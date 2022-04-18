@@ -22,30 +22,8 @@ public class UnitController {
 
     }
 
-    // this function returns null if moving unit to tile is possible and moves it if
-    // it is else returns error in string
-    public static String moveUnitToTile(Unit unit, Tile tile) {
-        // TODO shadiiiiiiiiiddddddddddddd
-        return null;
-
-    }
-
     public static City UnitsCity(Unit unit) {
         return null;
-
-    }
-
-    // calls one of the functions attackUnit or attackCity if possible and returns the error if attack couldn't be done
-    public static String combatUnitAttacksTile(CombatUnit combatUnit, Tile tile) {
-        return "";
-
-
-    }
-
-    public void attackUnit(CombatUnit combatUnit, Unit unit) {
-    }
-
-    public void attackCity(CombatUnit combatUnit, City city) {
 
     }
 

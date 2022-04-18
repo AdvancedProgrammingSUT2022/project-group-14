@@ -1,15 +1,13 @@
 package models;
 
 import enums.Progresses;
-import enums.TileFeature;
-import enums.TileType;
+import enums.tiles.TileFeature;
+import enums.tiles.TileType;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
-
-import java.util.ArrayList;
 
 public class Tile {
     private int x;

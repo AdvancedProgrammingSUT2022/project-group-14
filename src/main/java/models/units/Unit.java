@@ -8,7 +8,8 @@ import models.resources.StrategicResource;
 import java.util.ArrayList;
 
 public class Unit {
-    private Tile tile;
+    private Tile currentTile;
+    private Tile destinationTile;
     private String name;
     private int requiredGold;
     private int movementPoint;

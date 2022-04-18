@@ -1,4 +1,4 @@
-package enums;
+package enums.tiles;
 
 public enum TileType {
 
