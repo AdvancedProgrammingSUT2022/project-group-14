@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class LoginMenu {
 
-    public void run(Scanner scanner) {
+    public static void run(Scanner scanner) {
         String input = new String();
         loop: while (true) {
             input = scanner.nextLine();
@@ -13,7 +13,7 @@ public class LoginMenu {
         }
     }
 
-    private boolean checkCommand(String input) {
+    private static boolean checkCommand(String input) {
         return true;
     }
 

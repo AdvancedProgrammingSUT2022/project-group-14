@@ -1,5 +1,13 @@
+import controllers.UserController;
+import views.menus.LoginMenu;
+
+import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) throws Exception {
-        System.out.println("Hello, World!");
+        UserController.readAllUsers();
+        Scanner scanner = new Scanner(System.in);
+        LoginMenu.run(scanner);
+        UserController.saveAllUsers();
     }
 }
