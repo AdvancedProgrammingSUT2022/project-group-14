@@ -5,5 +5,17 @@ public class CombatUnit extends Unit{
     private double attackStrength;
 
     private boolean isAlert;
-    private boolean isFortified;
+    private boolean isFortifiedTillHealed;
+
+    public void alertUnit() {
+        this.isAlert = true;
+    }
+
+    public void fortifyUnitTillHealed() {
+        this.isFortifiedTillHealed = true;
+    }
+
+    public void healUnit(double amount) {
+        this.addHealthPoint(amount);
+    }
 }
