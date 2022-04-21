@@ -33,5 +33,20 @@ public class UserController {
         users.add(new User(username, password, nickname));
     }
 
+    public static User getUserByUsername(String username){
+        for (User user : users) {
+            if (user.getUsername().equals(username))
+                return user;
+        }
+        return null;
+    }
+
+    public static User getUserByNickname(String nickname){
+        for (User user : users) {
+            if (user.getNickname().equals(nickname))
+                return user;
+        }
+        return null;
+    }
     
 }

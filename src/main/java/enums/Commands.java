@@ -5,15 +5,15 @@ import java.util.regex.Pattern;
 
 public enum Commands {
     // Menu commands
-    ENTER_MENU(""),
-    EXIT_MENU(""),
-    SHOW_MENU(""),
+    ENTER_MENU("menu enter (?<menuName>login menu|main menu|game menu|profile menu)"),
+    EXIT_MENU("menu exit"),
+    SHOW_MENU("menu show-current"),
     // LoginMenu commands
-    LOGIN(""),
-    CREATE_USER(""),
-    PASSWORD("--password//s+(?<password>//S+)"),
-    USERNAME(""),
-    NICK_NAME(""),
+    LOGIN("user login "),
+    CREATE_USER("user create "),
+    PASSWORD("(\\-\\-password|\\-p) (?<password>\\S+)"),
+    USERNAME("(\\-\\-username|\\-u) (?<username>\\S+)"),
+    NICKNAME("(\\-\\-nickname|\\-n) (?<nickname>\\S+)"),
     // MainMenu Commands
     LOGOUT(""),
     // Profile Commands
@@ -53,8 +53,21 @@ public enum Commands {
     public static Matcher getMatcher(String input, Commands commands) {
         Pattern pattern = Pattern.compile(commands.regex);
         Matcher matcher = pattern.matcher(input);
-
         if (matcher.matches())
+            return matcher;
+        return null;
+    }
+
+    public static boolean startsWith(String input, Commands commands){
+        if (input.startsWith(commands.regex))
+            return true;
+        return false;
+    }
+
+    public static Matcher matcherFindsRegex(String input, Commands commands){
+        Matcher matcher = Pattern.compile(commands.regex).matcher(input);
+
+        if (matcher.find())
             return matcher;
         return null;
     }

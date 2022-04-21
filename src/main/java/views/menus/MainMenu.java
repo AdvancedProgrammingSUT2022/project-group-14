@@ -1,9 +1,17 @@
 package views.menus;
 
+import models.User;
+
 import java.util.Scanner;
 
 public class MainMenu {
-    public void run(Scanner scanner) {
+    private Scanner scanner;
+
+    public MainMenu(Scanner scanner){
+        this.scanner = scanner;
+    }
+
+    public void run(User user) {
     }
 
     private boolean checkCommand(String input) {
