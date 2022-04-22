@@ -37,10 +37,7 @@ public class Civilization {
     private Technologies currentTechnology;
 
     public Civilization() {
-        Melee warrior = new Melee();
-        this.melees.add(warrior);
-        Settler settler = new Settler();
-        this.settlers.add(settler);
+        //TODO  add first warrior and settler
         firstCapital = null;
         currentCapital = null;
         //TODO goods

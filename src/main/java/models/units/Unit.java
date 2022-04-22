@@ -22,6 +22,18 @@ public class Unit {
     private double healthPoint;
     private boolean isSleep;
 
+    public Unit(Tile currentTile, int movementPoint, String name, Civilization civilization, int requiredGold,
+                StrategicResource requiredStrategicResource, String requiredTechnology, double healthPoint) {
+        this.currentTile = currentTile;
+        this.movementPoint = movementPoint;
+        this.name = name;
+        this.civilization = civilization;
+        this.requiredGold = requiredGold;
+        this.requiredStrategicResource = requiredStrategicResource;
+        this.requiredTechnology = requiredTechnology;
+        this.healthPoint = healthPoint;
+    }
+
     public Civilization getCivilization() {
         return civilization;
     }
