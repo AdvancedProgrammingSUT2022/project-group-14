@@ -24,7 +24,7 @@ public class Civilization {
 
     private ArrayList<Researches> researches = new ArrayList<>();
 
-    private HashMap<Technologies , Integer> technologies = new HashMap<>();
+    private HashMap<Technologies, Integer> technologies = new HashMap<>();
 
     private City firstCapital;
     private City currentCapital;
@@ -36,24 +36,50 @@ public class Civilization {
     private int citizens;
     private Technologies currentTechnology;
 
-    public Civilization(){
-
+    public Civilization() {
+        Melee warrior = new Melee();
+        this.melees.add(warrior);
+        Settler settler = new Settler();
+        this.settlers.add(settler);
+        firstCapital = null;
+        currentCapital = null;
+        //TODO goods
+        updateMapVision();
     }
 
-    public void addCity(City city){
-
+    public void addCity(City city) {
+        if(cities.size() == 0 && firstCapital == null) {
+            firstCapital = city;
+        }
+        cities.add(city);
     }
 
-    public void removeCity(City city){
-
+    public void removeCity(City city) {
+        cities.remove(city);
     }
 
-    public void addColony(City city){
-
+    public void addColony(City city) {
+        colonies.add(city);
     }
 
-    public void removeColony(City city){
+    public void removeColony(City city) {
+        colonies.remove(city);
+    }
 
+    public void addMeleeUnit(Melee unit) {
+        melees.add(unit);
+    }
+
+    public void addRangedUnit(Ranged unit) {
+        ranges.add(unit);
+    }
+
+    public void addSettler(Settler unit) {
+        settlers.add(unit);
+    }
+
+    public void addMeleeUnit(Worker unit) {
+        workers.add(unit);
     }
 
     public void removeMeleeUnit(Melee unit) {
@@ -83,11 +109,27 @@ public class Civilization {
 
     public void updateMapVision() {
         ArrayList<Unit> allUnits = getAllUnits();
-        if(true) {
+        if (true) {
             //TODO if it was near our units or cities is lucid
         } else {
             //TODO if it isn't and the tile is lucid change to half lucid
         }
     }
 
+    public void updateGoods() {
+        for (City city : cities) {
+            //TODO add each city goods
+        }
+    }
+
+    public void setCurrentTechnology(Technologies wantedTechnology) {
+        this.currentTechnology = wantedTechnology;
+    }
+
+    public void updateTechnology() {
+        this.technologies.put(this.currentTechnology, this.technologies.get(this.currentTechnology)-1);
+        if (this.technologies.get(this.currentTechnology) <= 0) {
+            this.currentTechnology = null;
+        }
+    }
 }

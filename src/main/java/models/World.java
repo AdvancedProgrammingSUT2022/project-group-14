@@ -21,8 +21,7 @@ public class World {
 
     public static ArrayList<Civilization> getAllCivilizations() {
         Collection<Civilization> civilizations = nations.values();
-        ArrayList<Civilization> allCivilizations = new ArrayList<>(civilizations);
-        return allCivilizations;
+        return new ArrayList<>(civilizations);
     }
 
     public void generateMap(){

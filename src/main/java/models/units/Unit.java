@@ -26,6 +26,10 @@ public class Unit {
         return civilization;
     }
 
+    public void updatePosition(Tile tile) {
+        this.currentTile = tile;
+    }
+
     public void putToSleep() {
         this.isSleep = true;
     }
@@ -45,4 +49,6 @@ public class Unit {
     public void cancelMission() {
         this.destinationTile = null;
     }
+
+
 }
