@@ -17,12 +17,12 @@ public enum Commands {
     // MainMenu Commands
     LOGOUT("user logout"),
     START_GAME("play game "),
-    PLAYER_USERNAME("(\\-\\-player|\\-p)(?<playerNumber>\\d+) (?<username>\\S+)"),
+    PLAYER_USERNAME("(\\-\\-player|\\-pl)(?<playerNumber>\\d+) (?<username>\\S+)"),
     // Profile Commands
-    PROFILE_CHANGE(""),
-    PASSWORD_FLAG(""),
-    CURRENT(""),
-    NEW(""),
+    PROFILE_CHANGE("profile change "),
+    PASSWORD_FLAG("(\\-\\-password|\\-p) "),
+    CURRENT("(\\-\\-current|\\-c) (?<currentPassword>\\S+)"),
+    NEW("(\\-\\-new|\\-ne) (?<newPassword>\\S+)"),
     // GamePlay commands
     PLAY_GAME(""),
     PLAYER(""),
