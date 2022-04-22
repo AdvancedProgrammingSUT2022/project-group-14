@@ -6,7 +6,7 @@ public class User {
     private String nickname;
     private int score;
 
-    User(String username, String password, String nickname)
+    public User(String username, String password, String nickname)
     {
         this.username = username;
         this.password = password;
