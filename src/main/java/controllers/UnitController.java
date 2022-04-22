@@ -18,25 +18,13 @@ public class UnitController {
 
     }
 
-    public static boolean unitDoesNotExist(Unit unit) {
-        ArrayList<Civilization> allCivilizations = World.getAllCivilizations();
-        for (Civilization civilization : allCivilizations) {
-            if (civilization.getAllUnits().contains(unit)) {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public static City UnitsCity(Unit unit) {
         return null;
 
     }
 
     public static String cancelMission(Unit unit) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getAllUnits().contains(unit)) {
             return "unit is not under your control";
         } else {
             unit.cancelMission();
@@ -45,9 +33,7 @@ public class UnitController {
     }
 
     public static String sleepUnit(Unit unit) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else {
             unit.putToSleep();
@@ -56,9 +42,7 @@ public class UnitController {
     }
 
     public static String alertUnit(Unit unit) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof CombatUnit) {
             ((CombatUnit) unit).alertUnit();
@@ -69,9 +53,7 @@ public class UnitController {
     }
 
     public String fortifyUnit(Unit unit) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof CombatUnit) {
             ((CombatUnit) unit).healUnit(5);
@@ -83,9 +65,7 @@ public class UnitController {
     }
 
     public String fortifyUnitUntilHealed(Unit unit) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof CombatUnit) {
             ((CombatUnit) unit).fortifyUnitTillHealed();
@@ -97,9 +77,7 @@ public class UnitController {
     }
 
     public String setupRanged(Unit unit, Tile tile) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof Ranged && ((Ranged) unit).isSiegeUnit()) {
             ((Ranged) unit).setTileToSetup(tile);
@@ -118,9 +96,7 @@ public class UnitController {
     }
 
     public String wakeUp(Unit unit) {
-        if (unitDoesNotExist(unit)) {
-            return "unit doesn't exist";
-        } else if (!unit.getCivilization().getAllUnits().contains(unit)) {
+        if (!unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else {
             unit.wakeUp();
@@ -129,29 +105,29 @@ public class UnitController {
     }
 
     public String delete(Unit unit) {
-        Civilization wantedCivil = unit.getCivilization();
+        Civilization wantedCivilization = unit.getCivilization();
 
         if (unit instanceof Ranged) {
-            if (unit.getCivilization().getAllUnits().contains(unit)) {
-                wantedCivil.removeRangedUnit((Ranged) unit);
+            if (unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
+                wantedCivilization.removeRangedUnit((Ranged) unit);
             } else {
                 return "unit is not under your control";
             }
         } else if (unit instanceof Melee) {
-            if (unit.getCivilization().getAllUnits().contains(unit)) {
-                wantedCivil.removeMeleeUnit((Melee) unit);
+            if (unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
+                wantedCivilization.removeMeleeUnit((Melee) unit);
             } else {
                 return "unit is not under your control";
             }
         } else if (unit instanceof Worker) {
-            if (unit.getCivilization().getAllUnits().contains(unit)) {
-                wantedCivil.removeWorker((Worker) unit);
+            if (unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
+                wantedCivilization.removeWorker((Worker) unit);
             } else {
                 return "unit is not under your control";
             }
         } else if (unit instanceof Settler) {
-            if (unit.getCivilization().getAllUnits().contains(unit)) {
-                wantedCivil.removeSettler((Settler) unit);
+            if (unit.getCivilization().getName().equals(World.getCurrentCivilizationName())) {
+                wantedCivilization.removeSettler((Settler) unit);
             } else {
                 return "unit is not under your control";
             }

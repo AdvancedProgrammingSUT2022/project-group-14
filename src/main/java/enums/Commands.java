@@ -27,7 +27,7 @@ public enum Commands {
     PLAY_GAME(""),
     PLAYER(""),
     UNIT("$//s*unit//s+"),
-    UNIT_MOVETO(""),
+    UNIT_MOVE_TO(""),
     UNIT_SLEEP(""),
     UNIT_ALERT(""),
     UNIT_FORTIFY(""),

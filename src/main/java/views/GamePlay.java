@@ -15,7 +15,6 @@ public class GamePlay {
     private NonCombatUnit selectedNonCombatUnit;
 
     public void run(ArrayList<String> usernames) {
-
         world = new World(usernames);
     }
 

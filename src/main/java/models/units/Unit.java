@@ -32,6 +32,7 @@ public class Unit {
         this.requiredStrategicResource = requiredStrategicResource;
         this.requiredTechnology = requiredTechnology;
         this.healthPoint = healthPoint;
+        this.isSleep = false;
     }
 
     public Civilization getCivilization() {

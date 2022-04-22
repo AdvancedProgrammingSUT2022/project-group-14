@@ -15,13 +15,12 @@ public class World {
     private static int turn;
 
     public World(ArrayList<String> players){
-
+        civilizationNames.addAll(players);
         generateMap();
     }
 
-    public static ArrayList<Civilization> getAllCivilizations() {
-        Collection<Civilization> civilizations = nations.values();
-        return new ArrayList<>(civilizations);
+    public static String getCurrentCivilizationName() {
+        return civilizationNames.get(turn);
     }
 
     public void generateMap(){

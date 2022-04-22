@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Civilization {
+    private String name;
     private ArrayList<Tile> lucid = new ArrayList<>();
     private ArrayList<Tile> halfLucid = new ArrayList<>();
 
@@ -36,12 +37,17 @@ public class Civilization {
     private int citizens;
     private Technologies currentTechnology;
 
-    public Civilization() {
+    public Civilization(String name) {
         //TODO  add first warrior and settler
+        this.name = name;
         firstCapital = null;
         currentCapital = null;
         //TODO goods
         updateMapVision();
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void addCity(City city) {
