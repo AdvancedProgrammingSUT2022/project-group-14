@@ -124,7 +124,7 @@ public class LoginMenu {
     }
 
     private void loginUser(User user) {
-        MainMenu mainMenu = new MainMenu(this.scanner);
-        mainMenu.run(user);
+        MainMenu mainMenu = new MainMenu(this.scanner, user);
+        mainMenu.run();
     }
 }

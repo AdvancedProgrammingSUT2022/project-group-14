@@ -1,9 +1,19 @@
 package views.menus;
 
+import models.User;
+
 import java.util.Scanner;
 
 public class ProfileMenu {
-    public void run(Scanner scanner) {
+    private Scanner scanner;
+    private User user;
+
+    public ProfileMenu(Scanner scanner, User user) {
+        this.scanner = scanner;
+        this.user = user;
+    }
+
+    public void run() {
 
     }
 

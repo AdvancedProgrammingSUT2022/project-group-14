@@ -15,7 +15,9 @@ public enum Commands {
     USERNAME("(\\-\\-username|\\-u) (?<username>\\S+)"),
     NICKNAME("(\\-\\-nickname|\\-n) (?<nickname>\\S+)"),
     // MainMenu Commands
-    LOGOUT(""),
+    LOGOUT("user logout"),
+    START_GAME("play game "),
+    PLAYER_USERNAME("(\\-\\-player|\\-p)(?<playerNumber>\\d+) (?<username>\\S+)"),
     // Profile Commands
     PROFILE_CHANGE(""),
     PASSWORD_FLAG(""),

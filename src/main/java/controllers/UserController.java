@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -47,6 +48,36 @@ public class UserController {
                 return user;
         }
         return null;
+    }
+
+    public static boolean playerNumberIsCorrect(Matcher matcher, int numberOfPlayersSoFar){
+        if (Integer.parseInt(matcher.group("playerNumber")) == numberOfPlayersSoFar)
+            return true;
+        return false;
+    }
+
+    public static boolean usernameExistsInArraylist(String username, ArrayList<String> usernames){
+        for (String playerUsername : usernames) {
+            if (playerUsername.equals(username))
+                return true;
+        }
+        return false;
+    }
+
+    //this function checks if current player format is correct and exists in users and not repetitive and returns the error
+    // and returns "" if everything is ok and add the players username to usernames
+    public static String checkPlayerValidation(Matcher matcher, ArrayList<String> usernames, int numberOfPlayersSoFar){
+        if (!playerNumberIsCorrect(matcher, numberOfPlayersSoFar)){
+            return "invalid command";
+        }
+        if (getUserByUsername(matcher.group("username")) == null){
+            return "one of the usernames doesn't exist";
+        }
+        if (usernameExistsInArraylist(matcher.group("username"), usernames)){
+            return "one of the usernames is repetitive";
+        }
+        usernames.add(matcher.group("username"));
+        return "";
     }
     
 }
