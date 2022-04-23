@@ -3,6 +3,8 @@ package controllers;
 import models.Tile;
 import models.units.Unit;
 
+import java.util.ArrayList;
+
 public class MoveController {
 
     public String setUnitDestinationTile(Unit unit, Tile tile) {
@@ -18,12 +20,16 @@ public class MoveController {
     }
 
     public String impossibleToMoveToTile(Tile tile) {
-        //TODO some kinds of tiles
+        if (true) {
+            return "chosen tile is in the enemy territory";
+        } else if (true) {
+            return "can not move to those kind of tiles";
+        }
         return null;
-
     }
 
     public void moveUnitToDestination(Unit unit, Tile tile) {
+        //TODO if their x's are different change their x else change their y if possible
 
     }
 }
