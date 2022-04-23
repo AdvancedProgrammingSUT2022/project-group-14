@@ -1,18 +1,14 @@
 package models.units;
 
-import models.Civilization;
-import models.Tile;
-import models.resources.StrategicResource;
-
-import java.util.ArrayList;
 
 public class Ranged extends CombatUnit{
     private boolean isSiegeUnit;
     private boolean unitIsReadyForRangedBattle;
 
-    public Ranged(Tile currentTile, int movementPoint, String name, Civilization civilization, int requiredGold,
-                  StrategicResource requiredStrategicResource, String requiredTechnology, double healthPoint, double defenseStrength, double attackStrength, boolean isSiegeUnit) {
-        super(currentTile, movementPoint, name, civilization, requiredGold, requiredStrategicResource,
+    public Ranged(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
+                  String requiredStrategicResourceName, String requiredTechnology, double healthPoint,
+                  double defenseStrength, double attackStrength, boolean isSiegeUnit) {
+        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
                 requiredTechnology, healthPoint, defenseStrength, attackStrength);
         this.isSiegeUnit = isSiegeUnit;
     }
@@ -21,8 +17,8 @@ public class Ranged extends CombatUnit{
         return isSiegeUnit;
     }
 
-    public void setTileToSetup(Tile tile) {
-        this.setDestinationTile(tile);
+    public void setCoordinatesToSetup(int x, int y) {
+        this.setDestinationCoordinates(x, y);
         this.unitIsReadyForRangedBattle =  true;
     }
 }

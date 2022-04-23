@@ -1,9 +1,5 @@
 package models.units;
 
-import models.Civilization;
-import models.Tile;
-import models.resources.StrategicResource;
-
 public class CombatUnit extends Unit{
     private double defenseStrength;
     private double attackStrength;
@@ -11,10 +7,10 @@ public class CombatUnit extends Unit{
     private boolean isAlert;
     private boolean isFortifiedTillHealed;
 
-    public CombatUnit(Tile currentTile, int movementPoint, String name, Civilization civilization, int requiredGold,
-                      StrategicResource requiredStrategicResource, String requiredTechnology, double healthPoint,
+    public CombatUnit(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
+                      String requiredStrategicResourceName, String requiredTechnology, double healthPoint,
                       double defenseStrength, double attackStrength) {
-        super(currentTile, movementPoint, name, civilization, requiredGold, requiredStrategicResource,
+        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
                 requiredTechnology, healthPoint);
         this.defenseStrength = defenseStrength;
         this.attackStrength = attackStrength;

@@ -23,6 +23,10 @@ public class World {
         return civilizationNames.get(turn);
     }
 
+    public Civilization getCivilizationByName(String name) {
+        return nations.get(name);
+    }
+
     public void generateMap(){
 
     }
