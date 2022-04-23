@@ -34,5 +34,11 @@ public class Tile {
     private City city;
     private Civilization civilization = null;
 
-    
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }
