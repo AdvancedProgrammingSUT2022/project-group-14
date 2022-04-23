@@ -15,7 +15,8 @@ public class GamePlay {
     private NonCombatUnit selectedNonCombatUnit;
 
     public void run(ArrayList<String> usernames) {
-
+        // TODO user validation
+        
         world = new World(usernames);
     }
 
@@ -103,7 +104,7 @@ public class GamePlay {
 
     }
 
-    public void attack(Tile tile){
+    public void attack(Tile tile) {
 
     }
 }
