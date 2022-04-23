@@ -9,7 +9,7 @@ public class World {
 
     private int year;
 
-    private Tile[][] map = new Tile[100][100];
+    private Tile[][] map = new Tile[5][12];
 
     private int turn;
 
