@@ -151,19 +151,19 @@ public class GamePlay {
                 wantedTiles[k][z] = allTiles[i][j];
             }
         }
-        showMap(wantedTiles, k, z, Math.max(tile.getX() - 1, 0), Math.max(tile.getY() - 5, 0));
+        showMap(allTiles, k, z, Math.max(tile.getX() - 1, 0), Math.max(tile.getY() - 5, 0));
     }
 
     public static void showMap(Tile[][] map, int m, int n, int originalX, int originalY) {
         for (int i = 1; i <= m; i++) {
-            showUpMap(i, map, m, n, originalX , originalY + i);
-            showDownMap(i, map, m, n, originalX, originalY + i);
+            showUpMap(i, map, m, n, originalX, originalY);
+            showDownMap(i, map, m, n, originalX, originalY);
         }
-        showUpMap(m + 1, map, m, n, originalX , originalY + m +1);
+        showUpMap(m + 1, map, m, n, originalX, originalY);
     }
 
     private static void showUpMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
-        int x, y;
+        int y, x;
         boolean printingCordinatesFlag = false;
         String cordinates = "";
         int currentChar = 0;
@@ -173,32 +173,32 @@ public class GamePlay {
             // if (row == m)
             // x = 0;
             // else
-            x = -1;
-            y = row - 2;
+            y = -1;
+            x = row - 2;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 1 && k % 16 == 4 && row <= m) {
                     printingCordinatesFlag = true;
-                    cordinates = (x + 1) + "," + (y + 1);
+                    cordinates = (originalX + x + 1) + "," + (originalY + y + 1);
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
                     // changeColor = true;
-                    y++;
                     x++;
+                    y++;
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
                     System.out.print(resetColor + "/");
                     changeColor = true;
-                    y++;
                     x++;
-                }else if ((k - (12 - j)) % 16 == 0) {
+                    y++;
+                } else if ((k - (12 - j)) % 16 == 0) {
                     System.out.print(resetColor + "\\");
                     changeColor = true;
-                    y--;
-                    x++;
+                    x--;
+                    y++;
                 } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
-                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + "_");
+                    if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
+                        System.out.print(map[originalX + x][originalY + y].getColor() + "_");
                     else
                         System.out.print("_");
                 } else {
@@ -209,8 +209,8 @@ public class GamePlay {
                             currentChar = 0;
                             printingCordinatesFlag = false;
                         }
-                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + " ");
+                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
+                        System.out.print(map[originalX + x][originalY + y].getColor() + " ");
                     else
                         System.out.print(" ");
                 }
@@ -220,48 +220,43 @@ public class GamePlay {
     }
 
     private static void showDownMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
-        int x, y, originalXCopy = originalX, originalYCopy = originalY;
-        boolean printingCoordinatesFlag = false;
-        String coordinates = "";
+        int y, x;
+        boolean printingCordinatesFlag = false;
+        String cordinates = "";
         int currentChar = 0;
         boolean changeColor = false;
         final String resetColor = "\u001B[0m";
         for (int j = 1; j <= 3; j++) {
-            x = -1;
-            y = row - 1;
-            originalX = originalXCopy;
-            originalY = originalYCopy;
+            y = -1;
+            x = row - 1;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 3 && k % 16 == 12) {
-                    printingCoordinatesFlag = true;
-                    coordinates = (x + 1) + "," + (y + 1);
-                    // coordinates = originalX + "," + originalY;
+                    printingCordinatesFlag = true;
+                    cordinates = (originalX + x + 1) + "," + (originalY + y + 1);
                 }
                 if ((k - j) % 16 == 0) {
                     System.out.print(resetColor + "\\");
                     changeColor = true;
-                    x++;
-                    originalX++;
+                    y++;
                 } else if ((k - (12 - j)) % 16 == 0) {
                     System.out.print(resetColor + "/");
                     changeColor = true;
-                    x++;
-                    originalX++;
+                    y++;
                 } else if (j == 3 && (k % 16 == 4 || k % 16 == 5 || k % 16 == 6 || k % 16 == 7 || k % 16 == 8)) {
-                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + "_");
+                    if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
+                        System.out.print(map[originalX + x][originalY + y].getColor() + "_");
                     else
                         System.out.print("_");
                 } else {
-                    if (printingCoordinatesFlag) {
-                        System.out.print(coordinates.charAt(currentChar));
+                    if (printingCordinatesFlag) {
+                        System.out.print(cordinates.charAt(currentChar));
                         currentChar++;
-                        if (currentChar > (coordinates.length() - 1)) {
+                        if (currentChar > (cordinates.length() - 1)) {
                             currentChar = 0;
-                            printingCoordinatesFlag = false;
+                            printingCordinatesFlag = false;
                         }
-                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + " ");
+                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
+                        System.out.print(map[originalX + x][originalY + y].getColor() + " ");
                     else
                         System.out.print(" ");
                 }
