@@ -27,6 +27,7 @@ public class Tile {
     private double gold;
     private int militaryImpact;
     private int movingPoint;
+    private String color;
     private TileFeature feature;
     private StrategicResource strategicResource;
     private LuxuryResource luxuryResource;
@@ -44,7 +45,7 @@ public class Tile {
     private City city;
     private Civilization civilization = null;
 
-    static HashMap<TileType, Tile> tileInformationMap = new HashMap<>();
+    private static HashMap<TileType, Tile> tileInformationMap = new HashMap<>();
 
     public Tile(TileType type) {
         Tile tile = tileInformationMap.get(type);

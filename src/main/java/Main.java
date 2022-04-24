@@ -15,7 +15,7 @@ public class Main {
         // GamePlay gamePlay = new GamePlay();
         // gamePlay.run(usernames);
 
-        Tile.readTileTypesInformationFromJson();
+        Tile.writeTileTypesInformationToJson();
 
     }
 } 

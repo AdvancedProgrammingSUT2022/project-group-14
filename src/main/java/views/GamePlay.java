@@ -17,7 +17,6 @@ public class GamePlay {
     public void run(ArrayList<String> usernames) {
         // TODO user validation
         Tile.readTileTypesInformationFromJson();
-        
 
         world = new World(usernames);
     }
@@ -105,6 +104,7 @@ public class GamePlay {
     public void showMapBasedOnTile(Tile tile) {
 
     }
+
 
     public void attack(Tile tile) {
 
