@@ -1,3 +1,4 @@
+
 import controllers.UserController;
 import views.menus.LoginMenu;
 
@@ -11,4 +12,4 @@ public class Main {
         loginMenu.run();
         UserController.saveAllUsers();
     }
-}
+} 

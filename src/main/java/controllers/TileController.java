@@ -1,9 +1,22 @@
 package controllers;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.HashMap;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import enums.Progresses;
+import enums.tiles.TileType;
 import models.Tile;
 
 public class TileController {
+
+
+   
 
     public static boolean selectedTileIsValid(int x, int y) {
         return false;
@@ -14,7 +27,7 @@ public class TileController {
         return false;
 
     }
-    
+
     public void buildRoadOnTile() {
 
     }
