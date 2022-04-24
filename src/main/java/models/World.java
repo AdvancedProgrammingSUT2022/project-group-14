@@ -11,7 +11,7 @@ public class World {
 
     private int year;
 
-    private Tile[][] map = new Tile[5][12];
+    private Tile[][] map = null;
 
     private int turn;
 
@@ -21,6 +21,10 @@ public class World {
     }
 
     public void generateMap() {
-
+        for (int i = 1; i <= 5; i++) {
+            for (int j = 1; j <= 12; j++) {
+                map[i][j] = Tile.generateRandomTile();
+            }
+        }
     }
 }
