@@ -9,15 +9,6 @@ import java.util.Set;
 
 public class UnitController {
 
-    public static boolean combatUnitExistsInTile(int x, int y) {
-        return false;
-    }
-
-    public static boolean nonCombatUnitExistsInTile(int x, int y) {
-        return false;
-
-    }
-
     public static City UnitsCity(Unit unit) {
         return null;
 
@@ -52,7 +43,7 @@ public class UnitController {
         return null;
     }
 
-    public String fortifyUnit(Unit unit, World world) {
+    public static String fortifyUnit(Unit unit, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof CombatUnit) {
@@ -64,7 +55,7 @@ public class UnitController {
         return null;
     }
 
-    public String fortifyUnitUntilHealed(Unit unit, World world) {
+    public static String fortifyUnitUntilHealed(Unit unit, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof CombatUnit) {
@@ -76,7 +67,7 @@ public class UnitController {
         return null;
     }
 
-    public String setupRanged(Unit unit, int x, int y, World world) {
+    public static String setupRanged(Unit unit, int x, int y, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof Ranged && ((Ranged) unit).isSiegeUnit()) {
@@ -95,7 +86,7 @@ public class UnitController {
 
     }
 
-    public String wakeUp(Unit unit, World world) {
+    public static String wakeUp(Unit unit, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else {
@@ -104,7 +95,7 @@ public class UnitController {
         return null;
     }
 
-    public String delete(Unit unit, World world) {
+    public static String delete(Unit unit, World world) {
         Civilization wantedCivilization = world.getCivilizationByName(unit.getCivilizationName());
 
         if (unit instanceof Ranged) {
@@ -138,8 +129,8 @@ public class UnitController {
         return null;
     }
 
-    public void garrisonCity(CombatUnit combatUnit, World world) {
-        //TODO
+    public static String garrisonCity(CombatUnit combatUnit, World world) {
+        return null;
     }
 
 }

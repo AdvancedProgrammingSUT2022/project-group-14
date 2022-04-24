@@ -38,4 +38,12 @@ public class TileController {
     public void repairCurrentTile() {
         // TODO
     }
+
+    public static boolean combatUnitExistsInTile(int x, int y) {
+        return false;
+    }
+
+    public static boolean nonCombatUnitExistsInTile(int x, int y) {
+        return false;
+    }
 }

@@ -8,7 +8,7 @@ import java.util.ArrayList;
 
 public class MoveController {
 
-    public String setUnitDestinationTile(Unit unit, int x, int y, World world) {
+    public static String setUnitDestinationCoordinates(Unit unit, int x, int y, World world) {
         String reason;
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "the unit is not under your control";
@@ -20,7 +20,7 @@ public class MoveController {
         return null;
     }
 
-    public String impossibleToMoveToTile(int x, int y) {
+    public static String impossibleToMoveToTile(int x, int y) {
         if (true) {
             return "chosen tile is in the enemy territory";
         } else if (true) {
