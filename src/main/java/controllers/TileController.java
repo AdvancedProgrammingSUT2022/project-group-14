@@ -4,6 +4,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.google.gson.Gson;
@@ -24,6 +25,11 @@ public class TileController {
     public static boolean tileHasJungle(Tile tile) {
         return false;
 
+    }
+
+    public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
+        ArrayList<Tile> neighbours = new ArrayList<>();
+        return neighbours;
     }
 
     public void buildRoadOnTile() {

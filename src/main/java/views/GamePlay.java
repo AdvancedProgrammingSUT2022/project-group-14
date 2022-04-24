@@ -164,8 +164,8 @@ public class GamePlay {
 
     private static void showUpMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
         int y, x;
-        boolean printingCordinatesFlag = false;
-        String cordinates = "";
+        boolean printingCoordinatesFlag = false;
+        String coordinates = "";
         int currentChar = 0;
         boolean changeColor = false;
         final String resetColor = "\u001B[0m";
@@ -177,8 +177,8 @@ public class GamePlay {
             x = row - 2;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 1 && k % 16 == 4 && row <= m) {
-                    printingCordinatesFlag = true;
-                    cordinates = (originalX + x + 1) + "," + (originalY + y + 1);
+                    printingCoordinatesFlag = true;
+                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
@@ -202,12 +202,12 @@ public class GamePlay {
                     else
                         System.out.print("_");
                 } else {
-                    if (printingCordinatesFlag) {
-                        System.out.print(cordinates.charAt(currentChar));
+                    if (printingCoordinatesFlag) {
+                        System.out.print(coordinates.charAt(currentChar));
                         currentChar++;
-                        if (currentChar > (cordinates.length() - 1)) {
+                        if (currentChar > (coordinates.length() - 1)) {
                             currentChar = 0;
-                            printingCordinatesFlag = false;
+                            printingCoordinatesFlag = false;
                         }
                     } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
                         System.out.print(map[originalX + x][originalY + y].getColor() + " ");
@@ -221,8 +221,8 @@ public class GamePlay {
 
     private static void showDownMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
         int y, x;
-        boolean printingCordinatesFlag = false;
-        String cordinates = "";
+        boolean printingCoordinatesFlag = false;
+        String coordinates = "";
         int currentChar = 0;
         boolean changeColor = false;
         final String resetColor = "\u001B[0m";
@@ -231,8 +231,8 @@ public class GamePlay {
             x = row - 1;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 3 && k % 16 == 12) {
-                    printingCordinatesFlag = true;
-                    cordinates = (originalX + x + 1) + "," + (originalY + y + 1);
+                    printingCoordinatesFlag = true;
+                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
                 }
                 if ((k - j) % 16 == 0) {
                     System.out.print(resetColor + "\\");
@@ -248,12 +248,12 @@ public class GamePlay {
                     else
                         System.out.print("_");
                 } else {
-                    if (printingCordinatesFlag) {
-                        System.out.print(cordinates.charAt(currentChar));
+                    if (printingCoordinatesFlag) {
+                        System.out.print(coordinates.charAt(currentChar));
                         currentChar++;
-                        if (currentChar > (cordinates.length() - 1)) {
+                        if (currentChar > (coordinates.length() - 1)) {
                             currentChar = 0;
-                            printingCordinatesFlag = false;
+                            printingCoordinatesFlag = false;
                         }
                     } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
                         System.out.print(map[originalX + x][originalY + y].getColor() + " ");
