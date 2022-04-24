@@ -11,7 +11,7 @@ public class World {
 
     private int year;
 
-    public final int width = 5;
+    public final int width = 3;
     public final int length = 12;
     private Tile[][] map = new Tile[width][length];
     private int turn;

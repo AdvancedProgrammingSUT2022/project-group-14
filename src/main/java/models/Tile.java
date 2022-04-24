@@ -55,6 +55,7 @@ public class Tile {
         this.gold = tile.gold;
         this.militaryImpact = tile.militaryImpact;
         this.movingPoint = tile.movingPoint;
+        this.color = tile.color;
     }
 
     public static Tile generateRandomTile() {
@@ -69,6 +70,7 @@ public class Tile {
         tile.gold = this.gold;
         tile.militaryImpact = this.militaryImpact;
         tile.movingPoint = this.movingPoint;
+        tile.color = this.color;
         return tile;
     }
 
@@ -81,6 +83,7 @@ public class Tile {
             e.printStackTrace();
         }
     }
+
 
     public int getX() {
         return this.x;
@@ -144,6 +147,14 @@ public class Tile {
 
     public void setMovingPoint(int movingPoint) {
         this.movingPoint = movingPoint;
+    }
+
+    public String getColor() {
+        return this.color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public TileFeature getFeature() {
@@ -261,5 +272,6 @@ public class Tile {
     public void setCivilization(Civilization civilization) {
         this.civilization = civilization;
     }
+
 
 }
