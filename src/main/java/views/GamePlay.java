@@ -163,9 +163,9 @@ public class GamePlay {
     }
 
     private static void showUpMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
-        int x, y, originalXCopy = originalX, originalYCopy = originalY;
-        boolean printingCoordinatesFlag = false;
-        String coordinates = "";
+        int x, y;
+        boolean printingCordinatesFlag = false;
+        String cordinates = "";
         int currentChar = 0;
         boolean changeColor = false;
         final String resetColor = "\u001B[0m";
@@ -175,49 +175,42 @@ public class GamePlay {
             // else
             x = -1;
             y = row - 2;
-            originalX = originalXCopy;
-            originalY = originalYCopy;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 1 && k % 16 == 4 && row <= m) {
-                    printingCoordinatesFlag = true;
-                    coordinates = (x + 1) + "," + (y + 1);
-                    // coordinates = (originalX) + "," + originalY;
+                    printingCordinatesFlag = true;
+                    cordinates = (x + 1) + "," + (y + 1);
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
                     // changeColor = true;
+                    y++;
                     x++;
-                    originalX++;
-                    originalY++;
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
                     System.out.print(resetColor + "/");
                     changeColor = true;
+                    y++;
                     x++;
-                    originalX++;
-                    originalY++;
-                } else if ((k - (12 - j)) % 16 == 0) {
+                }else if ((k - (12 - j)) % 16 == 0) {
                     System.out.print(resetColor + "\\");
                     changeColor = true;
                     y--;
                     x++;
-                    originalX++;
-                    originalY--;
                 } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
-                    if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[x][y].getColor() + "_");
+                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
+                        System.out.print(map[y][x].getColor() + "_");
                     else
                         System.out.print("_");
                 } else {
-                    if (printingCoordinatesFlag) {
-                        System.out.print(coordinates.charAt(currentChar));
+                    if (printingCordinatesFlag) {
+                        System.out.print(cordinates.charAt(currentChar));
                         currentChar++;
-                        if (currentChar > (coordinates.length() - 1)) {
+                        if (currentChar > (cordinates.length() - 1)) {
                             currentChar = 0;
-                            printingCoordinatesFlag = false;
+                            printingCordinatesFlag = false;
                         }
-                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[x][y].getColor() + " ");
+                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
+                        System.out.print(map[y][x].getColor() + " ");
                     else
                         System.out.print(" ");
                 }
