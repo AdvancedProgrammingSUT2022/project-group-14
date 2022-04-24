@@ -1,54 +1,130 @@
 package views.menus;
 
+import controllers.UserController;
+import enums.Commands;
+import models.User;
+
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class LoginMenu {
 
-    public void run(Scanner scanner) {
-        String input = new String();
-        loop: while (true) {
-            input = scanner.nextLine();
+    private Scanner scanner;
+
+    public LoginMenu(Scanner scanner){
+        this.scanner = scanner;
+    }
+
+    public void run() {
+        String input;
+        loop:
+        while (true) {
+            input = this.scanner.nextLine();
             if (!checkCommand(input))
                 break loop;
         }
     }
 
     private boolean checkCommand(String input) {
+
+        Matcher matcher;
+        if (Commands.startsWith(input, Commands.LOGIN)) {
+            checkLogin(input);
+
+        } else if (Commands.startsWith(input, Commands.CREATE_USER)) {
+            checkCreateUser(input);
+        } else if ((matcher = Commands.getMatcher(input, Commands.ENTER_MENU)) != null) {
+            checkEnterMenu(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.SHOW_MENU)) != null) {
+            System.out.println("Login Menu");
+        } else if ((matcher = Commands.getMatcher(input, Commands.EXIT_MENU)) != null) {
+            System.out.println("you exited the game successfully");
+            return false;
+        } else System.out.println("invalid command");
+
+
         return true;
+
     }
 
-    private boolean checkExitMenu(String input, Scanner scanner) {
-        return true;
+
+    private void checkEnterMenu(Matcher matcher) {
+        String menuName = matcher.group("menuName");
+        switch (menuName){
+            case "login menu":
+                System.out.println("this is your current menu");
+                break;
+            case "profile menu":
+            case "game menu":
+                System.out.println("menu navigation is not possible");
+                break;
+            case "main menu":
+                System.out.println("please login first");
+            default:
+        }
     }
 
-    private boolean checkEnterMenu(String input, Scanner scanner) {
-        return true;
+
+    private void checkLogin(String input) {
+        Matcher usernameMatcher;
+        Matcher passwordMatcher;
+        if ((usernameMatcher = Commands.matcherFindsRegex(input, Commands.USERNAME)) != null &&
+                (passwordMatcher = Commands.matcherFindsRegex(input, Commands.PASSWORD)) != null) {
+
+
+            if (!usernameExists(usernameMatcher)) System.out.println("Username and password didn’t match!");
+            else {
+                User user = UserController.getUserByUsername(usernameMatcher.group("username"));
+                if (passwordIsCorrect(passwordMatcher, user)) {
+                    System.out.println("user logged in successfully!");
+
+                    loginUser(user);
+                } else System.out.println("Username and password didn’t match!");
+            }
+        } else System.out.println("invalid command");
+
     }
 
-    private boolean checkShowMenu(String input, Scanner scanner) {
-        return true;
+    private void checkCreateUser(String input) {
+        Matcher usernameMatcher;
+        Matcher passwordMatcher;
+        Matcher nicknameMatcher;
+        if ((usernameMatcher = Commands.matcherFindsRegex(input, Commands.USERNAME)) != null &&
+                (passwordMatcher = Commands.matcherFindsRegex(input, Commands.PASSWORD)) != null &&
+                (nicknameMatcher = Commands.matcherFindsRegex(input, Commands.NICKNAME)) != null) {
+
+            if (usernameExists(usernameMatcher))
+                System.out.println("user with username " + usernameMatcher.group("username") +" already exists");
+            else if (nicknameExists(nicknameMatcher))
+                System.out.println("user with nickname " + nicknameMatcher.group("nickname") +" already exists");
+            else {
+                UserController.addUser(usernameMatcher.group("username"),
+                        passwordMatcher.group("password"),
+                        nicknameMatcher.group("nickname"));
+
+                System.out.println("user created successfully!");
+            }
+
+        } else System.out.println("invalid command");
+
+
     }
 
-    private boolean checkLogin(String input) {
-        return true;
+    private boolean usernameExists(Matcher usernameMatcher) {
+        return UserController.getUserByUsername(usernameMatcher.group("username")) != null;
     }
 
-    private boolean checkCreateUser(String input) {
-        return true;
+    private boolean passwordIsCorrect(Matcher passwordMatcher, User user) {
+        return user.getPassword().equals(passwordMatcher.group("password"));
     }
 
-    private boolean checkUsername(String input) {
-        return true;
+    private boolean nicknameExists(Matcher nicknameMatcher) {
+        return UserController.getUserByNickname(nicknameMatcher.group("nickname")) != null;
     }
 
-    private boolean checkPassword(String input) {
-        return true;
-    }
-
-    private boolean checkNickname(String input) {
-        return true;
-    }
-
-    private void loginUser(String username) {
+    private void loginUser(User user) {
+        MainMenu mainMenu = new MainMenu(this.scanner, user);
+        mainMenu.run();
     }
 }

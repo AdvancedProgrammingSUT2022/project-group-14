@@ -6,105 +6,146 @@ import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 
 import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.regex.Matcher;
 
 public class GamePlay {
 
-    private World world;
-    private City selectedCity;
-    private CombatUnit selectedCombatUnit;
-    private NonCombatUnit selectedNonCombatUnit;
+    private static World world;
+    private static City selectedCity;
+    private static CombatUnit selectedCombatUnit;
+    private static NonCombatUnit selectedNonCombatUnit;
+    private static Civilization currentCivilization;
+    private static Tile selectedTile;
 
-    public void run(ArrayList<String> usernames) {
-        // TODO user validation
+
+
+    public void run(ArrayList<String> usernames, Scanner scanner) {
+          // TODO user validation
         Tile.readTileTypesInformationFromJson();
         world = new World(usernames);
-        this.showMap();
+        int numberOfPlayers = usernames.size();
+        world.setTurn(0);
+        currentCivilization = world.getNations().get(world.getCurrentCivilizationName());
+
+        String input;
+        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
+        while (true) {
+            input = scanner.nextLine();
+            if (!gameCommandsValidation.checkCommands(input))
+                break;
+        }
+
+
+        world = null;
+        selectedCity = null;
+        selectedCombatUnit = null;
+        selectedNonCombatUnit = null;
+        currentCivilization = null;
+        selectedTile = null;
+    }
+
+    public static Tile getTileByPosition(int x, int y){
+        return world.getTileByCoordinates(x, y);
+    }
+
+    public static Tile getTileByCityName(String name){
+        return null;
 
     }
 
-    public void showResearches(Civilization civilization) {
+    public static void showResearches() {
 
     }
 
-    public void showUnits(Civilization civilization) {
+    public static void showUnits() {
 
     }
 
-    public void showCities(Civilization civilization) {
+    public static void showCities() {
 
     }
 
-    public void showDiplomacyPanel(Civilization civilization) {
+    public static void showDiplomacyPanel() {
         // TODO
     }
 
-    public void showDemographicsPanel(Civilization civilization) {
+    public static void showDemographicsPanel() {
         // TODO
     }
 
-    public void showVictoryPanel(Civilization civilization) {
+    public static void showVictoryPanel() {
         // TODO
     }
 
-    public void showNotifications(Civilization civilization) {
+    public static void showNotifications() {
         // TODO
     }
 
-    public void showMilitaryUnits(Civilization civilization) {
+    public static void showMilitaryUnits() {
         // TODO
     }
 
-    public void showEconomicStatus(Civilization civilization) {
+    public static void showEconomicStatus() {
 
     }
 
-    public void showDiplomaticHistory(Civilization civilization) {
+    public static void showDiplomaticHistory() {
         // TODO
     }
 
-    public void showDealsHistory(Civilization civilization) {
+    public static void showDealsHistory() {
         // TODO
     }
 
-    public void showCombatUnitInfo() {
+    public static void selectUnit(Matcher matcher){
 
     }
 
-    public void showNonCombatUnitInfo() {
+    public static void selectCityByPosition(Matcher matcher){
 
     }
 
-    public void showCityInfo() {
+    public static void selectCityByName(Matcher matcher){
 
     }
 
-    public void buildRoadOnTile() {
+    public static void moveTo(Matcher matcher){
 
     }
 
-    public void buildRailroadOnTile() {
+    public static void unitSleep(){
 
     }
 
-    public void buildProgressOnTile(Progresses progress) {
+    public static void unitAlert(){
 
     }
 
-    public void removeRoadAndRailroadFromTile() {
+    public static void unitFortify(){
 
     }
 
-    public void removeJungleFromTile() {
+    public static void unitFortifyHeal(){
 
     }
 
-    public void repairCurrentTile() {
+    public static void unitGarrison(){
 
     }
 
-    public void showMapBasedOnTile(Tile tile) {
+    public static void setupRanged(){
 
     }
+
+    public static void cancelMission(){
+
+    }
+
+    public static void foundCity(){
+
+    }
+
 
     public void showMap() {
         Tile[][] map = world.getMap();
@@ -233,6 +274,61 @@ public class GamePlay {
     }
 
     public void attack(Tile tile) {
+    }
+    public static void deleteUnit(){
 
+    }
+
+    public static void unitWake(){
+
+    }
+
+    public static void showCombatUnitInfo() {
+
+    }
+
+    public static void showNonCombatUnitInfo() {
+
+    }
+
+    public static void showCityInfo() {
+
+    }
+
+    public static void buildRoadOnTile() {
+
+    }
+
+    public static void buildRailroadOnTile() {
+
+    }
+
+    public static void buildProgressOnTile() {
+
+    }
+
+    public static void removeRoadAndRailroadFromTile() {
+
+    }
+
+    public static void removeJungleFromTile() {
+
+    }
+
+    public static void repairCurrentTile() {
+
+    }
+
+    public static void showMapBasedOnTile(Tile tile) {
+
+    }
+
+    public static void attack(int destinationX, int destinationY){
+
+    }
+
+
+    public static Tile getSelectedTile() {
+        return selectedTile;
     }
 }

@@ -272,6 +272,4 @@ public class Tile {
     public void setCivilization(Civilization civilization) {
         this.civilization = civilization;
     }
-
-
 }
