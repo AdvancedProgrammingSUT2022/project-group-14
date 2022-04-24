@@ -1,13 +1,9 @@
 package models.units;
 
-import models.Civilization;
-import models.Tile;
-import models.resources.StrategicResource;
-
 public class Settler extends NonCombatUnit{
-    public Settler(Tile currentTile, int movementPoint, String name, Civilization civilization, int requiredGold,
-                  StrategicResource requiredStrategicResource, String requiredTechnology, double healthPoint) {
-        super(currentTile, movementPoint, name, civilization, requiredGold, requiredStrategicResource,
+    public Settler(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
+                   String requiredStrategicResourceName, String requiredTechnology, double healthPoint) {
+        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
                 requiredTechnology, healthPoint);
     }
 }

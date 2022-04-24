@@ -8,39 +8,57 @@ import models.resources.StrategicResource;
 import java.util.ArrayList;
 
 public class Unit {
-    private Tile currentTile;
-    private Tile destinationTile;
+    private int currentX, currentY;
+    private int destinationX, destinationY;
     private int movementPoint;
 
     private String name;
-    private Civilization civilization;
+    private String civilizationName;
 
     private int requiredGold;
-    private StrategicResource requiredStrategicResource;
+    private String requiredStrategicResourceName;
     private String requiredTechnology;
 
     private double healthPoint;
     private boolean isSleep;
 
-    public Unit(Tile currentTile, int movementPoint, String name, Civilization civilization, int requiredGold,
-                StrategicResource requiredStrategicResource, String requiredTechnology, double healthPoint) {
-        this.currentTile = currentTile;
+    public Unit(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
+                String requiredStrategicResourceName, String requiredTechnology, double healthPoint) {
+        this.currentX = currentX;
+        this.currentY = currentY;
         this.movementPoint = movementPoint;
         this.name = name;
-        this.civilization = civilization;
+        this.civilizationName = civilization;
         this.requiredGold = requiredGold;
-        this.requiredStrategicResource = requiredStrategicResource;
+        this.requiredStrategicResourceName = requiredStrategicResourceName;
         this.requiredTechnology = requiredTechnology;
         this.healthPoint = healthPoint;
         this.isSleep = false;
     }
 
-    public Civilization getCivilization() {
-        return civilization;
+    public String getCivilizationName() {
+        return civilizationName;
     }
 
-    public void updatePosition(Tile tile) {
-        this.currentTile = tile;
+    public int getCurrentX() {
+        return currentX;
+    }
+
+    public int getCurrentY() {
+        return currentY;
+    }
+
+    public int getDestinationX() {
+        return destinationX;
+    }
+
+    public int getDestinationY() {
+        return destinationY;
+    }
+
+    public void updatePosition(int x, int y) {
+        this.currentX = x;
+        this.currentY = y;
     }
 
     public void putToSleep() {
@@ -51,8 +69,9 @@ public class Unit {
         this.isSleep = false;
     }
 
-    public void setDestinationTile(Tile tile) {
-        this.destinationTile = tile;
+    public void setDestinationCoordinates(int x, int y) {
+        this.destinationX = x;
+        this.destinationY = y;
     }
 
     public void addHealthPoint(double amount) {
@@ -60,7 +79,8 @@ public class Unit {
     }
 
     public void cancelMission() {
-        this.destinationTile = null;
+        this.destinationX = this.currentX;
+        this.destinationY = this.currentY;
     }
 
 
