@@ -1,6 +1,7 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 
 public class World {
@@ -14,11 +15,31 @@ public class World {
     private int turn;
 
     public World(ArrayList<String> players){
-
+        civilizationNames.addAll(players);
         generateMap();
+    }
+
+    public String getCurrentCivilizationName() {
+        return civilizationNames.get(turn);
     }
 
     public void generateMap(){
 
+    }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public int getTurn() {
+        return this.turn;
+    }
+
+    public HashMap<String, Civilization> getNations() {
+        return nations;
+    }
+
+    public Tile getTileByCoordinates(int x, int y){
+        return this.map[x][y];
     }
 }

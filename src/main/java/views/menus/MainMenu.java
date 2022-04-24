@@ -101,7 +101,7 @@ public class MainMenu {
 
     private void startGame(ArrayList<String> usernames){
         GamePlay gamePlay = new GamePlay();
-        gamePlay.run(usernames);
+        gamePlay.run(usernames, this.scanner);
     }
 
     private void goToProfileMenu() {
