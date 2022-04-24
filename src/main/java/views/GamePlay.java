@@ -21,7 +21,6 @@ public class GamePlay {
     private static NonCombatUnit selectedNonCombatUnit;
     private static Tile selectedTile;
 
-
     public void run(ArrayList<String> usernames, Scanner scanner) {
         Tile.readTileTypesInformationFromJson();
         world = new World(usernames);
@@ -36,13 +35,14 @@ public class GamePlay {
 
         resetGameValues();
     }
-    //selecting methods
+
+    // selecting methods
     public static void selectUnit(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         Tile wantedTile = getTileByPosition(x, y);
         if (matcher.group("militaryStatus").equals("combat")) {
-            if (TileController.combatUnitExistsInTile(wantedTile)){
+            if (TileController.combatUnitExistsInTile(wantedTile)) {
                 selectedCombatUnit = wantedTile.getCombatUnit();
                 selectedNonCombatUnit = null;
                 showCombatUnitInfo();
@@ -50,7 +50,7 @@ public class GamePlay {
                 System.out.println("there isn't any combat unit in this position");
             }
         } else {
-            if (TileController.nonCombatUnitExistsInTile(wantedTile)){
+            if (TileController.nonCombatUnitExistsInTile(wantedTile)) {
                 selectedNonCombatUnit = wantedTile.getNonCombatUnit();
                 selectedCombatUnit = null;
                 showNonCombatUnitInfo();
@@ -67,7 +67,8 @@ public class GamePlay {
     public static void selectCityByName(Matcher matcher) {
 
     }
-    //getting methods
+
+    // getting methods
     public static Tile getTileByPosition(int x, int y) {
         return world.getTileByCoordinates(x, y);
     }
@@ -80,7 +81,8 @@ public class GamePlay {
     public static Tile getSelectedTile() {
         return selectedTile;
     }
-    //showing methods
+
+    // showing methods
     public static void showResearches() {
 
     }
@@ -136,27 +138,28 @@ public class GamePlay {
     public static void showCityInfo() {
 
     }
-    //showing map methods
+
+    // showing map methods
     public static void showMapBasedOnTile(Tile tile) {
         selectedTile = tile;
         Tile[][] allTiles = world.getMap();
         Tile[][] wantedTiles = new Tile[3][12];
         int k = 0, z = 0;
-        for (int i = Math.max(tile.getX()-1, 0); i < Math.min(tile.getX() + 2, World.getWidth()); i++, k++) {
+        for (int i = Math.max(tile.getX() - 1, 0); i < Math.min(tile.getX() + 2, World.getWidth()); i++, k++) {
             z = 0;
             for (int j = Math.max(tile.getY() - 5, 0); j < Math.min(tile.getY() + 7, World.getLength()); j++, z++) {
                 wantedTiles[k][z] = allTiles[i][j];
             }
         }
-        showMap(wantedTiles, k, z, tile.getX(), tile.getY()-4);
+        showMap(wantedTiles, k, z, Math.max(tile.getX() - 1, 0), Math.max(tile.getY() - 5, 0));
     }
 
     public static void showMap(Tile[][] map, int m, int n, int originalX, int originalY) {
         for (int i = 1; i <= m; i++) {
-            showUpMap(i, map, m, n, originalX-1, originalY + i-2);
-            showDownMap(i, map, m, n, originalX-1, originalY + i-2);
+            showUpMap(i, map, m, n, originalX , originalY + i);
+            showDownMap(i, map, m, n, originalX, originalY + i);
         }
-        showUpMap(m + 1, map, m, n, originalX-1, originalY + m-1);
+        showUpMap(m + 1, map, m, n, originalX , originalY + m +1);
     }
 
     private static void showUpMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
@@ -178,12 +181,11 @@ public class GamePlay {
                 if (j == 1 && k % 16 == 4 && row <= m) {
                     printingCoordinatesFlag = true;
                     coordinates = (x + 1) + "," + (y + 1);
-//                    coordinates = (originalX) + "," + originalY;
+                    // coordinates = (originalX) + "," + originalY;
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
                     // changeColor = true;
-                    y++;
                     x++;
                     originalX++;
                     originalY++;
@@ -191,7 +193,6 @@ public class GamePlay {
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
                     System.out.print(resetColor + "/");
                     changeColor = true;
-                    y++;
                     x++;
                     originalX++;
                     originalY++;
@@ -203,8 +204,8 @@ public class GamePlay {
                     originalX++;
                     originalY--;
                 } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
-                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + "_");
+                    if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
+                        System.out.print(map[x][y].getColor() + "_");
                     else
                         System.out.print("_");
                 } else {
@@ -215,8 +216,8 @@ public class GamePlay {
                             currentChar = 0;
                             printingCoordinatesFlag = false;
                         }
-                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + " ");
+                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
+                        System.out.print(map[x][y].getColor() + " ");
                     else
                         System.out.print(" ");
                 }
@@ -241,7 +242,7 @@ public class GamePlay {
                 if (j == 3 && k % 16 == 12) {
                     printingCoordinatesFlag = true;
                     coordinates = (x + 1) + "," + (y + 1);
-//                    coordinates = originalX + "," + originalY;
+                    // coordinates = originalX + "," + originalY;
                 }
                 if ((k - j) % 16 == 0) {
                     System.out.print(resetColor + "\\");
@@ -275,7 +276,8 @@ public class GamePlay {
             System.out.println();
         }
     }
-    //units methods
+
+    // units methods
     public static void attack(int destinationX, int destinationY) {
 
     }
