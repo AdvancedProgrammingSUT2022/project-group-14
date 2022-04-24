@@ -1,5 +1,7 @@
 package enums.tiles;
 
+import java.util.Random;
+
 public enum TileType {
     DESERT("//s+desert//s+"),
     MEDOW("//s+medow//s+"),
@@ -19,5 +21,10 @@ public enum TileType {
 
     public String getName() {
         return this.regex;
+    }
+
+    public static TileType generateRandomTileType() {
+        Random rand = new Random();
+        return TileType.values()[rand.nextInt(TileType.values().length - 1)];
     }
 }

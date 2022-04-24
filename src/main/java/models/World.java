@@ -3,6 +3,8 @@ package models;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import enums.tiles.TileType;
+
 public class World {
     private ArrayList<String> civilizationNames = new ArrayList<>();
     private HashMap<String, Civilization> nations = new HashMap<>();
@@ -13,12 +15,12 @@ public class World {
 
     private int turn;
 
-    public World(ArrayList<String> players){
+    public World(ArrayList<String> players) {
 
         generateMap();
     }
 
-    public void generateMap(){
+    public void generateMap() {
 
     }
 }

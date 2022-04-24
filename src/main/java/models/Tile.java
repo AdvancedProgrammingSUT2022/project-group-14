@@ -56,6 +56,10 @@ public class Tile {
         this.movingPoint = tile.movingPoint;
     }
 
+    public static Tile generateRandomTile() {
+        return new Tile(TileType.generateRandomTileType());
+    }
+
     public Tile copy() {
         Tile tile = new Tile(TileType.UNKOWN);
         tile.type = this.type;
@@ -67,7 +71,6 @@ public class Tile {
         return tile;
     }
 
-
     public static void readTileTypesInformationFromJson() {
         try {
             String json = new String(Files.readAllBytes(Paths.get("resources/TileTypeInformation.json")));
@@ -77,10 +80,6 @@ public class Tile {
             e.printStackTrace();
         }
     }
-
-
-
-
 
     public int getX() {
         return this.x;
