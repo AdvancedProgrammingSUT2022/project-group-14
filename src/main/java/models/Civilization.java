@@ -43,7 +43,7 @@ public class Civilization {
         this.name = name;
         firstCapital = null;
         currentCapital = null;
-        //TODO goods
+        updateGoods();
         updateMapVision();
     }
 

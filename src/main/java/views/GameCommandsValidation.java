@@ -209,6 +209,10 @@ public class GameCommandsValidation {
         int movementAmount = Integer.parseInt("movementAmount");
 
         Tile oldTile = GamePlay.getSelectedTile();
+        if (oldTile == null) {
+            System.out.println("Tile is not selected");
+            return;
+        }
         int x = oldTile.getX();
         int y = oldTile.getY();
 

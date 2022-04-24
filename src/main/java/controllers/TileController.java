@@ -16,8 +16,6 @@ import models.Tile;
 public class TileController {
 
 
-   
-
     public static boolean selectedTileIsValid(int x, int y) {
         return false;
 
@@ -52,11 +50,11 @@ public class TileController {
         // TODO
     }
 
-    public static boolean combatUnitExistsInTile(int x, int y) {
-        return false;
+    public static boolean combatUnitExistsInTile(Tile tile) {
+        return tile.getCombatUnit() != null;
     }
 
-    public static boolean nonCombatUnitExistsInTile(int x, int y) {
-        return false;
+    public static boolean nonCombatUnitExistsInTile(Tile tile) {
+        return tile.getNonCombatUnit() != null;
     }
 }

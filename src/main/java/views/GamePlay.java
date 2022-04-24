@@ -1,6 +1,7 @@
 package views;
 
 import controllers.MoveController;
+import controllers.TileController;
 import controllers.UnitController;
 import enums.Progresses;
 import models.*;
@@ -18,18 +19,12 @@ public class GamePlay {
     private static City selectedCity;
     private static CombatUnit selectedCombatUnit;
     private static NonCombatUnit selectedNonCombatUnit;
-    private static Civilization currentCivilization;
     private static Tile selectedTile;
 
 
-
     public void run(ArrayList<String> usernames, Scanner scanner) {
-          // TODO user validation
         Tile.readTileTypesInformationFromJson();
         world = new World(usernames);
-        int numberOfPlayers = usernames.size();
-        world.setTurn(0);
-        currentCivilization = world.getNations().get(world.getCurrentCivilizationName());
 
         String input;
         GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
@@ -39,24 +34,53 @@ public class GamePlay {
                 break;
         }
 
-
-        world = null;
-        selectedCity = null;
-        selectedCombatUnit = null;
-        selectedNonCombatUnit = null;
-        currentCivilization = null;
-        selectedTile = null;
+        resetGameValues();
+    }
+    //selecting methods
+    public static void selectUnit(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
+        Tile wantedTile = getTileByPosition(x, y);
+        if (matcher.group("militaryStatus").equals("combat")) {
+            if (TileController.combatUnitExistsInTile(wantedTile)){
+                selectedCombatUnit = wantedTile.getCombatUnit();
+                selectedNonCombatUnit = null;
+                showCombatUnitInfo();
+            } else {
+                System.out.println("there isn't any combat unit in this position");
+            }
+        } else {
+            if (TileController.nonCombatUnitExistsInTile(wantedTile)){
+                selectedNonCombatUnit = wantedTile.getNonCombatUnit();
+                selectedCombatUnit = null;
+                showNonCombatUnitInfo();
+            } else {
+                System.out.println("there isn't any non combat unit in this position");
+            }
+        }
     }
 
-    public static Tile getTileByPosition(int x, int y){
+    public static void selectCityByPosition(Matcher matcher) {
+
+    }
+
+    public static void selectCityByName(Matcher matcher) {
+
+    }
+    //getting methods
+    public static Tile getTileByPosition(int x, int y) {
         return world.getTileByCoordinates(x, y);
     }
 
-    public static Tile getTileByCityName(String name){
+    public static Tile getTileByCityName(String name) {
         return null;
 
     }
 
+    public static Tile getSelectedTile() {
+        return selectedTile;
+    }
+    //showing methods
     public static void showResearches() {
 
     }
@@ -101,25 +125,159 @@ public class GamePlay {
         // TODO
     }
 
-    public static void selectUnit(Matcher matcher){
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
-        if (matcher.group("militaryStatus").equals("combat")) {
-            //TODO get the combat unit on tile
-        } else {
-            //TODO get the nonCombat unit tile
+    public static void showCombatUnitInfo() {
+        System.out.println("you have selected : " + selectedCombatUnit.getName());
+    }
+
+    public static void showNonCombatUnitInfo() {
+        System.out.println("you have selected : " + selectedNonCombatUnit.getName());
+    }
+
+    public static void showCityInfo() {
+
+    }
+
+    public static void showMapBasedOnTile(Tile tile) {
+        Tile[][] allTiles = world.getMap();
+        Tile[][] wantedTiles = new Tile[3][11];
+        for (int i = Math.max(tile.getX()-1, 0), k = 0; i < Math.min(tile.getX() + 2, world.width); i++, k++) {
+            for (int j = Math.max(tile.getY() - 5, 0), z = 0; j < Math.min(tile.getY() + 6, world.length); j++, z++) {
+                wantedTiles[k][z] = allTiles[i][j];
+            }
+        }
+    }
+    //showing map methods
+    public void showMap() {
+        Tile[][] map = world.getMap();
+        int m = world.width;
+        int n = world.length;
+        int x = -1;
+        int y = -1;
+        boolean E = true;
+        boolean O = false;
+        boolean printingCoordinatesFlag = false;
+        String coordinates = "";
+        int currentChar = 0;
+        for (int i = 1; i <= m; i++) {
+            this.showUpMap(i);
+            this.showDownMap(i);
+        }
+        this.showUpMap(m + 1);
+
+    }
+
+    private void showUpMap(int row) {
+        Tile[][] map = world.getMap();
+        int m = world.width, n = world.length;
+        int x, y;
+        boolean printingCoordinatesFlag = false;
+        String coordinates = "";
+        int currentChar = 0;
+        boolean changeColor = false;
+        final String resetColor = "\u001B[0m";
+        for (int j = 3; j >= 1; j--) {
+            // if (row == m)
+            // x = 0;
+            // else
+            x = -1;
+            y = row - 2;
+            for (int k = 1; k <= 8 * n + 3; k++) {
+                if (j == 1 && k % 16 == 4 && row <= m) {
+                    printingCoordinatesFlag = true;
+                    coordinates = (x + 1) + "," + (y + 1);
+                }
+                if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
+                    // System.out.print(resetColor + "/");
+                    // changeColor = true;
+                    y++;
+                    x++;
+                }
+                if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
+                    System.out.print(resetColor + "/");
+                    changeColor = true;
+                    y++;
+                    x++;
+                } else if ((k - (12 - j)) % 16 == 0) {
+                    System.out.print(resetColor + "\\");
+                    changeColor = true;
+                    y--;
+                    x++;
+                } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
+                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
+                        System.out.print(map[y][x].getColor() + "_");
+                    else
+                        System.out.print("_");
+                } else {
+                    if (printingCoordinatesFlag) {
+                        System.out.print(coordinates.charAt(currentChar));
+                        currentChar++;
+                        if (currentChar > (coordinates.length() - 1)) {
+                            currentChar = 0;
+                            printingCoordinatesFlag = false;
+                        }
+                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
+                        System.out.print(map[y][x].getColor() + " ");
+                    else
+                        System.out.print(" ");
+                }
+            }
+            System.out.println();
         }
     }
 
-    public static void selectCityByPosition(Matcher matcher){
+    private void showDownMap(int row) {
+        Tile[][] map = world.getMap();
+        int m = world.width, n = world.length;
+        int x, y;
+        boolean printingCoordinatesFlag = false;
+        String coordinates = "";
+        int currentChar = 0;
+        boolean changeColor = false;
+        final String resetColor = "\u001B[0m";
+        for (int j = 1; j <= 3; j++) {
+            x = -1;
+            y = row - 1;
+            for (int k = 1; k <= 8 * n + 3; k++) {
+                if (j == 3 && k % 16 == 12) {
+                    printingCoordinatesFlag = true;
+                    coordinates = (x + 1) + "," + (y + 1);
+                }
+                if ((k - j) % 16 == 0) {
+                    System.out.print(resetColor + "\\");
+                    changeColor = true;
+                    x++;
+                } else if ((k - (12 - j)) % 16 == 0) {
+                    System.out.print(resetColor + "/");
+                    changeColor = true;
+                    x++;
+                } else if (j == 3 && (k % 16 == 4 || k % 16 == 5 || k % 16 == 6 || k % 16 == 7 || k % 16 == 8)) {
+                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
+                        System.out.print(map[y][x].getColor() + "_");
+                    else
+                        System.out.print("_");
+                } else {
+                    if (printingCoordinatesFlag) {
+                        System.out.print(coordinates.charAt(currentChar));
+                        currentChar++;
+                        if (currentChar > (coordinates.length() - 1)) {
+                            currentChar = 0;
+                            printingCoordinatesFlag = false;
+                        }
+                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
+                        System.out.print(map[y][x].getColor() + " ");
+                    else
+                        System.out.print(" ");
+                }
+            }
+            System.out.println();
+        }
+    }
+    //units methods
+    public static void attack(int destinationX, int destinationY) {
 
     }
 
-    public static void selectCityByName(Matcher matcher){
-
-    }
-
-    public static void moveTo(Matcher matcher){
+    public static void moveTo(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
         String error;
@@ -136,7 +294,7 @@ public class GamePlay {
         }
     }
 
-    public static void unitSleep(){
+    public static void unitSleep() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -151,7 +309,7 @@ public class GamePlay {
         }
     }
 
-    public static void unitAlert(){
+    public static void unitAlert() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -164,7 +322,7 @@ public class GamePlay {
         }
     }
 
-    public static void unitFortify(){
+    public static void unitFortify() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -177,7 +335,7 @@ public class GamePlay {
         }
     }
 
-    public static void unitFortifyHeal(){
+    public static void unitFortifyHeal() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -190,22 +348,22 @@ public class GamePlay {
         }
     }
 
-    public static void unitGarrison(){
+    public static void unitGarrison() {
 
     }
 
-    public static void setupRanged(){
+    public static void setupRanged() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
         } else {
-            if ((error = UnitController.setupRanged(selectedCombatUnit,0, 0, world)) != null) {
+            if ((error = UnitController.setupRanged(selectedCombatUnit, 0, 0, world)) != null) {
                 System.out.println(error);
             }
         }
     }
 
-    public static void cancelMission(){
+    public static void cancelMission() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -220,140 +378,7 @@ public class GamePlay {
         }
     }
 
-    public static void foundCity(){
-
-    }
-
-
-    public void showMap() {
-        Tile[][] map = world.getMap();
-        int m = world.width;
-        int n = world.length;
-        int x = -1;
-        int y = -1;
-        boolean E = true;
-        boolean O = false;
-        boolean printingCordinatesFlag = false;
-        String cordinates = "";
-        int currentChar = 0;
-        for (int i = 1; i <= m; i++) {
-            this.showUpMap(i);
-            this.showDownMap(i);
-        }
-        this.showUpMap(m + 1);
-
-    }
-
-    private void showUpMap(int row) {
-        Tile[][] map = world.getMap();
-        int m = world.width, n = world.length;
-        int x, y;
-        boolean printingCordinatesFlag = false;
-        String cordinates = "";
-        int currentChar = 0;
-        boolean changeColor = false;
-        final String resetColor = "\u001B[0m";
-        for (int j = 3; j >= 1; j--) {
-            // if (row == m)
-            // x = 0;
-            // else
-            x = -1;
-            y = row - 2;
-            for (int k = 1; k <= 8 * n + 3; k++) {
-                if (j == 1 && k % 16 == 4 && row <= m) {
-                    printingCordinatesFlag = true;
-                    cordinates = (x + 1) + "," + (y + 1);
-                }
-                if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
-                    // System.out.print(resetColor + "/");
-                    // changeColor = true;
-                    y++;
-                    x++;
-                }
-                if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
-                    System.out.print(resetColor + "/");
-                    changeColor = true;
-                    y++;
-                    x++;
-                }else if ((k - (12 - j)) % 16 == 0) {
-                    System.out.print(resetColor + "\\");
-                    changeColor = true;
-                    y--;
-                    x++;
-                } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
-                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + "_");
-                    else
-                        System.out.print("_");
-                } else {
-                    if (printingCordinatesFlag) {
-                        System.out.print(cordinates.charAt(currentChar));
-                        currentChar++;
-                        if (currentChar > (cordinates.length() - 1)) {
-                            currentChar = 0;
-                            printingCordinatesFlag = false;
-                        }
-                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + " ");
-                    else
-                        System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    private void showDownMap(int row) {
-        Tile[][] map = world.getMap();
-        int m = world.width, n = world.length;
-        int x, y;
-        boolean printingCordinatesFlag = false;
-        String cordinates = "";
-        int currentChar = 0;
-        boolean changeColor = false;
-        final String resetColor = "\u001B[0m";
-        for (int j = 1; j <= 3; j++) {
-            x = -1;
-            y = row - 1;
-            for (int k = 1; k <= 8 * n + 3; k++) {
-                if (j == 3 && k % 16 == 12) {
-                    printingCordinatesFlag = true;
-                    cordinates = (x + 1) + "," + (y + 1);
-                }
-                if ((k - j) % 16 == 0) {
-                    System.out.print(resetColor + "\\");
-                    changeColor = true;
-                    x++;
-                } else if ((k - (12 - j)) % 16 == 0) {
-                    System.out.print(resetColor + "/");
-                    changeColor = true;
-                    x++;
-                } else if (j == 3 && (k % 16 == 4 || k % 16 == 5 || k % 16 == 6 || k % 16 == 7 || k % 16 == 8)) {
-                    if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + "_");
-                    else
-                        System.out.print("_");
-                } else {
-                    if (printingCordinatesFlag) {
-                        System.out.print(cordinates.charAt(currentChar));
-                        currentChar++;
-                        if (currentChar > (cordinates.length() - 1)) {
-                            currentChar = 0;
-                            printingCordinatesFlag = false;
-                        }
-                    } else if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
-                        System.out.print(map[y][x].getColor() + " ");
-                    else
-                        System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    public void attack(Tile tile) {
-    }
-    public static void deleteUnit(){
+    public static void deleteUnit() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -368,7 +393,7 @@ public class GamePlay {
         }
     }
 
-    public static void unitWake(){
+    public static void unitWake() {
         String error;
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
@@ -383,15 +408,7 @@ public class GamePlay {
         }
     }
 
-    public static void showCombatUnitInfo() {
-
-    }
-
-    public static void showNonCombatUnitInfo() {
-
-    }
-
-    public static void showCityInfo() {
+    public static void foundCity() {
 
     }
 
@@ -419,16 +436,11 @@ public class GamePlay {
 
     }
 
-    public static void showMapBasedOnTile(Tile tile) {
-
-    }
-
-    public static void attack(int destinationX, int destinationY){
-
-    }
-
-
-    public static Tile getSelectedTile() {
-        return selectedTile;
+    public void resetGameValues() {
+        world = null;
+        selectedCity = null;
+        selectedCombatUnit = null;
+        selectedNonCombatUnit = null;
+        selectedTile = null;
     }
 }

@@ -12,28 +12,42 @@ public class World {
 
     private int year;
 
-    public final int width = 3;
-    public final int length = 12;
+    public final int width = 45;
+    public final int length = 80;
     private Tile[][] map = new Tile[width][length];
     private int turn;
 
 
-    public World(ArrayList<String> players){
+    public World(ArrayList<String> players) {
         civilizationNames.addAll(players);
+        for (String civilizationName : civilizationNames) {
+            nations.put(civilizationName, new Civilization(civilizationName));
+        }
+        this.year = -3000;
+        this.turn = 0;
         generateMap();
     }
 
+    public int getWidth() {
+        return width;
+    }
 
-      public String getCurrentCivilizationName() {
+    public int getLength() {
+        return length;
+    }
+
+    public String getCurrentCivilizationName() {
         return civilizationNames.get(turn);
     }
-      public Civilization getCivilizationByName(String name) {
+
+    public Civilization getCivilizationByName(String name) {
         return nations.get(name);
     }
 
     public Tile[][] getMap() {
         return this.map;
     }
+
     public void generateMap() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
@@ -42,8 +56,9 @@ public class World {
         }
     }
 
-    public void setTurn(int turn) {
-        this.turn = turn;
+    public void nextTurn() {
+        this.turn++;
+        this.turn %= nations.size();
     }
 
     public int getTurn() {
@@ -54,7 +69,7 @@ public class World {
         return nations;
     }
 
-    public Tile getTileByCoordinates(int x, int y){
+    public Tile getTileByCoordinates(int x, int y) {
         return this.map[x][y];
     }
 }

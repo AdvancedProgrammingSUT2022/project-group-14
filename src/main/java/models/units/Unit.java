@@ -40,6 +40,10 @@ public class Unit {
         return civilizationName;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public int getCurrentX() {
         return currentX;
     }
