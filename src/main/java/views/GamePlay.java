@@ -16,7 +16,9 @@ public class GamePlay {
 
     public void run(ArrayList<String> usernames) {
         // TODO user validation
+        Tile.readTileTypesInformationFromJson();
         
+
         world = new World(usernames);
     }
 
