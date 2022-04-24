@@ -12,13 +12,13 @@ import com.google.gson.reflect.TypeToken;
 import enums.Progresses;
 import enums.tiles.TileType;
 import models.Tile;
+import models.World;
 
 public class TileController {
 
 
     public static boolean selectedTileIsValid(int x, int y) {
-        return false;
-
+        return x <= World.getWidth() && y <= World.getLength() && x > 0 && y > 0;
     }
 
     public static boolean tileHasJungle(Tile tile) {

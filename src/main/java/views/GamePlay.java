@@ -136,40 +136,31 @@ public class GamePlay {
     public static void showCityInfo() {
 
     }
-
+    //showing map methods
     public static void showMapBasedOnTile(Tile tile) {
+        selectedTile = tile;
         Tile[][] allTiles = world.getMap();
-        Tile[][] wantedTiles = new Tile[3][11];
-        for (int i = Math.max(tile.getX()-1, 0), k = 0; i < Math.min(tile.getX() + 2, world.width); i++, k++) {
-            for (int j = Math.max(tile.getY() - 5, 0), z = 0; j < Math.min(tile.getY() + 6, world.length); j++, z++) {
+        Tile[][] wantedTiles = new Tile[3][12];
+        int k = 0, z = 0;
+        for (int i = Math.max(tile.getX()-1, 0); i < Math.min(tile.getX() + 2, World.getWidth()); i++, k++) {
+            z = 0;
+            for (int j = Math.max(tile.getY() - 5, 0); j < Math.min(tile.getY() + 7, World.getLength()); j++, z++) {
                 wantedTiles[k][z] = allTiles[i][j];
             }
         }
+        showMap(wantedTiles, k, z, tile.getX(), tile.getY()-4);
     }
-    //showing map methods
-    public void showMap() {
-        Tile[][] map = world.getMap();
-        int m = world.width;
-        int n = world.length;
-        int x = -1;
-        int y = -1;
-        boolean E = true;
-        boolean O = false;
-        boolean printingCoordinatesFlag = false;
-        String coordinates = "";
-        int currentChar = 0;
+
+    public static void showMap(Tile[][] map, int m, int n, int originalX, int originalY) {
         for (int i = 1; i <= m; i++) {
-            this.showUpMap(i);
-            this.showDownMap(i);
+            showUpMap(i, map, m, n, originalX-1, originalY + i-2);
+            showDownMap(i, map, m, n, originalX-1, originalY + i-2);
         }
-        this.showUpMap(m + 1);
-
+        showUpMap(m + 1, map, m, n, originalX-1, originalY + m-1);
     }
 
-    private void showUpMap(int row) {
-        Tile[][] map = world.getMap();
-        int m = world.width, n = world.length;
-        int x, y;
+    private static void showUpMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
+        int x, y, originalXCopy = originalX, originalYCopy = originalY;
         boolean printingCoordinatesFlag = false;
         String coordinates = "";
         int currentChar = 0;
@@ -181,27 +172,36 @@ public class GamePlay {
             // else
             x = -1;
             y = row - 2;
+            originalX = originalXCopy;
+            originalY = originalYCopy;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 1 && k % 16 == 4 && row <= m) {
                     printingCoordinatesFlag = true;
                     coordinates = (x + 1) + "," + (y + 1);
+//                    coordinates = (originalX) + "," + originalY;
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
                     // changeColor = true;
                     y++;
                     x++;
+                    originalX++;
+                    originalY++;
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
                     System.out.print(resetColor + "/");
                     changeColor = true;
                     y++;
                     x++;
+                    originalX++;
+                    originalY++;
                 } else if ((k - (12 - j)) % 16 == 0) {
                     System.out.print(resetColor + "\\");
                     changeColor = true;
                     y--;
                     x++;
+                    originalX++;
+                    originalY--;
                 } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
                     if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
                         System.out.print(map[y][x].getColor() + "_");
@@ -225,10 +225,8 @@ public class GamePlay {
         }
     }
 
-    private void showDownMap(int row) {
-        Tile[][] map = world.getMap();
-        int m = world.width, n = world.length;
-        int x, y;
+    private static void showDownMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
+        int x, y, originalXCopy = originalX, originalYCopy = originalY;
         boolean printingCoordinatesFlag = false;
         String coordinates = "";
         int currentChar = 0;
@@ -237,19 +235,24 @@ public class GamePlay {
         for (int j = 1; j <= 3; j++) {
             x = -1;
             y = row - 1;
+            originalX = originalXCopy;
+            originalY = originalYCopy;
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 3 && k % 16 == 12) {
                     printingCoordinatesFlag = true;
                     coordinates = (x + 1) + "," + (y + 1);
+//                    coordinates = originalX + "," + originalY;
                 }
                 if ((k - j) % 16 == 0) {
                     System.out.print(resetColor + "\\");
                     changeColor = true;
                     x++;
+                    originalX++;
                 } else if ((k - (12 - j)) % 16 == 0) {
                     System.out.print(resetColor + "/");
                     changeColor = true;
                     x++;
+                    originalX++;
                 } else if (j == 3 && (k % 16 == 4 || k % 16 == 5 || k % 16 == 6 || k % 16 == 7 || k % 16 == 8)) {
                     if (changeColor == true && -1 < x && -1 < y && x < n && y < m)
                         System.out.print(map[y][x].getColor() + "_");

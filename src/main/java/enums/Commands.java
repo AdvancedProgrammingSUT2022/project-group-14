@@ -24,10 +24,10 @@ public enum Commands {
     CURRENT("(\\-\\-current|\\-c) (?<currentPassword>\\S+)"),
     NEW("(\\-\\-new|\\-ne) (?<newPassword>\\S+)"),
     // GamePlay commands
-    SELECT_UNIT("select unit (?<militaryStatus>)combat|nonCombat) (?<x>\\d+) (?<y>\\d+)"),
+    SELECT_UNIT("select unit (?<militaryStatus>combat|nonCombat) (?<x>\\d+) (?<y>\\d+)"),
     SELECT_CITY_BY_NAME("select city (?<name>\\S+)"),
     SELECT_CITY_BY_POSITION("select city (?<x>\\d+) (<?y>\\d+)"),
-    SHOW_INFO("show info (?<field>research|units|cities|diplomacy|victory|demographics|notifications|military|economic|diplomatic|deals"),
+    SHOW_INFO("show info (?<field>research|units|cities|diplomacy|victory|demographics|notifications|military|economic|diplomatic|deals)"),
     UNIT_MOVE_TO("unit move to (?<x>\\d+) (<?y>\\d+)"),
     UNIT_SLEEP("unit sleep"),
     UNIT_ALERT("unit alert"),
@@ -40,10 +40,10 @@ public enum Commands {
     UNIT_CANCEL_MISSION("unit cancel mission"),
     UNIT_WAKE("unit wake"),
     UNIT_DELETE("unit delete"),
-    UNIT_BUILD("unit build (?<progress>road|railroad|farm|mine|tradingPost|lumberMill|pasture|camp|plantation|quarry"),
-    UNIT_REMOVE("unit remove (?<foundation>jungle|route"),
+    UNIT_BUILD("unit build (?<progress>road|railroad|farm|mine|tradingPost|lumberMill|pasture|camp|plantation|quarry)"),
+    UNIT_REMOVE("unit remove (?<foundation>jungle|route)"),
     UNIT_REPAIR("unit repair"),
-    MAP_SHOW_BY_POSITION("map show (?<x>\\d+) (<?y>\\d+)"),
+    MAP_SHOW_BY_POSITION("map show (?<x>\\d+) (?<y>\\d+)"),
     MAP_SHOW_BY_NAME("map show (?<name>\\S+)"),
     MAP_MOVE("map move (?<direction>right|left|up|down) (?<movementAmount>\\d+)");
 

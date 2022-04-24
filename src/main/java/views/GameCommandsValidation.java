@@ -206,15 +206,15 @@ public class GameCommandsValidation {
 
     public void checkMapMove(Matcher matcher) {
         String direction = matcher.group("direction");
-        int movementAmount = Integer.parseInt("movementAmount");
+        int movementAmount = Integer.parseInt(matcher.group("movementAmount"));
 
         Tile oldTile = GamePlay.getSelectedTile();
         if (oldTile == null) {
             System.out.println("Tile is not selected");
             return;
         }
-        int x = oldTile.getX();
-        int y = oldTile.getY();
+        int x = oldTile.getX() + 1;
+        int y = oldTile.getY() + 1;
 
         switch (direction) {
             case "right":

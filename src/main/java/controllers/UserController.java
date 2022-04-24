@@ -19,13 +19,13 @@ public class UserController {
     private static User loggedInUser = null;
 
     public static void readAllUsers() throws IOException {
-        String json = new String(Files.readAllBytes(Paths.get("usersData.json")));
+        String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/usersData.json")));
         users = new Gson().fromJson(json,
                 new TypeToken<List<User>>(){}.getType());
     }
 
     public static void saveAllUsers() throws IOException {
-        FileWriter fileWriter = new FileWriter("usersData.json");
+        FileWriter fileWriter = new FileWriter("./src/main/resources/usersData.json");
         fileWriter.write(new Gson().toJson(users));
         fileWriter.close();
     }

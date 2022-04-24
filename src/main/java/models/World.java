@@ -12,8 +12,8 @@ public class World {
 
     private int year;
 
-    public final int width = 45;
-    public final int length = 80;
+    private static final int width = 45;
+    private static final int length = 80;
     private Tile[][] map = new Tile[width][length];
     private int turn;
 
@@ -28,11 +28,11 @@ public class World {
         generateMap();
     }
 
-    public int getWidth() {
+    public static int getWidth() {
         return width;
     }
 
-    public int getLength() {
+    public static int getLength() {
         return length;
     }
 
@@ -51,7 +51,7 @@ public class World {
     public void generateMap() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
-                this.map[i][j] = Tile.generateRandomTile();
+                this.map[i][j] = Tile.generateRandomTile(i, j);
             }
         }
     }
@@ -70,6 +70,6 @@ public class World {
     }
 
     public Tile getTileByCoordinates(int x, int y) {
-        return this.map[x][y];
+        return this.map[x-1][y-1];
     }
 }
