@@ -30,4 +30,20 @@ public class World {
     public void generateMap(){
 
     }
+
+    public void setTurn(int turn) {
+        this.turn = turn;
+    }
+
+    public int getTurn() {
+        return this.turn;
+    }
+
+    public HashMap<String, Civilization> getNations() {
+        return nations;
+    }
+
+    public Tile getTileByCoordinates(int x, int y){
+        return this.map[x][y];
+    }
 }
