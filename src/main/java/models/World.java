@@ -14,8 +14,6 @@ public class World {
     private int evolutionSpeed;
     private int turn;
 
-    private Tile[][] map;
-
     public World(ArrayList<String> players) {
         for (int i = 0; i < players.size(); i++) {
             civilizations.add(new Civilization(players.get(i)));
@@ -23,7 +21,6 @@ public class World {
         year = -3000;
         evolutionSpeed = 10;
         turn = 0;
-        map = MapController.generateMap();
     }
 
     public String getCurrentCivilizationName() {
@@ -52,11 +49,4 @@ public class World {
         evolutionSpeed += amount;
     }
 
-    public Tile[][] getMap() {
-        return this.map;
-    }
-
-    public Tile getTileByCoordinates(int x, int y) {
-        return this.map[x-1][y-1];
-    }
 }

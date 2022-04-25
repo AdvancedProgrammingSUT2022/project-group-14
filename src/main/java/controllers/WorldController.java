@@ -1,12 +1,15 @@
 package controllers;
 
 import models.City;
+import models.Civilization;
 import models.Tile;
 import models.World;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
+import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class WorldController {
     private static World world;
@@ -18,6 +21,7 @@ public class WorldController {
 
     public static void newWorld(ArrayList<String> usernames) {
         Tile.readTileTypesInformationFromJson();
+        MapController.generateMap();
         world = new World(usernames);
     }
 
@@ -27,6 +31,19 @@ public class WorldController {
         selectedCity = null;
         selectedCombatUnit = null;
         selectedNonCombatUnit = null;
+        MapController.resetMap();
+    }
+
+    public static void nextTurn() {
+        //TODO progresses, technologies, goods, buildings, movingUnits, mapVision
+        Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        CivilizationController.updateTechnology(currentCivilization);
+        CivilizationController.updateMapVision(currentCivilization);
+        CivilizationController.updateGoods(currentCivilization);
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            MoveController.moveUnitToDestination(unit);
+        }
+        world.nextTurn();
     }
 
     public static World getWorld() {

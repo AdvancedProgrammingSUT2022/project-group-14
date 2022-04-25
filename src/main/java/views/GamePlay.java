@@ -8,8 +8,11 @@ import models.units.NonCombatUnit;
 import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
+
+import static controllers.MapController.getMap;
 
 public class GamePlay {
 
@@ -25,7 +28,7 @@ public class GamePlay {
     public static void selectUnit(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x"));
         int y = Integer.parseInt(matcher.group("y"));
-        Tile wantedTile = getTileByPosition(x, y);
+        Tile wantedTile = MapController.getTileByCoordinates(x, y);
         if (matcher.group("militaryStatus").equals("combat")) {
             if (TileController.combatUnitExistsInTile(wantedTile)) {
                 WorldController.setSelectedCombatUnit(wantedTile.getCombatUnit());
@@ -51,11 +54,6 @@ public class GamePlay {
 
     public static void selectCityByName(Matcher matcher) {
 
-    }
-
-    // getting methods
-    public static Tile getTileByPosition(int x, int y) {
-        return WorldController.getWorld().getTileByCoordinates(x, y);
     }
 
     public static Tile getTileByCityName(String name) {
@@ -127,7 +125,7 @@ public class GamePlay {
     // showing map methods
     public static void showMapBasedOnTile(Tile tile) {
         WorldController.setSelectedTile(tile);
-        Tile[][] allTiles = WorldController.getWorld().getMap();
+        Tile[][] allTiles = MapController.getMap();
         Tile[][] wantedTiles = new Tile[3][12];
         int k = 0, z = 0;
         for (int i = Math.max(tile.getX() - 1, 0); i < Math.min(tile.getX() + 2, MapController.getWidth()); i++, k++) {
@@ -262,11 +260,11 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else if (WorldController.getSelectedCombatUnit() != null) {
-            if ((error = MoveController.setUnitDestinationCoordinates(WorldController.getSelectedCombatUnit(), x, y, WorldController.getWorld())) != null) {
+            if ((error = MoveController.setUnitDestinationCoordinates(WorldController.getSelectedCombatUnit(), x, y)) != null) {
                 System.out.println(error);
             }
         } else {
-            if ((error = MoveController.setUnitDestinationCoordinates(WorldController.getSelectedNonCombatUnit(), x, y, WorldController.getWorld())) != null) {
+            if ((error = MoveController.setUnitDestinationCoordinates(WorldController.getSelectedNonCombatUnit(), x, y)) != null) {
                 System.out.println(error);
             }
         }

@@ -2,6 +2,7 @@
 package models;
 
 import controllers.MapController;
+import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import models.units.*;
@@ -9,6 +10,7 @@ import org.w3c.dom.ranges.Range;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class Civilization {
     private String name;
@@ -37,8 +39,9 @@ public class Civilization {
     //TODO may consider a new way to handle citizens
 
     public Civilization(String name) {
+        Melee melee = new Melee(10, 10, 2, "warrior", name, 0, " ", " ", 10, 10, 10);
         this.name = name;
-        //TODO  add first warrior and settler
+        addMeleeUnit(melee);
         firstCapital = null;
         currentCapital = null;
         currentTechnology = null;
@@ -52,34 +55,42 @@ public class Civilization {
 
     public void addMeleeUnit(Melee unit) {
         melees.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(unit);
     }
 
     public void addRangedUnit(Ranged unit) {
         ranges.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(unit);
     }
 
     public void addSettler(Settler unit) {
         settlers.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(unit);
     }
 
-    public void addMeleeUnit(Worker unit) {
+    public void addWorker(Worker unit) {
         workers.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(unit);
     }
 
     public void removeMeleeUnit(Melee unit) {
         melees.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(null);
     }
 
     public void removeRangedUnit(Ranged unit) {
         ranges.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(null);
     }
 
     public void removeWorker(Worker unit) {
         workers.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(null);
     }
 
     public void removeSettler(Settler unit) {
         settlers.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(null);
     }
 
     public ArrayList<Unit> getAllUnits() {

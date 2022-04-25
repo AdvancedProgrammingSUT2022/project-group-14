@@ -1,5 +1,6 @@
 package views;
 
+import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.Commands;
@@ -60,7 +61,7 @@ public class GameCommandsValidation {
             WorldController.resetWorld();
             return false;
         } else if (Commands.getMatcher(input, Commands.NEXT_TURN) != null) {
-            WorldController.getWorld().nextTurn();
+            WorldController.nextTurn();
         } else System.out.println("invalid command");
 
         return true;
@@ -168,7 +169,7 @@ public class GameCommandsValidation {
         if (matcherPositionIsValid(matcher)) {
             int x = Integer.parseInt(matcher.group("x"));
             int y = Integer.parseInt(matcher.group("y"));
-            Tile tile = GamePlay.getTileByPosition(x, y);
+            Tile tile = MapController.getTileByCoordinates(x, y);
             GamePlay.showMapBasedOnTile(tile);
         } else System.out.println("given position is invalid");
     }
@@ -201,7 +202,7 @@ public class GameCommandsValidation {
         }
 
         if (TileController.selectedTileIsValid(x, y)){
-            Tile newTile = GamePlay.getTileByPosition(x, y);
+            Tile newTile = MapController.getTileByCoordinates(x, y);
             GamePlay.showMapBasedOnTile(newTile);
 
         }else System.out.println("the wanted movement can't be done");

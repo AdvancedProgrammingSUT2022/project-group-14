@@ -1,5 +1,7 @@
 package models.units;
 
+import controllers.TileController;
+import controllers.WorldController;
 import enums.Technologies;
 import models.Civilization;
 import models.Tile;
