@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
+import controllers.MapController;
 import enums.tiles.TileType;
 
 public class World {
@@ -13,11 +14,7 @@ public class World {
     private int evolutionSpeed;
     private int turn;
 
-    private static int width = 45;
-    private static int length = 80;
-    private Tile[][] map = new Tile[width][length];
-
-
+    private Tile[][] map;
 
     public World(ArrayList<String> players) {
         for (int i = 0; i < players.size(); i++) {
@@ -26,7 +23,7 @@ public class World {
         year = -3000;
         evolutionSpeed = 10;
         turn = 0;
-        generateMap();
+        map = MapController.generateMap();
     }
 
     public String getCurrentCivilizationName() {
@@ -55,25 +52,8 @@ public class World {
         evolutionSpeed += amount;
     }
 
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getLength() {
-        return length;
-    }
-
-
     public Tile[][] getMap() {
         return this.map;
-    }
-
-    public void generateMap() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
-                this.map[i][j] = Tile.generateRandomTile(i, j);
-            }
-        }
     }
 
     public Tile getTileByCoordinates(int x, int y) {

@@ -19,12 +19,11 @@ public class TileController {
 
 
     public static boolean selectedTileIsValid(int x, int y) {
-        return x <= World.getWidth() && y <= World.getLength() && x > 0 && y > 0;
+        return x <= MapController.getWidth() && y <= MapController.getLength() && x > 0 && y > 0;
     }
 
     public static boolean tileHasJungle(Tile tile) {
         return false;
-
     }
 
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y, World world) {

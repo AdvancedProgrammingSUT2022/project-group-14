@@ -30,26 +30,26 @@ public class MoveController {
     }
 
     public void moveUnitToDestination(Unit unit, World world) {
-        boolean[][] visitedTiles = new boolean[World.getWidth()][World.getLength()];
-        int[][] distanceFromStartingTile = new int[World.getWidth()][World.getLength()];
-        Tile[][] previousTile = new Tile[World.getWidth()][World.getLength()];
+        boolean[][] visitedTiles = new boolean[MapController.getWidth()][MapController.getLength()];
+        int[][] distanceFromStartingTile = new int[MapController.getWidth()][MapController.getLength()];
+        Tile[][] previousTile = new Tile[MapController.getWidth()][MapController.getLength()];
 
         //initializing the arrays
-        for (int i = 0; i < World.getWidth(); i++) {
-            for (int j = 0; j < World.getLength(); j++) {
+        for (int i = 0; i < MapController.getWidth(); i++) {
+            for (int j = 0; j < MapController.getLength(); j++) {
                 visitedTiles[i][j] = false;
                 distanceFromStartingTile[i][j] = Integer.MAX_VALUE;
             }
         }
         distanceFromStartingTile[unit.getCurrentX()][unit.getCurrentY()] = 0;
         //main Dijkstra part
-        for (int i = 0; i < World.getWidth() * World.getLength(); i++) {
+        for (int i = 0; i < MapController.getWidth() * MapController.getLength(); i++) {
             Tile tempPreviousTile = null;
             int minDistance = Integer.MAX_VALUE;
             ArrayList<Tile> neighbourTiles;
 
-            for (int k = 0; k < World.getWidth(); k++) {
-                for (int z = 0; z < World.getLength(); z++) {
+            for (int k = 0; k < MapController.getWidth(); k++) {
+                for (int z = 0; z < MapController.getLength(); z++) {
                     if (!visitedTiles[k][z] && distanceFromStartingTile[k][z] < minDistance) {
                         minDistance = distanceFromStartingTile[k][z];
                         tempPreviousTile = world.getTileByCoordinates(k, z);

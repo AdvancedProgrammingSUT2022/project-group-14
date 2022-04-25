@@ -1,9 +1,6 @@
 package views;
 
-import controllers.MoveController;
-import controllers.TileController;
-import controllers.UnitController;
-import controllers.WorldController;
+import controllers.*;
 import enums.Progresses;
 import models.*;
 import models.units.CombatUnit;
@@ -133,9 +130,9 @@ public class GamePlay {
         Tile[][] allTiles = WorldController.getWorld().getMap();
         Tile[][] wantedTiles = new Tile[3][12];
         int k = 0, z = 0;
-        for (int i = Math.max(tile.getX() - 1, 0); i < Math.min(tile.getX() + 2, World.getWidth()); i++, k++) {
+        for (int i = Math.max(tile.getX() - 1, 0); i < Math.min(tile.getX() + 2, MapController.getWidth()); i++, k++) {
             z = 0;
-            for (int j = Math.max(tile.getY() - 5, 0); j < Math.min(tile.getY() + 7, World.getLength()); j++, z++) {
+            for (int j = Math.max(tile.getY() - 5, 0); j < Math.min(tile.getY() + 7, MapController.getLength()); j++, z++) {
                 wantedTiles[k][z] = allTiles[i][j];
             }
         }

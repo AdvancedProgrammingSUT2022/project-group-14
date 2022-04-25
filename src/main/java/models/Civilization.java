@@ -1,6 +1,7 @@
 
 package models;
 
+import controllers.MapController;
 import enums.Researches;
 import enums.Technologies;
 import models.units.*;
@@ -12,7 +13,9 @@ import java.util.HashMap;
 public class Civilization {
     private String name;
 
-    private Tile[][] mapFromPov;
+    private int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getLength()];
+    private Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getLength()];
+
 
     private ArrayList<Melee> melees = new ArrayList<>();
     private ArrayList<Ranged> ranges = new ArrayList<>();
