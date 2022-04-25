@@ -68,4 +68,8 @@ public class WorldController {
     public static void setSelectedNonCombatUnit(NonCombatUnit selectedNonCombatUnit) {
         WorldController.selectedNonCombatUnit = selectedNonCombatUnit;
     }
+
+    public static boolean unitIsNotSelected() {
+        return selectedCombatUnit == null && selectedNonCombatUnit == null;
+    }
 }
