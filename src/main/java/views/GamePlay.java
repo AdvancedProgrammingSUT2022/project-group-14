@@ -3,6 +3,7 @@ package views;
 import controllers.MoveController;
 import controllers.TileController;
 import controllers.UnitController;
+import controllers.WorldController;
 import enums.Progresses;
 import models.*;
 import models.units.CombatUnit;
@@ -15,25 +16,12 @@ import java.util.regex.Matcher;
 
 public class GamePlay {
 
-    private static World world;
-    private static City selectedCity;
-    private static CombatUnit selectedCombatUnit;
-    private static NonCombatUnit selectedNonCombatUnit;
-    private static Tile selectedTile;
-
     public void run(ArrayList<String> usernames, Scanner scanner) {
-        Tile.readTileTypesInformationFromJson();
-        world = new World(usernames);
-
         String input;
         GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
-        while (true) {
+        do {
             input = scanner.nextLine();
-            if (!gameCommandsValidation.checkCommands(input))
-                break;
-        }
-
-        resetGameValues();
+        } while (gameCommandsValidation.checkCommands(input));
     }
 
     // selecting methods
@@ -427,13 +415,5 @@ public class GamePlay {
 
     public static void repairCurrentTile() {
 
-    }
-
-    public void resetGameValues() {
-        world = null;
-        selectedCity = null;
-        selectedCombatUnit = null;
-        selectedNonCombatUnit = null;
-        selectedTile = null;
     }
 }

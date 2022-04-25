@@ -45,7 +45,10 @@ public enum Commands {
     UNIT_REPAIR("unit repair"),
     MAP_SHOW_BY_POSITION("map show (?<x>\\d+) (?<y>\\d+)"),
     MAP_SHOW_BY_NAME("map show (?<name>\\S+)"),
-    MAP_MOVE("map move (?<direction>right|left|up|down) (?<movementAmount>\\d+)");
+    MAP_MOVE("map move (?<direction>right|left|up|down) (?<movementAmount>\\d+)"),
+    NEXT_TURN("next turn"),
+    END_GAME("end game");
+
 
     private final String regex;
 

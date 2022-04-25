@@ -1,6 +1,7 @@
 package views;
 
 import controllers.TileController;
+import controllers.WorldController;
 import enums.Commands;
 import models.Tile;
 
@@ -55,10 +56,14 @@ public class GameCommandsValidation {
             checkShowMapByName(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.MAP_MOVE)) != null) {
             checkMapMove(matcher);
+        } else if (Commands.getMatcher(input, Commands.END_GAME) != null) {
+            WorldController.resetWorld();
+            return false;
+        } else if (Commands.getMatcher(input, Commands.NEXT_TURN) != null) {
+            WorldController.getWorld().nextTurn();
         } else System.out.println("invalid command");
 
         return true;
-
     }
 
     private boolean matcherPositionIsValid(Matcher matcher) {
@@ -74,40 +79,19 @@ public class GameCommandsValidation {
         String field = matcher.group("field");
 
         switch (field) {
-            case "research":
-                GamePlay.showResearches();
-                break;
-            case "units":
-                GamePlay.showUnits();
-                break;
-            case "cities":
-                GamePlay.showCities();
-                break;
-            case "diplomacy":
-                GamePlay.showDiplomacyPanel();
-                break;
-            case "victory":
-                GamePlay.showVictoryPanel();
-                break;
-            case "demographics":
-                GamePlay.showDemographicsPanel();
-                break;
-            case "notifications":
-                GamePlay.showNotifications();
-                break;
-            case "military":
-                GamePlay.showMilitaryUnits();
-                break;
-            case "economic":
-                GamePlay.showEconomicStatus();
-                break;
-            case "diplomatic":
-                GamePlay.showDiplomaticHistory();
-                break;
-            case "deals":
-                GamePlay.showDealsHistory();
-                break;
-            default:
+            case "research" -> GamePlay.showResearches();
+            case "units" -> GamePlay.showUnits();
+            case "cities" -> GamePlay.showCities();
+            case "diplomacy" -> GamePlay.showDiplomacyPanel();
+            case "victory" -> GamePlay.showVictoryPanel();
+            case "demographics" -> GamePlay.showDemographicsPanel();
+            case "notifications" -> GamePlay.showNotifications();
+            case "military" -> GamePlay.showMilitaryUnits();
+            case "economic" -> GamePlay.showEconomicStatus();
+            case "diplomatic" -> GamePlay.showDiplomaticHistory();
+            case "deals" -> GamePlay.showDealsHistory();
+            default -> {
+            }
         }
     }
 
@@ -150,14 +134,9 @@ public class GameCommandsValidation {
         String progress = matcher.group("progress");
 
         switch (progress) {
-            case "road":
-                GamePlay.buildRoadOnTile();
-                break;
-            case "railroad":
-                GamePlay.buildRailroadOnTile();
-                break;
-            default:
-                GamePlay.buildProgressOnTile();
+            case "road" -> GamePlay.buildRoadOnTile();
+            case "railroad" -> GamePlay.buildRailroadOnTile();
+            default -> GamePlay.buildProgressOnTile();
         }
     }
 
@@ -215,17 +194,10 @@ public class GameCommandsValidation {
         int y = oldTile.getY() + 1;
 
         switch (direction) {
-            case "right":
-                y += movementAmount;
-                break;
-            case "left":
-                y -= movementAmount;
-                break;
-            case "down":
-                x += movementAmount;
-                break;
-            case "up":
-                x -= movementAmount;
+            case "right" -> y += movementAmount;
+            case "left" -> y -= movementAmount;
+            case "down" -> x += movementAmount;
+            case "up" -> x -= movementAmount;
         }
 
         if (TileController.selectedTileIsValid(x, y)){
