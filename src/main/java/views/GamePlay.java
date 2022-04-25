@@ -16,7 +16,7 @@ import static controllers.MapController.getMap;
 
 public class GamePlay {
 
-    public void run(ArrayList<String> usernames, Scanner scanner) {
+    public void run(Scanner scanner) {
         String input;
         GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
         do {
@@ -161,7 +161,7 @@ public class GamePlay {
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 1 && k % 16 == 4 && row <= m) {
                     printingCoordinatesFlag = true;
-                    coordinates = (originalX + x + 2) + "," + (originalY + y + 2);
+                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
@@ -215,7 +215,7 @@ public class GamePlay {
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 3 && k % 16 == 12) {
                     printingCoordinatesFlag = true;
-                    coordinates = (originalX + x + 2) + "," + (originalY + y + 2);
+                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
                 }
                 if ((k - j) % 16 == 0) {
                     System.out.print(resetColor + "\\");
@@ -260,11 +260,11 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else if (WorldController.getSelectedCombatUnit() != null) {
-            if ((error = MoveController.setUnitDestinationCoordinates(WorldController.getSelectedCombatUnit(), x, y)) != null) {
+            if ((error = UnitController.setUnitDestinationCoordinates(WorldController.getSelectedCombatUnit(), x, y)) != null) {
                 System.out.println(error);
             }
         } else {
-            if ((error = MoveController.setUnitDestinationCoordinates(WorldController.getSelectedNonCombatUnit(), x, y)) != null) {
+            if ((error = UnitController.setUnitDestinationCoordinates(WorldController.getSelectedNonCombatUnit(), x, y)) != null) {
                 System.out.println(error);
             }
         }

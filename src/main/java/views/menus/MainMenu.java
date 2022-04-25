@@ -103,7 +103,7 @@ public class MainMenu {
     private void startGame(ArrayList<String> usernames){
         GamePlay gamePlay = new GamePlay();
         WorldController.newWorld(usernames);
-        gamePlay.run(usernames, this.scanner);
+        gamePlay.run(this.scanner);
     }
 
     private void goToProfileMenu() {

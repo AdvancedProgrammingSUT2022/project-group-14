@@ -139,7 +139,7 @@
         "production": 0.0,
         "gold": 0.0,
         "militaryImpact": 25,
-        "movingPoint": -1,
+        "movingPoint": 9999,
         "color": "\u001b[46m",
         "isRiver": [
             false,
@@ -161,7 +161,7 @@
         "production": 0.0,
         "gold": 0.0,
         "militaryImpact": 25,
-        "movingPoint": -1,
+        "movingPoint": 9999,
         "color": "\u001b[44m",
         "isRiver": [
             false,

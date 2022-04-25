@@ -9,6 +9,18 @@ import java.util.Set;
 
 public class UnitController {
 
+    public static String setUnitDestinationCoordinates(Unit unit, int x, int y) {
+        String reason;
+        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if ((reason = MoveController.impossibleToMoveToTile(x, y)) != null) {
+            return reason;
+        } else {
+            unit.setDestinationCoordinates(x, y);
+        }
+        return null;
+    }
+
     public static String cancelMission(Unit unit, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
