@@ -56,7 +56,7 @@ public class MoveController {
                     }
                 }
             }
-            neighbourTiles = TileController.getAvailableNeighbourTiles(tempPreviousTile.getX(), tempPreviousTile.getY());
+            neighbourTiles = TileController.getAvailableNeighbourTiles(tempPreviousTile.getX(), tempPreviousTile.getY(), world);
             for (Tile tile : neighbourTiles) {
                 if (minDistance + tile.getMovingPoint() < distanceFromStartingTile[tile.getX()][tile.getY()]) {
                     distanceFromStartingTile[tile.getX()][tile.getY()] = minDistance + tile.getMovingPoint();

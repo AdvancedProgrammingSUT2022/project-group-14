@@ -27,8 +27,21 @@ public class TileController {
 
     }
 
-    public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
+    public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y, World world) {
         ArrayList<Tile> neighbours = new ArrayList<>();
+        if (selectedTileIsValid(x-1, y))
+            neighbours.add(world.getTileByCoordinates(x-1, y));
+        if (selectedTileIsValid(x, y+1))
+            neighbours.add(world.getTileByCoordinates(x, y+1));
+        if (selectedTileIsValid(x+1, y+1))
+            neighbours.add(world.getTileByCoordinates(x+1, y+1));
+        if (selectedTileIsValid(x+1, y))
+            neighbours.add(world.getTileByCoordinates(x+1, y));
+        if (selectedTileIsValid(x+1, y-1))
+            neighbours.add(world.getTileByCoordinates(x+1, y-1));
+        if (selectedTileIsValid(x, y-1))
+            neighbours.add(world.getTileByCoordinates(x, y-1));
+
         return neighbours;
     }
 
