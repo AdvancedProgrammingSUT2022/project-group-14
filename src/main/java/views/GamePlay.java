@@ -350,7 +350,7 @@ public class GamePlay {
         if (selectedNonCombatUnit == null && selectedCombatUnit == null) {
             System.out.println("you haven't selected a unit yet");
         } else {
-            if ((error = UnitController.setupRanged(selectedCombatUnit, 0, 0, world)) != null) {
+            if ((error = UnitController.setupRangedUnit(selectedCombatUnit, 0, 0, world)) != null) {
                 System.out.println(error);
             }
         }

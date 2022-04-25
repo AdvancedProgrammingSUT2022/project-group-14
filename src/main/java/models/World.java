@@ -51,6 +51,10 @@ public class World {
         year += evolutionSpeed;
     }
 
+    public void increaseEvolutionSpeed(int amount) {
+        evolutionSpeed += amount;
+    }
+
     public static int getWidth() {
         return width;
     }

@@ -9,11 +9,6 @@ import java.util.Set;
 
 public class UnitController {
 
-    public static City UnitsCity(Unit unit) {
-        return null;
-
-    }
-
     public static String cancelMission(Unit unit, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
@@ -67,7 +62,7 @@ public class UnitController {
         return null;
     }
 
-    public static String setupRanged(Unit unit, int x, int y, World world) {
+    public static String setupRangedUnit(Unit unit, int x, int y, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else if (unit instanceof Ranged && ((Ranged) unit).isSiegeUnit()) {
@@ -78,20 +73,20 @@ public class UnitController {
         return null;
     }
 
-
-    // returns if the city could be founded or not and do it if possible and returns
-    // the error if not
-    public static String foundCity(Settler settler, World world) {
-        return null;
-
-    }
-
     public static String wakeUp(Unit unit, World world) {
         if (!unit.getCivilizationName().equals(world.getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else {
             unit.wakeUp();
         }
+        return null;
+    }
+
+    public static String garrisonCity(CombatUnit combatUnit, World world) {
+        return null;
+    }
+
+    public static String foundCity(Settler settler, World world) {
         return null;
     }
 
@@ -125,12 +120,6 @@ public class UnitController {
         } else {
             return "unit doesn't exist";
         }
-
         return null;
     }
-
-    public static String garrisonCity(CombatUnit combatUnit, World world) {
-        return null;
-    }
-
 }
