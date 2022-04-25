@@ -35,6 +35,10 @@ public class World {
         return null;
     }
 
+    public ArrayList<Civilization> getAllCivilizations() {
+        return civilizations;
+    }
+
     public int getTurn() {
         return this.turn;
     }

@@ -13,7 +13,7 @@ public class UnitController {
         String reason;
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
-        } else if ((reason = MoveController.impossibleToMoveToTile(x, y)) != null) {
+        } else if ((reason = MoveController.impossibleToMoveToTile(x, y, unit)) != null) {
             return reason;
         } else {
             unit.setDestinationCoordinates(x, y);
