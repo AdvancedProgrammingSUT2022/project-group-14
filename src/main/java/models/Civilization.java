@@ -8,9 +8,7 @@ import enums.Technologies;
 import models.units.*;
 import org.w3c.dom.ranges.Range;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Civilization {
     private String name;
@@ -39,9 +37,14 @@ public class Civilization {
     //TODO may consider a new way to handle citizens
 
     public Civilization(String name) {
-        Melee melee = new Melee(9, 9, 2, "warrior", name, 0, " ", " ", 10, 10, 10);
-        this.name = name;
+        Random random = new Random();
+        int randomX = random.nextInt(40), randomY = random.nextInt(80);
+        Melee melee = new Melee(randomX, randomY, 2, "warrior", name, 0, " ", " ", 10, 10, 10);
         addMeleeUnit(melee);
+        Settler settler = new Settler(randomX, randomY, 2, "settler", name, 0, " ", " ", 10);
+        addSettler(settler);
+        System.out.println(randomX + " " + randomY);
+        this.name = name;
         firstCapital = null;
         currentCapital = null;
         currentTechnology = null;

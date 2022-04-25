@@ -33,6 +33,13 @@ public class WorldController {
         MapController.resetMap();
     }
 
+    public static void resetSelection() {
+        selectedTile = null;
+        selectedCity = null;
+        selectedCombatUnit = null;
+        selectedNonCombatUnit = null;
+    }
+
     public static void nextTurn() {
         //TODO progresses, technologies, goods, buildings, movingUnits, mapVision
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
@@ -43,6 +50,7 @@ public class WorldController {
             MoveController.moveUnitToDestination(unit);
         }
         world.nextTurn();
+        resetSelection();
     }
 
     public static World getWorld() {

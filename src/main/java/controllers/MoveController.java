@@ -28,6 +28,7 @@ public class MoveController {
                                                 MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()));
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
             movementPointsConsumed += nextTileToMove.getMovingPoint();
+            MapController.updateUnitPositions();
         }
     }
 

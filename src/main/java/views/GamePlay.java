@@ -179,7 +179,7 @@ public class GamePlay {
                     changeColor = true;
                     x--;
                     y++;
-                } else if (j == 1 && (k % 16 == 12 || k % 16 == 13 || k % 16 == 14 || k % 16 == 15 || k % 16 == 0)) {
+                } else if (j == 1 && (k % 16 >= 12 || k % 16 == 0)) {
                     if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
                         System.out.print(map[originalX + x][originalY + y].getColor() + "_");
                     else
@@ -192,8 +192,17 @@ public class GamePlay {
                             currentChar = 0;
                             printingCoordinatesFlag = false;
                         }
-                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[originalX + x][originalY + y].getColor() + " ");
+                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m) {
+                        CombatUnit combatUnit= MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
+                        NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
+                        if (combatUnit != null && j == 3 && k % 16 == 12) {
+                            System.out.print(map[originalX + x][originalY + y].getColor() + combatUnit.getName().charAt(0));
+                        } else if (nonCombatUnit != null && j == 3 && k % 16 == 14) {
+                            System.out.print(map[originalX + x][originalY + y].getColor() + nonCombatUnit.getName().charAt(0));
+                        } else {
+                            System.out.print(map[originalX + x][originalY + y].getColor() + " ");
+                        }
+                    }
                     else
                         System.out.print(" ");
                 }
@@ -225,7 +234,7 @@ public class GamePlay {
                     System.out.print(resetColor + "/");
                     changeColor = true;
                     y++;
-                } else if (j == 3 && (k % 16 == 4 || k % 16 == 5 || k % 16 == 6 || k % 16 == 7 || k % 16 == 8)) {
+                } else if (j == 3 && (k % 16 >= 4 && k % 16 <= 8)) {
                     if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
                         System.out.print(map[originalX + x][originalY + y].getColor() + "_");
                     else
@@ -238,8 +247,17 @@ public class GamePlay {
                             currentChar = 0;
                             printingCoordinatesFlag = false;
                         }
-                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[originalX + x][originalY + y].getColor() + " ");
+                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m) {
+                        CombatUnit combatUnit= MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
+                        NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
+                        if (combatUnit != null && j == 1 && k % 16 == 4) {
+                            System.out.print(map[originalX + x][originalY + y].getColor() + combatUnit.getName().charAt(0));
+                        } else if (nonCombatUnit != null && j == 1 && k % 16 == 6) {
+                            System.out.print(map[originalX + x][originalY + y].getColor() + nonCombatUnit.getName().charAt(0));
+                        } else {
+                            System.out.print(map[originalX + x][originalY + y].getColor() + " ");
+                        }
+                    }
                     else
                         System.out.print(" ");
                 }

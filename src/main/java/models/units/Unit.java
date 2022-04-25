@@ -1,5 +1,6 @@
 package models.units;
 
+import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.Technologies;
@@ -8,6 +9,7 @@ import models.Tile;
 import models.resources.StrategicResource;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Unit {
     private int currentX, currentY;
