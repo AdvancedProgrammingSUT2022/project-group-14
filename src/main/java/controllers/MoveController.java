@@ -37,6 +37,7 @@ public class MoveController {
                 }
             }
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
+            System.out.printf("X is : %d Y is : %d\n", nextTileToMove.getX(), nextTileToMove.getY());
             movementPointsConsumed += nextTileToMove.getMovingPoint();
             MapController.updateUnitPositions();
         }

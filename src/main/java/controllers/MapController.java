@@ -1,6 +1,12 @@
 package controllers;
 
+import models.Civilization;
 import models.Tile;
+import models.units.CombatUnit;
+import models.units.NonCombatUnit;
+import models.units.Unit;
+
+import java.util.ArrayList;
 
 public class MapController {
     private static int width = 45;
@@ -40,17 +46,28 @@ public class MapController {
     }
 
     public static void updateUnitPositions() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
-                if (map[i][j].getCombatUnit() != null &&
-                        (map[i][j].getCombatUnit().getCurrentX() != i || map[i][j].getCombatUnit().getCurrentY() != j)) {
-                    map[map[i][j].getCombatUnit().getCurrentX()][map[i][j].getCombatUnit().getCurrentY()].setCombatUnit(map[i][j].getCombatUnit());
-                    map[i][j].setCombatUnit(null);
+        ArrayList<Unit> allUnitsInGame = new ArrayList<>();
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            allUnitsInGame.addAll(civilization.getAllUnits());
+        }
+
+        for (Unit unit : allUnitsInGame) {
+            if (unit instanceof CombatUnit) {
+                map[unit.getCurrentX()][unit.getCurrentY()].setCombatUnit((CombatUnit) unit);
+            }
+            if (unit instanceof NonCombatUnit) {
+                map[unit.getCurrentX()][unit.getCurrentY()].setNonCombatUnit((NonCombatUnit) unit);
+            }
+        }
+        for (Tile[] tiles : map) {
+            for (Tile tile : tiles) {
+                if (tile.getCombatUnit() != null &&
+                        (tile.getCombatUnit().getCurrentX() != tile.getX() || tile.getCombatUnit().getCurrentY() != tile.getY())) {
+                    tile.setCombatUnit(null);
                 }
-                if (map[i][j].getNonCombatUnit() != null &&
-                        (map[i][j].getNonCombatUnit().getCurrentX() != i || map[i][j].getNonCombatUnit().getCurrentY() != j)) {
-                    map[map[i][j].getNonCombatUnit().getCurrentX()][map[i][j].getNonCombatUnit().getCurrentY()].setNonCombatUnit(map[i][j].getNonCombatUnit());
-                    map[i][j].setNonCombatUnit(null);
+                if (tile.getNonCombatUnit() != null &&
+                        (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
+                    tile.setNonCombatUnit(null);
                 }
             }
         }
