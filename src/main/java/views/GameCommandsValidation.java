@@ -2,8 +2,6 @@ package views;
 
 import controllers.TileController;
 import enums.Commands;
-import enums.Progresses;
-import models.Civilization;
 import models.Tile;
 
 import java.util.regex.Matcher;

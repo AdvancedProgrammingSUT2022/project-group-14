@@ -11,10 +11,8 @@ import java.util.HashMap;
 
 public class Civilization {
     private String name;
-    private ArrayList<Tile> lucid = new ArrayList<>();
-    private ArrayList<Tile> halfLucid = new ArrayList<>();
 
-    private ArrayList<City> discoveredCities = new ArrayList<>();
+    private Tile[][] mapFromPov;
 
     private ArrayList<Melee> melees = new ArrayList<>();
     private ArrayList<Ranged> ranges = new ArrayList<>();
@@ -23,51 +21,40 @@ public class Civilization {
 
     private ArrayList<City> cities = new ArrayList<>();
     private ArrayList<City> colonies = new ArrayList<>();
-
-    private ArrayList<Researches> researches = new ArrayList<>();
-
-    private HashMap<Technologies, Integer> technologies = new HashMap<>();
-
     private City firstCapital;
     private City currentCapital;
 
-    private double food;
-    private double gold;
-    private double production;
-    private double happiness;
-    private int citizens;
+    private HashMap<Technologies, Integer> technologies = new HashMap<>();
     private Technologies currentTechnology;
+    private ArrayList<Researches> researches = new ArrayList<>();
+
+    private double food, gold, production, happiness;
+
+    private int citizens;
+    //TODO may consider a new way to handle citizens
 
     public Civilization(String name) {
-        //TODO  add first warrior and settler
         this.name = name;
+        updateMapVision();
+        //TODO  add first warrior and settler
         firstCapital = null;
         currentCapital = null;
-        updateGoods();
-        updateMapVision();
+        currentTechnology = null;
+        food = 0; gold = 0; production = 0; happiness = 0;
+        citizens = 0;
     }
 
     public String getName() {
         return name;
     }
 
-    public void addCity(City city) {
-        if(cities.size() == 0 && firstCapital == null) {
-            firstCapital = city;
+    public void updateMapVision() {
+        ArrayList<Unit> allUnits = getAllUnits();
+        if (true) {
+            //TODO if it was near our units or cities is lucid
+        } else {
+            //TODO if it isn't and the tile is lucid change to half lucid
         }
-        cities.add(city);
-    }
-
-    public void removeCity(City city) {
-        cities.remove(city);
-    }
-
-    public void addColony(City city) {
-        colonies.add(city);
-    }
-
-    public void removeColony(City city) {
-        colonies.remove(city);
     }
 
     public void addMeleeUnit(Melee unit) {
@@ -111,19 +98,23 @@ public class Civilization {
         return allUnits;
     }
 
-    public void updateMapVision() {
-        ArrayList<Unit> allUnits = getAllUnits();
-        if (true) {
-            //TODO if it was near our units or cities is lucid
-        } else {
-            //TODO if it isn't and the tile is lucid change to half lucid
+    public void addCity(City city) {
+        if(cities.size() == 0 && firstCapital == null) {
+            firstCapital = city;
         }
+        cities.add(city);
     }
 
-    public void updateGoods() {
-        for (City city : cities) {
-            //TODO add each city goods
-        }
+    public void removeCity(City city) {
+        cities.remove(city);
+    }
+
+    public void addColony(City city) {
+        colonies.add(city);
+    }
+
+    public void removeColony(City city) {
+        colonies.remove(city);
     }
 
     public void setCurrentTechnology(Technologies wantedTechnology) {
@@ -134,6 +125,12 @@ public class Civilization {
         this.technologies.put(this.currentTechnology, this.technologies.get(this.currentTechnology)-1);
         if (this.technologies.get(this.currentTechnology) <= 0) {
             this.currentTechnology = null;
+        }
+    }
+
+    public void updateGoods() {
+        for (City city : cities) {
+            //TODO add each city goods
         }
     }
 }

@@ -9,6 +9,7 @@ import enums.tiles.TileType;
 public class World {
     private ArrayList<String> civilizationNames = new ArrayList<>();
     private HashMap<String, Civilization> nations = new HashMap<>();
+    private ArrayList<Civilization> civilizations = new ArrayList<>();
 
     private int year;
 
