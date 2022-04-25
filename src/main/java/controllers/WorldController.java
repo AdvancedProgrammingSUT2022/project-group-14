@@ -9,7 +9,6 @@ import models.units.NonCombatUnit;
 import models.units.Unit;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class WorldController {
     private static World world;
@@ -37,9 +36,9 @@ public class WorldController {
     public static void nextTurn() {
         //TODO progresses, technologies, goods, buildings, movingUnits, mapVision
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
-        CivilizationController.updateTechnology(currentCivilization);
-        CivilizationController.updateMapVision(currentCivilization);
-        CivilizationController.updateGoods(currentCivilization);
+//        CivilizationController.updateTechnology(currentCivilization);
+//        CivilizationController.updateMapVision(currentCivilization);
+//        CivilizationController.updateGoods(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }

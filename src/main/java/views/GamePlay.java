@@ -26,8 +26,8 @@ public class GamePlay {
 
     // selecting methods
     public static void selectUnit(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
         Tile wantedTile = MapController.getTileByCoordinates(x, y);
         if (matcher.group("militaryStatus").equals("combat")) {
             if (TileController.combatUnitExistsInTile(wantedTile)) {
@@ -161,7 +161,7 @@ public class GamePlay {
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 1 && k % 16 == 4 && row <= m) {
                     printingCoordinatesFlag = true;
-                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
+                    coordinates = (originalX + x + 2) + "," + (originalY + y + 2);
                 }
                 if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
                     // System.out.print(resetColor + "/");
@@ -215,7 +215,7 @@ public class GamePlay {
             for (int k = 1; k <= 8 * n + 3; k++) {
                 if (j == 3 && k % 16 == 12) {
                     printingCoordinatesFlag = true;
-                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
+                    coordinates = (originalX + x + 2) + "," + (originalY + y + 2);
                 }
                 if ((k - j) % 16 == 0) {
                     System.out.print(resetColor + "\\");
@@ -254,8 +254,8 @@ public class GamePlay {
     }
 
     public static void moveTo(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
         String error;
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");

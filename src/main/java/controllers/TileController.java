@@ -19,27 +19,27 @@ public class TileController {
 
 
     public static boolean selectedTileIsValid(int x, int y) {
-        return x <= MapController.getWidth() && y <= MapController.getLength() && x > 0 && y > 0;
+        return x < MapController.getWidth() && y < MapController.getLength() && x >= 0 && y >= 0;
     }
 
     public static boolean tileHasJungle(Tile tile) {
         return false;
     }
 
-    public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y, World world) {
+    public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
         if (selectedTileIsValid(x-1, y))
-            neighbours.add(world.getTileByCoordinates(x-1, y));
+            neighbours.add(MapController.getTileByCoordinates(x-1, y));
         if (selectedTileIsValid(x, y+1))
-            neighbours.add(world.getTileByCoordinates(x, y+1));
+            neighbours.add(MapController.getTileByCoordinates(x, y+1));
         if (selectedTileIsValid(x+1, y+1))
-            neighbours.add(world.getTileByCoordinates(x+1, y+1));
+            neighbours.add(MapController.getTileByCoordinates(x+1, y+1));
         if (selectedTileIsValid(x+1, y))
-            neighbours.add(world.getTileByCoordinates(x+1, y));
+            neighbours.add(MapController.getTileByCoordinates(x+1, y));
         if (selectedTileIsValid(x+1, y-1))
-            neighbours.add(world.getTileByCoordinates(x+1, y-1));
+            neighbours.add(MapController.getTileByCoordinates(x+1, y-1));
         if (selectedTileIsValid(x, y-1))
-            neighbours.add(world.getTileByCoordinates(x, y-1));
+            neighbours.add(MapController.getTileByCoordinates(x, y-1));
 
         return neighbours;
     }

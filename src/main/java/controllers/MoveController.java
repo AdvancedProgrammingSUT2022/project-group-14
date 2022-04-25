@@ -20,7 +20,8 @@ public class MoveController {
     }
 
     public static String impossibleToMoveToTile(int x, int y) {
-        if (!MapController.getTileByCoordinates(x, y).getCivilization().getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+        if (MapController.getTileByCoordinates(x, y).getCivilization() != null &&
+                !MapController.getTileByCoordinates(x, y).getCivilization().getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "chosen tile is in the enemy territory";
         } else if (MapController.getTileByCoordinates(x, y).getMovingPoint() == -1) {
             return "can not move to those kind of tiles";
@@ -55,22 +56,24 @@ public class MoveController {
                     }
                 }
             }
-            neighbourTiles = TileController.getAvailableNeighbourTiles(tempPreviousTile.getX(), tempPreviousTile.getY(), WorldController.getWorld());
-            for (Tile tile : neighbourTiles) {
-                if (minDistance + tile.getMovingPoint() < distanceFromStartingTile[tile.getX()][tile.getY()]) {
-                    distanceFromStartingTile[tile.getX()][tile.getY()] = minDistance + tile.getMovingPoint();
-                    previousTile[tile.getX()][tile.getY()] = tempPreviousTile;
+            if (tempPreviousTile != null){
+                neighbourTiles = TileController.getAvailableNeighbourTiles(tempPreviousTile.getX(), tempPreviousTile.getY());
+                for (Tile tile : neighbourTiles) {
+                    if (minDistance + tile.getMovingPoint() < distanceFromStartingTile[tile.getX()][tile.getY()]) {
+                        distanceFromStartingTile[tile.getX()][tile.getY()] = minDistance + tile.getMovingPoint();
+                        previousTile[tile.getX()][tile.getY()] = tempPreviousTile;
+                    }
                 }
+                visitedTiles[tempPreviousTile.getX()][tempPreviousTile.getY()] = true;
             }
-            visitedTiles[tempPreviousTile.getX()][tempPreviousTile.getY()] = true;
         }
-        System.out.println(unit.getCurrentX() + " * " + unit.getCurrentY());
+        System.out.println(unit.getCurrentX()+1 + " * " + unit.getCurrentY()+1);
         //getting back to the tile that the unit should move to
         Tile lastTile = MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY());
         while (true) {
             if (previousTile[lastTile.getX()][lastTile.getY()].equals(MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()))) {
                 unit.updatePosition(lastTile.getX(), lastTile.getY());
-                System.out.println(unit.getCurrentX() + " * " + unit.getCurrentY());
+                System.out.println(unit.getCurrentX()+1 + " * " + unit.getCurrentY()+1);
                 return;
             }
             lastTile = previousTile[lastTile.getX()][lastTile.getY()];

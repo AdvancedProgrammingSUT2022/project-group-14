@@ -3,10 +3,10 @@ package controllers;
 import models.Tile;
 
 public class MapController {
-    private static Tile[][] map;
-
     private static int width = 45;
     private static int length = 80;
+
+    private static Tile[][] map = new Tile[width][length];
 
     public static int getWidth() {
         return width;
@@ -30,11 +30,12 @@ public class MapController {
             }
         }
     }
+
     public static Tile[][] getMap() {
         return map;
     }
 
     public static Tile getTileByCoordinates(int x, int y) {
-        return map[x-1][y-1];
+        return map[x][y];
     }
 }

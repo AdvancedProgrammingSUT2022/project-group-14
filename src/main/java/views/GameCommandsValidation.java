@@ -68,8 +68,8 @@ public class GameCommandsValidation {
     }
 
     private boolean matcherPositionIsValid(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
         if (TileController.selectedTileIsValid(x, y)) {
             return true;
         }
@@ -122,8 +122,8 @@ public class GameCommandsValidation {
 
     private void checkAttack(Matcher matcher) {
         if (matcherPositionIsValid(matcher)) {
-            int x = Integer.parseInt(matcher.group("x"));
-            int y = Integer.parseInt(matcher.group("y"));
+            int x = Integer.parseInt(matcher.group("x")) - 1;
+            int y = Integer.parseInt(matcher.group("y")) - 1;
             GamePlay.attack(x, y);
             return;
         }
@@ -162,13 +162,12 @@ public class GameCommandsValidation {
     }
 
     public void checkShowCityInfo() {
-
     }
 
     public void checkShowMapByPosition(Matcher matcher) {
         if (matcherPositionIsValid(matcher)) {
-            int x = Integer.parseInt(matcher.group("x"));
-            int y = Integer.parseInt(matcher.group("y"));
+            int x = Integer.parseInt(matcher.group("x")) - 1;
+            int y = Integer.parseInt(matcher.group("y")) - 1;
             Tile tile = MapController.getTileByCoordinates(x, y);
             GamePlay.showMapBasedOnTile(tile);
         } else System.out.println("given position is invalid");
@@ -191,8 +190,8 @@ public class GameCommandsValidation {
             System.out.println("Tile is not selected");
             return;
         }
-        int x = oldTile.getX() + 1;
-        int y = oldTile.getY() + 1;
+        int x = oldTile.getX();
+        int y = oldTile.getY();
 
         switch (direction) {
             case "right" -> y += movementAmount;

@@ -39,7 +39,7 @@ public class Civilization {
     //TODO may consider a new way to handle citizens
 
     public Civilization(String name) {
-        Melee melee = new Melee(10, 10, 2, "warrior", name, 0, " ", " ", 10, 10, 10);
+        Melee melee = new Melee(9, 9, 2, "warrior", name, 0, " ", " ", 10, 10, 10);
         this.name = name;
         addMeleeUnit(melee);
         firstCapital = null;
