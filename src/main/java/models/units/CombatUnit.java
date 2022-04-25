@@ -1,5 +1,7 @@
 package models.units;
 
+import controllers.WorldController;
+
 public class CombatUnit extends Unit{
     private double defenseStrength;
     private double attackStrength;

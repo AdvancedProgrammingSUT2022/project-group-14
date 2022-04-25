@@ -1,20 +1,21 @@
 
 package models;
 
+import controllers.MapController;
+import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import models.units.*;
 import org.w3c.dom.ranges.Range;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Civilization {
     private String name;
-    private ArrayList<Tile> lucid = new ArrayList<>();
-    private ArrayList<Tile> halfLucid = new ArrayList<>();
 
-    private ArrayList<City> discoveredCities = new ArrayList<>();
+    private int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getLength()];
+    private Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getLength()];
+
 
     private ArrayList<Melee> melees = new ArrayList<>();
     private ArrayList<Ranged> ranges = new ArrayList<>();
@@ -23,32 +24,89 @@ public class Civilization {
 
     private ArrayList<City> cities = new ArrayList<>();
     private ArrayList<City> colonies = new ArrayList<>();
-
-    private ArrayList<Researches> researches = new ArrayList<>();
-
-    private HashMap<Technologies, Integer> technologies = new HashMap<>();
-
     private City firstCapital;
     private City currentCapital;
 
-    private double food;
-    private double gold;
-    private double production;
-    private double happiness;
-    private int citizens;
+    private HashMap<Technologies, Integer> technologies = new HashMap<>();
     private Technologies currentTechnology;
+    private ArrayList<Researches> researches = new ArrayList<>();
+
+    private double food, gold, production, happiness;
+
+    private int citizens;
+    //TODO may consider a new way to handle citizens
 
     public Civilization(String name) {
-        //TODO  add first warrior and settler
+        Random random = new Random();
+        int randomX = random.nextInt(40), randomY = random.nextInt(80);
+        Melee melee = new Melee(randomX, randomY, 2, "warrior", name, 0, " ", " ", 10, 10, 10);
+        addMeleeUnit(melee);
+        Settler settler = new Settler(randomX, randomY, 2, "settler", name, 0, " ", " ", 10);
+        addSettler(settler);
+        System.out.println(randomX + " " + randomY);
         this.name = name;
         firstCapital = null;
         currentCapital = null;
-        //TODO goods
-        updateMapVision();
+        currentTechnology = null;
+        food = 0; gold = 0; production = 0; happiness = 0;
+        citizens = 0;
     }
 
     public String getName() {
         return name;
+    }
+
+    public void addMeleeUnit(Melee unit) {
+        melees.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(unit);
+    }
+
+    public void addRangedUnit(Ranged unit) {
+        ranges.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(unit);
+    }
+
+    public void addSettler(Settler unit) {
+        settlers.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(unit);
+    }
+
+    public void addWorker(Worker unit) {
+        workers.add(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(unit);
+    }
+
+    public void removeMeleeUnit(Melee unit) {
+        melees.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(null);
+    }
+
+    public void removeRangedUnit(Ranged unit) {
+        ranges.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(null);
+    }
+
+    public void removeWorker(Worker unit) {
+        workers.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(null);
+    }
+
+    public void removeSettler(Settler unit) {
+        settlers.remove(unit);
+        MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(null);
+    }
+
+    public ArrayList<Unit> getAllUnits() {
+        ArrayList<Unit> allUnits = new ArrayList<>();
+        allUnits.addAll(melees);
+        allUnits.addAll(ranges);
+        allUnits.addAll(workers);
+        allUnits.addAll(settlers);
+        return allUnits;
+    }
+
+    public ArrayList<City> getCities() {
+        return cities;
     }
 
     public void addCity(City city) {
@@ -70,70 +128,15 @@ public class Civilization {
         colonies.remove(city);
     }
 
-    public void addMeleeUnit(Melee unit) {
-        melees.add(unit);
+    public HashMap<Technologies, Integer> getTechnologies() {
+        return technologies;
     }
 
-    public void addRangedUnit(Ranged unit) {
-        ranges.add(unit);
-    }
-
-    public void addSettler(Settler unit) {
-        settlers.add(unit);
-    }
-
-    public void addMeleeUnit(Worker unit) {
-        workers.add(unit);
-    }
-
-    public void removeMeleeUnit(Melee unit) {
-        melees.remove(unit);
-    }
-
-    public void removeRangedUnit(Ranged unit) {
-        ranges.remove(unit);
-    }
-
-    public void removeWorker(Worker unit) {
-        workers.remove(unit);
-    }
-
-    public void removeSettler(Settler unit) {
-        settlers.remove(unit);
-    }
-
-    public ArrayList<Unit> getAllUnits() {
-        ArrayList<Unit> allUnits = new ArrayList<>();
-        allUnits.addAll(melees);
-        allUnits.addAll(ranges);
-        allUnits.addAll(workers);
-        allUnits.addAll(settlers);
-        return allUnits;
-    }
-
-    public void updateMapVision() {
-        ArrayList<Unit> allUnits = getAllUnits();
-        if (true) {
-            //TODO if it was near our units or cities is lucid
-        } else {
-            //TODO if it isn't and the tile is lucid change to half lucid
-        }
-    }
-
-    public void updateGoods() {
-        for (City city : cities) {
-            //TODO add each city goods
-        }
+    public Technologies getCurrentTechnology() {
+        return currentTechnology;
     }
 
     public void setCurrentTechnology(Technologies wantedTechnology) {
         this.currentTechnology = wantedTechnology;
-    }
-
-    public void updateTechnology() {
-        this.technologies.put(this.currentTechnology, this.technologies.get(this.currentTechnology)-1);
-        if (this.technologies.get(this.currentTechnology) <= 0) {
-            this.currentTechnology = null;
-        }
     }
 }

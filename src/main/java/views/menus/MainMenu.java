@@ -1,6 +1,7 @@
 package views.menus;
 
 import controllers.UserController;
+import controllers.WorldController;
 import enums.Commands;
 import models.User;
 import views.GamePlay;
@@ -101,7 +102,8 @@ public class MainMenu {
 
     private void startGame(ArrayList<String> usernames){
         GamePlay gamePlay = new GamePlay();
-        gamePlay.run(usernames, this.scanner);
+        WorldController.newWorld(usernames);
+        gamePlay.run(this.scanner);
     }
 
     private void goToProfileMenu() {

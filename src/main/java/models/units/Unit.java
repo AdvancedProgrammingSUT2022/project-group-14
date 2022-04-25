@@ -1,11 +1,15 @@
 package models.units;
 
+import controllers.MapController;
+import controllers.TileController;
+import controllers.WorldController;
 import enums.Technologies;
 import models.Civilization;
 import models.Tile;
 import models.resources.StrategicResource;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class Unit {
     private int currentX, currentY;
@@ -26,6 +30,8 @@ public class Unit {
                 String requiredStrategicResourceName, String requiredTechnology, double healthPoint) {
         this.currentX = currentX;
         this.currentY = currentY;
+        destinationX = -1;
+        destinationY = -1;
         this.movementPoint = movementPoint;
         this.name = name;
         this.civilizationName = civilization;
@@ -38,6 +44,10 @@ public class Unit {
 
     public String getCivilizationName() {
         return civilizationName;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public int getCurrentX() {
@@ -56,9 +66,17 @@ public class Unit {
         return destinationY;
     }
 
+    public int getMovementPoint() {
+        return movementPoint;
+    }
+
     public void updatePosition(int x, int y) {
         this.currentX = x;
         this.currentY = y;
+        if (currentX == destinationX && currentY == destinationY) {
+            destinationX = -1;
+            destinationY = -1;
+        }
     }
 
     public void putToSleep() {
@@ -79,8 +97,8 @@ public class Unit {
     }
 
     public void cancelMission() {
-        this.destinationX = this.currentX;
-        this.destinationY = this.currentY;
+        this.destinationX = -1;
+        this.destinationY = -1;
     }
 
 

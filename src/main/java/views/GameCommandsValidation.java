@@ -1,9 +1,9 @@
 package views;
 
+import controllers.MapController;
 import controllers.TileController;
+import controllers.WorldController;
 import enums.Commands;
-import enums.Progresses;
-import models.Civilization;
 import models.Tile;
 
 import java.util.regex.Matcher;
@@ -57,15 +57,19 @@ public class GameCommandsValidation {
             checkShowMapByName(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.MAP_MOVE)) != null) {
             checkMapMove(matcher);
+        } else if (Commands.getMatcher(input, Commands.END_GAME) != null) {
+            WorldController.resetWorld();
+            return false;
+        } else if (Commands.getMatcher(input, Commands.NEXT_TURN) != null) {
+            WorldController.nextTurn();
         } else System.out.println("invalid command");
 
         return true;
-
     }
 
     private boolean matcherPositionIsValid(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
         if (TileController.selectedTileIsValid(x, y)) {
             return true;
         }
@@ -76,40 +80,19 @@ public class GameCommandsValidation {
         String field = matcher.group("field");
 
         switch (field) {
-            case "research":
-                GamePlay.showResearches();
-                break;
-            case "units":
-                GamePlay.showUnits();
-                break;
-            case "cities":
-                GamePlay.showCities();
-                break;
-            case "diplomacy":
-                GamePlay.showDiplomacyPanel();
-                break;
-            case "victory":
-                GamePlay.showVictoryPanel();
-                break;
-            case "demographics":
-                GamePlay.showDemographicsPanel();
-                break;
-            case "notifications":
-                GamePlay.showNotifications();
-                break;
-            case "military":
-                GamePlay.showMilitaryUnits();
-                break;
-            case "economic":
-                GamePlay.showEconomicStatus();
-                break;
-            case "diplomatic":
-                GamePlay.showDiplomaticHistory();
-                break;
-            case "deals":
-                GamePlay.showDealsHistory();
-                break;
-            default:
+            case "research" -> GamePlay.showResearches();
+            case "units" -> GamePlay.showUnits();
+            case "cities" -> GamePlay.showCities();
+            case "diplomacy" -> GamePlay.showDiplomacyPanel();
+            case "victory" -> GamePlay.showVictoryPanel();
+            case "demographics" -> GamePlay.showDemographicsPanel();
+            case "notifications" -> GamePlay.showNotifications();
+            case "military" -> GamePlay.showMilitaryUnits();
+            case "economic" -> GamePlay.showEconomicStatus();
+            case "diplomatic" -> GamePlay.showDiplomaticHistory();
+            case "deals" -> GamePlay.showDealsHistory();
+            default -> {
+            }
         }
     }
 
@@ -139,8 +122,8 @@ public class GameCommandsValidation {
 
     private void checkAttack(Matcher matcher) {
         if (matcherPositionIsValid(matcher)) {
-            int x = Integer.parseInt(matcher.group("x"));
-            int y = Integer.parseInt(matcher.group("y"));
+            int x = Integer.parseInt(matcher.group("x")) - 1;
+            int y = Integer.parseInt(matcher.group("y")) - 1;
             GamePlay.attack(x, y);
             return;
         }
@@ -152,14 +135,9 @@ public class GameCommandsValidation {
         String progress = matcher.group("progress");
 
         switch (progress) {
-            case "road":
-                GamePlay.buildRoadOnTile();
-                break;
-            case "railroad":
-                GamePlay.buildRailroadOnTile();
-                break;
-            default:
-                GamePlay.buildProgressOnTile();
+            case "road" -> GamePlay.buildRoadOnTile();
+            case "railroad" -> GamePlay.buildRailroadOnTile();
+            default -> GamePlay.buildProgressOnTile();
         }
     }
 
@@ -184,14 +162,13 @@ public class GameCommandsValidation {
     }
 
     public void checkShowCityInfo() {
-
     }
 
     public void checkShowMapByPosition(Matcher matcher) {
         if (matcherPositionIsValid(matcher)) {
-            int x = Integer.parseInt(matcher.group("x"));
-            int y = Integer.parseInt(matcher.group("y"));
-            Tile tile = GamePlay.getTileByPosition(x, y);
+            int x = Integer.parseInt(matcher.group("x")) - 1;
+            int y = Integer.parseInt(matcher.group("y")) - 1;
+            Tile tile = MapController.getTileByCoordinates(x, y);
             GamePlay.showMapBasedOnTile(tile);
         } else System.out.println("given position is invalid");
     }
@@ -206,28 +183,25 @@ public class GameCommandsValidation {
 
     public void checkMapMove(Matcher matcher) {
         String direction = matcher.group("direction");
-        int movementAmount = Integer.parseInt("movementAmount");
+        int movementAmount = Integer.parseInt(matcher.group("movementAmount"));
 
         Tile oldTile = GamePlay.getSelectedTile();
+        if (oldTile == null) {
+            System.out.println("Tile is not selected");
+            return;
+        }
         int x = oldTile.getX();
         int y = oldTile.getY();
 
         switch (direction) {
-            case "right":
-                y += movementAmount;
-                break;
-            case "left":
-                y -= movementAmount;
-                break;
-            case "down":
-                x += movementAmount;
-                break;
-            case "up":
-                x -= movementAmount;
+            case "right" -> y += movementAmount;
+            case "left" -> y -= movementAmount;
+            case "down" -> x += movementAmount;
+            case "up" -> x -= movementAmount;
         }
 
         if (TileController.selectedTileIsValid(x, y)){
-            Tile newTile = GamePlay.getTileByPosition(x, y);
+            Tile newTile = MapController.getTileByCoordinates(x, y);
             GamePlay.showMapBasedOnTile(newTile);
 
         }else System.out.println("the wanted movement can't be done");

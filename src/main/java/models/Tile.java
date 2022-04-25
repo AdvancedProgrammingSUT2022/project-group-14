@@ -47,8 +47,10 @@ public class Tile {
 
     private static HashMap<TileType, Tile> tileInformationMap = new HashMap<>();
 
-    public Tile(TileType type) {
+    public Tile(TileType type, int x, int y) {
         Tile tile = tileInformationMap.get(type);
+        this.x = x;
+        this.y = y;
         this.type = tile.type;
         this.food = tile.food;
         this.production = tile.production;
@@ -58,12 +60,12 @@ public class Tile {
         this.color = tile.color;
     }
 
-    public static Tile generateRandomTile() {
-        return new Tile(TileType.generateRandomTileType());
+    public static Tile generateRandomTile(int x, int y) {
+        return new Tile(TileType.generateRandomTileType(), x, y);
     }
 
     public Tile copy() {
-        Tile tile = new Tile(TileType.UNKOWN);
+        Tile tile = new Tile(TileType.UNKOWN, this.x, this.y);
         tile.type = this.type;
         tile.food = this.food;
         tile.production = this.production;
@@ -76,7 +78,7 @@ public class Tile {
 
     public static void readTileTypesInformationFromJson() {
         try {
-            String json = new String(Files.readAllBytes(Paths.get("resources/TileTypeInformation.json")));
+            String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/TileTypeInformation.json")));
             tileInformationMap = new Gson().fromJson(json, new TypeToken<HashMap<TileType, Tile>>() {
             }.getType());
         } catch (IOException e) {
