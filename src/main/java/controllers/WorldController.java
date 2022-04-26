@@ -22,6 +22,7 @@ public class WorldController {
         Tile.readTileTypesInformationFromJson();
         MapController.generateMap();
         world = new World(usernames);
+        MapController.updateUnitPositions();
     }
 
     public static void resetWorld() {

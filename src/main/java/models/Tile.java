@@ -21,29 +21,33 @@ import models.units.NonCombatUnit;
 public class Tile {
     private int x;
     private int y;
+
     private TileType type;
+    private TileFeature feature;
+    private String color;
+
     private double food;
     private double production;
     private double gold;
+
     private int militaryImpact;
     private int movingPoint;
-    private String color;
-    private TileFeature feature;
+
     private StrategicResource strategicResource;
     private LuxuryResource luxuryResource;
     private Resource bonusResource;
+    private Progresses progress;
+
     private boolean[] isRiver = new boolean[6];
     private boolean hasRoad;
     private boolean hasRailroad;
-    private Progresses progress;
-    // if the tile was attacked pillaged becomes true and when it is repaired the
-    // tile it becomes false again
-    private boolean pillaged = false;
 
+    private boolean pillaged;
+
+    private String civilizationName;
+    private City city;
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
-    private City city;
-    private Civilization civilization = null;
 
     private static HashMap<TileType, Tile> tileInformationMap = new HashMap<>();
 
@@ -52,12 +56,12 @@ public class Tile {
         this.x = x;
         this.y = y;
         this.type = tile.type;
+        this.color = tile.color;
         this.food = tile.food;
         this.production = tile.production;
         this.gold = tile.gold;
         this.militaryImpact = tile.militaryImpact;
         this.movingPoint = tile.movingPoint;
-        this.color = tile.color;
     }
 
     public static Tile generateRandomTile(int x, int y) {
@@ -267,11 +271,11 @@ public class Tile {
         this.city = city;
     }
 
-    public Civilization getCivilization() {
-        return this.civilization;
+    public String getCivilizationName() {
+        return this.civilizationName;
     }
 
-    public void setCivilization(Civilization civilization) {
-        this.civilization = civilization;
+    public void setCivilization(String civilizationName) {
+        this.civilizationName = civilizationName;
     }
 }

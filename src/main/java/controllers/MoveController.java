@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class MoveController {
 
     public static String impossibleToMoveToTile(int x, int y, Unit unit) {
-        if (MapController.getTileByCoordinates(x, y).getCivilization() != null &&
-                !MapController.getTileByCoordinates(x, y).getCivilization().getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+        if (MapController.getTileByCoordinates(x, y).getCivilizationName() != null &&
+                !MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "chosen tile is in the enemy territory";
         } else if (MapController.getTileByCoordinates(x, y).getMovingPoint() == 9999) {
             return "can not move to those kind of tiles";
@@ -33,11 +33,11 @@ public class MoveController {
                                                 MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()), unit);
             if (impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit) != null) {
                 if (unit.getMovementPoint() - (movementPointsConsumed + nextTileToMove.getMovingPoint()) <= 0) {
+                    unit.cancelMission();
                     break;
                 }
             }
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
-            System.out.printf("X is : %d Y is : %d\n", nextTileToMove.getX(), nextTileToMove.getY());
             movementPointsConsumed += nextTileToMove.getMovingPoint();
             MapController.updateUnitPositions();
         }

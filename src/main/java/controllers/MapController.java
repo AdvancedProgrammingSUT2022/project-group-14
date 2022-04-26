@@ -17,6 +17,7 @@ public class MapController {
     public static int getWidth() {
         return width;
     }
+
     public static int getLength() {
         return length;
     }
