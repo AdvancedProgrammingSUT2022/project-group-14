@@ -25,7 +25,7 @@ public class StrategicResource extends Resource {
     public static void writeData() {
         try {
 
-            FileWriter writer = new FileWriter("resources/resources/StrategicRsourceTypesInformation.json");
+            FileWriter writer = new FileWriter("./src/main/resources/resources/StrategicRsourceTypesInformation.json");
             StrategicResource resource = null;
             resource = new StrategicResource(StrategicResourceTypes.COAL, 0, 1, 0, Progresses.MINE,
                     Technologies.SCIENTIFIC_THEORY);
@@ -35,7 +35,7 @@ public class StrategicResource extends Resource {
             TypesMap.put(StrategicResourceTypes.HORSE, resource);
             resource = new StrategicResource(StrategicResourceTypes.IRON, 0, 1, 0, Progresses.MINE,
                     Technologies.IRON_WORKING);
-            TypesMap.put(StrategicResourceTypes.HORSE, resource);
+            TypesMap.put(StrategicResourceTypes.IRON, resource);
 
             writer.write(new Gson().toJson(TypesMap));
             writer.close();
