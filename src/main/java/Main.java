@@ -14,5 +14,6 @@ public class Main {
         // UserController.saveAllUsers();
 
         StrategicResource.writeData();
+        StrategicResource.readData();
     }
 } 
