@@ -1,5 +1,6 @@
 package controllers;
 
+import enums.Progresses;
 import models.*;
 import models.units.*;
 
@@ -31,6 +32,15 @@ public class UnitController {
             return "unit is not under your control";
         } else {
             unit.putToSleep();
+        }
+        return null;
+    }
+
+    public static String wakeUp(Unit unit) {
+        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "unit is not under your control";
+        } else {
+            unit.wakeUp();
         }
         return null;
     }
@@ -68,15 +78,6 @@ public class UnitController {
         return null;
     }
 
-    public static String wakeUp(Unit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else {
-            unit.wakeUp();
-        }
-        return null;
-    }
-
     public static String garrisonCity(CombatUnit combatUnit) {
         Tile currentTile = MapController.getTileByCoordinates(combatUnit.getCurrentX(), combatUnit.getCurrentY());
         if (!combatUnit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
@@ -106,15 +107,51 @@ public class UnitController {
         return null;
     }
 
+    public static String buildRoad(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.hasRoad()) {
+            return "there is already road on this tile";
+        } else {
+            //TODO build roads
+        }
+        return null;
+    }
+
+    public static String buildRailRoad(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.hasRailRoad()) {
+            return "there is already railRoad on this tile";
+        } else {
+            //TODO build railRoads
+        }
+        return null;
+    }
+
     public static String removeRouteFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
-        } else if (!currentTile.hasRoad() && !currentTile.hasRailroad()) {
+        } else if (!currentTile.hasRoad() && !currentTile.hasRailRoad()) {
             return "there is not any roads or railRoads on this tile";
         } else {
             currentTile.setHasRoad(false);
-            currentTile.setHasRailroad(false);
+            currentTile.setHasRailRoad(false);
+        }
+        return null;
+    }
+
+    public static String buildProgress(Worker worker, Progresses progress) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.getProgress().equals(progress)) {
+            return "there is already this kind of progress on this tile";
+        } else {
+            //TODO build progress
         }
         return null;
     }

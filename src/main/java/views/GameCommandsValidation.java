@@ -30,7 +30,7 @@ public class GameCommandsValidation {
         } else if (Commands.getMatcher(input, Commands.UNIT_FORTIFY) != null) {
             GamePlay.unitFortify();
         } else if (Commands.getMatcher(input, Commands.UNIT_FORTIFY_HEAL) != null) {
-            GamePlay.unitFortifyUntilHeal();
+            GamePlay.unitFortifyUntilHealed();
         } else if (Commands.getMatcher(input, Commands.UNIT_GARRISON) != null) {
             GamePlay.unitGarrison();
         } else if (Commands.getMatcher(input, Commands.UNIT_SETUP_RANGED) != null) {
@@ -65,15 +65,6 @@ public class GameCommandsValidation {
         } else System.out.println("invalid command");
 
         return true;
-    }
-
-    private boolean matcherPositionIsValid(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x")) - 1;
-        int y = Integer.parseInt(matcher.group("y")) - 1;
-        if (TileController.selectedTileIsValid(x, y)) {
-            return true;
-        }
-        return false;
     }
 
     private void checkShowInfo(Matcher matcher) {
@@ -141,7 +132,7 @@ public class GameCommandsValidation {
         switch (progress) {
             case "road" -> GamePlay.buildRoadOnTile();
             case "railroad" -> GamePlay.buildRailroadOnTile();
-            default -> GamePlay.buildProgressOnTile();
+            default -> GamePlay.buildProgressOnTile(progress);
         }
     }
 
@@ -151,21 +142,6 @@ public class GameCommandsValidation {
         if (foundation.equals("jungle"))
             GamePlay.removeJungleFromTile();
         else GamePlay.removeRoutsFromTile();
-    }
-
-    public void checkShowCombatUnitInfo() {
-
-    }
-
-    public void checkShowNonCombatUnitInfo() {
-
-    }
-
-    public boolean checkUnit(String input) {
-        return true;
-    }
-
-    public void checkShowCityInfo() {
     }
 
     public void checkShowMapByPosition(Matcher matcher) {
