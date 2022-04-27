@@ -7,4 +7,5 @@ public class Worker extends NonCombatUnit {
         super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
                 requiredTechnology, healthPoint);
     }
+
 }

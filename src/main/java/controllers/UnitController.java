@@ -79,7 +79,9 @@ public class UnitController {
 
     public static String garrisonCity(CombatUnit combatUnit) {
         Tile currentTile = MapController.getTileByCoordinates(combatUnit.getCurrentX(), combatUnit.getCurrentY());
-        if (currentTile.getCity() == null) {
+        if (!combatUnit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.getCity() == null) {
             return "you should be in a city to garrison";
         } else {
             combatUnit.garrisonUnit();
@@ -89,7 +91,9 @@ public class UnitController {
 
     public static String foundCity(Settler settler) {
         Tile currentTile = MapController.getTileByCoordinates(settler.getCurrentX(), settler.getCurrentY());
-        if (currentTile.getCity() != null) {
+        if (!settler.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.getCity() != null) {
             return "can not found a city over another city";
         } else if (currentTile.getCivilizationName() != null
                 && !currentTile.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
@@ -98,6 +102,45 @@ public class UnitController {
             City city = new City();
             currentTile.setCity(city);
             WorldController.getWorld().getCivilizationByName(settler.getCivilizationName()).addCity(city);
+        }
+        return null;
+    }
+
+    public static String removeRouteFromTile(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (!currentTile.hasRoad() && !currentTile.hasRailroad()) {
+            return "there is not any roads or railRoads on this tile";
+        } else {
+            currentTile.setHasRoad(false);
+            currentTile.setHasRailroad(false);
+        }
+        return null;
+    }
+
+    public static String removeJungleFromTile(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (true) {
+            //TODO check that the tile has a jungle
+            return "there is not a jungle on this tile";
+        } else {
+            //TODO remove the jungle
+        }
+        return null;
+    }
+
+    public static String repairTile(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.isPillaged()) {
+            return "this tile has not been pillaged";
+        } else {
+            worker.putToWork();
+            //TODO repair the tile
         }
         return null;
     }

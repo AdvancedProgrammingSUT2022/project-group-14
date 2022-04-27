@@ -24,11 +24,9 @@ public class GamePlay {
     }
 
     // selecting methods
-    public static void selectUnit(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x")) - 1;
-        int y = Integer.parseInt(matcher.group("y")) - 1;
+    public static void selectUnit(int x, int y, String militaryStatus) {
         Tile wantedTile = MapController.getTileByCoordinates(x, y);
-        if (matcher.group("militaryStatus").equals("combat")) {
+        if (militaryStatus.equals("combat")) {
             if (TileController.combatUnitExistsInTile(wantedTile)) {
                 WorldController.setSelectedCombatUnit(wantedTile.getCombatUnit());
                 WorldController.setSelectedNonCombatUnit(null);
@@ -47,21 +45,17 @@ public class GamePlay {
         }
     }
 
-    public static void selectCityByPosition(Matcher matcher) {
+    public static void selectCityByPosition(int x, int y) {
 
     }
 
-    public static void selectCityByName(Matcher matcher) {
+    public static void selectCityByName(String name) {
 
     }
 
     public static Tile getTileByCityName(String name) {
         return null;
 
-    }
-
-    public static Tile getSelectedTile() {
-        return WorldController.getSelectedTile();
     }
 
     // showing methods
@@ -128,7 +122,8 @@ public class GamePlay {
     }
 
     // showing map methods
-    public static void showMapBasedOnTile(Tile tile) {
+    public static void showMapBasedOnTile(int x, int y) {
+        Tile tile = MapController.getTileByCoordinates(x, y);
         WorldController.setSelectedTile(tile);
         Tile[][] allTiles = MapController.getMap();
         Tile[][] wantedTiles = new Tile[3][12];
@@ -276,9 +271,7 @@ public class GamePlay {
 
     }
 
-    public static void moveTo(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x")) - 1;
-        int y = Integer.parseInt(matcher.group("y")) - 1;
+    public static void moveTo(int x, int y) {
         String error;
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
@@ -442,15 +435,45 @@ public class GamePlay {
 
     }
 
-    public static void removeRoadAndRailroadFromTile() {
-
+    public static void removeRoutsFromTile() {
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.removeRouteFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
     }
 
     public static void removeJungleFromTile() {
-
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.removeJungleFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
     }
 
     public static void repairCurrentTile() {
-
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.repairTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
     }
 }

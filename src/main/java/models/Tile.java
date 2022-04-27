@@ -195,16 +195,12 @@ public class Tile {
         this.bonusResource = bonusResource;
     }
 
-    public boolean[] getIsRiver() {
+    public boolean[] isRiver() {
         return this.isRiver;
     }
 
     public void setIsRiver(boolean[] isRiver) {
         this.isRiver = isRiver;
-    }
-
-    public boolean isHasRoad() {
-        return this.hasRoad;
     }
 
     public boolean hasRoad() {
@@ -232,10 +228,6 @@ public class Tile {
     }
 
     public boolean isPillaged() {
-        return this.pillaged;
-    }
-
-    public boolean getPillaged() {
         return this.pillaged;
     }
 
