@@ -56,6 +56,10 @@ public class Civilization {
         return name;
     }
 
+    public int[][] getVisionStatesOfMap() {
+        return this.visionStatesOfMap;
+    }
+
     public void addMeleeUnit(Melee unit) {
         melees.add(unit);
     }

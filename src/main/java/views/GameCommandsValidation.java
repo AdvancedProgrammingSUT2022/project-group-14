@@ -80,19 +80,17 @@ public class GameCommandsValidation {
         String field = matcher.group("field");
 
         switch (field) {
-            case "research" -> GamePlay.showResearches();
-            case "units" -> GamePlay.showUnits();
-            case "cities" -> GamePlay.showCities();
-            case "diplomacy" -> GamePlay.showDiplomacyPanel();
-            case "victory" -> GamePlay.showVictoryPanel();
-            case "demographics" -> GamePlay.showDemographicsPanel();
-            case "notifications" -> GamePlay.showNotifications();
-            case "military" -> GamePlay.showMilitaryUnits();
-            case "economic" -> GamePlay.showEconomicStatus();
-            case "diplomatic" -> GamePlay.showDiplomaticHistory();
-            case "deals" -> GamePlay.showDealsHistory();
-            default -> {
-            }
+            case "research" -> GamePlay.researchesPanel();
+            case "units" -> GamePlay.unitsPanel();
+            case "cities" -> GamePlay.citiesPanel();
+            case "diplomacy" -> GamePlay.diplomacyPanel();
+            case "victory" -> GamePlay.victoryPanel();
+            case "demographics" -> GamePlay.demographicsPanel();
+            case "notifications" -> GamePlay.notificationsPanel();
+            case "military" -> GamePlay.militaryPanel();
+            case "economic" -> GamePlay.economicStatusPanel();
+            case "diplomatic" -> GamePlay.diplomaticHistoryPanel();
+            case "deals" -> GamePlay.dealsHistoryPanel();
         }
     }
 
@@ -180,10 +178,15 @@ public class GameCommandsValidation {
 
     public void checkShowMapByName(Matcher matcher) {
         String cityName = matcher.group("name");
-        Tile tile = GamePlay.getTileByCityName(cityName);
-        if (tile != null)
-            GamePlay.showMapBasedOnTile(tile.getX(), tile.getY());
-        else System.out.println("given city name is not valid");
+        //TODO get city by name
+        if (true){
+            System.out.println("given city name is not valid");
+        } else if (true) {
+            //TODO isn't in vision of the civilization
+            System.out.println("you don't have vision on that city");
+        } else {
+            GamePlay.showMapBasedOnTile(0, 0);
+        }
     }
 
     public void checkMapMove(Matcher matcher) {

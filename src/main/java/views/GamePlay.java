@@ -46,61 +46,61 @@ public class GamePlay {
     }
 
     public static void selectCityByPosition(int x, int y) {
-
+        if (MapController.getTileByCoordinates(x, y).getCity() == null) {
+            System.out.println("there is not any cities over there");
+        } else {
+            WorldController.setSelectedCity(MapController.getTileByCoordinates(x, y).getCity());
+        }
     }
 
     public static void selectCityByName(String name) {
+        if (true) {
+            //TODO name was invalid
+        } else {
+            //TODO get the city by name
+            WorldController.setSelectedCity(null);
+        }
+    }
+
+    // panels
+    public static void researchesPanel() {
 
     }
 
-    public static Tile getTileByCityName(String name) {
-        return null;
+    public static void unitsPanel() {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            System.out.println(unit.getInfo());
+        }
+    }
+
+    public static void citiesPanel() {
 
     }
 
-    // showing methods
-    public static void showResearches() {
+    public static void diplomacyPanel() {
+    }
+
+    public static void demographicsPanel() {
+    }
+
+    public static void victoryPanel() {
+    }
+
+    public static void notificationsPanel() {
+    }
+
+    public static void militaryPanel() {
+    }
+
+    public static void economicStatusPanel() {
 
     }
 
-    public static void showUnits() {
-
+    public static void diplomaticHistoryPanel() {
     }
 
-    public static void showCities() {
-
-    }
-
-    public static void showDiplomacyPanel() {
-        // TODO
-    }
-
-    public static void showDemographicsPanel() {
-        // TODO
-    }
-
-    public static void showVictoryPanel() {
-        // TODO
-    }
-
-    public static void showNotifications() {
-        // TODO
-    }
-
-    public static void showMilitaryUnits() {
-        // TODO
-    }
-
-    public static void showEconomicStatus() {
-
-    }
-
-    public static void showDiplomaticHistory() {
-        // TODO
-    }
-
-    public static void showDealsHistory() {
-        // TODO
+    public static void dealsHistoryPanel() {
     }
 
     public static void showCombatUnitInfo() {
