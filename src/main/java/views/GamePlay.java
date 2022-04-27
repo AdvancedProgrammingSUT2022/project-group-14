@@ -3,13 +3,12 @@ package views;
 import controllers.*;
 import enums.Progresses;
 import models.*;
-import models.units.CombatUnit;
-import models.units.NonCombatUnit;
-import models.units.Unit;
+import models.units.*;
 
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.regex.Matcher;
 
 import static controllers.MapController.getMap;
@@ -111,11 +110,17 @@ public class GamePlay {
     }
 
     public static void showCombatUnitInfo() {
-        System.out.println("you have selected : " + WorldController.getSelectedCombatUnit().getName());
+        System.out.println("you have selected : " + WorldController.getSelectedCombatUnit().getName()
+                + " from the " + WorldController.getSelectedCombatUnit().getCivilizationName() + " civilization"
+                + " with these coordinates : " + WorldController.getSelectedCombatUnit().getCurrentX() + " "
+                + WorldController.getSelectedCombatUnit().getCurrentY());
     }
 
     public static void showNonCombatUnitInfo() {
-        System.out.println("you have selected : " + WorldController.getSelectedNonCombatUnit().getName());
+        System.out.println("you have selected : " + WorldController.getSelectedNonCombatUnit().getName()
+                + " from the " + WorldController.getSelectedNonCombatUnit().getCivilizationName() + " civilization"
+                + " with these coordinates : " + WorldController.getSelectedNonCombatUnit().getCurrentX() + " "
+                + WorldController.getSelectedNonCombatUnit().getCurrentY());
     }
 
     public static void showCityInfo() {
@@ -293,11 +298,11 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else if (WorldController.getSelectedCombatUnit() != null) {
-            if ((error = UnitController.sleepUnit(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.sleepUnit(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         } else {
-            if ((error = UnitController.sleepUnit(WorldController.getSelectedNonCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.sleepUnit(WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -310,7 +315,7 @@ public class GamePlay {
         } else if (WorldController.getSelectedNonCombatUnit() != null) {
             System.out.println("the selected unit is not a combat unit");
         } else {
-            if ((error = UnitController.alertUnit(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.alertUnit(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -323,7 +328,7 @@ public class GamePlay {
         } else if (WorldController.getSelectedNonCombatUnit() != null) {
             System.out.println("the selected unit is not a combat unit");
         } else {
-            if ((error = UnitController.fortifyUnit(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.fortifyUnit(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -336,7 +341,7 @@ public class GamePlay {
         } else if (WorldController.getSelectedNonCombatUnit() != null) {
             System.out.println("the selected unit is not a combat unit");
         } else {
-            if ((error = UnitController.fortifyUnitUntilHealed(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.fortifyUnitUntilHealed(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -351,7 +356,7 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else {
-            if ((error = UnitController.setupRangedUnit(WorldController.getSelectedCombatUnit(), 0, 0, WorldController.getWorld())) != null) {
+            if ((error = UnitController.setupRangedUnit(WorldController.getSelectedCombatUnit(), 0, 0)) != null) {
                 System.out.println(error);
             }
         }
@@ -362,11 +367,11 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else if (WorldController.getSelectedCombatUnit() != null) {
-            if ((error = UnitController.cancelMission(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.cancelMission(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         } else {
-            if ((error = UnitController.cancelMission(WorldController.getSelectedNonCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.cancelMission(WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -377,11 +382,11 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else if (WorldController.getSelectedCombatUnit() != null) {
-            if ((error = UnitController.delete(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.delete(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         } else {
-            if ((error = UnitController.delete(WorldController.getSelectedNonCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.delete(WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -392,18 +397,28 @@ public class GamePlay {
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
         } else if (WorldController.getSelectedCombatUnit() != null) {
-            if ((error = UnitController.wakeUp(WorldController.getSelectedCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.wakeUp(WorldController.getSelectedCombatUnit())) != null) {
                 System.out.println(error);
             }
         } else {
-            if ((error = UnitController.wakeUp(WorldController.getSelectedNonCombatUnit(), WorldController.getWorld())) != null) {
+            if ((error = UnitController.wakeUp(WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
     }
 
     public static void foundCity() {
-
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Worker)) {
+            System.out.println("the selected unit is not a settler");
+        } else {
+            if ((error = UnitController.foundCity((Settler) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
     }
 
     public static void buildRoadOnTile() {
