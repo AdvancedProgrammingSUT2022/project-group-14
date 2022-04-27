@@ -207,7 +207,7 @@ public class Tile {
         return this.hasRoad;
     }
 
-    public boolean getHasRoad() {
+    public boolean hasRoad() {
         return this.hasRoad;
     }
 
@@ -215,11 +215,7 @@ public class Tile {
         this.hasRoad = hasRoad;
     }
 
-    public boolean isHasRailroad() {
-        return this.hasRailroad;
-    }
-
-    public boolean getHasRailroad() {
+    public boolean hasRailroad() {
         return this.hasRailroad;
     }
 

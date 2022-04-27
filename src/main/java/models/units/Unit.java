@@ -39,7 +39,6 @@ public class Unit {
         this.requiredStrategicResourceName = requiredStrategicResourceName;
         this.requiredTechnology = requiredTechnology;
         this.healthPoint = healthPoint;
-        this.isSleep = false;
     }
 
     public String getCivilizationName() {

@@ -30,7 +30,7 @@ public class GameCommandsValidation {
         } else if (Commands.getMatcher(input, Commands.UNIT_FORTIFY) != null) {
             GamePlay.unitFortify();
         } else if (Commands.getMatcher(input, Commands.UNIT_FORTIFY_HEAL) != null) {
-            GamePlay.unitFortifyHeal();
+            GamePlay.unitFortifyUntilHeal();
         } else if (Commands.getMatcher(input, Commands.UNIT_GARRISON) != null) {
             GamePlay.unitGarrison();
         } else if (Commands.getMatcher(input, Commands.UNIT_SETUP_RANGED) != null) {

@@ -334,7 +334,7 @@ public class GamePlay {
         }
     }
 
-    public static void unitFortifyHeal() {
+    public static void unitFortifyUntilHeal() {
         String error;
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
@@ -348,7 +348,16 @@ public class GamePlay {
     }
 
     public static void unitGarrison() {
-
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedNonCombatUnit() != null) {
+            System.out.println("the selected unit is not combat unit");
+        } else {
+            if ((error = UnitController.garrisonCity(WorldController.getSelectedCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
     }
 
     public static void setupRanged() {
