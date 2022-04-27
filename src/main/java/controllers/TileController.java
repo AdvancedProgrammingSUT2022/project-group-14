@@ -11,7 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import enums.Progresses;
-import enums.tiles.TileType;
+import enums.tiles.TileTypes;
 import models.Tile;
 import models.World;
 

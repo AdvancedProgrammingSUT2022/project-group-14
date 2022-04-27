@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 
 import controllers.MapController;
-import enums.tiles.TileType;
+import enums.tiles.TileTypes;
 
 public class World {
     private ArrayList<Civilization> civilizations = new ArrayList<>();

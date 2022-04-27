@@ -2,7 +2,7 @@ package enums.tiles;
 
 import java.util.Random;
 
-public enum TileType {
+public enum TileTypes {
     DESERT("//s+desert//s+"),
     MEDOW("//s+medow//s+"),
     HEEL("//s+heel//s+"),
@@ -15,7 +15,7 @@ public enum TileType {
 
     private final String regex;
 
-    TileType(String regex) {
+    TileTypes(String regex) {
         this.regex = regex;
     }
 
@@ -23,8 +23,8 @@ public enum TileType {
         return this.regex;
     }
 
-    public static TileType generateRandomTileType() {
+    public static TileTypes generateRandomTileType() {
         Random rand = new Random();
-        return TileType.values()[rand.nextInt(TileType.values().length - 1)];
+        return TileTypes.values()[rand.nextInt(TileTypes.values().length - 1)];
     }
 }

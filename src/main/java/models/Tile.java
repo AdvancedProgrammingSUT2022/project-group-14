@@ -10,8 +10,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import enums.Progresses;
-import enums.tiles.TileFeature;
-import enums.tiles.TileType;
+import enums.tiles.TileFeatures;
+import enums.tiles.TileTypes;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -22,8 +22,8 @@ public class Tile {
     private int x;
     private int y;
 
-    private TileType type;
-    private TileFeature feature;
+    private TileTypes type;
+    private TileFeatures feature;
     private String color;
 
     private double food;
@@ -49,9 +49,9 @@ public class Tile {
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
 
-    private static HashMap<TileType, Tile> tileInformationMap = new HashMap<>();
+    private static HashMap<TileTypes, Tile> tileInformationMap = new HashMap<>();
 
-    public Tile(TileType type, int x, int y) {
+    public Tile(TileTypes type, int x, int y) {
         Tile tile = tileInformationMap.get(type);
         this.x = x;
         this.y = y;
@@ -65,11 +65,11 @@ public class Tile {
     }
 
     public static Tile generateRandomTile(int x, int y) {
-        return new Tile(TileType.generateRandomTileType(), x, y);
+        return new Tile(TileTypes.generateRandomTileType(), x, y);
     }
 
     public Tile copy() {
-        Tile tile = new Tile(TileType.UNKOWN, this.x, this.y);
+        Tile tile = new Tile(TileTypes.UNKOWN, this.x, this.y);
         tile.type = this.type;
         tile.food = this.food;
         tile.production = this.production;
@@ -83,7 +83,7 @@ public class Tile {
     public static void readTileTypesInformationFromJson() {
         try {
             String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/TileTypeInformation.json")));
-            tileInformationMap = new Gson().fromJson(json, new TypeToken<HashMap<TileType, Tile>>() {
+            tileInformationMap = new Gson().fromJson(json, new TypeToken<HashMap<TileTypes, Tile>>() {
             }.getType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,11 +107,11 @@ public class Tile {
         this.y = y;
     }
 
-    public TileType getType() {
+    public TileTypes getType() {
         return this.type;
     }
 
-    public void setType(TileType type) {
+    public void setType(TileTypes type) {
         this.type = type;
     }
 
@@ -163,11 +163,11 @@ public class Tile {
         this.color = color;
     }
 
-    public TileFeature getFeature() {
+    public TileFeatures getFeature() {
         return this.feature;
     }
 
-    public void setFeature(TileFeature feature) {
+    public void setFeature(TileFeatures feature) {
         this.feature = feature;
     }
 
