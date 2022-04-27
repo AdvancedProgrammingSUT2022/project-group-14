@@ -1,5 +1,6 @@
 
 import controllers.UserController;
+import models.resources.LuxuryResource;
 import models.resources.StrategicResource;
 import views.menus.LoginMenu;
 
@@ -13,7 +14,8 @@ public class Main {
         // loginMenu.run();
         // UserController.saveAllUsers();
 
-        StrategicResource.writeData();
-        StrategicResource.readData();
+
+        LuxuryResource.writeData();
+        LuxuryResource.readData();
     }
 } 

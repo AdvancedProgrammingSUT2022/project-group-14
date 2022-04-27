@@ -1,6 +1,8 @@
 package models.resources;
 
 import enums.Progresses;
+import enums.resources.BonusResourceTypes;
+import enums.resources.LuxuryResourceTypes;
 import enums.resources.StrategicResourceTypes;
 
 public class Resource {
@@ -26,6 +28,21 @@ public class Resource {
         this.requiredProgress = resource.requiredProgress;
     }
 
+    public Resource(LuxuryResourceTypes type) {
+        Resource resource = LuxuryResource.typeMapGetter().get(type);
+        this.food = resource.food;
+        this.production = resource.production;
+        this.gold = resource.gold;
+        this.requiredProgress = resource.requiredProgress;
+    }
+
+    public Resource(BonusResourceTypes type) {
+        Resource resource = BonusResource.typeMapGetter().get(type);
+        this.food = resource.food;
+        this.production = resource.production;
+        this.gold = resource.gold;
+        this.requiredProgress = resource.requiredProgress;
+    }
 
     public double getFood() {
         return this.food;

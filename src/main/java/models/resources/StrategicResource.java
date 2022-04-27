@@ -28,7 +28,7 @@ public class StrategicResource extends Resource {
     public static void writeData() {
         try {
 
-            FileWriter writer = new FileWriter("./src/main/resources/resources/StrategicRsourceTypesInformation.json");
+            FileWriter writer = new FileWriter("./src/main/resources/resources/StrategicResourceTypesInformation.json");
             StrategicResource resource = null;
             resource = new StrategicResource(StrategicResourceTypes.COAL, 0, 1, 0, Progresses.MINE,
                     Technologies.SCIENTIFIC_THEORY);
@@ -52,7 +52,7 @@ public class StrategicResource extends Resource {
     public static void readData() {
         try {
             String json = new String(Files
-                    .readAllBytes(Paths.get("./src/main/resources/resources/StrategicRsourceTypesInformation.json")));
+                    .readAllBytes(Paths.get("./src/main/resources/resources/StrategicResourceTypesInformation.json")));
             typesMap = new Gson().fromJson(json, new TypeToken<HashMap<StrategicResourceTypes, StrategicResource>>() {
             }.getType());
         } catch (IOException e) {
