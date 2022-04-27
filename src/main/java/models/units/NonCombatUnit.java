@@ -8,6 +8,13 @@ public class NonCombatUnit extends Unit{
                          double healthPoint) {
         super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
                 requiredTechnology, healthPoint);
+    }
+
+    public void putToWork() {
+        this.isWorking = true;
+    }
+
+    public void finishWork() {
         this.isWorking = false;
     }
 }

@@ -39,7 +39,6 @@ public class Unit {
         this.requiredStrategicResourceName = requiredStrategicResourceName;
         this.requiredTechnology = requiredTechnology;
         this.healthPoint = healthPoint;
-        this.isSleep = false;
     }
 
     public String getCivilizationName() {
@@ -101,5 +100,13 @@ public class Unit {
         this.destinationY = -1;
     }
 
-
+    public String getInfo() {
+        return  "Name : " + name + '\n' +
+                "current coordination : ( " + currentX +
+                " , " + currentY + " )\n" +
+                "movementPoint : " + movementPoint + "\n" +
+                "civilizationName : " + civilizationName + '\n' +
+                "healthPoint : " + healthPoint + "\n" +
+                "isSleeping : " + isSleep + "\n";
+    }
 }

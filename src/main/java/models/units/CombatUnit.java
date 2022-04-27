@@ -1,13 +1,12 @@
 package models.units;
 
-import controllers.WorldController;
-
 public class CombatUnit extends Unit{
     private double defenseStrength;
     private double attackStrength;
 
     private boolean isAlert;
     private boolean isFortifiedTillHealed;
+    private boolean garrisoned;
 
     public CombatUnit(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
                       String requiredStrategicResourceName, String requiredTechnology, double healthPoint,
@@ -16,19 +15,25 @@ public class CombatUnit extends Unit{
                 requiredTechnology, healthPoint);
         this.defenseStrength = defenseStrength;
         this.attackStrength = attackStrength;
-        this.isAlert = false;
-        this.isFortifiedTillHealed = false;
     }
 
     public void alertUnit() {
-        this.isAlert = true;
+        isAlert = true;
     }
 
     public void fortifyUnitTillHealed() {
-        this.isFortifiedTillHealed = true;
+        isFortifiedTillHealed = true;
     }
 
     public void healUnit(double amount) {
-        this.addHealthPoint(amount);
+        addHealthPoint(amount);
+    }
+
+    public void garrisonUnit() {
+        garrisoned = true;
+    }
+
+    public void unGarrisonUnit() {
+        garrisoned = false;
     }
 }

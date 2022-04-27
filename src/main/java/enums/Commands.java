@@ -27,7 +27,7 @@ public enum Commands {
     SELECT_UNIT("select unit (?<militaryStatus>combat|nonCombat) (?<x>\\d+) (?<y>\\d+)"),
     SELECT_CITY_BY_NAME("select city (?<name>\\S+)"),
     SELECT_CITY_BY_POSITION("select city (?<x>\\d+) (?<y>\\d+)"),
-    SHOW_INFO("show info (?<field>research|units|cities|diplomacy|victory|demographics|notifications|military|economic|diplomatic|deals)"),
+    SHOW_INFO("show info of (?<field>research|units|cities|diplomacy|victory|demographics|notifications|military|economic|diplomatic|deals)"),
     UNIT_MOVE_TO("unit move to (?<x>\\d+) (?<y>\\d+)"),
     UNIT_SLEEP("unit sleep"),
     UNIT_ALERT("unit alert"),

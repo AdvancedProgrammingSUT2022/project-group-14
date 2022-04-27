@@ -40,7 +40,7 @@ public class Tile {
 
     private boolean[] isRiver = new boolean[6];
     private boolean hasRoad;
-    private boolean hasRailroad;
+    private boolean hasRailRoad;
 
     private boolean pillaged;
 
@@ -195,7 +195,7 @@ public class Tile {
         this.bonusResource = bonusResource;
     }
 
-    public boolean[] getIsRiver() {
+    public boolean[] isRiver() {
         return this.isRiver;
     }
 
@@ -203,11 +203,7 @@ public class Tile {
         this.isRiver = isRiver;
     }
 
-    public boolean isHasRoad() {
-        return this.hasRoad;
-    }
-
-    public boolean getHasRoad() {
+    public boolean hasRoad() {
         return this.hasRoad;
     }
 
@@ -215,16 +211,12 @@ public class Tile {
         this.hasRoad = hasRoad;
     }
 
-    public boolean isHasRailroad() {
-        return this.hasRailroad;
+    public boolean hasRailRoad() {
+        return this.hasRailRoad;
     }
 
-    public boolean getHasRailroad() {
-        return this.hasRailroad;
-    }
-
-    public void setHasRailroad(boolean hasRailroad) {
-        this.hasRailroad = hasRailroad;
+    public void setHasRailRoad(boolean hasRailroad) {
+        this.hasRailRoad = hasRailroad;
     }
 
     public Progresses getProgress() {
@@ -236,10 +228,6 @@ public class Tile {
     }
 
     public boolean isPillaged() {
-        return this.pillaged;
-    }
-
-    public boolean getPillaged() {
         return this.pillaged;
     }
 

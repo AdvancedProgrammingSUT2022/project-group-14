@@ -20,7 +20,7 @@ public class GameCommandsValidation {
         } else if ((matcher = Commands.getMatcher(input, Commands.SELECT_CITY_BY_POSITION)) != null) {
             checkSelectCityByPosition(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.SELECT_CITY_BY_NAME)) != null) {
-            GamePlay.selectCityByName(matcher);
+            GamePlay.selectCityByName(matcher.group("name"));
         } else if ((matcher = Commands.getMatcher(input, Commands.UNIT_MOVE_TO)) != null) {
             checkMoveTo(matcher);
         } else if (Commands.getMatcher(input, Commands.UNIT_ALERT) != null) {
@@ -30,7 +30,7 @@ public class GameCommandsValidation {
         } else if (Commands.getMatcher(input, Commands.UNIT_FORTIFY) != null) {
             GamePlay.unitFortify();
         } else if (Commands.getMatcher(input, Commands.UNIT_FORTIFY_HEAL) != null) {
-            GamePlay.unitFortifyHeal();
+            GamePlay.unitFortifyUntilHealed();
         } else if (Commands.getMatcher(input, Commands.UNIT_GARRISON) != null) {
             GamePlay.unitGarrison();
         } else if (Commands.getMatcher(input, Commands.UNIT_SETUP_RANGED) != null) {
@@ -67,63 +67,58 @@ public class GameCommandsValidation {
         return true;
     }
 
-    private boolean matcherPositionIsValid(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x")) - 1;
-        int y = Integer.parseInt(matcher.group("y")) - 1;
-        if (TileController.selectedTileIsValid(x, y)) {
-            return true;
-        }
-        return false;
-    }
-
     private void checkShowInfo(Matcher matcher) {
         String field = matcher.group("field");
 
         switch (field) {
-            case "research" -> GamePlay.showResearches();
-            case "units" -> GamePlay.showUnits();
-            case "cities" -> GamePlay.showCities();
-            case "diplomacy" -> GamePlay.showDiplomacyPanel();
-            case "victory" -> GamePlay.showVictoryPanel();
-            case "demographics" -> GamePlay.showDemographicsPanel();
-            case "notifications" -> GamePlay.showNotifications();
-            case "military" -> GamePlay.showMilitaryUnits();
-            case "economic" -> GamePlay.showEconomicStatus();
-            case "diplomatic" -> GamePlay.showDiplomaticHistory();
-            case "deals" -> GamePlay.showDealsHistory();
-            default -> {
-            }
+            case "research" -> GamePlay.researchesPanel();
+            case "units" -> GamePlay.unitsPanel();
+            case "cities" -> GamePlay.citiesPanel();
+            case "diplomacy" -> GamePlay.diplomacyPanel();
+            case "victory" -> GamePlay.victoryPanel();
+            case "demographics" -> GamePlay.demographicsPanel();
+            case "notifications" -> GamePlay.notificationsPanel();
+            case "military" -> GamePlay.militaryPanel();
+            case "economic" -> GamePlay.economicStatusPanel();
+            case "diplomatic" -> GamePlay.diplomaticHistoryPanel();
+            case "deals" -> GamePlay.dealsHistoryPanel();
         }
     }
 
     private void checkSelectUnit(Matcher matcher) {
-        if (matcherPositionIsValid(matcher)) {
-            GamePlay.selectUnit(matcher);
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.selectUnit(x, y, matcher.group("militaryStatus"));
             return;
         }
         System.out.println("the given position is invalid");
     }
 
     private void checkSelectCityByPosition(Matcher matcher) {
-        if (matcherPositionIsValid(matcher)) {
-            GamePlay.selectCityByPosition(matcher);
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.selectCityByPosition(x, y);
             return;
         }
         System.out.println("the given position is invalid");
     }
 
     private void checkMoveTo(Matcher matcher) {
-        if (matcherPositionIsValid(matcher)) {
-            GamePlay.moveTo(matcher);
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.moveTo(x, y);
             return;
         }
         System.out.println("the given position is invalid");
     }
 
     private void checkAttack(Matcher matcher) {
-        if (matcherPositionIsValid(matcher)) {
-            int x = Integer.parseInt(matcher.group("x")) - 1;
-            int y = Integer.parseInt(matcher.group("y")) - 1;
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
             GamePlay.attack(x, y);
             return;
         }
@@ -137,7 +132,7 @@ public class GameCommandsValidation {
         switch (progress) {
             case "road" -> GamePlay.buildRoadOnTile();
             case "railroad" -> GamePlay.buildRailroadOnTile();
-            default -> GamePlay.buildProgressOnTile();
+            default -> GamePlay.buildProgressOnTile(progress);
         }
     }
 
@@ -146,46 +141,35 @@ public class GameCommandsValidation {
 
         if (foundation.equals("jungle"))
             GamePlay.removeJungleFromTile();
-        else GamePlay.removeRoadAndRailroadFromTile();
-    }
-
-    public void checkShowCombatUnitInfo() {
-
-    }
-
-    public void checkShowNonCombatUnitInfo() {
-
-    }
-
-    public boolean checkUnit(String input) {
-        return true;
-    }
-
-    public void checkShowCityInfo() {
+        else GamePlay.removeRoutsFromTile();
     }
 
     public void checkShowMapByPosition(Matcher matcher) {
-        if (matcherPositionIsValid(matcher)) {
-            int x = Integer.parseInt(matcher.group("x")) - 1;
-            int y = Integer.parseInt(matcher.group("y")) - 1;
-            Tile tile = MapController.getTileByCoordinates(x, y);
-            GamePlay.showMapBasedOnTile(tile);
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.showMapBasedOnTile(x, y);
         } else System.out.println("given position is invalid");
     }
 
     public void checkShowMapByName(Matcher matcher) {
         String cityName = matcher.group("name");
-        Tile tile = GamePlay.getTileByCityName(cityName);
-        if (tile != null)
-            GamePlay.showMapBasedOnTile(tile);
-        else System.out.println("given city name is not valid");
+        //TODO get city by name
+        if (true){
+            System.out.println("given city name is not valid");
+        } else if (true) {
+            //TODO isn't in vision of the civilization
+            System.out.println("you don't have vision on that city");
+        } else {
+            GamePlay.showMapBasedOnTile(0, 0);
+        }
     }
 
     public void checkMapMove(Matcher matcher) {
         String direction = matcher.group("direction");
         int movementAmount = Integer.parseInt(matcher.group("movementAmount"));
 
-        Tile oldTile = GamePlay.getSelectedTile();
+        Tile oldTile = WorldController.getSelectedTile();
         if (oldTile == null) {
             System.out.println("Tile is not selected");
             return;
@@ -202,7 +186,7 @@ public class GameCommandsValidation {
 
         if (TileController.selectedTileIsValid(x, y)){
             Tile newTile = MapController.getTileByCoordinates(x, y);
-            GamePlay.showMapBasedOnTile(newTile);
+            GamePlay.showMapBasedOnTile(newTile.getX(), newTile.getY());
 
         }else System.out.println("the wanted movement can't be done");
     }
