@@ -27,4 +27,25 @@ public enum LuxuryResourceTypes implements ResourceTypes {
         this.requiredImprovement = requiredImprovement;
     }
 
+    @Override
+    public double foodGetter() {
+        return this.food;
+    }
+
+    @Override
+    public double productionGetter() {
+        return this.production;
+    }
+
+    @Override
+    public double goldGetter() {
+        return this.gold;
+    }
+
+    @Override
+    public Improvements improvementGetter() {
+        return this.requiredImprovement;
+    }
+
+
 }

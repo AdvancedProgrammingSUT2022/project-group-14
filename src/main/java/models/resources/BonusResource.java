@@ -16,15 +16,7 @@ import enums.resources.StrategicResourceTypes;
 public class BonusResource extends Resource {
 
     private BonusResourceTypes type;
-    public static HashMap<BonusResourceTypes, BonusResource> typesMap = new HashMap<>();
 
-
-
-    public BonusResource(BonusResourceTypes type, double food, double production, double gold,
-            Improvements requiredProgress) {
-        super(food, production, gold, requiredProgress);
-        this.type = type;
-    }
 
     public BonusResource(BonusResourceTypes type) {
         super(type);

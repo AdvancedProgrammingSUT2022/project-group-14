@@ -7,4 +7,12 @@ public interface ResourceTypes {
     // double production = 0 ;
     // double gold = 0 ;
     // Improvements requiredImprovement = Improvements.AGRICULTURE;
+    double foodGetter();
+
+    double productionGetter();
+
+    double goldGetter();
+
+    Improvements improvementGetter();
+
 }

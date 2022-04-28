@@ -22,11 +22,10 @@ public class Resource {
     }
 
     public Resource(ResourceTypes type) {
-        Resource resource = StrategicResource.typesMapGetter().get(type);
-        this.food = resource.food;
-        this.production = resource.production;
-        this.gold = resource.gold;
-        this.requiredImprovement = resource.requiredImprovement;
+        this.food = type.foodGetter();
+        this.production = type.productionGetter();
+        this.gold = type.goldGetter();
+        this.requiredImprovement = type.improvementGetter();
     }
 
    
