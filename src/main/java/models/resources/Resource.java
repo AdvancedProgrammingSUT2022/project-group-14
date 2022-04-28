@@ -10,14 +10,14 @@ public class Resource {
     private double production;
     private double gold;
 
-    private Improvements requiredProgress;
+    private Improvements requiredImprovement;
     private boolean isActive;// what the hell is this?
 
     public Resource(double food, double production, double gold, Improvements requiredProgress) {
         this.food = food;
         this.production = production;
         this.gold = gold;
-        this.requiredProgress = requiredProgress;
+        this.requiredImprovement = requiredProgress;
     }
 
     public Resource(StrategicResourceTypes type) {
@@ -25,7 +25,7 @@ public class Resource {
         this.food = resource.food;
         this.production = resource.production;
         this.gold = resource.gold;
-        this.requiredProgress = resource.requiredProgress;
+        this.requiredImprovement = resource.requiredImprovement;
     }
 
     public Resource(LuxuryResourceTypes type) {
@@ -33,7 +33,7 @@ public class Resource {
         this.food = resource.food;
         this.production = resource.production;
         this.gold = resource.gold;
-        this.requiredProgress = resource.requiredProgress;
+        this.requiredImprovement = resource.requiredImprovement;
     }
 
     public Resource(BonusResourceTypes type) {
@@ -41,7 +41,7 @@ public class Resource {
         this.food = resource.food;
         this.production = resource.production;
         this.gold = resource.gold;
-        this.requiredProgress = resource.requiredProgress;
+        this.requiredImprovement = resource.requiredImprovement;
     }
 
     public double getFood() {
@@ -57,7 +57,7 @@ public class Resource {
     }
 
     public Improvements getRequiredProgress() {
-        return this.requiredProgress;
+        return this.requiredImprovement;
     }
 
     public boolean getIsActive() {
