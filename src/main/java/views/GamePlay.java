@@ -462,7 +462,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            Progresses wantedProgress = null;
+            Improvements wantedProgress = null;
             //TODO get the progress
             if ((error = UnitController.buildProgress(( Worker) WorldController.getSelectedNonCombatUnit(), wantedProgress)) != null) {
                 System.out.println(error);
