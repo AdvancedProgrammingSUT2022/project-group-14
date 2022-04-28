@@ -13,6 +13,6 @@ public interface ResourceTypes {
 
     double goldGetter();
 
-    Improvements improvementGetter();
+    Improvements requiredImprovementGetter();
 
 }

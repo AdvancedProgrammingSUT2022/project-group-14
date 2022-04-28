@@ -43,7 +43,7 @@ public enum LuxuryResourceTypes implements ResourceTypes {
     }
 
     @Override
-    public Improvements improvementGetter() {
+    public Improvements requiredImprovementGetter() {
         return this.requiredImprovement;
     }
 

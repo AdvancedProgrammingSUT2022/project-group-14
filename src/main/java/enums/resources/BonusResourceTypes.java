@@ -38,7 +38,7 @@ public enum BonusResourceTypes implements ResourceTypes {
     }
 
     @Override
-    public Improvements improvementGetter() {
+    public Improvements requiredImprovementGetter() {
         return this.requiredImprovement;
     }
 }

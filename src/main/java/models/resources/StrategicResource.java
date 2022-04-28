@@ -1,7 +1,6 @@
 package models.resources;
 
 import java.util.ArrayList;
-=
 
 import enums.Improvements;
 import enums.Technologies;
@@ -16,21 +15,11 @@ public class StrategicResource extends Resource {
     private ArrayList<Building> dependentBuildings = new ArrayList<>();
     private ArrayList<Unit> dependentUnit = new ArrayList<>();
 
-
-
-    public StrategicResource(StrategicResourceTypes type, double food, double production, double gold,
-            Improvements requiredProgress, Technologies requiredTechnology) {
-        super(food, production, gold, requiredProgress);
-        this.type = type;
-        this.requiredTechnology = requiredTechnology;
-    }
-
     public StrategicResource(StrategicResourceTypes type) {
         super(type);
         this.type = type;
-        this.requiredTechnology = requiredTechnology;
+        this.requiredTechnology = type.requiredTechnologyGetter();
     }
-
 
     public Building getBuilding() {
         return this.building;
@@ -51,6 +40,5 @@ public class StrategicResource extends Resource {
     public ArrayList<Unit> getDependentUnit() {
         return this.dependentUnit;
     }
-    
 
 }

@@ -39,8 +39,12 @@ public enum StrategicResourceTypes implements ResourceTypes {
     }
 
     @Override
-    public Improvements improvementGetter() {
+    public Improvements requiredImprovementGetter() {
         return this.requiredImprovement;
+    }
+
+    public Technologies requiredTechnologyGetter() {
+        return this.requiredTechnology;
     }
 
 }

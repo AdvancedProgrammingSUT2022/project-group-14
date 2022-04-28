@@ -25,7 +25,7 @@ public class Resource {
         this.food = type.foodGetter();
         this.production = type.productionGetter();
         this.gold = type.goldGetter();
-        this.requiredImprovement = type.improvementGetter();
+        this.requiredImprovement = type.requiredImprovementGetter();
     }
 
    
