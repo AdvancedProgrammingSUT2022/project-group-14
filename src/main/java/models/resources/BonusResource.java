@@ -23,7 +23,4 @@ public class BonusResource extends Resource {
         this.type = type;
     }
 
-    public static HashMap<BonusResourceTypes, BonusResource> typeMapGetter() {
-        return typesMap;
-    }
 }
