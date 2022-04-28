@@ -10,8 +10,8 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import enums.Progresses;
-import enums.tiles.TileType;
+import enums.Improvements;
+import enums.tiles.TileBaseTypes;
 import models.Tile;
 import models.World;
 
@@ -52,7 +52,7 @@ public class TileController {
 
     }
 
-    public void buildProgressOnTile(Progresses progress) {
+    public void buildProgressOnTile(Improvements progress) {
 
     }
 

@@ -1,7 +1,7 @@
 package views;
 
 import controllers.*;
-import enums.Progresses;
+import enums.Improvements;
 import models.*;
 import models.units.*;
 
