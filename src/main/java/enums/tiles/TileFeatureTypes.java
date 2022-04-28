@@ -1,7 +1,6 @@
 package enums.tiles;
 
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.HashSet;
 
 import enums.resources.BonusResourceTypes;
@@ -14,11 +13,14 @@ public enum TileFeatureTypes {
     JUNGLE("jungle", 1, 1, 0, 25, 2,
             new HashSet<ResourceTypes>(Arrays.asList(BonusResourceTypes.GAZELLE, LuxuryResourceTypes.COTTON,
                     LuxuryResourceTypes.COLOR, LuxuryResourceTypes.SILK))), // jangal
-    ICE("ice" , 0 , 0 , 0 , 0 , -9999 , new HashSet<ResourceTypes>()),
-    FOREST("forest" , 1 , -1 , 0 ,25 , 2 , new HashSet<ResourceTypes>(Arrays.asList(BonusResourceTypes.BANANA , LuxuryResourceTypes.JEWEL , LuxuryResourceTypes.COLOR))), // jangale anbooh
-    SWAMP("swamp" , -1 , 0 , 0 , -33 , 2 , new HashSet<ResourceTypes>(Arrays.asList(LuxuryResourceTypes.SUGAR))), // mordab
-    OASIS("oasis", 3 , 0 , 1 , - 33 ,1 , new HashSet<ResourceTypes>()), // vahe
-    LAKE("lake" , 0 , 0 ,1 , 0 , -9999 , new HashSet<ResourceTypes>());
+    ICE("ice", 0, 0, 0, 0, -9999, new HashSet<ResourceTypes>()),
+    FOREST("forest", 1, -1, 0, 25, 2,
+            new HashSet<ResourceTypes>(
+                    Arrays.asList(BonusResourceTypes.BANANA, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.COLOR))), // jangale
+                                                                                                                      // anbooh
+    SWAMP("swamp", -1, 0, 0, -33, 2, new HashSet<ResourceTypes>(Arrays.asList(LuxuryResourceTypes.SUGAR))), // mordab
+    OASIS("oasis", 3, 0, 1, -33, 1, new HashSet<ResourceTypes>()), // vahe
+    LAKE("lake", 0, 0, 1, 0, -9999, new HashSet<ResourceTypes>());
 
     private String name;
     private double food;
@@ -41,6 +43,13 @@ public enum TileFeatureTypes {
 
     public String nameGetter() {
         return this.name;
+    }
+
+    public double foodGetter() {
+        return this.food;
+    }
+    public void foodSetter(double food) {
+        this.food = food;
     }
 
 }

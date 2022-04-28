@@ -19,6 +19,10 @@ public class Main {
         // LuxuryResource.writeData();
         // LuxuryResource.readData();
 
-        // System.out.println(TileFeatureTypes.VALLEY.nameGetter()); 
+        System.out.println(TileFeatureTypes.VALLEY.foodGetter());
+        TileFeatureTypes.VALLEY.foodSetter(56.7);
+        System.out.println(TileFeatureTypes.VALLEY.foodGetter());
+        System.out.println(TileFeatureTypes.VALLEY.foodGetter());
+        
     }
 } 
