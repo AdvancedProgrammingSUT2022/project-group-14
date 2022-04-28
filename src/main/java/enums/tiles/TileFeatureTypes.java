@@ -7,13 +7,13 @@ import enums.resources.BonusResourceTypes;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.ResourceTypes;
 
-public enum TileFeatureTypes {
+public enum TileFeatureTypes implements TileTypes{
     VALLEY("valley", 2, 0, 0, -33, 1,
             new HashSet<ResourceTypes>(Arrays.asList(LuxuryResourceTypes.SUGAR, BonusResourceTypes.WHEAT))), // jolge
     JUNGLE("jungle", 1, 1, 0, 25, 2,
             new HashSet<ResourceTypes>(Arrays.asList(BonusResourceTypes.GAZELLE, LuxuryResourceTypes.COTTON,
                     LuxuryResourceTypes.COLOR, LuxuryResourceTypes.SILK))), // jangal
-    ICE("ice", 0, 0, 0, 0, -9999, new HashSet<ResourceTypes>()),
+    ICE("ice", 0, 0, 0, 0, -9999, new HashSet<ResourceTypes>()), //TODO chera hich jayee yakh nadare?
     FOREST("forest", 1, -1, 0, 25, 2,
             new HashSet<ResourceTypes>(
                     Arrays.asList(BonusResourceTypes.BANANA, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.COLOR))), // jangale

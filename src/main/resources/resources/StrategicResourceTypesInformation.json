@@ -1,1 +1,35 @@
-{"IRON":{"requiredTechnology":"IRON_WORKING","type":"IRON","dependentBuildings":[],"dependentUnit":[],"food":0.0,"production":1.0,"gold":0.0,"requiredProgress":"MINE","isActive":false},"HORSE":{"requiredTechnology":"ANIMAL_HUSBANDRY","type":"HORSE","dependentBuildings":[],"dependentUnit":[],"food":0.0,"production":1.0,"gold":0.0,"requiredProgress":"PLANTATION","isActive":false},"COAL":{"requiredTechnology":"SCIENTIFIC_THEORY","type":"COAL","dependentBuildings":[],"dependentUnit":[],"food":0.0,"production":1.0,"gold":0.0,"requiredProgress":"MINE","isActive":false}}
+{
+    "IRON": {
+        "requiredTechnology": "IRON_WORKING",
+        "type": "IRON",
+        "dependentBuildings": [],
+        "dependentUnit": [],
+        "food": 0.0,
+        "production": 1.0,
+        "gold": 0.0,
+        "requiredProgress": "MINE",
+        "isActive": false
+    },
+    "HORSE": {
+        "requiredTechnology": "ANIMAL_HUSBANDRY",
+        "type": "HORSE",
+        "dependentBuildings": [],
+        "dependentUnit": [],
+        "food": 0.0,
+        "production": 1.0,
+        "gold": 0.0,
+        "requiredProgress": "PLANTATION",
+        "isActive": false
+    },
+    "COAL": {
+        "requiredTechnology": "SCIENTIFIC_THEORY",
+        "type": "COAL",
+        "dependentBuildings": [],
+        "dependentUnit": [],
+        "food": 0.0,
+        "production": 1.0,
+        "gold": 0.0,
+        "requiredProgress": "MINE",
+        "isActive": false
+    }
+}

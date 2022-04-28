@@ -11,7 +11,7 @@ import com.google.gson.reflect.TypeToken;
 
 import enums.Progresses;
 import enums.tiles.TileFeatureTypes;
-import enums.tiles.TileTypes;
+import enums.tiles.TileBaseTypes;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -22,7 +22,7 @@ public class Tile {
     private int x;
     private int y;
 
-    private TileTypes type;
+    private TileBaseTypes type;
     private TileFeatureTypes feature;
     private String color;
 
@@ -49,7 +49,7 @@ public class Tile {
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
 
-    private static HashMap<TileTypes, Tile> tileInformationMap = new HashMap<>();
+    private static HashMap<TileBaseTypes, Tile> tileInformationMap = new HashMap<>();
 
     public static void writeData() {
         try {
@@ -74,22 +74,22 @@ public class Tile {
 
             FileWriter writer = new FileWriter("resources/TileTypeInformation.json");
             Tile tile = null;
-            tile = new Tile(TileTypes.DESERT, 0, 0, 0, -33, 1, YELLOW);
-            tileInformationMap.put(TileTypes.DESERT, tile);
-            tile = new Tile(TileTypes.MEDOW, 2, 0, 0, -33, 1, GREEN);
-            tileInformationMap.put(TileTypes.MEDOW, tile);
-            tile = new Tile(TileTypes.HEEL, 0, 2, 0, 25, 2, BLACK);
-            tileInformationMap.put(TileTypes.HEEL, tile);
-            tile = new Tile(TileTypes.MOUNTAIN, 0, 0, 0, 25, -1, PURPLE);
-            tileInformationMap.put(TileTypes.MOUNTAIN, tile);
-            tile = new Tile(TileTypes.OCEAN, 0, 0, 0, 25, -1, CYAN);
-            tileInformationMap.put(TileTypes.OCEAN, tile);
-            tile = new Tile(TileTypes.PLAIN, 1, 1, 0, -33, 1, RED);
-            tileInformationMap.put(TileTypes.PLAIN, tile);
-            tile = new Tile(TileTypes.SNOW, 0, 0, 0, -33, 1, WHITE);
-            tileInformationMap.put(TileTypes.SNOW, tile);
-            tile = new Tile(TileTypes.TUNDRA, 1, 0, 0, -33, 1, PINK);
-            tileInformationMap.put(TileTypes.TUNDRA, tile);
+            tile = new Tile(TileBaseTypes.DESERT, 0, 0, 0, -33, 1, YELLOW);
+            tileInformationMap.put(TileBaseTypes.DESERT, tile);
+            tile = new Tile(TileBaseTypes.MEDOW, 2, 0, 0, -33, 1, GREEN);
+            tileInformationMap.put(TileBaseTypes.MEDOW, tile);
+            tile = new Tile(TileBaseTypes.HEEL, 0, 2, 0, 25, 2, BLACK);
+            tileInformationMap.put(TileBaseTypes.HEEL, tile);
+            tile = new Tile(TileBaseTypes.MOUNTAIN, 0, 0, 0, 25, -1, PURPLE);
+            tileInformationMap.put(TileBaseTypes.MOUNTAIN, tile);
+            tile = new Tile(TileBaseTypes.OCEAN, 0, 0, 0, 25, -1, CYAN);
+            tileInformationMap.put(TileBaseTypes.OCEAN, tile);
+            tile = new Tile(TileBaseTypes.PLAIN, 1, 1, 0, -33, 1, RED);
+            tileInformationMap.put(TileBaseTypes.PLAIN, tile);
+            tile = new Tile(TileBaseTypes.SNOW, 0, 0, 0, -33, 1, WHITE);
+            tileInformationMap.put(TileBaseTypes.SNOW, tile);
+            tile = new Tile(TileBaseTypes.TUNDRA, 1, 0, 0, -33, 1, PINK);
+            tileInformationMap.put(TileBaseTypes.TUNDRA, tile);
 
             writer.write(new Gson().toJson(tileInformationMap));
 
@@ -102,7 +102,7 @@ public class Tile {
 
     }
 
-    public Tile(TileTypes type, double food, double production, double gold, int militaryImpact, int movingPoint,
+    public Tile(TileBaseTypes type, double food, double production, double gold, int militaryImpact, int movingPoint,
             String color) {
         this.type = type;
         this.food = food;
@@ -113,7 +113,7 @@ public class Tile {
         this.color = color;
     }
 
-    public Tile(TileTypes type, int x, int y) {
+    public Tile(TileBaseTypes type, int x, int y) {
         Tile tile = tileInformationMap.get(type);
         this.x = x;
         this.y = y;
@@ -127,11 +127,11 @@ public class Tile {
     }
 
     public static Tile generateRandomTile(int x, int y) {
-        return new Tile(TileTypes.generateRandomTileType(), x, y);
+        return new Tile(TileBaseTypes.generateRandomTileType(), x, y);
     }
 
     public Tile copy() {
-        Tile tile = new Tile(TileTypes.UNKOWN, this.x, this.y);
+        Tile tile = new Tile(TileBaseTypes.UNKOWN, this.x, this.y);
         tile.type = this.type;
         tile.food = this.food;
         tile.production = this.production;
@@ -145,7 +145,7 @@ public class Tile {
     public static void readTileTypesInformationFromJson() {
         try {
             String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/TileTypeInformation.json")));
-            tileInformationMap = new Gson().fromJson(json, new TypeToken<HashMap<TileTypes, Tile>>() {
+            tileInformationMap = new Gson().fromJson(json, new TypeToken<HashMap<TileBaseTypes, Tile>>() {
             }.getType());
         } catch (IOException e) {
             e.printStackTrace();
@@ -168,11 +168,11 @@ public class Tile {
         this.y = y;
     }
 
-    public TileTypes getType() {
+    public TileBaseTypes getType() {
         return this.type;
     }
 
-    public void setType(TileTypes type) {
+    public void setType(TileBaseTypes type) {
         this.type = type;
     }
 
