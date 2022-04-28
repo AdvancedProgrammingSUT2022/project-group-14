@@ -3,12 +3,12 @@ package enums.tiles;
 import java.util.Random;
 
 public enum TileTypes {
-    DESERT("//s+desert//s+"),
-    MEDOW("//s+medow//s+"),
-    HEEL("//s+heel//s+"),
+    DESERT("//s+desert//s+"), // kavir
+    MEDOW("//s+medow//s+"), // chamanzar
+    HEEL("//s+heel//s+"), // tape
     MOUNTAIN("//s+mountain//s+"),
     OCEAN("//s+ocean//s+"),
-    PLAIN("//s+plain//s+"),
+    PLAIN("//s+plain//s+"), // dasht
     SNOW("//s+snow//s+"),
     TUNDRA("//s+tundra//s+"),
     UNKOWN("ERROR");

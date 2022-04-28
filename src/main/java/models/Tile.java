@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import enums.Progresses;
-import enums.tiles.TileFeatures;
+import enums.tiles.TileFeatureTypes;
 import enums.tiles.TileTypes;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
@@ -23,7 +23,7 @@ public class Tile {
     private int y;
 
     private TileTypes type;
-    private TileFeatures feature;
+    private TileFeatureTypes feature;
     private String color;
 
     private double food;
@@ -51,6 +51,69 @@ public class Tile {
 
     private static HashMap<TileTypes, Tile> tileInformationMap = new HashMap<>();
 
+
+    public static void writeData() {
+        try {
+            final String RESET = "\u001B[0m";
+            final String BLACK = "\u001B[40m";
+            final String RED = "\u001B[41m";
+            final String GREEN = "\u001B[42m";
+            final String YELLOW = "\u001B[43m";
+            final String PURPLE = "\u001B[44m";
+            final String PINK = "\u001B[45m";
+            final String CYAN = "\u001B[46m";
+            final String WHITE = "\u001B[47m";
+
+            final String BBLACK = "\u001B[100m";
+            final String BRED = "\u001B[101m";
+            final String BGREEN = "\u001B[102m";
+            final String BYELLOW = "\u001B[103m";
+            final String BBLUE = "\u001B[104m";
+            final String BPURPLE = "\u001B[105m";
+            final String BCYAN = "\u001B[106m";
+            final String BWHITE = "\u001B[107m";
+
+            FileWriter writer = new FileWriter("resources/TileTypeInformation.json");
+            Tile tile = null;
+            tile = new Tile(TileTypes.DESERT, 0, 0, 0, -33, 1, YELLOW);
+            tileInformationMap.put(TileTypes.DESERT, tile);
+            tile = new Tile(TileTypes.MEDOW, 2, 0, 0, -33, 1, GREEN);
+            tileInformationMap.put(TileTypes.MEDOW, tile);
+            tile = new Tile(TileTypes.HEEL, 0, 2, 0, 25, 2, BLACK);
+            tileInformationMap.put(TileTypes.HEEL, tile);
+            tile = new Tile(TileTypes.MOUNTAIN, 0, 0, 0, 25, -1, PURPLE);
+            tileInformationMap.put(TileTypes.MOUNTAIN, tile);
+            tile = new Tile(TileTypes.OCEAN, 0, 0, 0, 25, -1, CYAN);
+            tileInformationMap.put(TileTypes.OCEAN, tile);
+            tile = new Tile(TileTypes.PLAIN, 1, 1, 0, -33, 1, RED);
+            tileInformationMap.put(TileTypes.PLAIN, tile);
+            tile = new Tile(TileTypes.SNOW, 0, 0, 0, -33, 1, WHITE);
+            tileInformationMap.put(TileTypes.SNOW, tile);
+            tile = new Tile(TileTypes.TUNDRA, 1, 0, 0, -33, 1, PINK);
+            tileInformationMap.put(TileTypes.TUNDRA, tile);
+
+            writer.write(new Gson().toJson(tileInformationMap));
+
+            writer.close();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+    }
+
+    public Tile(TileTypes type, double food, double production, double gold, int militaryImpact, int movingPoint,
+            String color) {
+        this.type = type;
+        this.food = food;
+        this.production = production;
+        this.gold = gold;
+        this.militaryImpact = militaryImpact;
+        this.movingPoint = movingPoint;
+        this.color = color;
+    }
+    
     public Tile(TileTypes type, int x, int y) {
         Tile tile = tileInformationMap.get(type);
         this.x = x;
@@ -163,11 +226,11 @@ public class Tile {
         this.color = color;
     }
 
-    public TileFeatures getFeature() {
+    public TileFeatureTypes getFeature() {
         return this.feature;
     }
 
-    public void setFeature(TileFeatures feature) {
+    public void setFeature(TileFeatureTypes feature) {
         this.feature = feature;
     }
 
