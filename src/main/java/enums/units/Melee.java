@@ -1,6 +1,6 @@
 package enums.units;
 
-public enum Melee {
+public enum Melee implements CombatUnit {
     SPEARMAN("//s*spearman//s*"),
     WARRIOR("//s*warrior//s*"),
     HORSE_MAN("//s*horse_man//s*"),
@@ -14,7 +14,6 @@ public enum Melee {
     RIFLE_MAN("//s*rifle_man//s*"),
     ANTI_TANK_GUN("//s*anti_tank_gun//s*"),
     INFANTRY("//s*infantry//s*");
-
 
     private final String regex;
 

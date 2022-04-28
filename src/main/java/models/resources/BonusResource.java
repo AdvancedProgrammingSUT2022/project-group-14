@@ -25,11 +25,11 @@ public class BonusResource extends Resource {
             BonusResource resource = null;
             resource = new BonusResource(BonusResourceTypes.BANANA, 1, 0, 0, Improvements.FARM);
             typesMap.put(BonusResourceTypes.BANANA, resource);
-            resource = new BonusResource(BonusResourceTypes.COW, 1, 0, 0, Improvements.PLANTATION);
+            resource = new BonusResource(BonusResourceTypes.COW, 1, 0, 0, Improvements.CAMP);
             typesMap.put(BonusResourceTypes.COW, resource);
             resource = new BonusResource(BonusResourceTypes.GAZELLE, 1, 0, 0, Improvements.CAMP);
             typesMap.put(BonusResourceTypes.GAZELLE, resource);
-            resource = new BonusResource(BonusResourceTypes.SHEEP, 2, 0, 0, Improvements.PLANTATION);
+            resource = new BonusResource(BonusResourceTypes.SHEEP, 2, 0, 0, Improvements.FARM);
             typesMap.put(BonusResourceTypes.SHEEP, resource);
             resource = new BonusResource(BonusResourceTypes.WHEAT, 1, 0, 0, Improvements.FARM);
             typesMap.put(BonusResourceTypes.WHEAT, resource);

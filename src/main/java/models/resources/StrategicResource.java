@@ -33,7 +33,7 @@ public class StrategicResource extends Resource {
             resource = new StrategicResource(StrategicResourceTypes.COAL, 0, 1, 0, Improvements.MINE,
                     Technologies.SCIENTIFIC_THEORY);
             typesMap.put(StrategicResourceTypes.COAL, resource);
-            resource = new StrategicResource(StrategicResourceTypes.HORSE, 0, 1, 0, Improvements.PLANTATION,
+            resource = new StrategicResource(StrategicResourceTypes.HORSE, 0, 1, 0, Improvements.AGRICULTURE,
                     Technologies.ANIMAL_HUSBANDRY);
             typesMap.put(StrategicResourceTypes.HORSE, resource);
             resource = new StrategicResource(StrategicResourceTypes.IRON, 0, 1, 0, Improvements.MINE,
