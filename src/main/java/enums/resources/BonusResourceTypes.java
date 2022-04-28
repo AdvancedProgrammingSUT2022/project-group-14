@@ -1,6 +1,6 @@
 package enums.resources;
 
-public enum BonusResourceTypes {
+public enum BonusResourceTypes implements ResourceTypes{
     BANANA,
     COW,
     GAZELLE,

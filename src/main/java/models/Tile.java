@@ -30,7 +30,7 @@ public class Tile {
     private double production;
     private double gold;
 
-    private int militaryImpact;
+    private int combatImpact;
     private int movingPoint;
 
     private StrategicResource strategicResource;
@@ -50,7 +50,6 @@ public class Tile {
     private NonCombatUnit nonCombatUnit;
 
     private static HashMap<TileTypes, Tile> tileInformationMap = new HashMap<>();
-
 
     public static void writeData() {
         try {
@@ -109,11 +108,11 @@ public class Tile {
         this.food = food;
         this.production = production;
         this.gold = gold;
-        this.militaryImpact = militaryImpact;
+        this.combatImpact = militaryImpact;
         this.movingPoint = movingPoint;
         this.color = color;
     }
-    
+
     public Tile(TileTypes type, int x, int y) {
         Tile tile = tileInformationMap.get(type);
         this.x = x;
@@ -123,7 +122,7 @@ public class Tile {
         this.food = tile.food;
         this.production = tile.production;
         this.gold = tile.gold;
-        this.militaryImpact = tile.militaryImpact;
+        this.combatImpact = tile.combatImpact;
         this.movingPoint = tile.movingPoint;
     }
 
@@ -137,7 +136,7 @@ public class Tile {
         tile.food = this.food;
         tile.production = this.production;
         tile.gold = this.gold;
-        tile.militaryImpact = this.militaryImpact;
+        tile.combatImpact = this.combatImpact;
         tile.movingPoint = this.movingPoint;
         tile.color = this.color;
         return tile;
@@ -152,7 +151,6 @@ public class Tile {
             e.printStackTrace();
         }
     }
-
 
     public int getX() {
         return this.x;
@@ -203,11 +201,11 @@ public class Tile {
     }
 
     public int getMilitaryImpact() {
-        return this.militaryImpact;
+        return this.combatImpact;
     }
 
     public void setMilitaryImpact(int militaryImpact) {
-        this.militaryImpact = militaryImpact;
+        this.combatImpact = militaryImpact;
     }
 
     public int getMovingPoint() {

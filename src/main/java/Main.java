@@ -1,5 +1,6 @@
 
 import controllers.UserController;
+import enums.tiles.TileFeatureTypes;
 import models.resources.LuxuryResource;
 import models.resources.StrategicResource;
 import views.menus.LoginMenu;
@@ -15,7 +16,9 @@ public class Main {
         // UserController.saveAllUsers();
 
 
-        LuxuryResource.writeData();
-        LuxuryResource.readData();
+        // LuxuryResource.writeData();
+        // LuxuryResource.readData();
+
+        // System.out.println(TileFeatureTypes.VALLEY.nameGetter()); 
     }
 } 

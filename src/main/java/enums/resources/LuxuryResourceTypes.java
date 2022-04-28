@@ -1,6 +1,6 @@
 package enums.resources;
 
-public enum LuxuryResourceTypes {
+public enum LuxuryResourceTypes implements ResourceTypes{
     COTTON,
     COLOR,
     FUR,

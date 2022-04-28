@@ -1,6 +1,6 @@
 package enums.resources;
 
-public enum StrategicResourceTypes {
+public enum StrategicResourceTypes implements ResourceTypes {
     COAL,
     HORSE,
     IRON;
