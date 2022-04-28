@@ -9,7 +9,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import enums.Progresses;
+import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
 import enums.tiles.TileBaseTypes;
 import models.resources.LuxuryResource;
@@ -36,7 +36,7 @@ public class Tile {
     private StrategicResource strategicResource;
     private LuxuryResource luxuryResource;
     private Resource bonusResource;
-    private Progresses progress;
+    private Improvements progress;
 
     private boolean[] isRiver = new boolean[6];
     private boolean hasRoad;
@@ -288,11 +288,11 @@ public class Tile {
         this.hasRailroad = hasRailroad;
     }
 
-    public Progresses getProgress() {
+    public Improvements getProgress() {
         return this.progress;
     }
 
-    public void setProgress(Progresses progress) {
+    public void setProgress(Improvements progress) {
         this.progress = progress;
     }
 

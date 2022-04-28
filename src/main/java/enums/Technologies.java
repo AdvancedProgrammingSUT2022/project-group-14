@@ -1,7 +1,7 @@
 package enums;
 
 public enum Technologies {
-    AGRICULTURE("//s*agriculture//s*"),
+    AGRICULTURE("//s*agriculture//s*"), // keshavarzi
     ANIMAL_HUSBANDRY("//s*animal_husbandry//s*"),
     ARCHERY("//s*archery//s*"),
     BRONZE_WORKING("//s*bronze_working//s*"),

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import enums.Progresses;
+import enums.Improvements;
 import enums.Technologies;
 import enums.resources.StrategicResourceTypes;
 import models.Building;
@@ -30,13 +30,13 @@ public class StrategicResource extends Resource {
 
             FileWriter writer = new FileWriter("./src/main/resources/resources/StrategicResourceTypesInformation.json");
             StrategicResource resource = null;
-            resource = new StrategicResource(StrategicResourceTypes.COAL, 0, 1, 0, Progresses.MINE,
+            resource = new StrategicResource(StrategicResourceTypes.COAL, 0, 1, 0, Improvements.MINE,
                     Technologies.SCIENTIFIC_THEORY);
             typesMap.put(StrategicResourceTypes.COAL, resource);
-            resource = new StrategicResource(StrategicResourceTypes.HORSE, 0, 1, 0, Progresses.PLANTATION,
+            resource = new StrategicResource(StrategicResourceTypes.HORSE, 0, 1, 0, Improvements.PLANTATION,
                     Technologies.ANIMAL_HUSBANDRY);
             typesMap.put(StrategicResourceTypes.HORSE, resource);
-            resource = new StrategicResource(StrategicResourceTypes.IRON, 0, 1, 0, Progresses.MINE,
+            resource = new StrategicResource(StrategicResourceTypes.IRON, 0, 1, 0, Improvements.MINE,
                     Technologies.IRON_WORKING);
             typesMap.put(StrategicResourceTypes.IRON, resource);
 
@@ -66,7 +66,7 @@ public class StrategicResource extends Resource {
     }
 
     public StrategicResource(StrategicResourceTypes type, double food, double production, double gold,
-            Progresses requiredProgress, Technologies requiredTechnology) {
+            Improvements requiredProgress, Technologies requiredTechnology) {
         super(food, production, gold, requiredProgress);
         this.type = type;
         this.requiredTechnology = requiredTechnology;

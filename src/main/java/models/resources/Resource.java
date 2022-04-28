@@ -1,6 +1,6 @@
 package models.resources;
 
-import enums.Progresses;
+import enums.Improvements;
 import enums.resources.BonusResourceTypes;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.StrategicResourceTypes;
@@ -10,10 +10,10 @@ public class Resource {
     private double production;
     private double gold;
 
-    private Progresses requiredProgress;
+    private Improvements requiredProgress;
     private boolean isActive;// what the hell is this?
 
-    public Resource(double food, double production, double gold, Progresses requiredProgress) {
+    public Resource(double food, double production, double gold, Improvements requiredProgress) {
         this.food = food;
         this.production = production;
         this.gold = gold;
@@ -56,7 +56,7 @@ public class Resource {
         return this.gold;
     }
 
-    public Progresses getRequiredProgress() {
+    public Improvements getRequiredProgress() {
         return this.requiredProgress;
     }
 

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import enums.Progresses;
+import enums.Improvements;
 import enums.resources.LuxuryResourceTypes;
 
 public class LuxuryResource extends Resource {
@@ -24,27 +24,27 @@ public class LuxuryResource extends Resource {
 
             FileWriter writer = new FileWriter("./src/main/resources/resources/LuxuryResourceTypesInformation.json");
             LuxuryResource resource = null;
-            resource = new LuxuryResource(LuxuryResourceTypes.COTTON, 0, 0, 2, Progresses.FARM);
+            resource = new LuxuryResource(LuxuryResourceTypes.COTTON, 0, 0, 2, Improvements.FARM);
             typesMap.put(LuxuryResourceTypes.COTTON, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.COLOR, 0, 0, 2, Progresses.FARM);
+            resource = new LuxuryResource(LuxuryResourceTypes.COLOR, 0, 0, 2, Improvements.FARM);
             typesMap.put(LuxuryResourceTypes.COLOR, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.FUR, 0, 0, 2, Progresses.CAMP);
+            resource = new LuxuryResource(LuxuryResourceTypes.FUR, 0, 0, 2, Improvements.CAMP);
             typesMap.put(LuxuryResourceTypes.FUR, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.JEWEL, 0, 0, 3, Progresses.MINE);
+            resource = new LuxuryResource(LuxuryResourceTypes.JEWEL, 0, 0, 3, Improvements.MINE);
             typesMap.put(LuxuryResourceTypes.JEWEL, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.GOLD, 0, 0, 2, Progresses.MINE);
+            resource = new LuxuryResource(LuxuryResourceTypes.GOLD, 0, 0, 2, Improvements.MINE);
             typesMap.put(LuxuryResourceTypes.GOLD, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.INCENSE, 0, 0, 2, Progresses.FARM);
+            resource = new LuxuryResource(LuxuryResourceTypes.INCENSE, 0, 0, 2, Improvements.FARM);
             typesMap.put(LuxuryResourceTypes.INCENSE, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.IVORY, 0, 0, 2, Progresses.CAMP);
+            resource = new LuxuryResource(LuxuryResourceTypes.IVORY, 0, 0, 2, Improvements.CAMP);
             typesMap.put(LuxuryResourceTypes.IVORY, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.MARBLE, 0, 0, 2, Progresses.MINE);
+            resource = new LuxuryResource(LuxuryResourceTypes.MARBLE, 0, 0, 2, Improvements.MINE);
             typesMap.put(LuxuryResourceTypes.MARBLE, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.SILK, 0, 0, 2, Progresses.FARM);
+            resource = new LuxuryResource(LuxuryResourceTypes.SILK, 0, 0, 2, Improvements.FARM);
             typesMap.put(LuxuryResourceTypes.SILK, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.SILVER, 0, 0, 2, Progresses.MINE);
+            resource = new LuxuryResource(LuxuryResourceTypes.SILVER, 0, 0, 2, Improvements.MINE);
             typesMap.put(LuxuryResourceTypes.SILVER, resource);
-            resource = new LuxuryResource(LuxuryResourceTypes.SUGAR, 0, 0, 2, Progresses.FARM);
+            resource = new LuxuryResource(LuxuryResourceTypes.SUGAR, 0, 0, 2, Improvements.FARM);
             typesMap.put(LuxuryResourceTypes.SUGAR, resource);
 
             writer.write(new Gson().toJson(typesMap));
@@ -72,7 +72,7 @@ public class LuxuryResource extends Resource {
     }
 
     public LuxuryResource(LuxuryResourceTypes type, double food, double production, double gold,
-            Progresses requiredProgress) {
+            Improvements requiredProgress) {
         super(food, production, gold, requiredProgress);
         this.type = type;
     }

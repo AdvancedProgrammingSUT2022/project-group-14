@@ -9,7 +9,7 @@ import java.util.HashMap;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import enums.Progresses;
+import enums.Improvements;
 import enums.resources.BonusResourceTypes;
 import enums.resources.StrategicResourceTypes;
 
@@ -23,15 +23,15 @@ public class BonusResource extends Resource {
 
             FileWriter writer = new FileWriter("./src/main/resources/resources/BonusResourceTypesInformation.json");
             BonusResource resource = null;
-            resource = new BonusResource(BonusResourceTypes.BANANA, 1, 0, 0, Progresses.FARM);
+            resource = new BonusResource(BonusResourceTypes.BANANA, 1, 0, 0, Improvements.FARM);
             typesMap.put(BonusResourceTypes.BANANA, resource);
-            resource = new BonusResource(BonusResourceTypes.COW, 1, 0, 0, Progresses.PLANTATION);
+            resource = new BonusResource(BonusResourceTypes.COW, 1, 0, 0, Improvements.PLANTATION);
             typesMap.put(BonusResourceTypes.COW, resource);
-            resource = new BonusResource(BonusResourceTypes.GAZELLE, 1, 0, 0, Progresses.CAMP);
+            resource = new BonusResource(BonusResourceTypes.GAZELLE, 1, 0, 0, Improvements.CAMP);
             typesMap.put(BonusResourceTypes.GAZELLE, resource);
-            resource = new BonusResource(BonusResourceTypes.SHEEP, 2, 0, 0, Progresses.PLANTATION);
+            resource = new BonusResource(BonusResourceTypes.SHEEP, 2, 0, 0, Improvements.PLANTATION);
             typesMap.put(BonusResourceTypes.SHEEP, resource);
-            resource = new BonusResource(BonusResourceTypes.WHEAT, 1, 0, 0, Progresses.FARM);
+            resource = new BonusResource(BonusResourceTypes.WHEAT, 1, 0, 0, Improvements.FARM);
             typesMap.put(BonusResourceTypes.WHEAT, resource);
 
             writer.write(new Gson().toJson(typesMap));
@@ -59,7 +59,7 @@ public class BonusResource extends Resource {
     }
 
     public BonusResource(BonusResourceTypes type, double food, double production, double gold,
-            Progresses requiredProgress) {
+            Improvements requiredProgress) {
         super(food, production, gold, requiredProgress);
         this.type = type;
     }
