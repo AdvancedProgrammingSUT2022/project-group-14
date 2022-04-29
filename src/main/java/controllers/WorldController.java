@@ -42,10 +42,11 @@ public class WorldController {
     }
 
     public static void nextTurn() {
-        //TODO progresses, technologies, goods, buildings, movingUnits, mapVision
+        //TODO technologies, goods, buildings, mapVision
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        TileController.updateImprovements();
 //        CivilizationController.updateTechnology(currentCivilization);
-//        CivilizationController.updateMapVision(currentCivilization);
+        CivilizationController.updateMapVision(currentCivilization);
 //        CivilizationController.updateGoods(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);

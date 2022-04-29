@@ -463,8 +463,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            Improvements wantedImprovement = null;
-            //TODO get the improvement
+            Improvements wantedImprovement = Improvements.getImprovementByName(improvement);
             if ((error = UnitController.buildImprovement(( Worker) WorldController.getSelectedNonCombatUnit(), wantedImprovement)) != null) {
                 System.out.println(error);
             }
@@ -480,6 +479,34 @@ public class GamePlay {
             System.out.println("the selected unit is not a worker");
         } else {
             if ((error = UnitController.removeJungleFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
+    }
+
+    public static void removeForestFromTile() {
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.removeForestFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
+    }
+
+    public static void removeMarshFromTile() {
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.removeMarshFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
