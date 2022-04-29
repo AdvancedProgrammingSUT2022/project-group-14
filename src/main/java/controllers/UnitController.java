@@ -1,6 +1,6 @@
 package controllers;
 
-import enums.Progresses;
+import enums.Improvements;
 import models.*;
 import models.units.*;
 
@@ -144,7 +144,7 @@ public class UnitController {
         return null;
     }
 
-    public static String buildProgress(Worker worker, Progresses progress) {
+    public static String buildImprovement(Worker worker, Improvements progress) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";

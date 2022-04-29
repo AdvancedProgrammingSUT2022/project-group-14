@@ -2,6 +2,7 @@ package views;
 
 import controllers.*;
 import enums.Improvements;
+import enums.Technologies;
 import models.*;
 import models.units.*;
 
@@ -65,7 +66,7 @@ public class GamePlay {
     // panels
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        //TODO research panel
+        //TODO for every technology print the value of it
     }
 
     public static void unitsPanel() {
@@ -454,7 +455,7 @@ public class GamePlay {
         }
     }
 
-    public static void buildProgressOnTile(String progress) {
+    public static void buildImprovementOnTile(String progress) {
         String error;
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
@@ -462,9 +463,9 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            Progresses wantedProgress = null;
+            Improvements wantedProgress = null;
             //TODO get the progress
-            if ((error = UnitController.buildProgress(( Worker) WorldController.getSelectedNonCombatUnit(), wantedProgress)) != null) {
+            if ((error = UnitController.buildImprovement(( Worker) WorldController.getSelectedNonCombatUnit(), wantedProgress)) != null) {
                 System.out.println(error);
             }
         }

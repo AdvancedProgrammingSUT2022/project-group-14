@@ -132,7 +132,7 @@ public class GameCommandsValidation {
         switch (progress) {
             case "road" -> GamePlay.buildRoadOnTile();
             case "railroad" -> GamePlay.buildRailroadOnTile();
-            default -> GamePlay.buildProgressOnTile(progress);
+            default -> GamePlay.buildImprovementOnTile(progress);
         }
     }
 
