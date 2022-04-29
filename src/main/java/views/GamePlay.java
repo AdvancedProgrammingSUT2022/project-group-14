@@ -455,7 +455,7 @@ public class GamePlay {
         }
     }
 
-    public static void buildImprovementOnTile(String progress) {
+    public static void buildImprovementOnTile(String improvement) {
         String error;
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
@@ -463,9 +463,9 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            Improvements wantedProgress = null;
-            //TODO get the progress
-            if ((error = UnitController.buildImprovement(( Worker) WorldController.getSelectedNonCombatUnit(), wantedProgress)) != null) {
+            Improvements wantedImprovement = null;
+            //TODO get the improvement
+            if ((error = UnitController.buildImprovement(( Worker) WorldController.getSelectedNonCombatUnit(), wantedImprovement)) != null) {
                 System.out.println(error);
             }
         }
