@@ -3,6 +3,7 @@ package controllers;
 
 import java.util.ArrayList;
 
+import models.Civilization;
 import models.Tile;
 import models.units.Unit;
 import models.units.Worker;
@@ -13,8 +14,8 @@ public class TileController {
         return x < MapController.getWidth() && y < MapController.getLength() && x >= 0 && y >= 0;
     }
 
-    public static void updateImprovements() {
-        ArrayList<Unit> units = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits();
+    public static void updateImprovements(Civilization civilization) {
+        ArrayList<Unit> units = civilization.getAllUnits();
         for (Unit unit : units) {
             if (unit instanceof Worker) {
                 if (((Worker) unit).isWorking()) {
