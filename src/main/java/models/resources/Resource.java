@@ -3,6 +3,7 @@ package models.resources;
 import enums.Improvements;
 import enums.resources.BonusResourceTypes;
 import enums.resources.LuxuryResourceTypes;
+import enums.resources.ResourceTypes;
 import enums.resources.StrategicResourceTypes;
 
 public class Resource {
@@ -10,39 +11,24 @@ public class Resource {
     private double production;
     private double gold;
 
-    private Improvements requiredProgress;
+    private Improvements requiredImprovement;
     private boolean isActive;// what the hell is this?
 
     public Resource(double food, double production, double gold, Improvements requiredProgress) {
         this.food = food;
         this.production = production;
         this.gold = gold;
-        this.requiredProgress = requiredProgress;
+        this.requiredImprovement = requiredProgress;
     }
 
-    public Resource(StrategicResourceTypes type) {
-        Resource resource = StrategicResource.typesMapGetter().get(type);
-        this.food = resource.food;
-        this.production = resource.production;
-        this.gold = resource.gold;
-        this.requiredProgress = resource.requiredProgress;
+    public Resource(ResourceTypes type) {
+        this.food = type.foodGetter();
+        this.production = type.productionGetter();
+        this.gold = type.goldGetter();
+        this.requiredImprovement = type.requiredImprovementGetter();
     }
 
-    public Resource(LuxuryResourceTypes type) {
-        Resource resource = LuxuryResource.typeMapGetter().get(type);
-        this.food = resource.food;
-        this.production = resource.production;
-        this.gold = resource.gold;
-        this.requiredProgress = resource.requiredProgress;
-    }
-
-    public Resource(BonusResourceTypes type) {
-        Resource resource = BonusResource.typeMapGetter().get(type);
-        this.food = resource.food;
-        this.production = resource.production;
-        this.gold = resource.gold;
-        this.requiredProgress = resource.requiredProgress;
-    }
+   
 
     public double getFood() {
         return this.food;
@@ -57,7 +43,7 @@ public class Resource {
     }
 
     public Improvements getRequiredProgress() {
-        return this.requiredProgress;
+        return this.requiredImprovement;
     }
 
     public boolean getIsActive() {
