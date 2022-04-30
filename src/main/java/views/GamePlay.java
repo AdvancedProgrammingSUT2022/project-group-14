@@ -200,9 +200,9 @@ public class GamePlay {
                         CombatUnit combatUnit= MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
                         NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
                         if (combatUnit != null && j == 3 && k % 16 == 12) {
-                            System.out.print(map[originalX + x][originalY + y].getColor() + combatUnit.getName().charAt(0));
+                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + combatUnit.getName().charAt(0));
                         } else if (nonCombatUnit != null && j == 3 && k % 16 == 14) {
-                            System.out.print(map[originalX + x][originalY + y].getColor() + nonCombatUnit.getName().charAt(0));
+                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + nonCombatUnit.getName().charAt(0));
                         } else {
                             System.out.print(map[originalX + x][originalY + y].getColor() + " ");
                         }
@@ -255,9 +255,9 @@ public class GamePlay {
                         CombatUnit combatUnit= MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
                         NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
                         if (combatUnit != null && j == 1 && k % 16 == 4) {
-                            System.out.print(map[originalX + x][originalY + y].getColor() + combatUnit.getName().charAt(0));
+                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + combatUnit.getName().charAt(0));
                         } else if (nonCombatUnit != null && j == 1 && k % 16 == 6) {
-                            System.out.print(map[originalX + x][originalY + y].getColor() + nonCombatUnit.getName().charAt(0));
+                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + nonCombatUnit.getName().charAt(0));
                         } else {
                             System.out.print(map[originalX + x][originalY + y].getColor() + " ");
                         }

@@ -19,7 +19,6 @@ public class WorldController {
     private static NonCombatUnit selectedNonCombatUnit;
 
     public static void newWorld(ArrayList<String> usernames) {
-        Tile.readTileTypesInformationFromJson();
         MapController.generateMap();
         world = new World(usernames);
         MapController.updateUnitPositions();
