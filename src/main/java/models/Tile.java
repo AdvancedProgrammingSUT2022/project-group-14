@@ -37,13 +37,14 @@ public class Tile {
     private StrategicResource strategicResource;
     private LuxuryResource luxuryResource;
     private Resource bonusResource;
-    private Improvements progress;
+    private Improvements improvement;
+    private int improvementTurnsLeftToBuild; // 9999 -> has not been started to build | 0 -> has been build
 
     private boolean[] isRiver = new boolean[6];
-    private boolean hasRoad;
-    private boolean hasRailRoad;
+    private int roadState; // 9999 -> has not been started to build | 0 -> has been build
+    private int railRoadState; // 9999 -> has not been started to build | 0 -> has been build
 
-    private boolean pillaged;
+    private int pillageState; // 0 -> has not been pillaged | 9999 -> been pillaged
 
     private String civilizationName;
     private City city;
@@ -60,6 +61,9 @@ public class Tile {
         this.gold = type.getGold();
         this.combatImpact = type.getCombatImpact();
         this.movingPoint = type.getMovingPoint();
+        this.improvementTurnsLeftToBuild = 9999;
+        this.roadState = 9999;
+        this.railRoadState = 9999;
     }
 
     public static Tile generateRandomTile(int x, int y) {
@@ -191,36 +195,44 @@ public class Tile {
         this.isRiver = isRiver;
     }
 
-    public boolean hasRoad() {
-        return this.hasRoad;
+    public int getRoadState() {
+        return roadState;
     }
 
-    public void setHasRoad(boolean hasRoad) {
-        this.hasRoad = hasRoad;
+    public void setRoadState(int roadState) {
+        this.roadState = roadState;
     }
 
-    public boolean hasRailRoad() {
-        return this.hasRailRoad;
+    public int getRailRoadState() {
+        return railRoadState;
     }
 
-    public void setHasRailRoad(boolean hasRailroad) {
-        this.hasRailRoad = hasRailroad;
+    public void setRailRoadState(int railRoadState) {
+        this.railRoadState = railRoadState;
     }
 
-    public Improvements getProgress() {
-        return this.progress;
+    public Improvements getImprovement() {
+        return this.improvement;
     }
 
-    public void setProgress(Improvements progress) {
-        this.progress = progress;
+    public void setImprovement(Improvements improvement) {
+        this.improvement = improvement;
     }
 
-    public boolean isPillaged() {
-        return this.pillaged;
+    public int getImprovementTurnsLeftToBuild() {
+        return improvementTurnsLeftToBuild;
     }
 
-    public void setPillaged(boolean pillaged) {
-        this.pillaged = pillaged;
+    public void setImprovementTurnsLeftToBuild(int improvementTurnsLeftToBuild) {
+        this.improvementTurnsLeftToBuild = improvementTurnsLeftToBuild;
+    }
+
+    public int getPillageState() {
+        return pillageState;
+    }
+
+    public void setPillageState(int pillageState) {
+        this.pillageState = pillageState;
     }
 
     public CombatUnit getCombatUnit() {

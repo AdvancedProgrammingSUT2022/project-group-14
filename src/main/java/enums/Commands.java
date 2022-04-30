@@ -9,17 +9,17 @@ public enum Commands {
     EXIT_MENU("menu exit"),
     SHOW_MENU("menu show-current"),
     // LoginMenu commands
-    LOGIN("user login "),
-    CREATE_USER("user create "),
+    LOGIN("login user "),
+    CREATE_USER("create user "),
     PASSWORD("(\\-\\-password|\\-p) (?<password>\\S+)"),
     USERNAME("(\\-\\-username|\\-u) (?<username>\\S+)"),
     NICKNAME("(\\-\\-nickname|\\-n) (?<nickname>\\S+)"),
     // MainMenu Commands
-    LOGOUT("user logout"),
+    LOGOUT("logout user"),
     START_GAME("play game "),
     PLAYER_USERNAME("(\\-\\-player|\\-pl)(?<playerNumber>\\d+) (?<username>\\S+)"),
     // Profile Commands
-    PROFILE_CHANGE("profile change "),
+    PROFILE_CHANGE("change profile "),
     PASSWORD_FLAG("(\\-\\-password|\\-p) "),
     CURRENT("(\\-\\-current|\\-c) (?<currentPassword>\\S+)"),
     NEW("(\\-\\-new|\\-ne) (?<newPassword>\\S+)"),
@@ -41,11 +41,11 @@ public enum Commands {
     UNIT_WAKE("unit wake"),
     UNIT_DELETE("unit delete"),
     UNIT_BUILD("unit build (?<progress>road|railroad|farm|mine|tradingPost|lumberMill|pasture|camp|plantation|quarry)"),
-    UNIT_REMOVE("unit remove (?<foundation>jungle|route)"),
+    UNIT_REMOVE("unit remove (?<foundation>jungle|forest|marsh|route)"),
     UNIT_REPAIR("unit repair"),
-    MAP_SHOW_BY_POSITION("map show (?<x>\\d+) (?<y>\\d+)"),
-    MAP_SHOW_BY_NAME("map show (?<name>\\S+)"),
-    MAP_MOVE("map move (?<direction>right|left|up|down) (?<movementAmount>\\d+)"),
+    MAP_SHOW_BY_POSITION("show map (?<x>\\d+) (?<y>\\d+)"),
+    MAP_SHOW_BY_NAME("show map (?<name>\\S+)"),
+    MAP_MOVE("move map (?<direction>right|left|up|down) (?<movementAmount>\\d+)"),
     NEXT_TURN("next turn"),
     END_GAME("end game");
 
@@ -65,9 +65,7 @@ public enum Commands {
     }
 
     public static boolean startsWith(String input, Commands commands){
-        if (input.startsWith(commands.regex))
-            return true;
-        return false;
+        return input.startsWith(commands.regex);
     }
 
     public static Matcher matcherFindsRegex(String input, Commands commands){

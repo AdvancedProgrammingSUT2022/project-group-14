@@ -35,6 +35,13 @@ public enum Improvements {
     FACTORY("factory", 0, 2, 0, Technologies.ENGINEERING, new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN,
             TileBaseTypes.DESERT, TileBaseTypes.MEDOW, TileBaseTypes.TUNDRA, TileBaseTypes.SNOW)));
 
+    private String name;
+    private double food;
+    private double production;
+    private double gold;
+    private Technologies requiredTechnology;
+    private HashSet<TileTypes> possibleTiles;
+
     Improvements(String name, double food, double production, double gold, Technologies requiredTechnology,
             HashSet<TileTypes> possibleTiles) {
         this.name = name;
@@ -45,10 +52,15 @@ public enum Improvements {
         this.possibleTiles = possibleTiles;
     }
 
-    private String name;
-    private double food;
-    private double production;
-    private double gold;
-    private Technologies requiredTechnology;
-    private HashSet<TileTypes> possibleTiles;
+    public static Improvements getImprovementByName(String name) {
+        return Improvements.valueOf(name);
+    }
+
+    public Technologies getRequiredTechnology() {
+        return this.requiredTechnology;
+    }
+
+    public HashSet<TileTypes> getPossibleTiles() {
+        return this.possibleTiles;
+    }
 }

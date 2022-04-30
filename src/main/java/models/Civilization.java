@@ -2,11 +2,9 @@
 package models;
 
 import controllers.MapController;
-import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import models.units.*;
-import org.w3c.dom.ranges.Range;
 
 import java.util.*;
 
@@ -58,6 +56,10 @@ public class Civilization {
 
     public int[][] getVisionStatesOfMap() {
         return this.visionStatesOfMap;
+    }
+
+    public Tile[][] getRevealedTiles() {
+        return this.revealedTiles;
     }
 
     public void addMeleeUnit(Melee unit) {

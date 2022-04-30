@@ -132,16 +132,19 @@ public class GameCommandsValidation {
         switch (progress) {
             case "road" -> GamePlay.buildRoadOnTile();
             case "railroad" -> GamePlay.buildRailroadOnTile();
-            default -> GamePlay.buildProgressOnTile(progress);
+            default -> GamePlay.buildImprovementOnTile(progress);
         }
     }
 
     private void checkRemove(Matcher matcher) {
         String foundation = matcher.group("foundation");
 
-        if (foundation.equals("jungle"))
-            GamePlay.removeJungleFromTile();
-        else GamePlay.removeRoutsFromTile();
+        switch (foundation) {
+            case "jungle" -> GamePlay.removeJungleFromTile();
+            case "forest" -> GamePlay.removeForestFromTile();
+            case "marsh" -> GamePlay.removeMarshFromTile();
+            default -> GamePlay.removeRoutsFromTile();
+        }
     }
 
     public void checkShowMapByPosition(Matcher matcher) {

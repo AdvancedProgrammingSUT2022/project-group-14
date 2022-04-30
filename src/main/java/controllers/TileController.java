@@ -1,29 +1,38 @@
 package controllers;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import enums.Improvements;
-import enums.tiles.TileBaseTypes;
+import models.Civilization;
 import models.Tile;
-import models.World;
+import models.units.Unit;
+import models.units.Worker;
 
 public class TileController {
-
 
     public static boolean selectedTileIsValid(int x, int y) {
         return x < MapController.getWidth() && y < MapController.getLength() && x >= 0 && y >= 0;
     }
 
-    public static boolean tileHasJungle(Tile tile) {
-        return false;
+    public static void updateBuildingProgress(Civilization civilization) {
+        ArrayList<Unit> units = civilization.getAllUnits();
+        for (Unit unit : units) {
+            if (unit instanceof Worker) {
+                if (((Worker) unit).isWorking()) {
+                    ((Worker) unit).work();
+                    Tile tile = MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY());
+                    if (tile.getPillageState() != 0 && tile.getPillageState() != 9999) {
+                        tile.setPillageState(tile.getPillageState() - 1);
+                    } else if (tile.getRoadState() != 0 && tile.getRoadState() != 9999) {
+                        tile.setRoadState(tile.getRoadState() - 1);
+                    } else if (tile.getRailRoadState() != 0 && tile.getRailRoadState() != 9999) {
+                        tile.setRailRoadState(tile.getRailRoadState() - 1);
+                    } else if (tile.getImprovementTurnsLeftToBuild() != 0 && tile.getImprovementTurnsLeftToBuild() != 9999) {
+                        tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() -1 );
+                    }
+                }
+            }
+        }
     }
 
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
@@ -42,30 +51,6 @@ public class TileController {
             neighbours.add(MapController.getTileByCoordinates(x, y-1));
 
         return neighbours;
-    }
-
-    public void buildRoadOnTile() {
-
-    }
-
-    public void buildRailroadOnTile() {
-
-    }
-
-    public void buildProgressOnTile(Improvements progress) {
-
-    }
-
-    public void removeRoadAndRailroadFromTile() {
-
-    }
-
-    public void removeJungleFromTile() {
-
-    }
-
-    public void repairCurrentTile() {
-        // TODO
     }
 
     public static boolean combatUnitExistsInTile(Tile tile) {

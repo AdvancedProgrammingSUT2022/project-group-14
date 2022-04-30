@@ -2,6 +2,7 @@ package views;
 
 import controllers.*;
 import enums.Improvements;
+import enums.Technologies;
 import models.*;
 import models.units.*;
 
@@ -65,7 +66,7 @@ public class GamePlay {
     // panels
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        //TODO research panel
+        //TODO for every technology print the value of it
     }
 
     public static void unitsPanel() {
@@ -454,7 +455,7 @@ public class GamePlay {
         }
     }
 
-    public static void buildProgressOnTile(String progress) {
+    public static void buildImprovementOnTile(String improvement) {
         String error;
         if (WorldController.unitIsNotSelected()) {
             System.out.println("you haven't selected a unit yet");
@@ -462,9 +463,8 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            Improvements wantedProgress = null;
-            //TODO get the progress
-            if ((error = UnitController.buildProgress(( Worker) WorldController.getSelectedNonCombatUnit(), wantedProgress)) != null) {
+            Improvements wantedImprovement = Improvements.getImprovementByName(improvement);
+            if ((error = UnitController.buildImprovement(( Worker) WorldController.getSelectedNonCombatUnit(), wantedImprovement)) != null) {
                 System.out.println(error);
             }
         }
@@ -479,6 +479,34 @@ public class GamePlay {
             System.out.println("the selected unit is not a worker");
         } else {
             if ((error = UnitController.removeJungleFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
+    }
+
+    public static void removeForestFromTile() {
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.removeForestFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+                System.out.println(error);
+            }
+        }
+    }
+
+    public static void removeMarshFromTile() {
+        String error;
+        if (WorldController.unitIsNotSelected()) {
+            System.out.println("you haven't selected a unit yet");
+        } else if (WorldController.getSelectedCombatUnit() != null ||
+                (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
+            System.out.println("the selected unit is not a worker");
+        } else {
+            if ((error = UnitController.removeMarshFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
