@@ -14,7 +14,7 @@ public class TileController {
         return x < MapController.getWidth() && y < MapController.getLength() && x >= 0 && y >= 0;
     }
 
-    public static void updateImprovements(Civilization civilization) {
+    public static void updateBuildingProgress(Civilization civilization) {
         ArrayList<Unit> units = civilization.getAllUnits();
         for (Unit unit : units) {
             if (unit instanceof Worker) {

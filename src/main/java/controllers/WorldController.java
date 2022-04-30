@@ -44,7 +44,7 @@ public class WorldController {
     public static void nextTurn() {
         //TODO technologies, goods, buildings
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
-        TileController.updateImprovements(currentCivilization);
+        TileController.updateBuildingProgress(currentCivilization);
 //        CivilizationController.updateTechnology(currentCivilization);
         CivilizationController.updateMapVision(currentCivilization);
 //        CivilizationController.updateGoods(currentCivilization);
