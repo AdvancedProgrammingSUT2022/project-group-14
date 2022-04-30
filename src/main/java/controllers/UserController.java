@@ -22,6 +22,8 @@ public class UserController {
         String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/usersData.json")));
         users = new Gson().fromJson(json,
                 new TypeToken<List<User>>(){}.getType());
+        if (users == null)
+            users = new ArrayList<>();
     }
 
     public static void saveAllUsers() throws IOException {
