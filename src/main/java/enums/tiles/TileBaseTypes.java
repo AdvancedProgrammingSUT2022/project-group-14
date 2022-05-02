@@ -23,9 +23,15 @@ public enum TileBaseTypes implements TileTypes {
     private int movingPoint;
     private Colors color;
 
-    TileBaseTypes(String name, double food, double production, double gold, int combatStrength, int movingPoint,
+    TileBaseTypes(String name, double food, double production, double gold, int combatImpact, int movingPoint,
             Colors color) {
         this.name = name;
+        this.food = food;
+        this.production = production;
+        this.gold = gold;
+        this.combatImpact = combatImpact;
+        this.movingPoint = movingPoint;
+        this.color = color;
     }
 
     public static TileBaseTypes generateRandomTileType() {

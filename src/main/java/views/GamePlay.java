@@ -185,7 +185,7 @@ public class GamePlay {
                     y++;
                 } else if (j == 1 && (k % 16 >= 12 || k % 16 == 0)) {
                     if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[originalX + x][originalY + y].getColor() + "_");
+                        System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + "_");
                     else
                         System.out.print("_");
                 } else {
@@ -204,7 +204,7 @@ public class GamePlay {
                         } else if (nonCombatUnit != null && j == 3 && k % 16 == 14) {
                             System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + nonCombatUnit.getName().charAt(0));
                         } else {
-                            System.out.print(map[originalX + x][originalY + y].getColor() + " ");
+                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + " ");
                         }
                     }
                     else
@@ -240,7 +240,7 @@ public class GamePlay {
                     y++;
                 } else if (j == 3 && (k % 16 >= 4 && k % 16 <= 8)) {
                     if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[originalX + x][originalY + y].getColor() + "_");
+                        System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + "_");
                     else
                         System.out.print("_");
                 } else {
@@ -259,7 +259,7 @@ public class GamePlay {
                         } else if (nonCombatUnit != null && j == 1 && k % 16 == 6) {
                             System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + nonCombatUnit.getName().charAt(0));
                         } else {
-                            System.out.print(map[originalX + x][originalY + y].getColor() + " ");
+                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + " ");
                         }
                     }
                     else
