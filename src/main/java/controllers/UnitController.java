@@ -100,7 +100,7 @@ public class UnitController {
                 && !currentTile.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "can not found a city in enemy territory";
         } else {
-            City city = new City();
+            City city = new City(settler.getCurrentX(), settler.getCurrentY());
             currentTile.setCity(city);
             WorldController.getWorld().getCivilizationByName(settler.getCivilizationName()).addCity(city);
         }
