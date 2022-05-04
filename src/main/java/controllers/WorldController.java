@@ -41,7 +41,7 @@ public class WorldController {
     }
 
     public static void nextTurn() {
-        //TODO technologies, goods, buildings
+        //TODO buildings
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
         TileController.updateBuildingProgress(currentCivilization);
         CivilizationController.updateScience(currentCivilization);
@@ -54,6 +54,20 @@ public class WorldController {
         }
         world.nextTurn();
         resetSelection();
+    }
+
+    public static String nextTurnImpossible() {
+        Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        if (currentCivilization.getCurrentTechnology() == null) {
+            return "you have to choose a technology to research";
+        } else {
+            for (Unit unit : currentCivilization.getAllUnits()) {
+                if (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep()) {
+                    return "units need to be moved";
+                }
+            }
+        }
+        return null;
     }
 
     public static World getWorld() {

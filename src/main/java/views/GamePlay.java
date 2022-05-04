@@ -6,10 +6,7 @@ import enums.Technologies;
 import models.*;
 import models.units.*;
 
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 
 import static controllers.MapController.getMap;
@@ -55,18 +52,22 @@ public class GamePlay {
     }
 
     public static void selectCityByName(String name) {
-        if (true) {
-            //TODO name was invalid
+        ArrayList<String> allCitiesNames = new ArrayList<>();
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            for (City city : civilization.getCities()) {
+                allCitiesNames.add(city.getName());
+            }
+        }
+        if (!allCitiesNames.contains(name)) {
+            System.out.println("given name is invalid");
         } else {
-            //TODO get the city by name
-            WorldController.setSelectedCity(null);
+            WorldController.setSelectedCity(CityController.getCityByName(name));
         }
     }
 
     // panels
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        //TODO for every technology print the value of it
     }
 
     public static void unitsPanel() {
@@ -603,9 +604,17 @@ public class GamePlay {
     }
 
     public static void nextTurn(){
-        WorldController.nextTurn();
-
         String error;
+        if ((error = WorldController.nextTurnImpossible()) != null) {
+            System.out.println(error);
+        } else {
+            Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+            for (City city : currentCivilization.getCities()) {
+                if ((error = CityController.unitReleaseImpossible(city)) != null)
+                    System.out.println(city.getName() + " : " + error);
+            }
+            WorldController.nextTurn();
+        }
     }
 
     public static void cancelCurrentResearch(){
@@ -618,7 +627,7 @@ public class GamePlay {
         for (String requiredTechnologyName : technology.getRequiredTechnologies()) {
             Technologies requiredTechnology = Technologies.getTechnologyByName(requiredTechnologyName);
             if (currentCivilization.getTechnologies().get(requiredTechnology) > 0){
-                System.out.println("you should first study technology" + requiredTechnologyName);
+                System.out.println("you should first study " + requiredTechnologyName.toLowerCase(Locale.ROOT));
                 return;
             }
         }

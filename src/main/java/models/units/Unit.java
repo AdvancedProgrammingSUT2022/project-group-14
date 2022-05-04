@@ -71,6 +71,10 @@ public class Unit {
         }
     }
 
+    public boolean isSleep() {
+        return this.isSleep;
+    }
+
     public void putToSleep() {
         this.isSleep = true;
     }

@@ -4,24 +4,30 @@ import models.Citizen;
 import models.City;
 import models.Civilization;
 import models.Tile;
+import models.units.CombatUnit;
+import models.units.NonCombatUnit;
 
 import java.util.ArrayList;
 
 public class CityController {
 
     public static City getCityByName(String name) {
+        ArrayList<String> allCitiesNames = new ArrayList<>();
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            for (City city : civilization.getCities()) {
+                if (city.getName().equals(name))
+                    return city;
+            }
+        }
         return null;
-
     }
 
     public static boolean cityExistsInTile(Tile tile) {
         return false;
-
     }
 
     public static boolean civilizationHasDiscoveredCity(Civilization civilization, City city) {
         return false;
-
     }
 
     public static void addGoodsToCity(City city) {
@@ -123,5 +129,17 @@ public class CityController {
             city.finishCityProduction();
     }
 
+    public static String unitReleaseImpossible(City city) {
+        if (city.getCurrentUnit() == null)
+            return null;
+
+        if (city.getCurrentUnit() instanceof CombatUnit && city.getCenterOfCity().getCombatUnit() != null) {
+                return "move the combat unit away from the center in order to use the produced unit";
+        }
+        if (city.getCurrentUnit() instanceof NonCombatUnit && city.getCenterOfCity().getNonCombatUnit() != null) {
+            return "move the nonCombat unit away from the center in order to use the produced unit";
+        }
+        return null;
+    }
 
 }
