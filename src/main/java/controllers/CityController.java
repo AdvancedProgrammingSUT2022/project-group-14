@@ -1,28 +1,126 @@
 package controllers;
 
+import models.Citizen;
 import models.City;
 import models.Civilization;
 import models.Tile;
 
+import java.util.ArrayList;
+
 public class CityController {
 
-    public static City getCityByName(String name){
+    public static City getCityByName(String name) {
         return null;
 
     }
 
-    public static boolean cityExistsInTile(Tile tile){
+    public static boolean cityExistsInTile(Tile tile) {
         return false;
 
     }
 
-    public static boolean civilizationHasDiscoveredCity(Civilization civilization, City city){
+    public static boolean civilizationHasDiscoveredCity(Civilization civilization, City city) {
         return false;
 
     }
 
-    public static void addGoodsToCity(City city){
+    public static void addGoodsToCity(City city) {
+        double addedFood = 0;
+        double addedGold = 0;
+        double addedProduction = 0;
+        for (Citizen citizen : city.getCitizens()) {
+            if (citizen.isWorking()) {
+                for (Tile tile : city.getTerritory()) {
+                    if (citizen.getxOfWorkingTile() == tile.getX() && citizen.getYOfWorkingTile() == tile.getY()) {
+                        addedFood += MapController.getMap()[citizen.getxOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
+                        addedGold += MapController.getMap()[citizen.getxOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
+                        addedProduction += MapController.getMap()[citizen.getxOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
+                    }
+                }
+            }
+        }
+        double cityFood = city.getFood() + addedFood;
+        double cityGold = city.getGold() + addedGold;
+        double cityProduction = city.getProduction() + addedProduction;
+        cityFood = consumeCityFood(cityFood, city.getCitizens());
+        city.setFood(cityFood);
+        city.setGold(cityGold);
+        city.setProduction(cityProduction);
+        addCitizenIfPossible(city);
+    }
 
+    public static double consumeCityFood(double cityFood, ArrayList<Citizen> citizens) {
+        while (citizens.size() * 2 > cityFood) {
+            starveCitizen(citizens);
+        }
+        cityFood -= citizens.size() * 2;
+        return cityFood;
+    }
+
+    public static void starveCitizen(ArrayList<Citizen> citizens){
+        for (Citizen citizen : citizens) {
+            if (!citizen.isWorking()){
+                citizens.remove(citizen);
+                return;
+            }
+        }
+        citizens.remove(citizens.size() - 1);
+    }
+
+    public static void addCitizenIfPossible(City city){
+        if (city.getFood() >= city.getGrowthFoodLimit()){
+            city.setFood(0);
+            city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
+            city.setGrowthFoodLimit(city.getGrowthFoodLimit() * 2);
+        }
+    }
+
+    public static String lockCitizenToTile(City city, int id, int x, int y){
+        for (Citizen citizen : city.getCitizens()) {
+            if (id == citizen.getId()){
+                if (citizen.isWorking()) return "the citizen is currently working";
+                else {
+                    citizen.setXOfWorkingTile(x);
+                    citizen.setYOfWorkingTile(y);
+                    citizen.setIsWorking(true);
+                    return "citizen locked to tile successfully";
+                }
+            }
+        }
+        return "no citizen exists in the city with the given id";
+    }
+
+    public static String unlockCitizenFromTile(City city, int id){
+        for (Citizen citizen : city.getCitizens()) {
+            if (id == citizen.getId()){
+                if (!citizen.isWorking()) return "the citizen with the given id isn't currently locked to any tile";
+                else {
+                    citizen.setYOfWorkingTile(-1);
+                    citizen.setXOfWorkingTile(-1);
+                    citizen.setIsWorking(false);
+                    return "citizen unlocked successfully";
+                }
+            }
+        }
+        return "no citizen exists in the city with the given id";
+    }
+
+    public static void updateCityProduction(City city){
+        if (city.getCurrentProductionRemainingCost() <= 0) {
+            city.finishCityProduction();
+            return;
+        }
+
+        if (city.isPayingGoldForCityProduction()) {
+            city.setCurrentProductionRemainingCost(city.getCurrentProductionRemainingCost() - city.getGold());
+            city.setGold(0);
+        }else {
+            city.setCurrentProductionRemainingCost(city.getCurrentProductionRemainingCost() - city.getProduction());
+            city.setProduction(0);
+        }
+
+        if (city.getCurrentProductionRemainingCost() <= 0)
+            city.finishCityProduction();
     }
 
 

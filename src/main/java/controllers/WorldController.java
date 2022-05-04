@@ -46,7 +46,8 @@ public class WorldController {
         TileController.updateBuildingProgress(currentCivilization);
 //        CivilizationController.updateTechnology(currentCivilization);
         CivilizationController.updateMapVision(currentCivilization);
-//        CivilizationController.updateGoods(currentCivilization);
+        CivilizationController.updateGoods(currentCivilization);
+        CivilizationController.updateCitiesProductions(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }

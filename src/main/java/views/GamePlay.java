@@ -540,4 +540,24 @@ public class GamePlay {
             }
         }
     }
+
+    public static void lockCitizen(int x, int y, int id){
+        if (WorldController.getSelectedCity() == null)
+            System.out.println("you should select a city first");
+        else {
+            String message = CityController.lockCitizenToTile(WorldController.getSelectedCity(), id, x, y);
+            System.out.println(message);
+        }
+
+    }
+
+    public static void unlockCitizen(Matcher matcher) {
+        if (WorldController.getSelectedCity() == null)
+            System.out.println("you should select a city first");
+        else {
+            int id = Integer.parseInt(matcher.group("id"));
+            String message = CityController.unlockCitizenFromTile(WorldController.getSelectedCity(), id);
+            System.out.println(message);
+        }
+    }
 }

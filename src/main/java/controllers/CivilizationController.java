@@ -45,7 +45,13 @@ public class CivilizationController {
 
     public static void updateGoods(Civilization civilization) {
         for (City city : civilization.getCities()) {
-            //TODO add each city goods
+            CityController.addGoodsToCity(city);
+        }
+    }
+
+    public static void updateCitiesProductions(Civilization civilization){
+        for (City city : civilization.getCities()) {
+            CityController.updateCityProduction(city);
         }
     }
 }

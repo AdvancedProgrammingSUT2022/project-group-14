@@ -47,7 +47,10 @@ public enum Commands {
     MAP_SHOW_BY_NAME("show map (?<name>\\S+)"),
     MAP_MOVE("move map (?<direction>right|left|up|down) (?<movementAmount>\\d+)"),
     NEXT_TURN("next turn"),
-    END_GAME("end game");
+    END_GAME("end game"),
+    LOCK_CITIZEN("lock citizen (?<id>\\d+) to (?<x>\\d+) (<?y>\\d+)"),
+    UNLOCK_CITIZEN("unlock citizen (?<id>\\d+)"),
+    CITY_PRODUCE("city produce (?<type>unit|building) (?<productionName>\\S+)");
 
 
     private final String regex;
