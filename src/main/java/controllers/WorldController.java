@@ -44,9 +44,10 @@ public class WorldController {
         //TODO technologies, goods, buildings
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
         TileController.updateBuildingProgress(currentCivilization);
-//        CivilizationController.updateTechnology(currentCivilization);
+        CivilizationController.updateScience(currentCivilization);
+        CivilizationController.updateTechnology(currentCivilization);
         CivilizationController.updateMapVision(currentCivilization);
-        CivilizationController.updateGoods(currentCivilization);
+        CivilizationController.updateCitiesGoods(currentCivilization);
         CivilizationController.updateCitiesProductions(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);

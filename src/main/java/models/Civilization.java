@@ -30,7 +30,7 @@ public class Civilization {
     private Technologies currentTechnology;
     private ArrayList<Researches> researches = new ArrayList<>();
 
-    private double food, gold, production, happiness;
+    private double food, gold, production, happiness, science;
 
     private int citizens;
     //TODO may consider a new way to handle citizens
@@ -138,5 +138,21 @@ public class Civilization {
 
     public void setCurrentTechnology(Technologies wantedTechnology) {
         this.currentTechnology = wantedTechnology;
+    }
+
+    public void setHappiness(double happiness) {
+        this.happiness = happiness;
+    }
+
+    public void setScience(double science) {
+        this.science = science;
+    }
+
+    public double getHappiness() {
+        return happiness;
+    }
+
+    public double getScience() {
+        return science;
     }
 }

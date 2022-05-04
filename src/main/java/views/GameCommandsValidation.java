@@ -5,6 +5,7 @@ import controllers.TileController;
 import controllers.WorldController;
 import enums.Buildings;
 import enums.Commands;
+import enums.Technologies;
 import enums.units.Unit;
 import models.Building;
 import models.Tile;
@@ -64,13 +65,17 @@ public class GameCommandsValidation {
             WorldController.resetWorld();
             return false;
         } else if (Commands.getMatcher(input, Commands.NEXT_TURN) != null) {
-            WorldController.nextTurn();
+            GamePlay.nextTurn();
         } else if ((matcher = Commands.getMatcher(input, Commands.LOCK_CITIZEN)) != null) {
             checkLockCitizen(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.UNLOCK_CITIZEN)) != null) {
             GamePlay.unlockCitizen(matcher);
         }else if ((matcher = Commands.getMatcher(input, Commands.CITY_PRODUCE)) != null) {
             checkCityProduce(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.CANCEL_CURRENT_RESEARCH)) != null) {
+            GamePlay.cancelCurrentResearch();
+        } else if ((matcher = Commands.getMatcher(input, Commands.START_RESEARCH)) != null) {
+            checkStartResearch(matcher);
         } else System.out.println("invalid command");
 
         return true;
@@ -243,6 +248,14 @@ public class GameCommandsValidation {
                 GamePlay.startProducingBuilding(building, payment);
             }
         }
+    }
+
+    public void checkStartResearch(Matcher matcher){
+        String technologyName = matcher.group("technology");
+        Technologies technologies = Technologies.getTechnologyByName(technologyName);
+        if (technologies == null)
+            System.out.println("no such technology exists");
+        else GamePlay.startResearch(technologies);
     }
 
 }

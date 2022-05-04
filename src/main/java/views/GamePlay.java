@@ -602,4 +602,17 @@ public class GamePlay {
 
     }
 
+    public static void nextTurn(){
+        WorldController.nextTurn();
+    }
+
+    public static void cancelCurrentResearch(){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.setCurrentTechnology(null);
+    }
+
+    public static void startResearch(Technologies technologies){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.setCurrentTechnology(technologies);
+    }
 }

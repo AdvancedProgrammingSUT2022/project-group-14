@@ -2,6 +2,7 @@ package enums;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 
 public enum Technologies{
     AGRICULTURE("agriculture", 20, new HashSet<>()), // keshavarzi
@@ -73,5 +74,9 @@ public enum Technologies{
 
     public HashSet<String> getRequiredTechnologies() {
         return this.requiredTechnologies;
+    }
+
+    public static Technologies getTechnologyByName(String name){
+        return Technologies.valueOf(name.toUpperCase(Locale.ROOT));
     }
 }
