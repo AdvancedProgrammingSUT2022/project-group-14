@@ -13,7 +13,7 @@ public class Main {
         // loginMenu.run();
         // UserController.saveAllUsers();
         NewMapController MapController = new NewMapController();
-        MapController.bordersInit();
+        MapController.mapInit();
         MapController.showMap();
     }
 }
