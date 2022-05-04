@@ -49,4 +49,8 @@ public enum Buildings {
         this.requiredTechnology = requiredTechnology;
     }
 
+    public static Buildings getBuildingByName(String name){
+        return Buildings.valueOf(name);
+    }
+
 }

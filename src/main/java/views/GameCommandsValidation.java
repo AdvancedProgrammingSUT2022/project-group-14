@@ -4,6 +4,9 @@ import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.Commands;
+import enums.units.Melee;
+import enums.units.NonCombatUnit;
+import enums.units.Ranged;
 import models.Tile;
 
 import java.util.regex.Matcher;
@@ -66,6 +69,8 @@ public class GameCommandsValidation {
             checkLockCitizen(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.UNLOCK_CITIZEN)) != null) {
             GamePlay.unlockCitizen(matcher);
+        }else if ((matcher = Commands.getMatcher(input, Commands.CITY_PRODUCE)) != null) {
+            checkCityProduce(matcher);
         } else System.out.println("invalid command");
 
         return true;
@@ -207,6 +212,28 @@ public class GameCommandsValidation {
             return;
         }
         System.out.println("the given position is invalid");
+    }
+
+    public void checkCityProduce(Matcher matcher){
+        String type = matcher.group("type");
+        String productionName = matcher.group("productionName");
+
+        if (type.equals("unit")){
+            Melee melee = Melee.getMeleeUnitByName(productionName);
+            if (melee != null){
+                models.units.Melee unit = new models.units.Melee();
+            }else {
+                Ranged ranged = Ranged.getRangedUnitByName(productionName);
+                if (ranged != null){
+                    models.units.Ranged unit = new models.units.Ranged();
+                }else {
+                    NonCombatUnit nonCombatUnit = NonCombatUnit.getNonCombatUnitByName(productionName);
+                    if (nonCombatUnit != null){
+                        models.units.NonCombatUnit unit = new models.units.NonCombatUnit();
+                    } else System.out.println("no such unit exists");
+                }
+            }
+        }
     }
 
 }

@@ -41,4 +41,8 @@ public enum Melee implements CombatUnit {
         this.requiredResource = requiredResource;
         this.requiredTechnology = requiredTechnology;
     }
+
+    public static Melee getMeleeUnitByName(String name){
+        return Melee.valueOf(name);
+    }
 }

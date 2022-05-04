@@ -39,4 +39,8 @@ public enum Ranged implements CombatUnit {
         this.requiredResource = requiredResource;
         this.requiredTechnology = requiredTechnology;
     }
+
+    public static Ranged getRangedUnitByName(String name){
+        return Ranged.valueOf(name);
+    }
 }
