@@ -55,4 +55,8 @@ public enum Unit {
         this.requiredResource = requiredResource;
         this.requiredTechnology = requiredTechnology;
     }
+
+    public static Unit getUnitByName(String name){
+        return Unit.valueOf(name);
+    }
 }
