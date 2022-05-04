@@ -3,24 +3,26 @@ package enums.resources;
 import enums.Improvements;
 
 public enum LuxuryResourceTypes implements ResourceTypes {
-    COTTON(0, 0, 2, Improvements.FARM),
-    COLOR(0, 0, 2, Improvements.FARM),
-    FUR(0, 0, 2, Improvements.CAMP),
-    JEWEL(0, 0, 3, Improvements.MINE),
-    GOLD(0, 0, 2, Improvements.MINE),
-    INCENSE(0, 0, 2, Improvements.FARM),
-    IVORY(0, 0, 2, Improvements.CAMP),
-    MARBLE(0, 0, 2, Improvements.MINE),
-    SILK(0, 0, 2, Improvements.FARM),
-    SILVER(0, 0, 2, Improvements.MINE),
-    SUGAR(0, 0, 2, Improvements.FARM);
+    COTTON("cotton", 0, 0, 2, Improvements.FARM),
+    COLOR("color", 0, 0, 2, Improvements.FARM),
+    FUR("fur", 0, 0, 2, Improvements.CAMP),
+    JEWEL("jewel", 0, 0, 3, Improvements.MINE),
+    GOLD("gold", 0, 0, 2, Improvements.MINE),
+    INCENSE("incense", 0, 0, 2, Improvements.FARM),
+    IVORY("ivory", 0, 0, 2, Improvements.CAMP),
+    MARBLE("marble", 0, 0, 2, Improvements.MINE),
+    SILK("silk", 0, 0, 2, Improvements.FARM),
+    SILVER("silver", 0, 0, 2, Improvements.MINE),
+    SUGAR("sugar", 0, 0, 2, Improvements.FARM);
 
+    private String name;
     private double food;
     private double production;
     private double gold;
     private Improvements requiredImprovement;
 
-    LuxuryResourceTypes(double food, double production, double gold, Improvements requiredImprovement) {
+    LuxuryResourceTypes(String name, double food, double production, double gold, Improvements requiredImprovement) {
+        this.name = name;
         this.food = food;
         this.production = production;
         this.gold = gold;
@@ -47,5 +49,9 @@ public enum LuxuryResourceTypes implements ResourceTypes {
         return this.requiredImprovement;
     }
 
+    @Override
+    public String nameGetter(){
+        return this.name;
+    }
 
 }

@@ -1,16 +1,5 @@
 package models.units;
 
-import controllers.MapController;
-import controllers.TileController;
-import controllers.WorldController;
-import enums.Technologies;
-import models.Civilization;
-import models.Tile;
-import models.resources.StrategicResource;
-
-import java.util.ArrayList;
-import java.util.Map;
-
 public class Unit {
     private int currentX, currentY;
     private int destinationX, destinationY;
@@ -26,19 +15,15 @@ public class Unit {
     private double healthPoint;
     private boolean isSleep;
 
-    public Unit(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
-                String requiredStrategicResourceName, String requiredTechnology, double healthPoint) {
-        this.currentX = currentX;
-        this.currentY = currentY;
-        destinationX = -1;
-        destinationY = -1;
-        this.movementPoint = movementPoint;
-        this.name = name;
+    public Unit(enums.units.Unit unitInfo, int x, int y, String civilization) {
+        this.currentX = x; this.currentY = y;
+        this.destinationX = -1; this.destinationY = -1;
+        this.movementPoint = unitInfo.getMovement();
+        this.name = unitInfo.getName();
         this.civilizationName = civilization;
-        this.requiredGold = requiredGold;
-        this.requiredStrategicResourceName = requiredStrategicResourceName;
-        this.requiredTechnology = requiredTechnology;
-        this.healthPoint = healthPoint;
+        this.requiredGold = unitInfo.getCost();
+        this.requiredStrategicResourceName = unitInfo.getRequiredResource().nameGetter();
+        this.requiredTechnology = unitInfo.getRequiredTechnology().getName();
     }
 
     public String getCivilizationName() {

@@ -8,13 +8,10 @@ public class CombatUnit extends Unit{
     private boolean isFortifiedTillHealed;
     private boolean garrisoned;
 
-    public CombatUnit(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
-                      String requiredStrategicResourceName, String requiredTechnology, double healthPoint,
-                      double defenseStrength, double attackStrength) {
-        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
-                requiredTechnology, healthPoint);
-        this.defenseStrength = defenseStrength;
-        this.attackStrength = attackStrength;
+    public CombatUnit(enums.units.Unit unitInfo, int x, int y, String civilization) {
+        super(unitInfo, x, y, civilization);
+        this.defenseStrength = unitInfo.getCombatStrength();
+        this.attackStrength = unitInfo.getCombatStrength();
     }
 
     public void alertUnit() {

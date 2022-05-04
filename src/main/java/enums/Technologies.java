@@ -62,4 +62,16 @@ public enum Technologies {
         this.cost = cost;
         this.technologiesSet = technologiesSet;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public EnumSet<Technologies> getTechnologiesSet() {
+        return technologiesSet;
+    }
 }

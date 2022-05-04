@@ -1,10 +1,10 @@
 package models.units;
 
+import enums.units.Unit;
+
 public class Settler extends NonCombatUnit{
 
-    public Settler(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
-                   String requiredStrategicResourceName, String requiredTechnology, double healthPoint) {
-        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
-                requiredTechnology, healthPoint);
+    public Settler(Unit unitInfo, int x, int y, String civilization) {
+        super(unitInfo, x, y, civilization);
     }
 }

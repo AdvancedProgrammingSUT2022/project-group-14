@@ -2,6 +2,7 @@ package enums;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Locale;
 
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
@@ -53,7 +54,7 @@ public enum Improvements {
     }
 
     public static Improvements getImprovementByName(String name) {
-        return Improvements.valueOf(name);
+        return Improvements.valueOf(name.toUpperCase(Locale.ROOT));
     }
 
     public Technologies getRequiredTechnology() {
