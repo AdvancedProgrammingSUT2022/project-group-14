@@ -26,11 +26,11 @@ public class Citizen {
         return YOfWorkingTile;
     }
 
-    public void setWorking(boolean working) {
-        isWorking = working;
+    public void setIsWorking(boolean isWorking) {
+        isWorking = isWorking;
     }
 
-    public void setxOfWorkingTile(int xOfWorkingTile) {
+    public void setXOfWorkingTile(int xOfWorkingTile) {
         this.xOfWorkingTile = xOfWorkingTile;
     }
 

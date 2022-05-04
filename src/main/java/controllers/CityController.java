@@ -71,7 +71,38 @@ public class CityController {
         if (city.getFood() >= city.getGrowthFoodLimit()){
             city.setFood(0);
             city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
+            city.setGrowthFoodLimit(city.getGrowthFoodLimit() * 2);
         }
+    }
+
+    public static String lockCitizenToTile(City city, int id, int x, int y){
+        for (Citizen citizen : city.getCitizens()) {
+            if (id == citizen.getId()){
+                if (citizen.isWorking()) return "the citizen is currently working";
+                else {
+                    citizen.setXOfWorkingTile(x);
+                    citizen.setYOfWorkingTile(y);
+                    citizen.setIsWorking(true);
+                    return "citizen locked to tile successfully";
+                }
+            }
+        }
+        return "no citizen exists in the city with the given id";
+    }
+
+    public static String unlockCitizenFromTile(City city, int id){
+        for (Citizen citizen : city.getCitizens()) {
+            if (id == citizen.getId()){
+                if (!citizen.isWorking()) return "the citizen with the given id isn't currently locked to any tile";
+                else {
+                    citizen.setYOfWorkingTile(-1);
+                    citizen.setXOfWorkingTile(-1);
+                    citizen.setIsWorking(false);
+                    return "citizen unlocked successfully";
+                }
+            }
+        }
+        return "no citizen exists in the city with the given id";
     }
 
 
