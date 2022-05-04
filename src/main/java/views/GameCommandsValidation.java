@@ -4,9 +4,6 @@ import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.Commands;
-import enums.units.Melee;
-import enums.units.NonCombatUnit;
-import enums.units.Ranged;
 import models.Tile;
 
 import java.util.regex.Matcher;
@@ -219,20 +216,7 @@ public class GameCommandsValidation {
         String productionName = matcher.group("productionName");
 
         if (type.equals("unit")){
-            Melee melee = Melee.getMeleeUnitByName(productionName);
-            if (melee != null){
-                models.units.Melee unit = new models.units.Melee();
-            }else {
-                Ranged ranged = Ranged.getRangedUnitByName(productionName);
-                if (ranged != null){
-                    models.units.Ranged unit = new models.units.Ranged();
-                }else {
-                    NonCombatUnit nonCombatUnit = NonCombatUnit.getNonCombatUnitByName(productionName);
-                    if (nonCombatUnit != null){
-                        models.units.NonCombatUnit unit = new models.units.NonCombatUnit();
-                    } else System.out.println("no such unit exists");
-                }
-            }
+
         }
     }
 
