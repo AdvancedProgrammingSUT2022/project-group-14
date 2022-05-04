@@ -21,6 +21,7 @@ public class Civilization {
     private ArrayList<Settler> settlers = new ArrayList<>();
 
     private ArrayList<City> cities = new ArrayList<>();
+    private ArrayList<String> citiesNames = new ArrayList<>();
     private ArrayList<City> colonies = new ArrayList<>();
     private City firstCapital;
     private City currentCapital;
@@ -37,12 +38,13 @@ public class Civilization {
     public Civilization(String name) {
         Random random = new Random();
         int randomX = random.nextInt(40), randomY = random.nextInt(80);
-        Melee melee = new Melee(enums.units.Unit.getUnitByName("melee"), randomX, randomY, name);
+        Melee melee = new Melee(enums.units.Unit.getUnitByName("warrior"), randomX, randomY, name);
         addMeleeUnit(melee);
         Settler settler = new Settler(enums.units.Unit.getUnitByName("settler"), randomX, randomY, name);
         addSettler(settler);
         System.out.println(randomX + " " + randomY);
         this.name = name;
+        citiesNames.add(name + "1"); citiesNames.add(name + "2"); citiesNames.add(name + "3");
         firstCapital = null;
         currentCapital = null;
         currentTechnology = null;

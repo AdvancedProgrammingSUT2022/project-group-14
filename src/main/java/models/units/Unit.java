@@ -22,8 +22,16 @@ public class Unit {
         this.name = unitInfo.getName();
         this.civilizationName = civilization;
         this.requiredGold = unitInfo.getCost();
-        this.requiredStrategicResourceName = unitInfo.getRequiredResource().nameGetter();
-        this.requiredTechnology = unitInfo.getRequiredTechnology().getName();
+        if (unitInfo.getRequiredResource() == null){
+            this.requiredStrategicResourceName = null;
+        } else {
+            this.requiredStrategicResourceName = unitInfo.getRequiredResource().nameGetter();
+        }
+        if (unitInfo.getRequiredTechnology() == null){
+            this.requiredTechnology = null;
+        } else {
+            this.requiredTechnology = unitInfo.getRequiredTechnology().getName();
+        }
     }
 
     public String getCivilizationName() {
