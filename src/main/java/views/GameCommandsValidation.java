@@ -3,7 +3,9 @@ package views;
 import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
+import enums.Buildings;
 import enums.Commands;
+import enums.units.Unit;
 import models.Tile;
 
 import java.util.regex.Matcher;
@@ -215,8 +217,17 @@ public class GameCommandsValidation {
         String type = matcher.group("type");
         String productionName = matcher.group("productionName");
 
-        if (type.equals("unit")){
+        if (type.equals("unit")){Unit unit = Unit.getUnitByName(productionName.toUpperCase());
+            if (unit == null) System.out.println("no such unit exists");
+            else {
 
+            }
+        }else {
+            Buildings buildings = Buildings.getBuildingByName(productionName.toUpperCase());
+            if (buildings == null) System.out.println("no such building exists");
+            else {
+
+            }
         }
     }
 
