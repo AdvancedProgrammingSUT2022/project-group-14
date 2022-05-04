@@ -105,5 +105,23 @@ public class CityController {
         return "no citizen exists in the city with the given id";
     }
 
+    public static void updateCityProduction(City city){
+        if (city.getCurrentProductionRemainingCost() <= 0) {
+            city.finishCityProduction();
+            return;
+        }
+
+        if (city.isPayingGoldForCityProduction()) {
+            city.setCurrentProductionRemainingCost(city.getCurrentProductionRemainingCost() - city.getGold());
+            city.setGold(0);
+        }else {
+            city.setCurrentProductionRemainingCost(city.getCurrentProductionRemainingCost() - city.getProduction());
+            city.setProduction(0);
+        }
+
+        if (city.getCurrentProductionRemainingCost() <= 0)
+            city.finishCityProduction();
+    }
+
 
 }

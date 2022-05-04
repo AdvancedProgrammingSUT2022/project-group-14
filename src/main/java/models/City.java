@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import controllers.MapController;
 import controllers.TileController;
+import enums.units.CombatUnit;
 import models.units.Unit;
 
 public class City {
@@ -23,7 +24,8 @@ public class City {
 
     private Unit currentUnit = null;
     private Building currentBuilding = null;
-    private int countdownUnit;
+    private boolean payingGoldForCityProduction = false;
+    private double currentProductionRemainingCost = 0;
 
     private double defenseStrength;
     private double attackStrength;
@@ -36,6 +38,34 @@ public class City {
         citizens.add(new Citizen(1));
         this.territory.add(centerOfCity);
         territory.addAll(TileController.getAvailableNeighbourTiles(centerOfCity.getX(), centerOfCity.getY()));
+    }
+
+    public void finishCityProduction(){
+        this.currentProductionRemainingCost = 0;
+        if (currentBuilding != null)
+            addBuildingToCity();
+        else
+            addUnitToCity();
+
+    }
+
+    public void addBuildingToCity(){
+        buildings.add(currentBuilding);
+        currentBuilding = null;
+    }
+
+    public void addUnitToCity(){
+        if (currentBuilding instanceof CombatUnit){
+            if (centerOfCity.getCombatUnit() == null){
+                centerOfCity.setCombatUnit((models.units.CombatUnit) currentUnit);
+                currentUnit = null;
+            }
+        }else {
+            if (centerOfCity.getNonCombatUnit() == null){
+                centerOfCity.setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
+                currentUnit = null;
+            }
+        }
     }
 
     public void setFood(double food) {
@@ -52,6 +82,14 @@ public class City {
 
     public void setGrowthFoodLimit(double growthFoodLimit) {
         this.growthFoodLimit = growthFoodLimit;
+    }
+
+    public void setPayingGoldForCityProduction(boolean payingGoldForCityProduction) {
+        this.payingGoldForCityProduction = payingGoldForCityProduction;
+    }
+
+    public void setCurrentProductionRemainingCost(double currentProductionRemainingCost) {
+        this.currentProductionRemainingCost = currentProductionRemainingCost;
     }
 
     public double getFood() {
@@ -77,4 +115,29 @@ public class City {
     public double getGrowthFoodLimit() {
         return growthFoodLimit;
     }
+
+    public Tile getCenterOfCity() {
+        return centerOfCity;
+    }
+
+    public ArrayList<Building> getBuildings() {
+        return buildings;
+    }
+
+    public Unit getCurrentUnit() {
+        return currentUnit;
+    }
+
+    public Building getCurrentBuilding() {
+        return currentBuilding;
+    }
+
+    public boolean isPayingGoldForCityProduction() {
+        return payingGoldForCityProduction;
+    }
+
+    public double getCurrentProductionRemainingCost() {
+        return currentProductionRemainingCost;
+    }
+
 }
