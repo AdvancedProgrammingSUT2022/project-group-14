@@ -33,7 +33,7 @@ public class City {
 
     private String name;
 
-    public City(int x, int y) {
+    public City(String name, int x, int y) {
         this.centerOfCity = MapController.getMap()[x][y];
         citizens.add(new Citizen(1));
         this.territory.add(centerOfCity);
@@ -148,4 +148,7 @@ public class City {
         return currentProductionRemainingCost;
     }
 
+    public String getName() {
+        return name;
+    }
 }

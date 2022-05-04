@@ -124,6 +124,12 @@ public class Civilization {
         cities.remove(city);
     }
 
+    public String getCityName() {
+        String name = citiesNames.get(0);
+        citiesNames.remove(0);
+        return name;
+    }
+
     public void addColony(City city) {
         colonies.add(city);
     }
