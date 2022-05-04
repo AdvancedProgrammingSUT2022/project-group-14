@@ -44,6 +44,7 @@ public class CivilizationController {
         int civilizationScience = (int) civilization.getScience();
         civilization.getTechnologies().put(civilization.getCurrentTechnology(),
                 civilization.getTechnologies().get(civilization.getCurrentTechnology()) - civilizationScience);
+        civilization.setScience(0);
         if (civilization.getTechnologies().get(civilization.getCurrentTechnology()) <= 0) {
             civilization.setCurrentTechnology(null);
         }

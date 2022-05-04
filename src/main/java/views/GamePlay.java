@@ -604,6 +604,8 @@ public class GamePlay {
 
     public static void nextTurn(){
         WorldController.nextTurn();
+
+        String error;
     }
 
     public static void cancelCurrentResearch(){

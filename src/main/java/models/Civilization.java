@@ -50,6 +50,10 @@ public class Civilization {
         currentTechnology = null;
         food = 0; gold = 0; production = 0; happiness = 0;
         citizens = 0;
+
+        for (Technologies technology : Technologies.values()) {
+            technologies.put(technology, technology.getCost());
+        }
     }
 
     public String getName() {
