@@ -62,6 +62,10 @@ public class GameCommandsValidation {
             return false;
         } else if (Commands.getMatcher(input, Commands.NEXT_TURN) != null) {
             WorldController.nextTurn();
+        } else if ((matcher = Commands.getMatcher(input, Commands.LOCK_CITIZEN)) != null) {
+            checkLockCitizen(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.UNLOCK_CITIZEN)) != null) {
+            GamePlay.unlockCitizen(matcher);
         } else System.out.println("invalid command");
 
         return true;
@@ -158,7 +162,7 @@ public class GameCommandsValidation {
     public void checkShowMapByName(Matcher matcher) {
         String cityName = matcher.group("name");
         //TODO get city by name
-        if (true){
+        if (true) {
             System.out.println("given city name is not valid");
         } else if (true) {
             //TODO isn't in vision of the civilization
@@ -187,11 +191,22 @@ public class GameCommandsValidation {
             case "up" -> x -= movementAmount;
         }
 
-        if (TileController.selectedTileIsValid(x, y)){
+        if (TileController.selectedTileIsValid(x, y)) {
             Tile newTile = MapController.getTileByCoordinates(x, y);
             GamePlay.showMapBasedOnTile(newTile.getX(), newTile.getY());
 
-        }else System.out.println("the wanted movement can't be done");
+        } else System.out.println("the wanted movement can't be done");
+    }
+
+    public void checkLockCitizen(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            int id = Integer.parseInt(matcher.group("id"));
+            GamePlay.lockCitizen(x, y, id);
+            return;
+        }
+        System.out.println("the given position is invalid");
     }
 
 }
