@@ -112,11 +112,11 @@ public class CityController {
         }
 
         if (city.isPayingGoldForCityProduction()) {
-            city.setCurrentProductionRemainingCost(city.getCurrentProductionRemainingCost() - city.getGold());
-            city.setGold(0);
+            city.setCurrentProductionRemainingCost(Math.max(city.getCurrentProductionRemainingCost() - city.getGold(), 0));
+            city.setGold(Math.max(city.getGold() - city.getCurrentProductionRemainingCost(), 0));
         }else {
-            city.setCurrentProductionRemainingCost(city.getCurrentProductionRemainingCost() - city.getProduction());
-            city.setProduction(0);
+            city.setCurrentProductionRemainingCost(Math.max(city.getCurrentProductionRemainingCost() - city.getProduction(), 0));
+            city.setGold(Math.max(city.getProduction() - city.getCurrentProductionRemainingCost(), 0));
         }
 
         if (city.getCurrentProductionRemainingCost() <= 0)

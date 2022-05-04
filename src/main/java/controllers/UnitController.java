@@ -151,7 +151,7 @@ public class UnitController {
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
         } else if (currentTile.getImprovement().equals(improvement)) {
-            return "there is already this kind of progress on this tile";
+            return "there is already this kind of improvement on this tile";
         } else if (WorldController.getWorld().getCivilizationByName(worker.getCivilizationName())
                 .getTechnologies().get(improvement.getRequiredTechnology()) != 0) {
             return "you don't have the required technology";

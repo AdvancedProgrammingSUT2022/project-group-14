@@ -50,7 +50,9 @@ public enum Commands {
     END_GAME("end game"),
     LOCK_CITIZEN("lock citizen (?<id>\\d+) to (?<x>\\d+) (<?y>\\d+)"),
     UNLOCK_CITIZEN("unlock citizen (?<id>\\d+)"),
-    CITY_PRODUCE("city produce (?<type>unit|building) (?<productionName>\\S+)");
+    CITY_PRODUCE("city produce (?<type>unit|building) (?<productionName>\\S+) with (?<payment>gold|production)"),
+    START_RESEARCH("start research (?<technology>\\S+)"),
+    CANCEL_CURRENT_RESEARCH("cancel current research");
 
 
     private final String regex;

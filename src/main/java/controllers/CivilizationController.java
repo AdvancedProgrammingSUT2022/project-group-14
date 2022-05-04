@@ -4,6 +4,8 @@ import models.City;
 import models.Civilization;
 import models.units.Unit;
 
+import java.util.ArrayList;
+
 public class CivilizationController {
 
     public static void updateMapVision(Civilization civilization) {
@@ -36,14 +38,19 @@ public class CivilizationController {
     }
 
     public static void updateTechnology(Civilization civilization) {
+        if (civilization.getCurrentTechnology() == null)
+            return;
+
+        int civilizationScience = (int) civilization.getScience();
         civilization.getTechnologies().put(civilization.getCurrentTechnology(),
-                civilization.getTechnologies().get(civilization.getCurrentTechnology())-1);
+                civilization.getTechnologies().get(civilization.getCurrentTechnology()) - civilizationScience);
+        civilization.setScience(0);
         if (civilization.getTechnologies().get(civilization.getCurrentTechnology()) <= 0) {
             civilization.setCurrentTechnology(null);
         }
     }
 
-    public static void updateGoods(Civilization civilization) {
+    public static void updateCitiesGoods(Civilization civilization) {
         for (City city : civilization.getCities()) {
             CityController.addGoodsToCity(city);
         }
@@ -53,5 +60,13 @@ public class CivilizationController {
         for (City city : civilization.getCities()) {
             CityController.updateCityProduction(city);
         }
+    }
+
+    public static void updateScience(Civilization civilization){
+        double addedScience = 3;
+        for (City city : civilization.getCities()) {
+            addedScience += city.getCitizens().size();
+        }
+        civilization.setScience(civilization.getScience() + addedScience);
     }
 }

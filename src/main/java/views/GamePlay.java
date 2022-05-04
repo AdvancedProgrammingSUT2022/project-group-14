@@ -560,4 +560,68 @@ public class GamePlay {
             System.out.println(message);
         }
     }
+
+    public static void startProducingBuilding(Building building, String payment){
+        WorldController.getSelectedCity().setCurrentBuilding(building);
+        if (payment.equals("gold"))
+            WorldController.getSelectedCity().setPayingGoldForCityProduction(true);
+        else WorldController.getSelectedCity().setPayingGoldForCityProduction(false);
+        WorldController.getSelectedCity().setCurrentProductionRemainingCost(building.getCost());
+    }
+
+    public static void startProducingUnit(enums.units.Unit unitEnum, String payment){
+
+        Unit unit;
+        if (unitEnum.getName().equals("settler")){
+            unit = new Settler(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        }else if (unitEnum.getName().equals("worker")){
+            unit = new Worker(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        }else if (unitEnum.getRangedCombatStrength() == 0){
+            unit = new Melee(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        } else {
+            unit = new Ranged(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        }
+
+        WorldController.getSelectedCity().setCurrentUnit(unit);
+        if (payment.equals("gold"))
+            WorldController.getSelectedCity().setPayingGoldForCityProduction(true);
+        else WorldController.getSelectedCity().setPayingGoldForCityProduction(false);
+        WorldController.getSelectedCity().setCurrentProductionRemainingCost(unitEnum.getCost());
+
+    }
+
+    public static void nextTurn(){
+        WorldController.nextTurn();
+
+        String error;
+    }
+
+    public static void cancelCurrentResearch(){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.setCurrentTechnology(null);
+    }
+
+    public static void startResearch(Technologies technology){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (String requiredTechnologyName : technology.getRequiredTechnologies()) {
+            Technologies requiredTechnology = Technologies.getTechnologyByName(requiredTechnologyName);
+            if (currentCivilization.getTechnologies().get(requiredTechnology) > 0){
+                System.out.println("you should first study technology" + requiredTechnologyName);
+                return;
+            }
+        }
+        currentCivilization.setCurrentTechnology(technology);
+    }
 }

@@ -54,8 +54,16 @@ public class City {
         currentBuilding = null;
     }
 
+    public void setCurrentUnit(Unit currentUnit) {
+        this.currentUnit = currentUnit;
+    }
+
+    public void setCurrentBuilding(Building currentBuilding) {
+        this.currentBuilding = currentBuilding;
+    }
+
     public void addUnitToCity(){
-        if (currentBuilding instanceof CombatUnit){
+        if (currentUnit instanceof CombatUnit){
             if (centerOfCity.getCombatUnit() == null){
                 centerOfCity.setCombatUnit((models.units.CombatUnit) currentUnit);
                 currentUnit = null;
