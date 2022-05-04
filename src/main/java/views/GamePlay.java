@@ -611,8 +611,15 @@ public class GamePlay {
         currentCivilization.setCurrentTechnology(null);
     }
 
-    public static void startResearch(Technologies technologies){
+    public static void startResearch(Technologies technology){
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        currentCivilization.setCurrentTechnology(technologies);
+        for (String requiredTechnologyName : technology.getRequiredTechnologies()) {
+            Technologies requiredTechnology = Technologies.getTechnologyByName(requiredTechnologyName);
+            if (currentCivilization.getTechnologies().get(requiredTechnology) > 0){
+                System.out.println("you should first study technology" + requiredTechnologyName);
+                return;
+            }
+        }
+        currentCivilization.setCurrentTechnology(technology);
     }
 }
