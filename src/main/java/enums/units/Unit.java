@@ -94,7 +94,7 @@ public enum Unit {
         return requiredTechnology;
     }
 
-    public Unit getUnitByName(String name) {
+    public static Unit getUnitByName(String name) {
         return Unit.valueOf(name.toUpperCase(Locale.ROOT));
     }
 }
