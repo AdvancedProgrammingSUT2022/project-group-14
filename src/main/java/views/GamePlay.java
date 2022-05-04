@@ -68,6 +68,9 @@ public class GamePlay {
     // panels
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (Technologies value : Technologies.values()) {
+            System.out.println(value.getName() + " : " + currentCivilization.getTechnologies().get(value));
+        }
     }
 
     public static void unitsPanel() {
@@ -79,9 +82,8 @@ public class GamePlay {
 
     public static void citiesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        for (Unit unit : currentCivilization.getAllUnits()) {
-            //TODO city info method
-            System.out.println("city info");
+        for (City city : currentCivilization.getCities()) {
+            System.out.println(city.toString());
         }
     }
 
@@ -610,7 +612,7 @@ public class GamePlay {
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
             for (City city : currentCivilization.getCities()) {
-                if ((error = CityController.unitReleaseImpossible(city)) != null)
+                if ((error = CityController.cityProductionWarnings(city)) != null)
                     System.out.println(city.getName() + " : " + error);
             }
             WorldController.nextTurn();
