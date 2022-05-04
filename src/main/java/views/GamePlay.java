@@ -560,4 +560,46 @@ public class GamePlay {
             System.out.println(message);
         }
     }
+
+    public static void startProducingBuilding(Building building, String payment){
+        WorldController.getSelectedCity().setCurrentBuilding(building);
+        if (payment.equals("gold"))
+            WorldController.getSelectedCity().setPayingGoldForCityProduction(true);
+        else WorldController.getSelectedCity().setPayingGoldForCityProduction(false);
+        WorldController.getSelectedCity().setCurrentProductionRemainingCost(building.getCost());
+    }
+
+    public static void startProducingUnit(enums.units.Unit unitEnum, String payment){
+
+        Unit unit;
+        if (unitEnum.getName().equals("settler")){
+            unit = new Settler(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        }else if (unitEnum.getName().equals("worker")){
+            unit = new Worker(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        }else if (unitEnum.getRangedCombatStrength() == 0){
+            unit = new Melee(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        } else {
+            unit = new Ranged(unitEnum,
+                    WorldController.getSelectedCity().getCenterOfCity().getX(),
+                    WorldController.getSelectedCity().getCenterOfCity().getY(),
+                    WorldController.getWorld().getCurrentCivilizationName());
+        }
+
+        WorldController.getSelectedCity().setCurrentUnit(unit);
+        if (payment.equals("gold"))
+            WorldController.getSelectedCity().setPayingGoldForCityProduction(true);
+        else WorldController.getSelectedCity().setPayingGoldForCityProduction(false);
+        WorldController.getSelectedCity().setCurrentProductionRemainingCost(unitEnum.getCost());
+
+    }
+
 }

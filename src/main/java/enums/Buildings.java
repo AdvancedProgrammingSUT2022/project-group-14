@@ -53,4 +53,15 @@ public enum Buildings {
         return Buildings.valueOf(name);
     }
 
+    public int getCost() {
+        return cost;
+    }
+
+    public int getMaintenance() {
+        return maintenance;
+    }
+
+    public Technologies getRequiredTechnology() {
+        return requiredTechnology;
+    }
 }
