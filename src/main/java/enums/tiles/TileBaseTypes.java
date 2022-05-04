@@ -9,8 +9,8 @@ public enum TileBaseTypes implements TileTypes {
     DESERT("desert", 0, 0, 0, -33, 1, Colors.YELLOW),
     MEDOW("medow", 2, 0, 0, -33, 1, Colors.GREEN),
     HEEL("heel", 0, 2, 0, 25, 2, Colors.BLACK),
-    MOUNTAIN("mountain", 0, 0, 0, 25, -1, Colors.PURPLE),
-    OCEAN("ocean", 0, 0, 0, 25, -1, Colors.CYAN),
+    MOUNTAIN("mountain", 0, 0, 0, 25, 9999, Colors.PURPLE),
+    OCEAN("ocean", 0, 0, 0, 25, 9999, Colors.CYAN),
     PLAIN("plain", 1, 1, 0, -33, 1, Colors.RED),
     SNOW("snow", 0, 0, 0, -33, 1, Colors.WHITE),
     TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK);
