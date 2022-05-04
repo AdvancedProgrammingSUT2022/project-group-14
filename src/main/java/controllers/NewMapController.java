@@ -91,11 +91,20 @@ public class NewMapController {
         }
     }
 
+    private void upLayerTileCellsInit(int[] tileCenter, Tile tile) {
+        for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
+            for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
+                outputMap[i][j].setColor(tile.getColor());
+            }
+
+    }
+
     public void mapInit() {
         generateMap();
         bordersInit();
         tileCentersInit();
         cellsInit();
+        upLayerTileCellsInit(tileCenter[0][0], map[0][0]);
     }
 
     public void showMap() {
