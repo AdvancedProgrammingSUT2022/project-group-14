@@ -4,11 +4,8 @@ public class NonCombatUnit extends Unit{
     private boolean isWorking;
     private int turnsLeftToWork;
 
-    public NonCombatUnit(int currentX, int currentY, int movementPoint, String name, String civilization,
-                         int requiredGold, String requiredStrategicResourceName, String requiredTechnology,
-                         double healthPoint) {
-        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
-                requiredTechnology, healthPoint);
+    public NonCombatUnit(enums.units.Unit unitInfo, int x, int y, String civilization) {
+        super(unitInfo, x, y, civilization);
     }
 
     public Boolean isWorking() {

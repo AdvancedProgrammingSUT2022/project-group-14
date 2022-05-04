@@ -1,11 +1,10 @@
 package models.units;
 
+import enums.units.Unit;
+
 public class Worker extends NonCombatUnit {
 
-    public Worker(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
-                  String requiredStrategicResourceName, String requiredTechnology, double healthPoint) {
-        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
-                requiredTechnology, healthPoint);
+    public Worker(Unit unitInfo, int x, int y, String civilization) {
+        super(unitInfo, x, y, civilization);
     }
-
 }

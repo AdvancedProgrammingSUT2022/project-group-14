@@ -15,4 +15,6 @@ public interface ResourceTypes {
 
     Improvements requiredImprovementGetter();
 
+    String nameGetter();
+
 }

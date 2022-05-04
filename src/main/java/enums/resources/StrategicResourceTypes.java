@@ -5,18 +5,20 @@ import enums.Technologies;
 
 public enum StrategicResourceTypes implements ResourceTypes {
 
-    COAL(0, 1, 0, Improvements.MINE, Technologies.SCIENTIFIC_THEORY),
-    HORSE(0, 1, 0, Improvements.AGRICULTURE, Technologies.ANIMAL_HUSBANDRY),
-    IRON(0, 1, 0, Improvements.MINE, Technologies.IRON_WORKING);
+    COAL("coal", 0, 1, 0, Improvements.MINE, Technologies.SCIENTIFIC_THEORY),
+    HORSE("horse", 0, 1, 0, Improvements.AGRICULTURE, Technologies.ANIMAL_HUSBANDRY),
+    IRON("iron", 0, 1, 0, Improvements.MINE, Technologies.IRON_WORKING);
 
+    private String name;
     private double food;
     private double production;
     private double gold;
     private Improvements requiredImprovement;
     private Technologies requiredTechnology;
 
-    StrategicResourceTypes(double food, double production, double gold, Improvements requiredImprovement,
+    StrategicResourceTypes(String name, double food, double production, double gold, Improvements requiredImprovement,
             Technologies requiredTechnology) {
+        this.name = name;
         this.food = food;
         this.production = production;
         this.gold = gold;
@@ -41,6 +43,11 @@ public enum StrategicResourceTypes implements ResourceTypes {
     @Override
     public Improvements requiredImprovementGetter() {
         return this.requiredImprovement;
+    }
+
+    @Override
+    public String nameGetter(){
+        return this.name;
     }
 
     public Technologies requiredTechnologyGetter() {

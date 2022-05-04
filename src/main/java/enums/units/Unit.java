@@ -4,6 +4,8 @@ import enums.Technologies;
 import enums.resources.ResourceTypes;
 import enums.resources.StrategicResourceTypes;
 
+import java.util.Locale;
+
 public enum Unit {
     SCOUT("scout", 25, CombatType.RECON, 4, 0, 1, 2, null, null),
     SPEARMAN("spearman", 50, CombatType.MELEE, 7, 0, 1, 2, null, Technologies.BRONZE_WORKING),
@@ -54,5 +56,45 @@ public enum Unit {
         this.movement = movement;
         this.requiredResource = requiredResource;
         this.requiredTechnology = requiredTechnology;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getCost() {
+        return cost;
+    }
+
+    public CombatType getType() {
+        return type;
+    }
+
+    public int getCombatStrength() {
+        return combatStrength;
+    }
+
+    public int getRangedCombatStrength() {
+        return rangedCombatStrength;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public int getMovement() {
+        return movement;
+    }
+
+    public ResourceTypes getRequiredResource() {
+        return requiredResource;
+    }
+
+    public Technologies getRequiredTechnology() {
+        return requiredTechnology;
+    }
+
+    public Unit getUnitByName(String name) {
+        return Unit.valueOf(name.toUpperCase(Locale.ROOT));
     }
 }

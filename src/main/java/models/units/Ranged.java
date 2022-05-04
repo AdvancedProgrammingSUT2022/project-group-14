@@ -1,16 +1,17 @@
 package models.units;
 
 
+import enums.units.Unit;
+
 public class Ranged extends CombatUnit{
+    private double rangedCombatStrength;
     private boolean isSiegeUnit;
     private boolean unitIsReadyForRangedBattle;
 
-    public Ranged(int currentX, int currentY, int movementPoint, String name, String civilization, int requiredGold,
-                  String requiredStrategicResourceName, String requiredTechnology, double healthPoint,
-                  double defenseStrength, double attackStrength, boolean isSiegeUnit) {
-        super(currentX, currentY, movementPoint, name, civilization, requiredGold, requiredStrategicResourceName,
-                requiredTechnology, healthPoint, defenseStrength, attackStrength);
-        this.isSiegeUnit = isSiegeUnit;
+    public Ranged(Unit unitInfo, int x, int y, String civilization) {
+        super(unitInfo, x, y, civilization);
+        this.rangedCombatStrength = unitInfo.getRangedCombatStrength();
+        this.isSiegeUnit = unitInfo.getType().name().equals("SIEGE");
     }
 
     public boolean isSiegeUnit() {
