@@ -99,14 +99,16 @@ public class NewMapController {
 
     }
 
-    private void cellsInit() {
-        for (int i = 0; i < width; i++) {
+    private void tileCellsInit() {
+        for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                outputMap[tileCenter[i][j][0]][tileCenter[i][j][1]].setColor(map[i][j].getColor());
+                upLayerTileCellsInit(tileCenter[i][j], map[i][j]);
+                downLayerTileCellsInit(tileCenter[i][j], map[i][j]);
             }
-        }
-        upLayerTileCellsInit(tileCenter[0][0], map[0][0]);
-        downLayerTileCellsInit(tileCenter[0][0], map[0][0]);
+    }
+
+    private void cellsInit() {
+        tileCellsInit();
     }
 
     public void mapInit() {
