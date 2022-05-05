@@ -228,12 +228,6 @@ public class GameCommandsValidation {
             return;
         }
 
-        if (WorldController.getSelectedCity().getCurrentUnit() != null ||
-                WorldController.getSelectedCity().getCurrentBuilding() != null) {
-            System.out.println("the city is already producing a production");
-            return;
-        }
-
         String type = matcher.group("type");
         String productionName = matcher.group("productionName");
         String payment = matcher.group("payment");

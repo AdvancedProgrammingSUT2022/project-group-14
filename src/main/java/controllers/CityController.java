@@ -48,18 +48,22 @@ public class CityController {
         double cityFood = city.getFood() + addedFood;
         double cityGold = city.getGold() + addedGold;
         double cityProduction = city.getProduction() + addedProduction;
-        cityFood = consumeCityFood(cityFood, city.getCitizens());
+        cityFood = consumeCityFood(cityFood, city);
         city.setFood(cityFood);
         city.setGold(cityGold);
         city.setProduction(cityProduction);
         addCitizenIfPossible(city);
     }
 
-    public static double consumeCityFood(double cityFood, ArrayList<Citizen> citizens) {
-        while (citizens.size() * 2 > cityFood) {
-            starveCitizen(citizens);
+    public static double consumeCityFood(double cityFood, City city) {
+        while (city.getCitizens().size() * 2 > cityFood) {
+            starveCitizen(city.getCitizens());
         }
-        cityFood -= citizens.size() * 2;
+        cityFood -= city.getCitizens().size() * 2;
+
+        if (city.getCurrentUnit() != null && city.getCurrentUnit().getName().equals("settler"))
+            cityFood = 0;
+
         return cityFood;
     }
 

@@ -98,12 +98,25 @@ public class Unit {
     }
 
     public String getInfo() {
-        return  "Name : " + name + '\n' +
+        String output =   "Name : " + name + '\n' +
                 "current coordination : ( " + currentX +
                 " , " + currentY + " )\n" +
                 "movementPoint : " + movementPoint + "\n" +
                 "civilizationName : " + civilizationName + '\n' +
                 "healthPoint : " + healthPoint + "\n" +
                 "isSleeping : " + isSleep + "\n";
+
+        if (this instanceof CombatUnit){
+            output += "defense strength : " + ((CombatUnit) this).getDefenseStrength() + '\n' +
+                    "attack strength : " + ((CombatUnit) this).getAttackStrength() + '\n' +
+                    "is fortified : " + ((CombatUnit) this).isFortifiedTillHealed() + '\n' +
+                    "is alert : " + ((CombatUnit) this).isAlert() + '\n' +
+                    "is garrisoned : " + ((CombatUnit) this).isGarrisoned() + '\n';
+        }else {
+            output += "is working : " + ((NonCombatUnit) this).isWorking() + '\n' +
+                    "turns left to work : " + ((NonCombatUnit) this).getTurnsLeftToWork() + '\n';
+        }
+
+        return output;
     }
 }

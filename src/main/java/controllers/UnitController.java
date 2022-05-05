@@ -1,8 +1,11 @@
 package controllers;
 
 import enums.Improvements;
+import enums.tiles.TileFeatureTypes;
 import models.*;
 import models.units.*;
+
+import java.awt.*;
 
 public class UnitController {
 
@@ -41,6 +44,9 @@ public class UnitController {
             return "unit is not under your control";
         } else {
             unit.wakeUp();
+            if (unit instanceof CombatUnit){
+                ((CombatUnit) unit).wakeUpFromAlert();
+            }
         }
         return null;
     }
@@ -154,7 +160,7 @@ public class UnitController {
         } else if (currentTile.getImprovement().equals(improvement)) {
             return "there is already this kind of improvement on this tile";
         } else if (WorldController.getWorld().getCivilizationByName(worker.getCivilizationName())
-                .getTechnologies().get(improvement.getRequiredTechnology()) != 0) {
+                .getTechnologies().get(improvement.getRequiredTechnology()) > 0) {
             return "you don't have the required technology";
         } else if (!improvement.getPossibleTiles().contains(currentTile.getType())) {
             return "can't build on these kinds of tiles";
@@ -171,11 +177,10 @@ public class UnitController {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
-        } else if (true) {
-            //TODO check that the tile has a jungle
+        } else if (currentTile.getFeature() != TileFeatureTypes.JUNGLE) {
             return "there is not a jungle on this tile";
         } else {
-            //TODO remove the jungle
+            //TODO remove the jungle and updating goods and MP of the tile
         }
         return null;
     }
@@ -184,11 +189,10 @@ public class UnitController {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
-        } else if (true) {
-            //TODO check that the tile has a forest
+        } else if (currentTile.getFeature() != TileFeatureTypes.FOREST) {
             return "there is not a forest on this tile";
         } else {
-            //TODO remove the forest
+            //TODO remove the forest and updating goods and MP of the tile
         }
         return null;
     }
@@ -197,11 +201,11 @@ public class UnitController {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
-        } else if (true) {
+        } else if (currentTile.getFeature() != TileFeatureTypes.SWAMP) {
             //TODO check that the tile has a marsh
             return "there is not a marsh on this tile";
         } else {
-            //TODO remove the marsh
+            //TODO remove the marsh and updating goods and MP of the tile
         }
         return null;
     }

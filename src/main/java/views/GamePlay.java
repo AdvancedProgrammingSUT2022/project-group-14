@@ -70,7 +70,15 @@ public class GamePlay {
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (Technologies value : Technologies.values()) {
-            System.out.println(value.getName() + " : " + currentCivilization.getTechnologies().get(value));
+            if (currentCivilization.getTechnologies().get(value) <=  0){
+                System.out.print("acquired -> ");
+            }else System.out.print("not acquired -> ");
+            System.out.println(value.getName() + " requires : ");
+            int i = 1;
+            for (String requiredTechnology : value.getRequiredTechnologies()) {
+                System.out.println(i + "- " + requiredTechnology);
+                i++;
+            }
         }
     }
 
@@ -84,7 +92,7 @@ public class GamePlay {
     public static void citiesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (City city : currentCivilization.getCities()) {
-            System.out.println(city.toString());
+            System.out.println(city.getName());
         }
     }
 
@@ -104,7 +112,10 @@ public class GamePlay {
     }
 
     public static void economicStatusPanel() {
-
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (City city : currentCivilization.getCities()) {
+            System.out.println(city.toString());
+        }
     }
 
     public static void diplomaticHistoryPanel() {
@@ -581,12 +592,24 @@ public class GamePlay {
     }
 
     public static void startProducingUnit(enums.units.Unit unitEnum, String payment){
+        //TODO checking required resource
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if (currentCivilization.getTechnologies().get(unitEnum.getRequiredTechnology()) > 0) {
+            System.out.println(unitEnum.getRequiredTechnology().getName() + " is required for producing this unit. you should study it first");
+            return;
+        }
+
         Unit unit;
         if (unitEnum.getName().equals("settler")){
+            if (WorldController.getSelectedCity().getCitizens().size() < 2){
+                System.out.println("can't produce settler in a city with less than 2 citizens");
+                return;
+            }
             unit = new Settler(unitEnum,
                     WorldController.getSelectedCity().getCenterOfCity().getX(),
                     WorldController.getSelectedCity().getCenterOfCity().getY(),
                     WorldController.getWorld().getCurrentCivilizationName());
+
         }else if (unitEnum.getName().equals("worker")){
             unit = new Worker(unitEnum,
                     WorldController.getSelectedCity().getCenterOfCity().getX(),
@@ -604,6 +627,7 @@ public class GamePlay {
                     WorldController.getWorld().getCurrentCivilizationName());
         }
 
+
         WorldController.getSelectedCity().setCurrentUnit(unit);
         WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
         WorldController.getSelectedCity().setCurrentProductionRemainingCost(unitEnum.getCost());
@@ -620,6 +644,7 @@ public class GamePlay {
                     System.out.println(city.getName() + " : " + error);
             }
             WorldController.nextTurn();
+            System.out.println(WorldController.getWorld().getCurrentCivilizationName() + "'s turn");
         }
     }
 

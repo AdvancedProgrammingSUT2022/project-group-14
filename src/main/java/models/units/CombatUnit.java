@@ -14,6 +14,10 @@ public class CombatUnit extends Unit{
         this.attackStrength = unitInfo.getCombatStrength();
     }
 
+    public void wakeUpFromAlert(){
+        this.isAlert = false;
+    }
+
     public void alertUnit() {
         isAlert = true;
     }
@@ -32,5 +36,25 @@ public class CombatUnit extends Unit{
 
     public void unGarrisonUnit() {
         garrisoned = false;
+    }
+
+    public double getDefenseStrength() {
+        return defenseStrength;
+    }
+
+    public double getAttackStrength() {
+        return attackStrength;
+    }
+
+    public boolean isAlert() {
+        return isAlert;
+    }
+
+    public boolean isFortifiedTillHealed() {
+        return isFortifiedTillHealed;
+    }
+
+    public boolean isGarrisoned() {
+        return garrisoned;
     }
 }

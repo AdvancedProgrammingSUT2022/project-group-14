@@ -7,6 +7,7 @@ import models.World;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
+import views.GamePlay;
 
 import java.util.ArrayList;
 
@@ -50,6 +51,7 @@ public class WorldController {
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }
+        //TODO show map
         world.nextTurn();
         resetSelection();
     }

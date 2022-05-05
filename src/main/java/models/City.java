@@ -155,7 +155,13 @@ public class City {
 
     @Override
     public String toString() {
-        return "Name : " + name + "\n" +
+        int numberOfUnemployedCitizens = 0;
+        for (Citizen citizen : citizens) {
+            if (!citizen.isWorking())
+                numberOfUnemployedCitizens++;
+        }
+
+        String output =  "Name : " + name + "\n" +
                 "CenterOfCityCoordinates : ( " + centerOfCity.getX() + " , " + centerOfCity.getY() + " )\n" +
                 "Food : " + food + "\n" +
                 "Gold : " + gold + "\n" +
@@ -168,6 +174,11 @@ public class City {
                 "DefenseStrength : " + defenseStrength + "\n" +
                 "AttackStrength : " + attackStrength + "\n" +
                 "HealthPoint : " + healthPoint;
+
+        if (this.getCurrentUnit() != null)
+            output += "current production : " + getCurrentUnit().getName() + '\n';
+
+        return output;
     }
 
 }
