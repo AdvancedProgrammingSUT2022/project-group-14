@@ -83,20 +83,30 @@ public class NewMapController {
 
     }
 
+    private void upLayerTileCellsInit(int[] tileCenter, Tile tile) {
+        for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
+            for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
+                outputMap[i][j].setColor(tile.getColor());
+            }
+    }
+
+    private void downLayerTileCellsInit(int[] tileCenter, Tile tile) {
+        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
+            for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4
+                    - (i - tileCenter[0] - 1); j++) {
+                outputMap[i][j].setColor(tile.getColor());
+            }
+
+    }
+
     private void cellsInit() {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
                 outputMap[tileCenter[i][j][0]][tileCenter[i][j][1]].setColor(map[i][j].getColor());
             }
         }
-    }
-
-    private void upLayerTileCellsInit(int[] tileCenter, Tile tile) {
-        for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
-            for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
-                outputMap[i][j].setColor(tile.getColor());
-            }
-
+        upLayerTileCellsInit(tileCenter[0][0], map[0][0]);
+        downLayerTileCellsInit(tileCenter[0][0], map[0][0]);
     }
 
     public void mapInit() {
@@ -104,7 +114,6 @@ public class NewMapController {
         bordersInit();
         tileCentersInit();
         cellsInit();
-        upLayerTileCellsInit(tileCenter[0][0], map[0][0]);
     }
 
     public void showMap() {
