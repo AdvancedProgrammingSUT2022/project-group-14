@@ -128,6 +128,16 @@ public class GamePlay {
                 + WorldController.getSelectedNonCombatUnit().getCurrentY());
     }
 
+    //-----------------------------------
+    public void showMap() {
+        for (int i = 0; i < 6 * width + 3; i++) {
+            for (int j = 0; j < 8 * length + 3; j++) {
+                System.out.print(cellsMap[i][j].getColor().getAnsiEscapeCode() + cellsMap[i][j].getCh()
+                        + Colors.RESET.getAnsiEscapeCode());
+            }
+            System.out.println();
+        }
+    }
     // showing map methods
     public static void showMapBasedOnTile(int x, int y) {
         Tile tile = MapController.getTileByCoordinates(x, y);
