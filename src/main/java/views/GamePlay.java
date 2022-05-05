@@ -139,6 +139,7 @@ public class GamePlay {
             System.out.println();
         }
     }
+
     public static void showMapBasedOnTile(int x, int y) {
         Tile tile = MapController.getTileByCoordinates(x, y);
         WorldController.setSelectedTile(tile);

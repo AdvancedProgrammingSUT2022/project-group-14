@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class MapController {
 
-    private static final int width = 3;
-    private static final int length = 7;
+    private static final int width = 40;
+    private static final int length = 80;
     private static final int outputMapWidth = 6 * width + 3;
     private static final int outputMapLength = 8 * length + 3;
 
