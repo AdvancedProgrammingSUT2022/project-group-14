@@ -129,16 +129,13 @@ public class CityController {
             city.finishCityProduction();
     }
 
-    public static String unitReleaseImpossible(City city) {
-        if (city.getCurrentUnit() == null)
-            return null;
-
-        if (city.getCurrentUnit() instanceof CombatUnit && city.getCenterOfCity().getCombatUnit() != null) {
+    public static String cityProductionWarnings(City city) {
+        if (city.getCurrentUnit() == null && city.getCurrentBuilding() == null)
+            return "you can set something to be produced";
+        if (city.getCurrentUnit() instanceof CombatUnit && city.getCenterOfCity().getCombatUnit() != null)
                 return "move the combat unit away from the center in order to use the produced unit";
-        }
-        if (city.getCurrentUnit() instanceof NonCombatUnit && city.getCenterOfCity().getNonCombatUnit() != null) {
+        if (city.getCurrentUnit() instanceof NonCombatUnit && city.getCenterOfCity().getNonCombatUnit() != null)
             return "move the nonCombat unit away from the center in order to use the produced unit";
-        }
         return null;
     }
 

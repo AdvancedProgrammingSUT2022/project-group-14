@@ -19,6 +19,7 @@ public class WorldController {
     private static NonCombatUnit selectedNonCombatUnit;
 
     public static void newWorld(ArrayList<String> usernames) {
+        MapController.mapInit();
         MapController.generateMap();
         world = new World(usernames);
         MapController.updateUnitPositions();
@@ -26,11 +27,8 @@ public class WorldController {
 
     public static void resetWorld() {
         world = null;
-        selectedTile = null;
-        selectedCity = null;
-        selectedCombatUnit = null;
-        selectedNonCombatUnit = null;
         MapController.resetMap();
+        resetSelection();
     }
 
     public static void resetSelection() {
@@ -72,10 +70,6 @@ public class WorldController {
 
     public static World getWorld() {
         return world;
-    }
-
-    public static void setWorld(World world) {
-        WorldController.world = world;
     }
 
     public static Tile getSelectedTile() {

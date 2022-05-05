@@ -1,6 +1,7 @@
 package views;
 
 import controllers.*;
+import enums.Colors;
 import enums.Improvements;
 import enums.Technologies;
 import models.*;
@@ -68,6 +69,9 @@ public class GamePlay {
     // panels
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (Technologies value : Technologies.values()) {
+            System.out.println(value.getName() + " : " + currentCivilization.getTechnologies().get(value));
+        }
     }
 
     public static void unitsPanel() {
@@ -79,9 +83,8 @@ public class GamePlay {
 
     public static void citiesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        for (Unit unit : currentCivilization.getAllUnits()) {
-            //TODO city info method
-            System.out.println("city info");
+        for (City city : currentCivilization.getCities()) {
+            System.out.println(city.toString());
         }
     }
 
@@ -126,17 +129,17 @@ public class GamePlay {
                 + WorldController.getSelectedNonCombatUnit().getCurrentY());
     }
 
-    //-----------------------------------
+    // showing map methods
     public void showMap() {
-        for (int i = 0; i < 6 * width + 3; i++) {
-            for (int j = 0; j < 8 * length + 3; j++) {
-                System.out.print(cellsMap[i][j].getColor().getAnsiEscapeCode() + cellsMap[i][j].getCh()
-                        + Colors.RESET.getAnsiEscapeCode());
+        for (int i = 0; i < 6 * MapController.getWidth() + 3; i++) {
+            for (int j = 0; j < 8 * MapController.getLength() + 3; j++) {
+                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +
+                        MapController.getCellsMap()[i][j].getCh() + Colors.RESET.getAnsiEscapeCode());
             }
             System.out.println();
         }
     }
-    // showing map methods
+
     public static void showMapBasedOnTile(int x, int y) {
         Tile tile = MapController.getTileByCoordinates(x, y);
         WorldController.setSelectedTile(tile);
@@ -559,7 +562,6 @@ public class GamePlay {
             String message = CityController.lockCitizenToTile(WorldController.getSelectedCity(), id, x, y);
             System.out.println(message);
         }
-
     }
 
     public static void unlockCitizen(Matcher matcher) {
@@ -574,14 +576,11 @@ public class GamePlay {
 
     public static void startProducingBuilding(Building building, String payment){
         WorldController.getSelectedCity().setCurrentBuilding(building);
-        if (payment.equals("gold"))
-            WorldController.getSelectedCity().setPayingGoldForCityProduction(true);
-        else WorldController.getSelectedCity().setPayingGoldForCityProduction(false);
+        WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
         WorldController.getSelectedCity().setCurrentProductionRemainingCost(building.getCost());
     }
 
     public static void startProducingUnit(enums.units.Unit unitEnum, String payment){
-
         Unit unit;
         if (unitEnum.getName().equals("settler")){
             unit = new Settler(unitEnum,
@@ -606,11 +605,8 @@ public class GamePlay {
         }
 
         WorldController.getSelectedCity().setCurrentUnit(unit);
-        if (payment.equals("gold"))
-            WorldController.getSelectedCity().setPayingGoldForCityProduction(true);
-        else WorldController.getSelectedCity().setPayingGoldForCityProduction(false);
+        WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
         WorldController.getSelectedCity().setCurrentProductionRemainingCost(unitEnum.getCost());
-
     }
 
     public static void nextTurn(){
@@ -620,7 +616,7 @@ public class GamePlay {
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
             for (City city : currentCivilization.getCities()) {
-                if ((error = CityController.unitReleaseImpossible(city)) != null)
+                if ((error = CityController.cityProductionWarnings(city)) != null)
                     System.out.println(city.getName() + " : " + error);
             }
             WorldController.nextTurn();

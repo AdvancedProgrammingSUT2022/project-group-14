@@ -34,6 +34,7 @@ public class City {
     private String name;
 
     public City(String name, int x, int y) {
+        this.name = name;
         this.centerOfCity = MapController.getMap()[x][y];
         citizens.add(new Citizen(1));
         this.territory.add(centerOfCity);
@@ -151,4 +152,22 @@ public class City {
     public String getName() {
         return name;
     }
+
+    @Override
+    public String toString() {
+        return "Name : " + name + "\n" +
+                "CenterOfCityCoordinates : ( " + centerOfCity.getX() + " , " + centerOfCity.getY() + " )\n" +
+                "Food : " + food + "\n" +
+                "Gold : " + gold + "\n" +
+                "Production : " + production + "\n" +
+                "GrowthFoodLimit : " + growthFoodLimit + "\n" +
+                "NumberOfCitizens : " + citizens.size() + "\n" +
+                "NumberOFBuildings : " + buildings.size() + "\n" +
+                "NumberOfTiles : " + territory.size() + "\n" +
+                "CurrentProductionRemainingCost : " + currentProductionRemainingCost + "\n" +
+                "DefenseStrength : " + defenseStrength + "\n" +
+                "AttackStrength : " + attackStrength + "\n" +
+                "HealthPoint : " + healthPoint;
+    }
+
 }

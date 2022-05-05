@@ -39,17 +39,11 @@ public class Civilization {
         Random random = new Random();
         int randomX = random.nextInt(40), randomY = random.nextInt(80);
         Melee melee = new Melee(enums.units.Unit.getUnitByName("warrior"), randomX, randomY, name);
-        addMeleeUnit(melee);
         Settler settler = new Settler(enums.units.Unit.getUnitByName("settler"), randomX, randomY, name);
+        addMeleeUnit(melee);
         addSettler(settler);
-        System.out.println(randomX + " " + randomY);
         this.name = name;
         citiesNames.add(name + "1"); citiesNames.add(name + "2"); citiesNames.add(name + "3");
-        firstCapital = null;
-        currentCapital = null;
-        currentTechnology = null;
-        food = 0; gold = 0; production = 0; happiness = 0;
-        citizens = 0;
 
         for (Technologies technology : Technologies.values()) {
             technologies.put(technology, technology.getCost());
