@@ -29,8 +29,8 @@ public enum Unit {
     TREBUCHET("trebuchet", 170, CombatType.SIEGE, 6, 20, 2, 2, StrategicResourceTypes.IRON, Technologies.PHYSICS),
     CANON("canon", 250, CombatType.SIEGE, 10, 26, 2, 2, null, Technologies.CHEMISTRY),
     ARTILLERY("artillery", 420, CombatType.SIEGE, 16, 32, 3, 2, null, Technologies.DYNAMITE),
-    PANZER("panzer", 450, CombatType.ARMORED, 60, 9999, 9999, 5, null, Technologies.COMBUSTION),
-    TANK("tank", 450 , CombatType.ARMORED , 50 , 9999 , 9999, 4 , null , Technologies.COMBUSTION),
+    PANZER("panzer", 450, CombatType.ARMORED, 60, 9999, 1, 5, null, Technologies.COMBUSTION),
+    TANK("tank", 450 , CombatType.ARMORED , 50 , 9999 , 1, 4 , null , Technologies.COMBUSTION),
 
     SETTLER("settler", 89, CombatType.NON_COMBAT, 0, 0, 1, 2, null, null),
     WORKER("worker", 70, CombatType.NON_COMBAT, 0, 0, 1, 2, null, null);

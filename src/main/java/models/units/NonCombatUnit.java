@@ -2,6 +2,11 @@ package models.units;
 
 public class NonCombatUnit extends Unit{
     private boolean isWorking;
+
+    public int getTurnsLeftToWork() {
+        return turnsLeftToWork;
+    }
+
     private int turnsLeftToWork;
 
     public NonCombatUnit(enums.units.Unit unitInfo, int x, int y, String civilization) {
