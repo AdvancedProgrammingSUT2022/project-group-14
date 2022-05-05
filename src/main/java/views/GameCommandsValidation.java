@@ -1,5 +1,6 @@
 package views;
 
+import controllers.CityController;
 import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
@@ -8,6 +9,8 @@ import enums.Commands;
 import enums.Technologies;
 import enums.units.Unit;
 import models.Building;
+import models.City;
+import models.Civilization;
 import models.Tile;
 
 import java.util.regex.Matcher;
@@ -171,14 +174,14 @@ public class GameCommandsValidation {
 
     public void checkShowMapByName(Matcher matcher) {
         String cityName = matcher.group("name");
-        //TODO get city by name
-        if (true) {
+        City wantedCity = CityController.getCityByName(cityName);
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if (wantedCity == null) {
             System.out.println("given city name is not valid");
-        } else if (true) {
-            //TODO isn't in vision of the civilization
+        } else if (currentCivilization.getVisionStatesOfMap()[wantedCity.getCenterOfCity().getX()][wantedCity.getCenterOfCity().getY()] != 2) {
             System.out.println("you don't have vision on that city");
         } else {
-            GamePlay.showMapBasedOnTile(0, 0);
+            GamePlay.showMapBasedOnTile(wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY());
         }
     }
 
