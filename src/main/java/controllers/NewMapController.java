@@ -99,23 +99,23 @@ public class NewMapController {
 
     }
 
-    private void tileCellsInit() {
+    private void tileCellsInit() { // initialaze cells of every tile
+        String cordinates = "";
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
                 upLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
                 downLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
+                cordinates = "(" + i + "," + j + ")";
+                printStringToCellsMap(cordinates, tileCenter[i][j][0] - 1, tileCenter[i][j][1] - 3);
             }
-    }
 
-    private void cellsInit() {
-        tileCellsInit();
     }
 
     public void mapInit() {
         generateMap();
         bordersInit();
         tileCentersInit();
-        cellsInit();
+        tileCellsInit();
         printStringToCellsMap("salam", 3, 1);
     }
 
