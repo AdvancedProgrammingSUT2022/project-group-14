@@ -107,6 +107,8 @@ public class NewMapController {
                 downLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
                 cordinates = "(" + i + "," + j + ")";
                 printStringToCellsMap(cordinates, tileCenter[i][j][0] - 1, tileCenter[i][j][1] - 3);
+                printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenter[i][j][0] + 1,
+                        tileCenter[i][j][1] - 4);
             }
 
     }
