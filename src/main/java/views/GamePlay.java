@@ -81,8 +81,10 @@ public class GamePlay {
 
     public static void citiesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int counter = 1;
         for (City city : currentCivilization.getCities()) {
-            System.out.println(city.getName());
+            int x = city.getCenterOfCity().getX()+1, y = city.getCenterOfCity().getY()+1;
+            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + "coordinates");
         }
     }
 

@@ -153,8 +153,7 @@ public class City {
         return name;
     }
 
-    @Override
-    public String toString() {
+    public String getInfo() {
         int numberOfUnemployedCitizens = 0;
         for (Citizen citizen : citizens) {
             if (!citizen.isWorking())
