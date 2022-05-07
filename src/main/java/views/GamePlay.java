@@ -10,8 +10,6 @@ import models.units.*;
 import java.util.*;
 import java.util.regex.Matcher;
 
-import static controllers.MapController.getMap;
-
 public class GamePlay {
 
     public void run(Scanner scanner) {
@@ -69,17 +67,9 @@ public class GamePlay {
     // panels
     public static void researchesPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        for (Technologies value : Technologies.values()) {
-            if (currentCivilization.getTechnologies().get(value) <=  0){
-                System.out.print("acquired -> ");
-            }else System.out.print("not acquired -> ");
-            System.out.println(value.getName() + " requires : ");
-            int i = 1;
-            for (String requiredTechnology : value.getRequiredTechnologies()) {
-                System.out.println(i + "- " + requiredTechnology);
-                i++;
-            }
-        }
+        System.out.println("You are now researching the " + currentCivilization.getCurrentTechnology().getName() +
+                " technology, and you will unlock it after " + currentCivilization.getTechnologies().get(currentCivilization.getCurrentTechnology()) +
+                " turns");
     }
 
     public static void unitsPanel() {
