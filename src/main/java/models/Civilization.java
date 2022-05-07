@@ -30,6 +30,8 @@ public class Civilization {
 
     private double food, gold, production, happiness, science;
 
+    ArrayList<String> notifications = new ArrayList<>();
+
     public Civilization(String name) {
         Random random = new Random();
         int randomX = random.nextInt(40), randomY = random.nextInt(80);
@@ -153,6 +155,14 @@ public class Civilization {
 
     public double getScience() {
         return science;
+    }
+
+    public void addNotification(String notification) {
+        notifications.add(notification);
+    }
+
+    public ArrayList<String> getNotifications() {
+        return notifications;
     }
 
     public String getInfo() {

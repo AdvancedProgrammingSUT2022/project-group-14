@@ -12,7 +12,7 @@ public class World {
 
     private int year;
     private int evolutionSpeed;
-    private int turn;
+    private int turn, actualTurn;
 
     public World(ArrayList<String> players) {
         for (int i = 0; i < players.size(); i++) {
@@ -20,7 +20,7 @@ public class World {
         }
         year = -3000;
         evolutionSpeed = 10;
-        turn = 0;
+        turn = 0; actualTurn = 0;
     }
 
     public String getCurrentCivilizationName() {
@@ -43,7 +43,12 @@ public class World {
         return this.turn;
     }
 
+    public int getActualTurn(){
+        return this.actualTurn;
+    }
+
     public void nextTurn() {
+        actualTurn++;
         turn++;
         turn %= civilizations.size();
         year += evolutionSpeed;

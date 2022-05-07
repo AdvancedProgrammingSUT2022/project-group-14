@@ -88,18 +88,16 @@ public class GamePlay {
         }
     }
 
-    public static void diplomacyPanel() {
-    }
-
     public static void demographicsPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         System.out.println(currentCivilization.getInfo());
     }
 
-    public static void victoryPanel() {
-    }
-
     public static void notificationsPanel() {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (String notification : currentCivilization.getNotifications()) {
+            System.out.println(notification);
+        }
     }
 
     public static void militaryPanel() {
@@ -134,12 +132,6 @@ public class GamePlay {
             System.out.println(counter + "-> " + city.getInfo());
             counter++;
         }
-    }
-
-    public static void diplomaticHistoryPanel() {
-    }
-
-    public static void dealsHistoryPanel() {
     }
 
     public static void showCombatUnitInfo() {
@@ -607,6 +599,12 @@ public class GamePlay {
         WorldController.getSelectedCity().setCurrentBuilding(building);
         WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
         WorldController.getSelectedCity().setCurrentProductionRemainingCost(building.getCost());
+        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
+        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
+                "building" + " in ( " + x + " , " + y + " ) coordinates";
+        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
+
     }
 
     public static void startProducingUnit(enums.units.Unit unitEnum, String payment){
@@ -649,6 +647,11 @@ public class GamePlay {
         WorldController.getSelectedCity().setCurrentUnit(unit);
         WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
         WorldController.getSelectedCity().setCurrentProductionRemainingCost(unitEnum.getCost());
+        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
+        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
+                unit.getName() + " in ( " + x + " , " + y + " ) coordinates";
+        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
     }
 
     public static void nextTurn(){
@@ -681,5 +684,9 @@ public class GamePlay {
             }
         }
         currentCivilization.setCurrentTechnology(technology);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started researching " +
+                technology.getName() + " technology";
+        currentCivilization.addNotification(notification);
+
     }
 }

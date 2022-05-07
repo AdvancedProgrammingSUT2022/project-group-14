@@ -6,6 +6,7 @@ import models.*;
 import models.units.*;
 
 import java.awt.*;
+import java.util.Locale;
 
 public class UnitController {
 
@@ -17,6 +18,10 @@ public class UnitController {
             return reason;
         } else {
             unit.setDestinationCoordinates(x, y);
+            x++; y++;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you moved " +
+                    unit.getName() + " to ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -110,6 +115,10 @@ public class UnitController {
             City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY());
             currentTile.setCity(city);
             currentCivilization.addCity(city);
+            int x = settler.getCurrentX()+1, y = settler.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you found the city " +
+                    city.getName() + " in ( " + x + " , " + y + " ) coordinates";
+            currentCivilization.addNotification(notification);
         }
         return null;
     }
@@ -123,6 +132,10 @@ public class UnitController {
         } else {
             currentTile.setRoadState(3);
             worker.putToWork(3);
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you built a road on" +
+                    " ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -136,6 +149,10 @@ public class UnitController {
         } else {
             currentTile.setRailRoadState(3);
             worker.putToWork(3);
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you built a railRoad on" +
+                    " ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -149,6 +166,10 @@ public class UnitController {
         } else {
             currentTile.setRoadState(9999);
             currentTile.setRailRoadState(9999);
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed a routes from" +
+                    " a tile in ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -165,10 +186,13 @@ public class UnitController {
         } else if (!improvement.getPossibleTiles().contains(currentTile.getType())) {
             return "can't build on these kinds of tiles";
         } else {
-            //TODO turns to build
             currentTile.setImprovement(improvement);
-            currentTile.setImprovementTurnsLeftToBuild(0);
-            worker.putToWork(0);
+            currentTile.setImprovementTurnsLeftToBuild(6);
+            worker.putToWork(6);
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you built the " +
+                    improvement.name().toLowerCase(Locale.ROOT) + " improvement on ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -181,6 +205,10 @@ public class UnitController {
             return "there is not a jungle on this tile";
         } else {
             //TODO remove the jungle and updating goods and MP of the tile
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed jungle from " +
+                    "the tile on ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -193,6 +221,10 @@ public class UnitController {
             return "there is not a forest on this tile";
         } else {
             //TODO remove the forest and updating goods and MP of the tile
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed forest from " +
+                    "the tile on ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -206,6 +238,10 @@ public class UnitController {
             return "there is not a marsh on this tile";
         } else {
             //TODO remove the marsh and updating goods and MP of the tile
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed marsh from " +
+                    "the tile on ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -219,6 +255,10 @@ public class UnitController {
         } else {
             currentTile.setPillageState(3);
             worker.putToWork(3);
+            int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you repaired the tile on " +
+                    "( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
         }
         return null;
     }
@@ -237,6 +277,10 @@ public class UnitController {
             } else if (unit instanceof Settler) {
                 wantedCivilization.removeSettler((Settler) unit);
             }
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you deleted the " +
+                    unit.getName() + " unit";
+            wantedCivilization.addNotification(notification);
+
         }
         return null;
     }

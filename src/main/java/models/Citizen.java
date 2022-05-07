@@ -18,7 +18,7 @@ public class Citizen {
         return isWorking;
     }
 
-    public int getxOfWorkingTile() {
+    public int getXOfWorkingTile() {
         return xOfWorkingTile;
     }
 
