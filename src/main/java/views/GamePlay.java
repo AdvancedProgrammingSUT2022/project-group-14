@@ -112,16 +112,25 @@ public class GamePlay {
         System.out.println("You have " + currentCivilization.getCities().size() + " cities in total and " +
                 totalCombatUnits + " combat units with total value of " + totalValueOfCombatUnits + " and your combat units are : ");
         int counter = 1;
+        for (City city : currentCivilization.getCities()) {
+            System.out.println(counter + "-> " + city.getCombatInfo());
+            counter++;
+        }
+        counter = 1;
         for (Unit unit : currentCivilization.getAllUnits()) {
-            if (unit instanceof CombatUnit)
+            if (unit instanceof CombatUnit) {
                 System.out.println(counter + "-> " + ((CombatUnit) unit).getCombatInfo());
+                counter++;
+            }
         }
     }
 
     public static void economicStatusPanel() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int counter = 1;
         for (City city : currentCivilization.getCities()) {
-            System.out.println(city.toString());
+            System.out.println(counter + "-> " + city.getInfo());
+            counter++;
         }
     }
 
