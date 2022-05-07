@@ -99,6 +99,21 @@ public class GamePlay {
     }
 
     public static void militaryPanel() {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int totalValueOfCombatUnits = 0, totalCombatUnits = 0;
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            if (unit instanceof CombatUnit) {
+                totalValueOfCombatUnits += enums.units.Unit.getUnitByName(unit.getName()).getCost();
+                totalCombatUnits++;
+            }
+        }
+        System.out.println("You have " + currentCivilization.getCities().size() + " cities in total and " +
+                totalCombatUnits + " combat units with total value of " + totalValueOfCombatUnits + " and your combat units are : ");
+        int counter = 1;
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            if (unit instanceof CombatUnit)
+                System.out.println(counter + "-> " + ((CombatUnit) unit).getCombatInfo());
+        }
     }
 
     public static void economicStatusPanel() {

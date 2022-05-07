@@ -98,25 +98,18 @@ public class Unit {
     }
 
     public String getInfo() {
-        String output =   "Name : " + name + '\n' +
-                "current coordination : ( " + currentX +
-                " , " + currentY + " )\n" +
-                "movementPoint : " + movementPoint + "\n" +
-                "civilizationName : " + civilizationName + '\n' +
-                "healthPoint : " + healthPoint + "\n" +
-                "isSleeping : " + isSleep + "\n";
-
-        if (this instanceof CombatUnit){
-            output += "defense strength : " + ((CombatUnit) this).getDefenseStrength() + '\n' +
-                    "attack strength : " + ((CombatUnit) this).getAttackStrength() + '\n' +
-                    "is fortified : " + ((CombatUnit) this).isFortifiedTillHealed() + '\n' +
-                    "is alert : " + ((CombatUnit) this).isAlert() + '\n' +
-                    "is garrisoned : " + ((CombatUnit) this).isGarrisoned() + '\n';
-        }else {
-            output += "is working : " + ((NonCombatUnit) this).isWorking() + '\n' +
-                    "turns left to work : " + ((NonCombatUnit) this).getTurnsLeftToWork() + '\n';
+        int x = currentX+1, y = currentY+1, destX = destinationX+1, destY = destinationY+1;
+        String output = "Name : " + name + '\n' +
+                "Current coordination : ( " + x + " , " + y + " )\n" +
+                "Total MovementPoints : " + movementPoint + "\n" +
+                "Civilization's name : " + civilizationName + '\n' +
+                "HealthPoint : " + healthPoint + "\n" +
+                "IsSleeping : " + isSleep + "\n";
+        if (destinationX != -1 && destinationY != -1) {
+            output += "IsMoving : true\nDestination coordinates : ( " + destX + " , " + destY + " )\n";
+        } else {
+            output += "IsMoving : false\n";
         }
-
         return output;
     }
 }
