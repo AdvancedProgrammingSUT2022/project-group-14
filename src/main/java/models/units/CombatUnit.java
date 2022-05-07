@@ -57,4 +57,13 @@ public class CombatUnit extends Unit{
     public boolean isGarrisoned() {
         return garrisoned;
     }
+
+    public String getCombatInfo() {
+        return "Name : " + this.getName() + "\n" +
+                "Defense strength : " + defenseStrength + "\n" +
+                "Attack strength : " + attackStrength + "\n" +
+                "IsAlert : " + isAlert + "\n" +
+                "IsFortified : " + isFortifiedTillHealed + "\n" +
+                "IsGarrisoned : " + garrisoned + "\n";
+    }
 }

@@ -153,32 +153,35 @@ public class City {
         return name;
     }
 
-    @Override
-    public String toString() {
-        int numberOfUnemployedCitizens = 0;
-        for (Citizen citizen : citizens) {
-            if (!citizen.isWorking())
-                numberOfUnemployedCitizens++;
-        }
-
+    public String getInfo() {
         String output =  "Name : " + name + "\n" +
-                "CenterOfCityCoordinates : ( " + centerOfCity.getX() + " , " + centerOfCity.getY() + " )\n" +
                 "Food : " + food + "\n" +
                 "Gold : " + gold + "\n" +
                 "Production : " + production + "\n" +
                 "GrowthFoodLimit : " + growthFoodLimit + "\n" +
-                "NumberOfCitizens : " + citizens.size() + "\n" +
-                "NumberOFBuildings : " + buildings.size() + "\n" +
                 "NumberOfTiles : " + territory.size() + "\n" +
-                "CurrentProductionRemainingCost : " + currentProductionRemainingCost + "\n" +
-                "DefenseStrength : " + defenseStrength + "\n" +
-                "AttackStrength : " + attackStrength + "\n" +
-                "HealthPoint : " + healthPoint;
+                "NumberOFBuildings : " + buildings.size() + "\n" +
+                "NumberOfCitizens : " + citizens.size() + "\n" +
+                "Citizens info : \n";
+        for (Citizen citizen : citizens) {
+            if (citizen.isWorking())
+                output += citizen.getId() + "is working\n";
+            else
+                output += citizen.getId() + "is not working\n";
+        }
 
         if (this.getCurrentUnit() != null)
-            output += "current production : " + getCurrentUnit().getName() + '\n';
+            output += "current production : " + getCurrentUnit().getName() + "\n";
+        output += "CurrentProductionRemainingCost : " + currentProductionRemainingCost + "\n";
 
         return output;
+    }
+
+    public String getCombatInfo() {
+        return "NumberOfTiles : " + territory.size() + "\n" +
+                "DefenseStrength : " + defenseStrength + "\n" +
+                "AttackStrength : " + attackStrength + "\n" +
+                "HealthPoint : " + healthPoint + "\n";
     }
 
 }

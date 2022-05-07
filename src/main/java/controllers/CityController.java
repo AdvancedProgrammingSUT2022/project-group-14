@@ -37,10 +37,10 @@ public class CityController {
         for (Citizen citizen : city.getCitizens()) {
             if (citizen.isWorking()) {
                 for (Tile tile : city.getTerritory()) {
-                    if (citizen.getxOfWorkingTile() == tile.getX() && citizen.getYOfWorkingTile() == tile.getY()) {
-                        addedFood += MapController.getMap()[citizen.getxOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
-                        addedGold += MapController.getMap()[citizen.getxOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
-                        addedProduction += MapController.getMap()[citizen.getxOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
+                    if (citizen.getXOfWorkingTile() == tile.getX() && citizen.getYOfWorkingTile() == tile.getY()) {
+                        addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
+                        addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
+                        addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
                     }
                 }
             }
@@ -94,6 +94,10 @@ public class CityController {
                     citizen.setXOfWorkingTile(x);
                     citizen.setYOfWorkingTile(y);
                     citizen.setIsWorking(true);
+                    x++; y++;
+                    String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you locked " +
+                            citizen.getId() + " to ( " + x + " , " + y + " ) coordinates";
+                    WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
                     return "citizen locked to tile successfully";
                 }
             }
@@ -109,6 +113,10 @@ public class CityController {
                     citizen.setYOfWorkingTile(-1);
                     citizen.setXOfWorkingTile(-1);
                     citizen.setIsWorking(false);
+                    int x = citizen.getXOfWorkingTile()+1, y = citizen.getYOfWorkingTile()+1;
+                    String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you unlocked " +
+                            citizen.getId() + " from ( " + x + " , " + y + " ) coordinates";
+                    WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
                     return "citizen unlocked successfully";
                 }
             }
