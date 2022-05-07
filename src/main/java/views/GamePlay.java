@@ -92,6 +92,8 @@ public class GamePlay {
     }
 
     public static void demographicsPanel() {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        System.out.println(currentCivilization.getInfo());
     }
 
     public static void victoryPanel() {

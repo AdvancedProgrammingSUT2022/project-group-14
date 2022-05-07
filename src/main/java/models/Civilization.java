@@ -10,10 +10,8 @@ import java.util.*;
 
 public class Civilization {
     private String name;
-
     private int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getLength()];
     private Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getLength()];
-
 
     private ArrayList<Melee> melees = new ArrayList<>();
     private ArrayList<Ranged> ranges = new ArrayList<>();
@@ -31,9 +29,6 @@ public class Civilization {
     private ArrayList<Researches> researches = new ArrayList<>();
 
     private double food, gold, production, happiness, science;
-
-    private int citizens;
-    //TODO may consider a new way to handle citizens
 
     public Civilization(String name) {
         Random random = new Random();
@@ -158,5 +153,26 @@ public class Civilization {
 
     public double getScience() {
         return science;
+    }
+
+    public String getInfo() {
+        int totalTiles = 0, totalTechnologiesAcquired = 0;
+        for (City city : cities) {
+            totalTiles += city.getTerritory().size();
+        }
+        for (Integer value : technologies.values()) {
+            if (value <= 0)
+                totalTechnologiesAcquired++;
+        }
+
+        return "Total tiles in map : " + totalTiles + "\n" +
+                "Food : " + food + "\n" +
+                "Gold : " + gold + "\n" +
+                "Production : " + production + "\n" +
+                "Happiness : " + happiness + "\n" +
+                "Science : " + science + "\n" +
+                "Total number of units : " + getAllUnits().size() + "\n" +
+                "Total number of cities : " + cities.size() + "\n" +
+                "Total Technologies Acquired : " + totalTechnologiesAcquired + "\n";
     }
 }
