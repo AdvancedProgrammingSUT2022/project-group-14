@@ -83,7 +83,7 @@ public class GamePlay {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         int counter = 1;
         for (City city : currentCivilization.getCities()) {
-            int x = city.getCenterOfCity().getX()+1, y = city.getCenterOfCity().getY()+1;
+            int x = city.getCenterOfCity().getX() + 1, y = city.getCenterOfCity().getY() + 1;
             System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + "coordinates");
         }
     }
@@ -136,18 +136,12 @@ public class GamePlay {
 
     public static void showCombatUnitInfo() {
         //TODO these are temporary
-        System.out.println("you have selected : " + WorldController.getSelectedCombatUnit().getName()
-                + " from the " + WorldController.getSelectedCombatUnit().getCivilizationName() + " civilization"
-                + " with these coordinates : " + WorldController.getSelectedCombatUnit().getCurrentX() + " "
-                + WorldController.getSelectedCombatUnit().getCurrentY());
+        System.out.println(WorldController.getSelectedCombatUnit().getInfo());
     }
 
     public static void showNonCombatUnitInfo() {
         //TODO these are temporary
-        System.out.println("you have selected : " + WorldController.getSelectedNonCombatUnit().getName()
-                + " from the " + WorldController.getSelectedNonCombatUnit().getCivilizationName() + " civilization"
-                + " with these coordinates : " + WorldController.getSelectedNonCombatUnit().getCurrentX() + " "
-                + WorldController.getSelectedNonCombatUnit().getCurrentY());
+        System.out.println(WorldController.getSelectedNonCombatUnit().getInfo());
     }
 
     // showing map methods
@@ -232,7 +226,7 @@ public class GamePlay {
                             printingCoordinatesFlag = false;
                         }
                     } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m) {
-                        CombatUnit combatUnit= MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
+                        CombatUnit combatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
                         NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
                         if (combatUnit != null && j == 3 && k % 16 == 12) {
                             System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + combatUnit.getName().charAt(0));
@@ -241,8 +235,7 @@ public class GamePlay {
                         } else {
                             System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + " ");
                         }
-                    }
-                    else
+                    } else
                         System.out.print(" ");
                 }
             }
@@ -287,7 +280,7 @@ public class GamePlay {
                             printingCoordinatesFlag = false;
                         }
                     } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m) {
-                        CombatUnit combatUnit= MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
+                        CombatUnit combatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
                         NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
                         if (combatUnit != null && j == 1 && k % 16 == 4) {
                             System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + combatUnit.getName().charAt(0));
@@ -296,8 +289,7 @@ public class GamePlay {
                         } else {
                             System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + " ");
                         }
-                    }
-                    else
+                    } else
                         System.out.print(" ");
                 }
             }
@@ -456,7 +448,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.buildRoad(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.buildRoad((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -470,7 +462,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.buildRailRoad(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.buildRailRoad((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -484,7 +476,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.removeRouteFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.removeRouteFromTile((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -499,7 +491,7 @@ public class GamePlay {
             System.out.println("the selected unit is not a worker");
         } else {
             Improvements wantedImprovement = Improvements.getImprovementByName(improvement);
-            if ((error = UnitController.buildImprovement(( Worker) WorldController.getSelectedNonCombatUnit(), wantedImprovement)) != null) {
+            if ((error = UnitController.buildImprovement((Worker) WorldController.getSelectedNonCombatUnit(), wantedImprovement)) != null) {
                 System.out.println(error);
             }
         }
@@ -513,7 +505,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.removeJungleFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.removeJungleFromTile((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -527,7 +519,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.removeForestFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.removeForestFromTile((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -541,7 +533,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.removeMarshFromTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.removeMarshFromTile((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -555,7 +547,7 @@ public class GamePlay {
                 (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit() instanceof Settler)) {
             System.out.println("the selected unit is not a worker");
         } else {
-            if ((error = UnitController.repairTile(( Worker) WorldController.getSelectedNonCombatUnit())) != null) {
+            if ((error = UnitController.repairTile((Worker) WorldController.getSelectedNonCombatUnit())) != null) {
                 System.out.println(error);
             }
         }
@@ -576,7 +568,7 @@ public class GamePlay {
         }
     }
 
-    public static void lockCitizen(int x, int y, int id){
+    public static void lockCitizen(int x, int y, int id) {
         if (WorldController.getSelectedCity() == null)
             System.out.println("you should select a city first");
         else {
@@ -595,66 +587,22 @@ public class GamePlay {
         }
     }
 
-    public static void startProducingBuilding(Building building, String payment){
-        WorldController.getSelectedCity().setCurrentBuilding(building);
-        WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
-        WorldController.getSelectedCity().setCurrentProductionRemainingCost(building.getCost());
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
-        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
-                "building" + " in ( " + x + " , " + y + " ) coordinates";
-        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
-
+    public static void startProducingBuilding(Building building, String payment) {
+        String error;
+        if ((error = CityController.producingBuilding(building, payment)) != null) {
+            System.out.println(error);
+        }
     }
 
-    public static void startProducingUnit(enums.units.Unit unitEnum, String payment){
+    public static void startProducingUnit(enums.units.Unit unitEnum, String payment) {
         //TODO checking required resource
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        if (currentCivilization.getTechnologies().get(unitEnum.getRequiredTechnology()) > 0) {
-            System.out.println(unitEnum.getRequiredTechnology().getName() + " is required for producing this unit. you should study it first");
-            return;
+        String error;
+        if ((error = CityController.producingUnit(unitEnum, payment)) != null) {
+            System.out.println(error);
         }
-
-        Unit unit;
-        if (unitEnum.getName().equals("settler")){
-            if (WorldController.getSelectedCity().getCitizens().size() < 2){
-                System.out.println("can't produce settler in a city with less than 2 citizens");
-                return;
-            }
-            unit = new Settler(unitEnum,
-                    WorldController.getSelectedCity().getCenterOfCity().getX(),
-                    WorldController.getSelectedCity().getCenterOfCity().getY(),
-                    WorldController.getWorld().getCurrentCivilizationName());
-
-        }else if (unitEnum.getName().equals("worker")){
-            unit = new Worker(unitEnum,
-                    WorldController.getSelectedCity().getCenterOfCity().getX(),
-                    WorldController.getSelectedCity().getCenterOfCity().getY(),
-                    WorldController.getWorld().getCurrentCivilizationName());
-        }else if (unitEnum.getRangedCombatStrength() == 0){
-            unit = new Melee(unitEnum,
-                    WorldController.getSelectedCity().getCenterOfCity().getX(),
-                    WorldController.getSelectedCity().getCenterOfCity().getY(),
-                    WorldController.getWorld().getCurrentCivilizationName());
-        } else {
-            unit = new Ranged(unitEnum,
-                    WorldController.getSelectedCity().getCenterOfCity().getX(),
-                    WorldController.getSelectedCity().getCenterOfCity().getY(),
-                    WorldController.getWorld().getCurrentCivilizationName());
-        }
-
-
-        WorldController.getSelectedCity().setCurrentUnit(unit);
-        WorldController.getSelectedCity().setPayingGoldForCityProduction(payment.equals("gold"));
-        WorldController.getSelectedCity().setCurrentProductionRemainingCost(unitEnum.getCost());
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
-        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
-                unit.getName() + " in ( " + x + " , " + y + " ) coordinates";
-        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
     }
 
-    public static void nextTurn(){
+    public static void nextTurn() {
         String error;
         if ((error = WorldController.nextTurnImpossible()) != null) {
             System.out.println(error);
@@ -669,16 +617,16 @@ public class GamePlay {
         }
     }
 
-    public static void cancelCurrentResearch(){
+    public static void cancelCurrentResearch() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         currentCivilization.setCurrentTechnology(null);
     }
 
-    public static void startResearch(Technologies technology){
+    public static void startResearch(Technologies technology) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (String requiredTechnologyName : technology.getRequiredTechnologies()) {
             Technologies requiredTechnology = Technologies.getTechnologyByName(requiredTechnologyName);
-            if (currentCivilization.getTechnologies().get(requiredTechnology) > 0){
+            if (currentCivilization.getTechnologies().get(requiredTechnology) > 0) {
                 System.out.println("you should first study " + requiredTechnologyName.toLowerCase(Locale.ROOT));
                 return;
             }

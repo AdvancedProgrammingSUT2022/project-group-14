@@ -13,14 +13,14 @@ public enum TileFeatureTypes implements TileTypes{
     JUNGLE("jungle", 1, 1, 0, 25, 2,
             new HashSet<ResourceTypes>(Arrays.asList(BonusResourceTypes.GAZELLE, LuxuryResourceTypes.COTTON,
                     LuxuryResourceTypes.COLOR, LuxuryResourceTypes.SILK))), // jangal
-    ICE("ice", 0, 0, 0, 0, -9999, new HashSet<ResourceTypes>()), //TODO chera hich jayee yakh nadare?
+    ICE("ice", 0, 0, 0, 0, 9999, new HashSet<ResourceTypes>()),
     FOREST("forest", 1, -1, 0, 25, 2,
             new HashSet<ResourceTypes>(
                     Arrays.asList(BonusResourceTypes.BANANA, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.COLOR))), // jangale
                                                                                                                       // anbooh
     SWAMP("swamp", -1, 0, 0, -33, 2, new HashSet<ResourceTypes>(Arrays.asList(LuxuryResourceTypes.SUGAR))), // mordab
     OASIS("oasis", 3, 0, 1, -33, 1, new HashSet<ResourceTypes>()), // vahe
-    LAKE("lake", 0, 0, 1, 0, -9999, new HashSet<ResourceTypes>());
+    LAKE("lake", 0, 0, 1, 0, 9999, new HashSet<ResourceTypes>());
 
     private String name;
     private double food;

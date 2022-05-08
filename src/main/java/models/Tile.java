@@ -134,6 +134,23 @@ public class Tile {
         return this.movingPoint;
     }
 
+    public int getMovingPointFromSide(int x, int y, int movingPoints) {
+        if (x == -1 && y == 0 && isRiver[0]) {
+            return movingPoints;
+        } else if (x == 0 && y == 1 && isRiver[1]) {
+            return movingPoints;
+        } else if (x == 1 && y == 1 && isRiver[2]) {
+            return movingPoints;
+        } else if (x == 1 && y == 0 && isRiver[3]) {
+            return movingPoints;
+        } else if (x == 1 && y == -1 && isRiver[4]) {
+            return movingPoints;
+        } else if (x == 0 && y == -1 && isRiver[5]) {
+            return movingPoints;
+        }
+        return this.movingPoint;
+    }
+
     public void setMovingPoint(int movingPoint) {
         this.movingPoint = movingPoint;
     }

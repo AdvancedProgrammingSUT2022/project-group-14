@@ -40,6 +40,7 @@ public class Civilization {
         addMeleeUnit(melee);
         addSettler(settler);
         this.name = name;
+        this.happiness = 10;
         citiesNames.add(name + "1"); citiesNames.add(name + "2"); citiesNames.add(name + "3");
 
         for (Technologies technology : Technologies.values()) {
@@ -109,10 +110,12 @@ public class Civilization {
             firstCapital = city;
         }
         cities.add(city);
+        happiness -= 2;
     }
 
     public void removeCity(City city) {
         cities.remove(city);
+        happiness += 2;
     }
 
     public String getCityName() {
@@ -123,6 +126,7 @@ public class Civilization {
 
     public void addColony(City city) {
         colonies.add(city);
+        happiness -= 2;
     }
 
     public void removeColony(City city) {
@@ -147,6 +151,10 @@ public class Civilization {
 
     public void setScience(double science) {
         this.science = science;
+    }
+
+    public void changeHappiness(double  amount) {
+        this.happiness += amount;
     }
 
     public double getHappiness() {
