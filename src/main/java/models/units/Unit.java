@@ -62,6 +62,10 @@ public class Unit {
         return movementPoint;
     }
 
+    public void setMovementPoint(int movementPoint) {
+        this.movementPoint = movementPoint;
+    }
+
     public void updatePosition(int x, int y) {
         this.currentX = x;
         this.currentY = y;
@@ -95,6 +99,8 @@ public class Unit {
     public void cancelMission() {
         this.destinationX = -1;
         this.destinationY = -1;
+        if (this instanceof NonCombatUnit)
+            ((NonCombatUnit) this).finishWork();
     }
 
     public String getInfo() {

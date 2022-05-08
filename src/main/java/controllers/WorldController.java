@@ -52,6 +52,7 @@ public class WorldController {
             MoveController.moveUnitToDestination(unit);
         }
         //TODO show map
+        UnitController.resetMovingPoints(currentCivilization);
         world.nextTurn();
         resetSelection();
     }
@@ -62,7 +63,7 @@ public class WorldController {
             return "you have to choose a technology to research";
         } else {
             for (Unit unit : currentCivilization.getAllUnits()) {
-                if (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep()) {
+                if ((unit.getMovementPoint() > 0) || (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep())) {
                     return "units need to be moved";
                 }
             }

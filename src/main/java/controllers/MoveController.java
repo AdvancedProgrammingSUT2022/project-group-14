@@ -16,34 +16,35 @@ public class MoveController {
         } else if (MapController.getTileByCoordinates(x, y).getMovingPoint() == 9999) {
             return "can not move to those kind of tiles";
         } else if ((MapController.getTileByCoordinates(x, y).getCombatUnit() != null && unit instanceof CombatUnit) ||
-                (MapController.getTileByCoordinates(x, y).getNonCombatUnit() != null && unit instanceof NonCombatUnit)){
+                (MapController.getTileByCoordinates(x, y).getNonCombatUnit() != null && unit instanceof NonCombatUnit)) {
             return "there is not any space left on the tile to move";
         }
         return null;
     }
 
     public static void moveUnitToDestination(Unit unit) {
-        if (unit.getDestinationX() == -1 && unit.getDestinationY() == -1) {
+        if (unit.getDestinationX() == -1 && unit.getDestinationY() == -1)
             return;
-        }
-        int movementPointsConsumed = 0;
-        Tile nextTileToMove;
-        while(unit.getMovementPoint() - movementPointsConsumed > 0 && unit.getDestinationX() != -1 && unit.getDestinationY() != -1) {
+
+        Tile nextTileToMove; String error;
+        while (unit.getMovementPoint() > 0 && unit.getDestinationX() != -1 && unit.getDestinationY() != -1) {
             nextTileToMove = bestNextTileToMove(MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()),
-                                                MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()), unit);
-            if (impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit) != null) {
-                if (unit.getMovementPoint() - (movementPointsConsumed + nextTileToMove.getMovingPoint()) <= 0) {
+                    MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()));
+            if ((error = impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit)) != null &&
+                    !error.equals("can not move to those kind of tiles")) {
+                if (unit.getMovementPoint() - (nextTileToMove.getMovingPoint()) <= 0) {
                     unit.cancelMission();
                     break;
                 }
             }
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
-            movementPointsConsumed += nextTileToMove.getMovingPoint();
+            unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
+                    nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));
             MapController.updateUnitPositions();
         }
     }
 
-    public static Tile bestNextTileToMove(Tile startingTile, Tile finishingTile, Unit unit) {
+    public static Tile bestNextTileToMove(Tile startingTile, Tile finishingTile) {
         int width = MapController.getWidth(), length = MapController.getLength(), INFINITE = 9999;
         boolean[][] visitedTiles = new boolean[width][length];
         int[][] distanceFromStartingTile = new int[width][length];

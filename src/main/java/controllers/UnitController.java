@@ -26,6 +26,12 @@ public class UnitController {
         return null;
     }
 
+    public static void resetMovingPoints(Civilization currentCivilization) {
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            unit.setMovementPoint(enums.units.Unit.getUnitByName(unit.getName()).getMovement());
+        }
+    }
+
     public static String cancelMission(Unit unit) {
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "unit is not under your control";
@@ -166,6 +172,7 @@ public class UnitController {
         } else {
             currentTile.setRoadState(9999);
             currentTile.setRailRoadState(9999);
+            worker.putToWork(3);
             int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
             String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed a routes from" +
                     " a tile in ( " + x + " , " + y + " ) coordinates";
@@ -204,7 +211,8 @@ public class UnitController {
         } else if (currentTile.getFeature() != TileFeatureTypes.JUNGLE) {
             return "there is not a jungle on this tile";
         } else {
-            //TODO remove the jungle and updating goods and MP of the tile
+            currentTile.setFeature(null);
+            worker.putToWork(3);
             int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
             String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed jungle from " +
                     "the tile on ( " + x + " , " + y + " ) coordinates";
@@ -220,7 +228,8 @@ public class UnitController {
         } else if (currentTile.getFeature() != TileFeatureTypes.FOREST) {
             return "there is not a forest on this tile";
         } else {
-            //TODO remove the forest and updating goods and MP of the tile
+            currentTile.setFeature(null);
+            worker.putToWork(3);
             int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
             String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed forest from " +
                     "the tile on ( " + x + " , " + y + " ) coordinates";
@@ -234,10 +243,10 @@ public class UnitController {
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "the unit is not under your control";
         } else if (currentTile.getFeature() != TileFeatureTypes.SWAMP) {
-            //TODO check that the tile has a marsh
             return "there is not a marsh on this tile";
         } else {
-            //TODO remove the marsh and updating goods and MP of the tile
+            currentTile.setFeature(null);
+            worker.putToWork(3);
             int x = worker.getCurrentX()+1, y = worker.getCurrentY()+1;
             String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed marsh from " +
                     "the tile on ( " + x + " , " + y + " ) coordinates";

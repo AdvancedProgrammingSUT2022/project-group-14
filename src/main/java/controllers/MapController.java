@@ -172,13 +172,11 @@ public class MapController {
         for (Tile[] tiles : tilesMap) {
             for (Tile tile : tiles) {
                 if (tile.getCombatUnit() != null &&
-                        (tile.getCombatUnit().getCurrentX() != tile.getX()
-                                || tile.getCombatUnit().getCurrentY() != tile.getY())) {
+                        (tile.getCombatUnit().getCurrentX() != tile.getX() || tile.getCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setCombatUnit(null);
                 }
                 if (tile.getNonCombatUnit() != null &&
-                        (tile.getNonCombatUnit().getCurrentX() != tile.getX()
-                                || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
+                        (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setNonCombatUnit(null);
                 }
             }
