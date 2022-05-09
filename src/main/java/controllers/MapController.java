@@ -182,4 +182,8 @@ public class MapController {
             }
         }
     }
+
+    public void kaftarWithKakolHair(){
+
+    }
 }
