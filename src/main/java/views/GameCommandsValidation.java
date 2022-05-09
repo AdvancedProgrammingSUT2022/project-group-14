@@ -12,7 +12,9 @@ import models.Building;
 import models.City;
 import models.Civilization;
 import models.Tile;
+import models.units.Ranged;
 
+import java.util.Map;
 import java.util.regex.Matcher;
 
 public class GameCommandsValidation {
@@ -73,12 +75,26 @@ public class GameCommandsValidation {
             checkLockCitizen(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.UNLOCK_CITIZEN)) != null) {
             GamePlay.unlockCitizen(matcher);
-        }else if ((matcher = Commands.getMatcher(input, Commands.CITY_PRODUCE)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.CITY_PRODUCE)) != null) {
             checkCityProduce(matcher);
-        } else if ((matcher = Commands.getMatcher(input, Commands.CANCEL_CURRENT_RESEARCH)) != null) {
+        } else if (Commands.getMatcher(input, Commands.CANCEL_CURRENT_RESEARCH) != null) {
             GamePlay.cancelCurrentResearch();
         } else if ((matcher = Commands.getMatcher(input, Commands.START_RESEARCH)) != null) {
             checkStartResearch(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_GOODS)) != null) {
+            checkIncreaseGoods(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_TURN)) != null) {
+            checkIncreaseTurn(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_MP)) != null) {
+            checkIncreaseMP(matcher);
+        } else if (Commands.getMatcher(input, Commands.SEE_WHOLE_MAP) != null) {
+            checkSeeWholeMap();
+        } else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
+            checkBuyTile(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_RANGE)) != null) {
+            checkIncreaseRange(matcher);
+        } else if (Commands.getMatcher(input, Commands.GET_ALL_TECHS) != null) {
+            checkGetAllTechs();
         } else System.out.println("invalid command");
 
         return true;
@@ -91,14 +107,10 @@ public class GameCommandsValidation {
             case "research" -> GamePlay.researchesPanel();
             case "units" -> GamePlay.unitsPanel();
             case "cities" -> GamePlay.citiesPanel();
-            case "diplomacy" -> GamePlay.diplomacyPanel();
-            case "victory" -> GamePlay.victoryPanel();
             case "demographics" -> GamePlay.demographicsPanel();
             case "notifications" -> GamePlay.notificationsPanel();
             case "military" -> GamePlay.militaryPanel();
             case "economic" -> GamePlay.economicStatusPanel();
-            case "diplomatic" -> GamePlay.diplomaticHistoryPanel();
-            case "deals" -> GamePlay.dealsHistoryPanel();
         }
     }
 
@@ -222,7 +234,7 @@ public class GameCommandsValidation {
         System.out.println("the given position is invalid");
     }
 
-    public void checkCityProduce(Matcher matcher){
+    public void checkCityProduce(Matcher matcher) {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;
@@ -232,12 +244,13 @@ public class GameCommandsValidation {
         String productionName = matcher.group("productionName");
         String payment = matcher.group("payment");
 
-        if (type.equals("unit")){Unit unit = Unit.getUnitByName(productionName.toUpperCase());
+        if (type.equals("unit")) {
+            Unit unit = Unit.getUnitByName(productionName.toUpperCase());
             if (unit == null) System.out.println("no such unit exists");
             else {
                 GamePlay.startProducingUnit(unit, payment);
             }
-        }else {
+        } else {
             Buildings buildings = Buildings.getBuildingByName(productionName.toUpperCase());
             if (buildings == null) System.out.println("no such building exists");
             else {
@@ -247,7 +260,7 @@ public class GameCommandsValidation {
         }
     }
 
-    public void checkStartResearch(Matcher matcher){
+    public void checkStartResearch(Matcher matcher) {
         String technologyName = matcher.group("technology");
         Technologies technologies = Technologies.getTechnologyByName(technologyName);
         if (technologies == null)
@@ -255,4 +268,69 @@ public class GameCommandsValidation {
         else GamePlay.startResearch(technologies);
     }
 
+    public void checkIncreaseGoods(Matcher matcher) {
+        String goodsName = matcher.group("goods");
+        int amount = Integer.parseInt(matcher.group("amount"));
+        switch (goodsName) {
+            case "gold" ->
+                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addGold(amount);
+            case "food" ->
+                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addFood(amount);
+            case "production" ->
+                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addProduction(amount);
+            case "happiness" ->
+                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addHappiness(amount);
+        }
+    }
+
+    public void checkIncreaseTurn(Matcher matcher) {
+        int amount = Integer.parseInt(matcher.group("amount"));
+        for (int i = 0; i < amount; i++) {
+            WorldController.nextTurn();
+        }
+    }
+
+    public void checkIncreaseMP(Matcher matcher) {
+        int amount = Integer.parseInt(matcher.group("amount"));
+        for (models.units.Unit unit : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits()) {
+            unit.setMovementPoint(unit.getMovementPoint() + amount);
+        }
+
+    }
+
+    public void checkSeeWholeMap() {
+        int[][] visionStates = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getVisionStatesOfMap();
+        for (int i = 0; i < MapController.getWidth(); i++) {
+            for (int j = 0; j < MapController.getLength(); j++) {
+                visionStates[i][j] = 2;
+            }
+        }
+    }
+
+    public void checkBuyTile(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("Y")) - 1;
+        if (!TileController.selectedTileIsValid(x, y)) {
+            System.out.println("selected tile is not valid");
+        } else if (MapController.getTileByCoordinates(x, y).getCivilizationName() != null) {
+            System.out.println("tile is already in control of another civilization");
+        } else {
+            MapController.getTileByCoordinates(x, y).setCivilization(WorldController.getWorld().getCurrentCivilizationName());
+        }
+    }
+
+    public void checkIncreaseRange(Matcher matcher) {
+        int amount = Integer.parseInt(matcher.group("amount"));
+        for (models.units.Unit unit : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits()) {
+            if (unit instanceof Ranged)
+                ((Ranged) unit).setRange(amount);
+        }
+    }
+
+    public void checkGetAllTechs() {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (Technologies value : Technologies.values()) {
+            currentCivilization.getTechnologies().put(value, 0);
+        }
+    }
 }
