@@ -53,7 +53,8 @@ public enum Commands {
     CITY_PRODUCE("city produce (?<type>unit|building) (?<productionName>\\S+) with (?<payment>gold|production)"),
     START_RESEARCH("start research (?<technology>\\S+)"),
     CANCEL_CURRENT_RESEARCH("cancel current research"),
-    BUY_TILE("buy tile (?<x>\\d+) (<?y>\\d+)");
+    BUY_TILE("buy tile (?<x>\\d+) (<?y>\\d+)"),
+    UPGRADE_UNIT("upgrade unit to (?<unitName>\\S+)");
 
 
     private final String regex;

@@ -662,4 +662,11 @@ public class GamePlay {
         }
         System.out.println("you should choose a neighbor tile to one of your cities territory");
     }
+
+    public static void upgradeUnit(enums.units.Unit unitEnum){
+        String error;
+        if ((error = UnitController.upgradeUnit(unitEnum)) != null) {
+            System.out.println(error);
+        }else System.out.println("unit upgraded successfully");
+    }
 }

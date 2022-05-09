@@ -81,6 +81,8 @@ public class GameCommandsValidation {
             checkStartResearch(matcher);
         }  else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
             checkBuyTile(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.UPGRADE_UNIT)) != null) {
+            checkUpgradeUnit(matcher);
         } else System.out.println("invalid command");
 
         return true;
@@ -262,6 +264,16 @@ public class GameCommandsValidation {
         int y = Integer.parseInt(matcher.group("y")) - 1;
         if (TileController.selectedTileIsValid(x, y)) {
             GamePlay.buyTile(x, y);
+        }
+    }
+
+    public void checkUpgradeUnit(Matcher matcher){
+        String unitName = matcher.group("unitName");
+        Unit unit = Unit.getUnitByName(unitName.toUpperCase());
+
+        if (unit == null) System.out.println("no such unit exists");
+        else {
+            GamePlay.upgradeUnit(unit);
         }
     }
 
