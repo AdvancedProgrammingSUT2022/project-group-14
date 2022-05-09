@@ -114,6 +114,18 @@ public class Civilization {
         return allUnits;
     }
 
+    public double getFood() {
+        return food;
+    }
+
+    public double getGold() {
+        return gold;
+    }
+
+    public double getProduction() {
+        return production;
+    }
+
     public ArrayList<City> getCities() {
         return cities;
     }
@@ -204,5 +216,17 @@ public class Civilization {
                 "Total number of units : " + getAllUnits().size() + "\n" +
                 "Total number of cities : " + cities.size() + "\n" +
                 "Total Technologies Acquired : " + totalTechnologiesAcquired + "\n";
+    }
+
+    public void setFood(double food) {
+        this.food = food;
+    }
+
+    public void setGold(double gold) {
+        this.gold = gold;
+    }
+
+    public void setProduction(double production) {
+        this.production = production;
     }
 }

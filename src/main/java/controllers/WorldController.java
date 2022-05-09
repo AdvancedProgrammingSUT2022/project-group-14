@@ -54,6 +54,7 @@ public class WorldController {
         }
         //TODO show map
         UnitController.resetMovingPoints(currentCivilization);
+
         world.nextTurn();
         resetSelection();
     }

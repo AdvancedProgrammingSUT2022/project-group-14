@@ -36,13 +36,14 @@ public class CityController {
                 }
             }
         }
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         double cityFood = city.getFood() + addedFood;
-        double cityGold = city.getGold() + addedGold;
+        double cityGold = addedGold;
         double cityProduction = city.getProduction() + addedProduction;
         cityProduction += city.getCitizens().size();
         cityFood = consumeCityFood(cityFood, city);
         city.setFood(cityFood);
-        city.setGold(cityGold);
+        currentCivilization.setGold(currentCivilization.getGold() + cityGold);
         city.setProduction(cityProduction);
         addCitizenIfPossible(city);
     }
@@ -125,8 +126,11 @@ public class CityController {
         }
 
         if (city.isPayingGoldForCityProduction()) {
+            Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+            city.setGold(currentCivilization.getGold() / currentCivilization.getCities().size());
             city.setCurrentProductionRemainingCost(Math.max(city.getCurrentProductionRemainingCost() - city.getGold(), 0));
-            city.setGold(Math.max(city.getGold() - city.getCurrentProductionRemainingCost(), 0));
+            currentCivilization.setGold(currentCivilization.getGold() + Math.max(city.getGold() - city.getCurrentProductionRemainingCost(), 0));
+            city.setGold(0);
         } else {
             city.setCurrentProductionRemainingCost(Math.max(city.getCurrentProductionRemainingCost() - city.getProduction(), 0));
             city.setGold(Math.max(city.getProduction() - city.getCurrentProductionRemainingCost(), 0));
