@@ -4,6 +4,10 @@ package models;
 import controllers.MapController;
 import enums.Researches;
 import enums.Technologies;
+import enums.resources.LuxuryResourceTypes;
+import enums.resources.StrategicResourceTypes;
+import models.resources.LuxuryResource;
+import models.resources.StrategicResource;
 import models.units.*;
 
 import java.util.*;
@@ -20,7 +24,8 @@ public class Civilization {
 
     private ArrayList<City> cities = new ArrayList<>();
     private ArrayList<String> citiesNames = new ArrayList<>();
-    private ArrayList<City> colonies = new ArrayList<>();
+    private HashMap<String, Integer> strategicResources = new HashMap<>();
+    private HashMap<String, Integer> luxuryResources = new HashMap<>();
     private City firstCapital;
     private City currentCapital;
 
@@ -45,6 +50,14 @@ public class Civilization {
 
         for (Technologies technology : Technologies.values()) {
             technologies.put(technology, technology.getCost());
+        }
+
+        for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values()) {
+            strategicResources.put(strategicResource.name(), 0);
+        }
+
+        for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values()) {
+            luxuryResources.put(luxuryResource.name(), 0);
         }
     }
 
@@ -124,13 +137,12 @@ public class Civilization {
         return name;
     }
 
-    public void addColony(City city) {
-        colonies.add(city);
-        happiness -= 2;
+    public HashMap<String, Integer> getStrategicResources() {
+        return strategicResources;
     }
 
-    public void removeColony(City city) {
-        colonies.remove(city);
+    public HashMap<String, Integer> getLuxuryResources() {
+        return luxuryResources;
     }
 
     public HashMap<Technologies, Integer> getTechnologies() {

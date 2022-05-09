@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import models.Civilization;
 import models.Tile;
+import models.resources.Resource;
+import models.resources.StrategicResource;
 import models.units.Unit;
 import models.units.Worker;
 
@@ -30,6 +32,9 @@ public class TileController {
                     } else if (tile.getImprovementTurnsLeftToBuild() != 0 && tile.getImprovementTurnsLeftToBuild() != 9999) {
                         tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() -1 );
                     }
+                    if (tile.getImprovementTurnsLeftToBuild() == 0){
+                        tile.addAvailableResourcesToCivilizationAndTile();
+                    }
                 }
             }
         }
@@ -51,6 +56,16 @@ public class TileController {
             neighbours.add(MapController.getTileByCoordinates(x, y-1));
 
         return neighbours;
+    }
+
+    public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile){
+        if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0){
+            if (resource instanceof StrategicResource &&
+                    !WorldController.currentCivilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology()))
+                return false;
+            return true;
+        }
+        return false;
     }
 
     public static boolean combatUnitExistsInTile(Tile tile) {

@@ -1,5 +1,6 @@
 package controllers;
 
+import enums.Technologies;
 import models.City;
 import models.Civilization;
 import models.Tile;
@@ -69,6 +70,10 @@ public class WorldController {
             }
         }
         return null;
+    }
+
+    public static boolean currentCivilizationHasTechnology(Technologies technology){
+        return world.getCivilizationByName(world.getCurrentCivilizationName()).getTechnologies().get(technology) <= 0;
     }
 
     public static World getWorld() {
