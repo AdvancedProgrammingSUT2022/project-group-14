@@ -595,7 +595,6 @@ public class GamePlay {
     }
 
     public static void startProducingUnit(enums.units.Unit unitEnum, String payment) {
-        //TODO checking required resource
         String error;
         if ((error = CityController.producingUnit(unitEnum, payment)) != null) {
             System.out.println(error);

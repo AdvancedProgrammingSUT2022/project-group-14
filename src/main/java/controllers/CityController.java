@@ -150,8 +150,14 @@ public class CityController {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         City wantedCity = WorldController.getSelectedCity();
         Unit unit;
-        if (currentCivilization.getTechnologies().get(unitEnum.getRequiredTechnology()) > 0) {
-            return unitEnum.getRequiredTechnology().getName() + " is required for producing this unit. you should study it first";
+        if (unitEnum.getRequiredTechnology() != null &&
+                currentCivilization.getTechnologies().get(unitEnum.getRequiredTechnology()) > 0) {
+            return "technology" + unitEnum.getRequiredTechnology().getName() + " is required for producing this unit. you should study it first";
+        }
+
+        if (unitEnum.getRequiredResource() != null &&
+                currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().nameGetter()) < 1) {
+            return "resource" + unitEnum.getRequiredResource().nameGetter() + " is required for producing this unit. you should gain it first";
         }
 
         if (unitEnum.getName().equals("settler")) {
@@ -171,6 +177,11 @@ public class CityController {
         } else {
             unit = new Ranged(unitEnum,
                     wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
+        }
+
+        if (unitEnum.getRequiredResource() != null){
+            currentCivilization.getStrategicResources().put(unitEnum.getRequiredResource().nameGetter(),
+                    currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().nameGetter()) - 1);
         }
 
         wantedCity.setCurrentUnit(unit);
