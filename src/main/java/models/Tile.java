@@ -40,7 +40,7 @@ public class Tile {
 
     private int pillageState; // 0 -> has not been pillaged | 9999 -> been pillaged
 
-    private String civilizationName;
+    private String civilizationName = null;
     private City city;
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;

@@ -58,6 +58,15 @@ public class TileController {
         return neighbours;
     }
 
+    public static boolean towTilesAreNeighbors(int x1, int y1, int x2, int y2){
+        return (x1 == x2 - 1 && y1 == y2) ||
+                (x1 == x2 && y1 == y2 + 1) ||
+                (x1 == x2 + 1 && y1 == y2 + 1) ||
+                (x1 == x2 + 1 && y1 == y2) ||
+                (x1 == x2 + 1 && y1 == y2 - 1) ||
+                (x1 == x2 && y1 == y2 - 1);
+    }
+
     public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile){
         if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0){
             if (resource instanceof StrategicResource &&

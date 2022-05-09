@@ -213,4 +213,14 @@ public class CityController {
         return null;
     }
 
+    public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY){
+        if (civilization.getGold() < 100) return "you don't have enough gold for buying this tile";
+
+        civilization.setGold(civilization.getGold() - 100);
+        Tile tile = MapController.getMap()[tileX][tileY];
+        tile.setCivilization(civilization.getName());
+        city.getTerritory().add(tile);
+        return "tile was bought successfully";
+    }
+
 }

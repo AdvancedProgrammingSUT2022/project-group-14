@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import controllers.MapController;
 import controllers.TileController;
+import controllers.WorldController;
 import enums.units.CombatUnit;
 import models.units.Unit;
 
@@ -39,6 +40,10 @@ public class City {
         citizens.add(new Citizen(1));
         this.territory.add(centerOfCity);
         territory.addAll(TileController.getAvailableNeighbourTiles(centerOfCity.getX(), centerOfCity.getY()));
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (Tile tile : this.territory) {
+            tile.setCivilization(currentCivilization.getName());
+        }
     }
 
     public void finishCityProduction(){

@@ -79,6 +79,8 @@ public class GameCommandsValidation {
             GamePlay.cancelCurrentResearch();
         } else if ((matcher = Commands.getMatcher(input, Commands.START_RESEARCH)) != null) {
             checkStartResearch(matcher);
+        }  else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
+            checkBuyTile(matcher);
         } else System.out.println("invalid command");
 
         return true;
@@ -253,6 +255,14 @@ public class GameCommandsValidation {
         if (technologies == null)
             System.out.println("no such technology exists");
         else GamePlay.startResearch(technologies);
+    }
+
+    public void checkBuyTile(Matcher matcher){
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.buyTile(x, y);
+        }
     }
 
 }

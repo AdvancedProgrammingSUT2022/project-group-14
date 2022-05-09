@@ -134,6 +134,18 @@ public class GamePlay {
         }
     }
 
+    public static void diplomacyPanel() {
+    }
+
+    public static void victoryPanel() {
+    }
+
+    public static void diplomaticHistoryPanel() {
+    }
+
+    public static void dealsHistoryPanel() {
+    }
+
     public static void showCombatUnitInfo() {
         //TODO these are temporary
         System.out.println(WorldController.getSelectedCombatUnit().getInfo());
@@ -635,5 +647,19 @@ public class GamePlay {
                 technology.getName() + " technology";
         currentCivilization.addNotification(notification);
 
+    }
+
+    public static void buyTile(int x, int y){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (City city : currentCivilization.getCities()) {
+            for (Tile tile : city.getTerritory()) {
+                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())){
+                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())){
+                        System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
+                    }else System.out.println("this tile belongs to another civilization");
+                }
+            }
+        }
+        System.out.println("you should choose a neighbor tile to one of your cities territory");
     }
 }
