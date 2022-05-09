@@ -114,6 +114,22 @@ public class Civilization {
         return allUnits;
     }
 
+    public ArrayList<Melee> getMelees() {
+        return melees;
+    }
+
+    public ArrayList<Ranged> getRanges() {
+        return ranges;
+    }
+
+    public ArrayList<Worker> getWorkers() {
+        return workers;
+    }
+
+    public ArrayList<Settler> getSettlers() {
+        return settlers;
+    }
+
     public double getFood() {
         return food;
     }

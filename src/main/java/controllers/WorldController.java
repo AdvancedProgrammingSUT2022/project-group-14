@@ -48,6 +48,8 @@ public class WorldController {
         CivilizationController.updateTechnology(currentCivilization);
         CivilizationController.updateMapVision(currentCivilization);
         CivilizationController.updateCitiesGoods(currentCivilization);
+        CivilizationController.payRequiredPriceForKeepingRoadsAndRailroads(currentCivilization);
+        CivilizationController.payRequiredPriceForKeepingUnits(currentCivilization);
         CivilizationController.updateCitiesProductions(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
