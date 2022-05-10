@@ -145,7 +145,7 @@ public class GamePlay {
     }
 
     // showing map methods
-    public static void showMapOnTiles(int i, int j) {
+    public static void showMapBasedOnTile(int i, int j) {
         MapController.tileCellsRefresh();
         int[] tileCenter = MapController.getTileCenterByCoordinates(i,j);
         showMapByCordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
