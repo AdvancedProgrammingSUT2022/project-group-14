@@ -18,7 +18,7 @@ public class Cell {
         return this.ch;
     }
 
-    public void setCh(char ch) {
+    public void setCharacter(char ch) {
         this.ch = ch;
     }
 

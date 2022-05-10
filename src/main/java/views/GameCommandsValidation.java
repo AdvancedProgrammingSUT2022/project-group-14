@@ -91,14 +91,14 @@ public class GameCommandsValidation {
             case "research" -> GamePlay.researchesPanel();
             case "units" -> GamePlay.unitsPanel();
             case "cities" -> GamePlay.citiesPanel();
-            case "diplomacy" -> GamePlay.diplomacyPanel();
-            case "victory" -> GamePlay.victoryPanel();
+//            case "diplomacy" -> GamePlay.diplomacyPanel();
+//            case "victory" -> GamePlay.victoryPanel();
             case "demographics" -> GamePlay.demographicsPanel();
             case "notifications" -> GamePlay.notificationsPanel();
             case "military" -> GamePlay.militaryPanel();
             case "economic" -> GamePlay.economicStatusPanel();
-            case "diplomatic" -> GamePlay.diplomaticHistoryPanel();
-            case "deals" -> GamePlay.dealsHistoryPanel();
+//            case "diplomatic" -> GamePlay.diplomaticHistoryPanel();
+//            case "deals" -> GamePlay.dealsHistoryPanel();
         }
     }
 

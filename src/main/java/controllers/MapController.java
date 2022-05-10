@@ -12,13 +12,12 @@ import java.util.ArrayList;
 
 public class MapController {
 
-    private static final int width = 40;
-    private static final int length = 80;
+    private static final int width = 7;
+    private static final int length = 21;
     private static final int outputMapWidth = 6 * width + 3;
     private static final int outputMapLength = 8 * length + 3;
-
-    private static int[][][] tileCenter = new int[width][length][2];
     private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapLength];
+    private static int[][][] tileCenter = new int[width][length][2];
     private static Tile[][] tilesMap = new Tile[width][length];
 
     public static void generateMap() {
@@ -37,13 +36,13 @@ public class MapController {
                 cell.setColor(Colors.RESET);
 
                 if (k % 16 == (2 - j) && (k < outputMapLength - 3 || row > 0) && (k > 2 || row < width)) {
-                    cell.setCh('/');
+                    cell.setCharacter('/');
                 } else if (k % 16 == (8 + j) && (row < width || k < outputMapLength - 3)) {
-                    cell.setCh('\\');
+                    cell.setCharacter('\\');
                 } else if (j == 2 && (k % 16) >= 11 && (k % 16) <= 15) {
-                    cell.setCh('_');
+                    cell.setCharacter('_');
                 } else {
-                    cell.setCh(' ');
+                    cell.setCharacter(' ');
                 }
             }
     }
@@ -55,13 +54,13 @@ public class MapController {
                 cellsMap[6 * row + 3 + j][k] = cell;
                 cell.setColor(Colors.RESET);
                 if (k % 16 == (0 + j)) {
-                    cell.setCh('\\');
+                    cell.setCharacter('\\');
                 } else if (k % 16 == (10 - j)) {
-                    cell.setCh('/');
+                    cell.setCharacter('/');
                 } else if (j == 2 && (k % 16) >= 3 && (k % 16) <= 7) {
-                    cell.setCh('_');
+                    cell.setCharacter('_');
                 } else {
-                    cell.setCh(' ');
+                    cell.setCharacter(' ');
                 }
             }
     }
@@ -75,13 +74,13 @@ public class MapController {
     }
 
     private static void tileCentersInit() {
-        for (int x = 2, i = 0; x < outputMapWidth - width; x += 6, i++)
-            for (int y = 5, j = 0; y < outputMapLength; y += 16, j += 2) {
+        for (int x = 2, i = 0; i < width; x += 6, i++)
+            for (int y = 5, j = 0; j < length; y += 16, j += 2) {
                 tileCenter[i][j][0] = x;
                 tileCenter[i][j][1] = y;
             }
-        for (int x = 5, i = 0; x < outputMapWidth; x += 6, i++)
-            for (int y = 13, j = 1; y < outputMapLength; y += 16, j += 2) {
+        for (int x = 5, i = 0; i < width; x += 6, i++)
+            for (int y = 13, j = 1; j < length; y += 16, j += 2) {
                 tileCenter[i][j][0] = x;
                 tileCenter[i][j][1] = y;
             }
@@ -115,6 +114,16 @@ public class MapController {
             }
     }
 
+    public static void showMap() {
+        for (int i = 0; i < 6 * MapController.getWidth() + 3; i++) {
+            for (int j = 0; j < 8 * MapController.getLength() + 3; j++) {
+                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +
+                        MapController.getCellsMap()[i][j].getCh() + Colors.RESET.getAnsiEscapeCode());
+            }
+            System.out.println();
+        }
+    }
+
     public static void mapInit() {
         generateMap();
         bordersInit();
@@ -125,7 +134,7 @@ public class MapController {
 
     public static void printStringToCellsMap(String input, int x, int y) {
         for (int i = 0; i < input.length(); i++) {
-            cellsMap[x][i + y].setCh(input.charAt(i));
+            cellsMap[x][i + y].setCharacter(input.charAt(i));
         }
     }
 
@@ -183,7 +192,4 @@ public class MapController {
         }
     }
 
-    public void kaftarWithKakolHair(){
-
-    }
 }
