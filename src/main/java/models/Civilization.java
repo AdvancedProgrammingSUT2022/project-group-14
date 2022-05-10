@@ -145,6 +145,18 @@ public class Civilization {
         this.currentTechnology = wantedTechnology;
     }
 
+    public void addGold(double amount) {
+        gold += amount;
+    }
+
+    public void addFood(double amount) {
+        gold += amount;
+    }
+
+    public void addProduction(double amount) {
+        gold += amount;
+    }
+
     public void setHappiness(double happiness) {
         this.happiness = happiness;
     }
@@ -153,7 +165,7 @@ public class Civilization {
         this.science = science;
     }
 
-    public void changeHappiness(double  amount) {
+    public void addHappiness(double  amount) {
         this.happiness += amount;
     }
 

@@ -52,7 +52,15 @@ public enum Commands {
     UNLOCK_CITIZEN("unlock citizen (?<id>\\d+)"),
     CITY_PRODUCE("city produce (?<type>unit|building) (?<productionName>\\S+) with (?<payment>gold|production)"),
     START_RESEARCH("start research (?<technology>\\S+)"),
-    CANCEL_CURRENT_RESEARCH("cancel current research");
+    CANCEL_CURRENT_RESEARCH("cancel current research"),
+    //cheat codes
+    INCREASE_GOODS("increase -(?<goods>gold|food|production|happiness) (?<amount>\\d+)"),
+    INCREASE_MP("increase -movementPoints (?<amount>\\d+)"),
+    INCREASE_TURN("increase -turn (?<amount>\\d+)"),
+    BUY_TILE("buy tile on (?<x>\\d+) (?<y>\\d+)"),
+    INCREASE_RANGE("increase range of units by (?<amount>\\d+)"),
+    GET_ALL_TECHS("get all technologies"),
+    SEE_WHOLE_MAP("see whole map");
 
 
     private final String regex;
