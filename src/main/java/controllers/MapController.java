@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class MapController {
 
-    public static final int width = 5;
-    public static final int length = 20;
+    public static final int width = 40;
+    public static final int length = 80;
     public static final int outputMapWidth = 6 * width + 3;
     public static final int outputMapLength = 8 * length + 3;
     private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapLength];
@@ -120,7 +120,6 @@ public class MapController {
         tileCellsRefresh();
     }
 
-
     public static void printStringToCellsMap(String input, int x, int y) {
         for (int i = 0; i < input.length(); i++) {
             cellsMap[x][i + y].setCharacter(input.charAt(i));
@@ -159,7 +158,6 @@ public class MapController {
         }
     }
 
-
     // Getters and Setters
     public static int getWidth() {
         return width;
@@ -183,6 +181,24 @@ public class MapController {
 
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
+    }
+//------------------------------------------------------------------------------------------------
+    private void setRiver(int x, int y, int i) {
+
+    }
+
+    private Tile getTileByRiver(int x, int y, int i) {
+        return null;
+    }
+
+    private void generateRivers() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                for (int k = 0; k < 6; k++) {
+
+                }
+            }
+        }
     }
 
 

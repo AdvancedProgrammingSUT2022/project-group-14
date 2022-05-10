@@ -34,7 +34,7 @@ public class Civilization {
 
     public Civilization(String name) {
         Random random = new Random();
-        int randomX = random.nextInt(40), randomY = random.nextInt(80);
+        int randomX = random.nextInt(MapController.width), randomY = random.nextInt(MapController.length);
         Melee melee = new Melee(enums.units.Unit.getUnitByName("warrior"), randomX, randomY, name);
         Settler settler = new Settler(enums.units.Unit.getUnitByName("settler"), randomX, randomY, name);
         addMeleeUnit(melee);
