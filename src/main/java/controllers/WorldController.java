@@ -63,7 +63,14 @@ public class WorldController {
 
     public static String nextTurnImpossible() {
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
-        if (currentCivilization.getCurrentTechnology() == null) {
+        boolean civilizationHasAllTechnologies = true;
+        for (Technologies technology : Technologies.values()) {
+            if (!currentCivilizationHasTechnology(technology)){
+                civilizationHasAllTechnologies = false;
+                break;
+            }
+        }
+        if (currentCivilization.getCurrentTechnology() == null && !civilizationHasAllTechnologies) {
             return "you have to choose a technology to research";
         } else {
             for (Unit unit : currentCivilization.getAllUnits()) {

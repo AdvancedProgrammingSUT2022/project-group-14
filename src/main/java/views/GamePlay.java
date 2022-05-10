@@ -635,6 +635,10 @@ public class GamePlay {
 
     public static void startResearch(Technologies technology) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if(currentCivilization.getTechnologies().get(technology) <= 0){
+            System.out.println("you have already studied this technology");
+            return;
+        }
         for (String requiredTechnologyName : technology.getRequiredTechnologies()) {
             Technologies requiredTechnology = Technologies.getTechnologyByName(requiredTechnologyName);
             if (currentCivilization.getTechnologies().get(requiredTechnology) > 0) {
