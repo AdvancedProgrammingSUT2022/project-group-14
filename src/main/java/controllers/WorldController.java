@@ -55,6 +55,7 @@ public class WorldController {
         UnitController.resetMovingPoints(currentCivilization);
         world.nextTurn();
         resetSelection();
+        MapController.tileCellsRefresh();
     }
 
     public static String nextTurnImpossible() {
