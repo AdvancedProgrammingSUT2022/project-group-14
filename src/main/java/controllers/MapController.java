@@ -66,6 +66,8 @@ public class MapController {
             }
     }
 
+
+
     private static void bordersInit() {
         for (int i = 0; i <= width - 1; i++) {
             upLayerBordersInit(i);
@@ -188,6 +190,33 @@ public class MapController {
     }
 
     private Tile getTileByRiver(int x, int y, int i) {
+        if (y % 2 == 1) {
+            if (i == 0)
+                return tilesMap[x - 1][y];
+            else if (i == 1)
+                return tilesMap[x][y + 1];
+            else if (i == 2)
+                return tilesMap[x + 1][y + 1];
+            else if (i == 3)
+                return tilesMap[x + 1][y];
+            else if (i == 4)
+                return tilesMap[x + 1][y - 1];
+            else if (i == 5)
+                return tilesMap[x][y - 1];
+        } else if (y % 2 == 0) {
+            if (i == 0)
+                return tilesMap[x - 1][y];
+            if (i == 1)
+                return tilesMap[x - 1][y + 1];
+            if (i == 2)
+                return tilesMap[x][y + 1];
+            if (i == 3)
+                return tilesMap[x + 1][y];
+            if (i == 4)
+                return tilesMap[x][y - 1];
+            if (i == 5)
+                return tilesMap[x - 1][y - 1];
+        }
         return null;
     }
 
@@ -200,6 +229,5 @@ public class MapController {
             }
         }
     }
-
 
 }
