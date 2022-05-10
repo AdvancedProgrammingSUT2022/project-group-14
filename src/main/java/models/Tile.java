@@ -4,8 +4,8 @@ import controllers.TileController;
 import controllers.WorldController;
 import enums.Colors;
 import enums.Improvements;
-import enums.tiles.TileFeatureTypes;
 import enums.tiles.TileBaseTypes;
+import enums.tiles.TileFeatureTypes;
 import models.resources.BonusResource;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
@@ -34,7 +34,7 @@ public class Tile {
     private Improvements improvement;
     private int improvementTurnsLeftToBuild; // 9999 -> has not been started to build | 0 -> has been build
 
-    private boolean[] isRiver = new boolean[6];
+    private boolean[] isRiver;
     private int roadState; // 9999 -> has not been started to build | 0 -> has been build
     private int railRoadState; // 9999 -> has not been started to build | 0 -> has been build
 
@@ -58,6 +58,9 @@ public class Tile {
         this.improvementTurnsLeftToBuild = 9999;
         this.roadState = 9999;
         this.railRoadState = 9999;
+        this.isRiver = new boolean[6];
+        for (int i = 0; i < 6; i++)
+            this.isRiver[i] = false;
     }
 
     public void addAvailableResourcesToCivilizationAndTile(){
@@ -174,7 +177,12 @@ public class Tile {
         return this.movingPoint;
     }
 
+    public void setMovingPoint(int movingPoint) {
+        this.movingPoint = movingPoint;
+    }
+
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
+        //TODO this returnes wrong answer
         if (x == -1 && y == 0 && isRiver[0]) {
             return movingPoints;
         } else if (x == 0 && y == 1 && isRiver[1]) {
@@ -189,10 +197,6 @@ public class Tile {
             return movingPoints;
         }
         return this.movingPoint;
-    }
-
-    public void setMovingPoint(int movingPoint) {
-        this.movingPoint = movingPoint;
     }
 
     public Colors getColor() {
@@ -235,12 +239,8 @@ public class Tile {
         this.bonusResource = bonusResource;
     }
 
-    public boolean[] isRiver() {
+    public boolean[] getIsRiver() {
         return this.isRiver;
-    }
-
-    public void setIsRiver(boolean[] isRiver) {
-        this.isRiver = isRiver;
     }
 
     public int getRoadState() {

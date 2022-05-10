@@ -1,8 +1,8 @@
 package enums.tiles;
 
-import java.util.Random;
-
 import enums.Colors;
+
+import java.util.Random;
 
 public enum TileBaseTypes implements TileTypes {
 
@@ -24,7 +24,7 @@ public enum TileBaseTypes implements TileTypes {
     private Colors color;
 
     TileBaseTypes(String name, double food, double production, double gold, int combatImpact, int movingPoint,
-            Colors color) {
+                  Colors color) {
         this.name = name;
         this.food = food;
         this.production = production;

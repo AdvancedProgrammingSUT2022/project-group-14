@@ -9,6 +9,7 @@ import models.units.NonCombatUnit;
 import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MapController {
 
@@ -26,6 +27,8 @@ public class MapController {
                 tilesMap[i][j] = Tile.generateRandomTile(i, j);
             }
         }
+        mapInit();
+        generateRivers();
     }
 
     // Initializations for tiles map and cells map
@@ -95,7 +98,7 @@ public class MapController {
     }
 
     private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
-        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
+        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 2; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
                 cellsMap[i][j].setColor(tile.getColor());
             }
@@ -113,8 +116,43 @@ public class MapController {
             }
     }
 
-    public static void mapInit() {
-        generateMap();
+    // River initialization
+    private static void setRiverCells(int x, int y, int riverSide) {
+        int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
+        if (riverSide == 0 || riverSide == 3) {
+            int direction = 1;
+            if (riverSide == 3) direction = -1;
+            for (int i = cellX - direction * 3, j = cellY - 2; j <= cellY + 2; j++)
+                cellsMap[i][j].setColor(Colors.BLUE);
+        } else if (riverSide == 1 || riverSide == 5) {
+            int direction = 1;
+            if (riverSide == 5) direction = -1;
+            for (int i = cellX - 2, j = cellY + direction * 3; i <= cellX; i++, j += direction)
+                cellsMap[i][j].setColor(Colors.BLUE);
+        } else {
+            int direction = 1;
+            if (riverSide == 4) direction = -1;
+            for (int i = cellX + 3, j = cellY + direction * 3; i >= cellX + 1; i--, j += direction)
+                cellsMap[i][j].setColor(Colors.BLUE);
+        }
+
+
+    }
+
+    private static void generateRivers() {
+        Random rand = new Random();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                for (int k = 0; k < 6; k++) {
+                    if (rand.nextInt(12) == 0) {
+                        setRiver(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+
+    private static void mapInit() {
         bordersInit();
         tileCentersInit();
         tileCellsRefresh();
@@ -183,22 +221,47 @@ public class MapController {
         return tilesMap[x][y];
     }
 
-    private void setRiver(int x, int y, int i) {
-
+    private static void setRiver(int x, int y, int riverSide) { // creates river
+        boolean[] isRiver = tilesMap[x][y].getIsRiver();
+        isRiver[riverSide] = true;
+        Tile neighbourTile = getTileByRiver(x, y, riverSide);
+        if (neighbourTile == null)
+            return;
+        boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
+        int neighbourRiverSide = (riverSide + 3) % 6;
+        neighbourIsRiver[neighbourRiverSide] = true;
+        setRiverCells(x, y, riverSide);
     }
 
-    private Tile getTileByRiver(int x, int y, int i) {
-        return null;
-    }
-
-    private void generateRivers() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
-                for (int k = 0; k < 6; k++) {
-
-                }
-            }
+    private static Tile getTileByRiver(int x, int y, int riverSide) {
+        if (y % 2 == 1) {
+            if (riverSide == 0 && x - 1 >= 0)
+                return tilesMap[x - 1][y];
+            else if (riverSide == 1 && y + 1 < length)
+                return tilesMap[x][y + 1];
+            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
+                return tilesMap[x + 1][y + 1];
+            else if (riverSide == 3 && x + 1 < width)
+                return tilesMap[x + 1][y];
+            else if (riverSide == 4 && x + 1 < width && y - 1 >= 0)
+                return tilesMap[x + 1][y - 1];
+            else if (riverSide == 5 && y - 1 >= 0)
+                return tilesMap[x][y - 1];
+        } else if (y % 2 == 0) {
+            if (riverSide == 0 && x - 1 >= 0)
+                return tilesMap[x - 1][y];
+            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
+                return tilesMap[x - 1][y + 1];
+            if (riverSide == 2 && y + 1 < length)
+                return tilesMap[x][y + 1];
+            if (riverSide == 3 && x + 1 < width)
+                return tilesMap[x + 1][y];
+            if (riverSide == 4 && y - 1 >= 0)
+                return tilesMap[x][y - 1];
+            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
+                return tilesMap[x - 1][y - 1];
         }
+        return null;
     }
 
 
