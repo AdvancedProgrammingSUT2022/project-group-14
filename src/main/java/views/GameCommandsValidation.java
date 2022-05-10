@@ -177,8 +177,8 @@ public class GameCommandsValidation {
     }
 
     public void checkShowMapByPosition(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x")) - 1;
-        int y = Integer.parseInt(matcher.group("y")) - 1;
+        int x = Integer.parseInt(matcher.group("x"));
+        int y = Integer.parseInt(matcher.group("y"));
         if (TileController.selectedTileIsValid(x, y)) {
             GamePlay.showMapBasedOnTile(x, y);
         } else System.out.println("given position is invalid");

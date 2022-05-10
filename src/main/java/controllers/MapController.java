@@ -67,7 +67,6 @@ public class MapController {
     }
 
 
-
     private static void bordersInit() {
         for (int i = 0; i <= width - 1; i++) {
             upLayerBordersInit(i);
@@ -184,37 +183,52 @@ public class MapController {
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
     }
+    //-------------------------
 
-    private void setRiver(int x, int y, int i) {
+    private void setRiver(int x, int y, int riverSide) {
 
     }
 
-    private Tile getTileByRiver(int x, int y, int i) {
+    private void setRiverCells(int x, int y, int riverSide) {
+        int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
+        if (riverSide == 0 || riverSide == 3) {
+            int direction = 1;
+            if (riverSide == 3) {
+                direction = -1;
+            }
+            for (int i = cellX - direction * 2, j = cellY - 2; j <= cellY + 2; j++)
+                cellsMap[i][j].setColor(Colors.BLACK);
+        }
+
+
+    }
+
+    private Tile getTileByRiver(int x, int y, int riverSide) {
         if (y % 2 == 1) {
-            if (i == 0)
+            if (riverSide == 0)
                 return tilesMap[x - 1][y];
-            else if (i == 1)
+            else if (riverSide == 1)
                 return tilesMap[x][y + 1];
-            else if (i == 2)
+            else if (riverSide == 2)
                 return tilesMap[x + 1][y + 1];
-            else if (i == 3)
+            else if (riverSide == 3)
                 return tilesMap[x + 1][y];
-            else if (i == 4)
+            else if (riverSide == 4)
                 return tilesMap[x + 1][y - 1];
-            else if (i == 5)
+            else if (riverSide == 5)
                 return tilesMap[x][y - 1];
         } else if (y % 2 == 0) {
-            if (i == 0)
+            if (riverSide == 0)
                 return tilesMap[x - 1][y];
-            if (i == 1)
+            if (riverSide == 1)
                 return tilesMap[x - 1][y + 1];
-            if (i == 2)
+            if (riverSide == 2)
                 return tilesMap[x][y + 1];
-            if (i == 3)
+            if (riverSide == 3)
                 return tilesMap[x + 1][y];
-            if (i == 4)
+            if (riverSide == 4)
                 return tilesMap[x][y - 1];
-            if (i == 5)
+            if (riverSide == 5)
                 return tilesMap[x - 1][y - 1];
         }
         return null;

@@ -4,21 +4,21 @@ import controllers.*;
 import enums.Colors;
 import enums.Improvements;
 import enums.Technologies;
-import models.*;
-import models.units.*;
+import models.Building;
+import models.City;
+import models.Civilization;
+import models.Tile;
+import models.units.CombatUnit;
+import models.units.Settler;
+import models.units.Unit;
+import models.units.Worker;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 
 public class GamePlay {
-
-    public void run(Scanner scanner) {
-        String input;
-        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
-        do {
-            input = scanner.nextLine();
-        } while (gameCommandsValidation.checkCommands(input));
-    }
 
     // selecting methods
     public static void selectUnit(int x, int y, String militaryStatus) {
@@ -146,7 +146,7 @@ public class GamePlay {
 
     // showing map methods
     public static void showMapBasedOnTile(int x, int y) {
-        int[] tileCenter = MapController.getTileCenterByCoordinates(x,y);
+        int[] tileCenter = MapController.getTileCenterByCoordinates(x, y);
         showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
     }
 
@@ -157,8 +157,6 @@ public class GamePlay {
             }
             System.out.println();
         }
-
-        //TODO move to gameplay
     }
 
     // units methods
@@ -500,5 +498,13 @@ public class GamePlay {
                 technology.getName() + " technology";
         currentCivilization.addNotification(notification);
 
+    }
+
+    public void run(Scanner scanner) {
+        String input;
+        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
+        do {
+            input = scanner.nextLine();
+        } while (gameCommandsValidation.checkCommands(input));
     }
 }
