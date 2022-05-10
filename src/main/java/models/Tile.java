@@ -182,7 +182,7 @@ public class Tile {
     }
 
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
-        //TODO this returnes wrong answer
+        //TODO this returns wrong answer
         if (x == -1 && y == 0 && isRiver[0]) {
             return movingPoints;
         } else if (x == 0 && y == 1 && isRiver[1]) {
@@ -212,6 +212,13 @@ public class Tile {
     }
 
     public void setFeature(TileFeatureTypes feature) {
+        if (feature == null){
+            this.food -= this.feature.getFood();
+            this.production -= this.feature.getProduction();
+            this.gold -= this.feature.getGold();
+            this.movingPoint -= this.feature.getMovementPoint();
+            this.combatImpact -= this.feature.getCombatImpact();
+        }
         this.feature = feature;
     }
 

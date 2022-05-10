@@ -41,15 +41,27 @@ public enum TileFeatureTypes implements TileTypes{
         this.possibleResources = possibleResources;
     }
 
-    public String nameGetter() {
+    public String getName() {
         return this.name;
     }
 
-    public double foodGetter() {
+    public double getFood() {
         return this.food;
     }
-    public void foodSetter(double food) {
-        this.food = food;
+
+    public double getProduction() {
+        return production;
     }
 
+    public double getGold() {
+        return gold;
+    }
+
+    public int getCombatImpact() {
+        return combatImpact;
+    }
+
+    public int getMovementPoint() {
+        return movementPoint;
+    }
 }

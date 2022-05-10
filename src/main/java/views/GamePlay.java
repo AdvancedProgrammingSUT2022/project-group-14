@@ -20,6 +20,14 @@ import java.util.regex.Matcher;
 
 public class GamePlay {
 
+    public void run(Scanner scanner) {
+        String input;
+        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
+        do {
+            input = scanner.nextLine();
+        } while (gameCommandsValidation.checkCommands(input));
+    }
+
     // selecting methods
     public static void selectUnit(int x, int y, String militaryStatus) {
         Tile wantedTile = MapController.getTileByCoordinates(x, y);
@@ -84,7 +92,7 @@ public class GamePlay {
         int counter = 1;
         for (City city : currentCivilization.getCities()) {
             int x = city.getCenterOfCity().getX() + 1, y = city.getCenterOfCity().getY() + 1;
-            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + "coordinates");
+            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + " coordinates");
         }
     }
 
@@ -497,7 +505,7 @@ public class GamePlay {
 
     public static void startResearch(Technologies technology) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        if(currentCivilization.getTechnologies().get(technology) <= 0){
+        if (currentCivilization.getTechnologies().get(technology) <= 0) {
             System.out.println("you have already studied this technology");
             return;
         }
@@ -515,46 +523,40 @@ public class GamePlay {
 
     }
 
-    public void run(Scanner scanner) {
-        String input;
-        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
-        do {
-            input = scanner.nextLine();
-        } while (gameCommandsValidation.checkCommands(input));
-    }
-  
-    public static void buyTile(int x, int y){
+    public static void buyTile(int x, int y) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (City city : currentCivilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())){
-                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())){
+                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())) {
+                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())) {
                         System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
-                    }else System.out.println("this tile belongs to another civilization");
+                    } else {
+                        System.out.println("this tile belongs to another civilization");
+                    }
+                    return;
                 }
             }
         }
         System.out.println("you should choose a neighbor tile to one of your cities territory");
     }
 
-    public static void upgradeUnit(enums.units.Unit unitEnum){
+    public static void upgradeUnit(enums.units.Unit unitEnum) {
         String error;
         if ((error = UnitController.upgradeUnit(unitEnum)) != null) {
             System.out.println(error);
-        }else System.out.println("unit upgraded successfully");
+        } else System.out.println("unit upgraded successfully");
     }
 
-    public static void showCityBanner(){
+    public static void showCityBanner() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
-            return;
+        } else {
+            System.out.println(WorldController.getSelectedCity().getInfo() + WorldController.getSelectedCity().getCombatInfo());
         }
-        //TODO
-
 
     }
 
-    public static void showEmployedCitizens(){
+    public static void showEmployedCitizens() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;
@@ -562,7 +564,7 @@ public class GamePlay {
         System.out.println(CityController.employedCitizensData(WorldController.getSelectedCity()));
     }
 
-    public static void showUnemployedCitizens(){
+    public static void showUnemployedCitizens() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;

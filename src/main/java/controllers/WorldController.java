@@ -74,8 +74,9 @@ public class WorldController {
             return "you have to choose a technology to research";
         } else {
             for (Unit unit : currentCivilization.getAllUnits()) {
-                if ((unit.getMovementPoint() > 0) || (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep())) {
-                    return "units need to be moved";
+                int x = unit.getCurrentX() + 1, y = unit.getCurrentY() + 1;
+                if ((unit.getMovementPoint() > 0) && (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep())) {
+                    return unit.getName() + " in ( " + x + " , " + y + " ) coordinates needs to be moved";
                 }
             }
         }
