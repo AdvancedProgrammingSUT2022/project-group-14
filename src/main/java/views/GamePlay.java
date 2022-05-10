@@ -20,6 +20,14 @@ import java.util.regex.Matcher;
 
 public class GamePlay {
 
+    public void run(Scanner scanner) {
+        String input;
+        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
+        do {
+            input = scanner.nextLine();
+        } while (gameCommandsValidation.checkCommands(input));
+    }
+
     // selecting methods
     public static void selectUnit(int x, int y, String militaryStatus) {
         Tile wantedTile = MapController.getTileByCoordinates(x, y);
@@ -514,14 +522,6 @@ public class GamePlay {
         currentCivilization.addNotification(notification);
 
     }
-
-    public void run(Scanner scanner) {
-        String input;
-        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
-        do {
-            input = scanner.nextLine();
-        } while (gameCommandsValidation.checkCommands(input));
-    }
   
     public static void buyTile(int x, int y){
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
@@ -547,10 +547,9 @@ public class GamePlay {
     public static void showCityBanner(){
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
-            return;
+        } else {
+            System.out.println(WorldController.getSelectedCity().getInfo() + WorldController.getSelectedCity().getCombatInfo());
         }
-        //TODO
-
 
     }
 

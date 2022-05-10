@@ -171,7 +171,6 @@ public class CityController {
                 return "can't produce settlers in an unhappy civilization";
             }
             unit = new Settler(unitEnum, wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
-
         } else if (unitEnum.getName().equals("worker")) {
             unit = new Worker(unitEnum,
                     wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
@@ -183,7 +182,7 @@ public class CityController {
                     wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
         }
 
-        if (unitEnum.getRequiredResource() != null){
+        if (unitEnum.getRequiredResource() != null) {
             currentCivilization.getStrategicResources().put(unitEnum.getRequiredResource().nameGetter(),
                     currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().nameGetter()) - 1);
         }
@@ -192,8 +191,8 @@ public class CityController {
         wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
         wantedCity.setCurrentProductionRemainingCost(unitEnum.getCost());
 
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
+        int x = WorldController.getSelectedCity().getCenterOfCity().getX() + 1;
+        int y = WorldController.getSelectedCity().getCenterOfCity().getY() + 1;
         String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
                 unit.getName() + " in ( " + x + " , " + y + " ) coordinates";
         currentCivilization.addNotification(notification);
@@ -205,15 +204,15 @@ public class CityController {
         wantedCity.setCurrentBuilding(building);
         wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
         wantedCity.setCurrentProductionRemainingCost(building.getCost());
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
+        int x = WorldController.getSelectedCity().getCenterOfCity().getX() + 1;
+        int y = WorldController.getSelectedCity().getCenterOfCity().getY() + 1;
         String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
                 "building" + " in ( " + x + " , " + y + " ) coordinates";
-        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
+        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x - 1, y - 1).getCivilizationName()).addNotification(notification);
         return null;
     }
 
-    public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY){
+    public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY) {
         if (civilization.getGold() < 100) return "you don't have enough gold for buying this tile";
 
         civilization.setGold(civilization.getGold() - 100);
@@ -223,7 +222,7 @@ public class CityController {
         return "tile was bought successfully";
     }
 
-    public static String unemployedCitizensData(City city){
+    public static String unemployedCitizensData(City city) {
         ArrayList<Citizen> unemployedCitizens = new ArrayList<>();
         for (Citizen citizen : city.getCitizens()) {
             if (!citizen.isWorking())
@@ -240,7 +239,7 @@ public class CityController {
         return output.toString();
     }
 
-    public static String employedCitizensData(City city){
+    public static String employedCitizensData(City city) {
         ArrayList<Citizen> employedCitizens = new ArrayList<>();
         for (Citizen citizen : city.getCitizens()) {
             if (citizen.isWorking())
