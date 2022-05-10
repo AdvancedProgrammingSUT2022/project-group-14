@@ -96,7 +96,7 @@ public class MapController {
     }
 
     private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
-        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
+        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 2; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
                 cellsMap[i][j].setColor(tile.getColor());
             }
@@ -119,6 +119,7 @@ public class MapController {
         bordersInit();
         tileCentersInit();
         tileCellsRefresh();
+//        MapController.setRiverCells(1,1 , 0);
     }
 
     public static void printStringToCellsMap(String input, int x, int y) {
@@ -189,7 +190,7 @@ public class MapController {
 
     }
 
-    private void setRiverCells(int x, int y, int riverSide) {
+    private static void setRiverCells(int x, int y, int riverSide) {
         int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
         if (riverSide == 0 || riverSide == 3) {
             int direction = 1;
