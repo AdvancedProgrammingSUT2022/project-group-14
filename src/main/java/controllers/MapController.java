@@ -26,6 +26,7 @@ public class MapController {
                 tilesMap[i][j] = Tile.generateRandomTile(i, j);
             }
         }
+        mapInit();
     }
 
     // Initializations for tiles map and cells map
@@ -65,7 +66,6 @@ public class MapController {
                 }
             }
     }
-
 
     private static void bordersInit() {
         for (int i = 0; i <= width - 1; i++) {
@@ -114,17 +114,40 @@ public class MapController {
             }
     }
 
-    public static void mapInit() {
+    // River initialization
+    private static void setRiverCells(int x, int y, int riverSide) {
+        int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
+        if (riverSide == 0 || riverSide == 3) {
+            int direction = 1;
+            if (riverSide == 3) direction = -1;
+            for (int i = cellX - direction * 3, j = cellY - 2; j <= cellY + 2; j++)
+                cellsMap[i][j].setColor(Colors.BLUE);
+        } else if (riverSide == 1 || riverSide == 5) {
+            int direction = 1;
+            if (riverSide == 5) direction = -1;
+            for (int i = cellX - 2, j = cellY + direction * 3; i <= cellX; i++, j += direction)
+                cellsMap[i][j].setColor(Colors.BLUE);
+        } else {
+            int direction = 1;
+            if (riverSide == 4) direction = -1;
+            for (int i = cellX + 3, j = cellY + direction * 3; i >= cellX; i--, j += direction)
+                cellsMap[i][j].setColor(Colors.BLUE);
+        }
+
+
+    }
+
+    private static void mapInit() {
         generateMap();
         bordersInit();
         tileCentersInit();
         tileCellsRefresh();
-        setRiverCells(1,1,0);
-        setRiverCells(1,1,1);
-        setRiverCells(1,1,2);
-        setRiverCells(1,1,3);
-        setRiverCells(1,1,4);
-        setRiverCells(1,1,5);
+        setRiverCells(1, 1, 0);
+        setRiverCells(1, 1, 1);
+        setRiverCells(1, 1, 2);
+        setRiverCells(1, 1, 3);
+        setRiverCells(1, 1, 4);
+        setRiverCells(1, 1, 5);
 
     }
 
@@ -190,32 +213,15 @@ public class MapController {
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
     }
-    //-------------------------
 
-    private static void setRiverCells(int x, int y, int riverSide) {
-        int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
-        if (riverSide == 0 || riverSide == 3) {
-            int direction = 1;
-            if (riverSide == 3) direction = -1;
-            for (int i = cellX - direction * 3, j = cellY - 2; j <= cellY + 2; j++)
-                cellsMap[i][j].setColor(Colors.PURPLE);
-        } else if (riverSide == 1 || riverSide == 5) {
-            int direction = 1;
-            if (riverSide == 5) direction = -1;
-            for (int i = cellX - 2, j = cellY + direction * 3; i <= cellX; i++, j += direction)
-                cellsMap[i][j].setColor(Colors.PURPLE);
-        } else {
-            int direction = 1;
-            if (riverSide == 4) direction = -1;
-            for (int i = cellX + 3, j = cellY + direction * 3; i >= cellX; i--, j += direction)
-                cellsMap[i][j].setColor(Colors.PURPLE);
-        }
-
-
-    }
-
-    private void setRiver(int x, int y, int riverSide) {
-
+    private void setRiver(int x, int y, int riverSide) { // creates river
+        boolean[] isRiver = tilesMap[x][y].getIsRiver();
+        isRiver[riverSide] = true;
+        Tile neighbourTile = getTileByRiver(x, y, riverSide);
+        boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
+        int neghbourRiverSide = (riverSide + 3) % 6;
+        neighbourIsRiver[neghbourRiverSide] = true;
+        setRiverCells(x, y, riverSide);
     }
 
     private Tile getTileByRiver(int x, int y, int riverSide) {
@@ -258,5 +264,4 @@ public class MapController {
             }
         }
     }
-
 }

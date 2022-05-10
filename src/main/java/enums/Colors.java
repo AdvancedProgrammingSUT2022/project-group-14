@@ -2,6 +2,7 @@ package enums;
 
 public enum Colors {
     RESET("\u001B[0m"),
+    BLUE("\u001B[48;5;20m"),
     BLACK("\u001B[40m"),
     RED("\u001B[41m"),
     GREEN("\u001B[42m"),
