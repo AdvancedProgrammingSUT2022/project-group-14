@@ -11,5 +11,12 @@ public class Main {
         MapController mapController = new MapController();
         MapController.mapInit();
         MapController.showMap();
+
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println();
+
+        MapController.showMapOnTiles(3,10);
     }
 }

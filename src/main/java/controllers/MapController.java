@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class MapController {
 
     private static final int width = 5;
-    private static final int length = 7;
+    private static final int length = 20;
     private static final int outputMapWidth = 6 * width + 3;
     private static final int outputMapLength = 8 * length + 3;
     private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapLength];
@@ -118,17 +118,27 @@ public class MapController {
         for (int i = 0; i < 6 * MapController.getWidth() + 3; i++) {
             for (int j = 0; j < 8 * MapController.getLength() + 3; j++) {
                 System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +
-                        MapController.getCellsMap()[i][j].getCh() + Colors.RESET.getAnsiEscapeCode());
+                        MapController.getCellsMap()[i][j].getCharacter() + Colors.RESET.getAnsiEscapeCode());
             }
             System.out.println();
         }
     }
 
-    public static void showMapOnTiles(int i , int j)
-    {
-        tileCellsRefresh();
-
+    public static void showMapByCordinates(int x1, int y1, int x2, int y2) {
+        for (int i = x1; i <= x2; i++) {
+            for (int j = y1; j <= y2; j++) {
+                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +
+                        MapController.getCellsMap()[i][j].getCharacter() + Colors.RESET.getAnsiEscapeCode());
+            }
+            System.out.println();
+        }
     }
+
+    public static void showMapOnTiles(int i, int j) {
+        tileCellsRefresh();
+        showMapByCordinates(tileCenter[i][j][0] - 11, tileCenter[i][j][1] - 28, tileCenter[i][j][0] + 11, tileCenter[i][j][1] + 28);
+    }
+
 
     public static void mapInit() {
         generateMap();

@@ -149,7 +149,7 @@ public class GamePlay {
         for (int i = 0; i < 6 * MapController.getWidth() + 3; i++) {
             for (int j = 0; j < 8 * MapController.getLength() + 3; j++) {
                 System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +
-                        MapController.getCellsMap()[i][j].getCh() + Colors.RESET.getAnsiEscapeCode());
+                        MapController.getCellsMap()[i][j].getCharacter() + Colors.RESET.getAnsiEscapeCode());
             }
             System.out.println();
         }

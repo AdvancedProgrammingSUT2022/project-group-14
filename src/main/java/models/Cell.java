@@ -14,7 +14,7 @@ public class Cell {
         this.color = color;
     }
 
-    public char getCh() {
+    public char getCharacter() {
         return this.ch;
     }
 
