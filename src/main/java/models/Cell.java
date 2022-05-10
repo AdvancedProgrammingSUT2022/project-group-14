@@ -14,11 +14,11 @@ public class Cell {
         this.color = color;
     }
 
-    public char getCh() {
+    public char getCharacter() {
         return this.ch;
     }
 
-    public void setCh(char ch) {
+    public void setCharacter(char ch) {
         this.ch = ch;
     }
 

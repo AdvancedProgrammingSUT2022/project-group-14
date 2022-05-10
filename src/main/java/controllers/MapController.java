@@ -12,13 +12,12 @@ import java.util.ArrayList;
 
 public class MapController {
 
-    private static final int width = 40;
-    private static final int length = 80;
-    private static final int outputMapWidth = 6 * width + 3;
-    private static final int outputMapLength = 8 * length + 3;
-
-    private static int[][][] tileCenter = new int[width][length][2];
+    public static final int width = 40;
+    public static final int length = 80;
+    public static final int outputMapWidth = 6 * width + 3;
+    public static final int outputMapLength = 8 * length + 3;
     private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapLength];
+    private static int[][][] tileCenters = new int[width][length][2];
     private static Tile[][] tilesMap = new Tile[width][length];
 
     public static void generateMap() {
@@ -29,6 +28,7 @@ public class MapController {
         }
     }
 
+    // Initializations for tiles map and cells map
     private static void upLayerBordersInit(int row) {
         for (int j = 0; j < 3; j++)
             for (int k = 0; k < outputMapLength; k++) {
@@ -37,13 +37,13 @@ public class MapController {
                 cell.setColor(Colors.RESET);
 
                 if (k % 16 == (2 - j) && (k < outputMapLength - 3 || row > 0) && (k > 2 || row < width)) {
-                    cell.setCh('/');
+                    cell.setCharacter('/');
                 } else if (k % 16 == (8 + j) && (row < width || k < outputMapLength - 3)) {
-                    cell.setCh('\\');
-                } else if (j == 2 && (k % 16) >= 11 && (k % 16) <= 15) {
-                    cell.setCh('_');
+                    cell.setCharacter('\\');
+                } else if (j == 2 && (k % 16) >= 11) {
+                    cell.setCharacter('_');
                 } else {
-                    cell.setCh(' ');
+                    cell.setCharacter(' ');
                 }
             }
     }
@@ -54,14 +54,14 @@ public class MapController {
                 Cell cell = new Cell();
                 cellsMap[6 * row + 3 + j][k] = cell;
                 cell.setColor(Colors.RESET);
-                if (k % 16 == (0 + j)) {
-                    cell.setCh('\\');
+                if (k % 16 == (j)) {
+                    cell.setCharacter('\\');
                 } else if (k % 16 == (10 - j)) {
-                    cell.setCh('/');
+                    cell.setCharacter('/');
                 } else if (j == 2 && (k % 16) >= 3 && (k % 16) <= 7) {
-                    cell.setCh('_');
+                    cell.setCharacter('_');
                 } else {
-                    cell.setCh(' ');
+                    cell.setCharacter(' ');
                 }
             }
     }
@@ -75,43 +75,41 @@ public class MapController {
     }
 
     private static void tileCentersInit() {
-        for (int x = 2, i = 0; x < outputMapWidth - width; x += 6, i++)
-            for (int y = 5, j = 0; y < outputMapLength; y += 16, j += 2) {
-                tileCenter[i][j][0] = x;
-                tileCenter[i][j][1] = y;
+        for (int x = 2, i = 0; i < width; x += 6, i++)
+            for (int y = 5, j = 0; j < length; y += 16, j += 2) {
+                tileCenters[i][j][0] = x;
+                tileCenters[i][j][1] = y;
             }
-        for (int x = 5, i = 0; x < outputMapWidth; x += 6, i++)
-            for (int y = 13, j = 1; y < outputMapLength; y += 16, j += 2) {
-                tileCenter[i][j][0] = x;
-                tileCenter[i][j][1] = y;
+        for (int x = 5, i = 0; i < width; x += 6, i++)
+            for (int y = 13, j = 1; j < length; y += 16, j += 2) {
+                tileCenters[i][j][0] = x;
+                tileCenters[i][j][1] = y;
             }
     }
 
-    private static void upLayerTileCellsInit(int[] tileCenter, Tile tile) {
+    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
                 cellsMap[i][j].setColor(tile.getColor());
             }
     }
 
-    private static void downLayerTileCellsInit(int[] tileCenter, Tile tile) {
+    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
-            for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4
-                    - (i - tileCenter[0] - 1); j++) {
+            for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
                 cellsMap[i][j].setColor(tile.getColor());
             }
     }
 
-    private static void tileCellsInit() { // initialize cells of every tile
-        String coordinates = "";
+    public static void tileCellsRefresh() { // initialize cells of every tile
+        String coordinates;
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                upLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
-                downLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
+                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
+                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
                 coordinates = "(" + i + "," + j + ")";
-                printStringToCellsMap(coordinates, tileCenter[i][j][0] - 1, tileCenter[i][j][1] - 3);
-                printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenter[i][j][0] + 1,
-                        tileCenter[i][j][1] - 4);
+                printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
+                printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
             }
     }
 
@@ -119,40 +117,19 @@ public class MapController {
         generateMap();
         bordersInit();
         tileCentersInit();
-        tileCellsInit();
-        printStringToCellsMap("salam", 3, 1);
+        tileCellsRefresh();
     }
 
     public static void printStringToCellsMap(String input, int x, int y) {
         for (int i = 0; i < input.length(); i++) {
-            cellsMap[x][i + y].setCh(input.charAt(i));
+            cellsMap[x][i + y].setCharacter(input.charAt(i));
         }
     }
 
-    public static int getWidth() {
-        return width;
-    }
-
-    public static int getLength() {
-        return length;
-    }
-
     public static void resetMap() {
-        tileCenter = new int[width][length][2];
+        tileCenters = new int[width][length][2];
         cellsMap = new Cell[outputMapWidth][outputMapLength];
         tilesMap = new Tile[width][length];
-    }
-
-    public static Tile[][] getMap() {
-        return tilesMap;
-    }
-
-    public static Cell[][] getCellsMap() {
-        return cellsMap;
-    }
-
-    public static Tile getTileByCoordinates(int x, int y) {
-        return tilesMap[x][y];
     }
 
     public static void updateUnitPositions() {
@@ -171,15 +148,58 @@ public class MapController {
         }
         for (Tile[] tiles : tilesMap) {
             for (Tile tile : tiles) {
-                if (tile.getCombatUnit() != null &&
-                        (tile.getCombatUnit().getCurrentX() != tile.getX() || tile.getCombatUnit().getCurrentY() != tile.getY())) {
+                if (tile.getCombatUnit() != null && (tile.getCombatUnit().getCurrentX() != tile.getX() || tile.getCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setCombatUnit(null);
                 }
-                if (tile.getNonCombatUnit() != null &&
-                        (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
+                if (tile.getNonCombatUnit() != null && (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setNonCombatUnit(null);
                 }
             }
         }
     }
+
+    // Getters and Setters
+    public static int getWidth() {
+        return width;
+    }
+
+    public static int getLength() {
+        return length;
+    }
+
+    public static Tile[][] getMap() {
+        return tilesMap;
+    }
+
+    public static Cell[][] getCellsMap() {
+        return cellsMap;
+    }
+
+    public static int[] getTileCenterByCoordinates(int x, int y) {
+        return tileCenters[x][y];
+    }
+
+    public static Tile getTileByCoordinates(int x, int y) {
+        return tilesMap[x][y];
+    }
+//------------------------------------------------------------------------------------------------
+    private void setRiver(int x, int y, int i) {
+
+    }
+
+    private Tile getTileByRiver(int x, int y, int i) {
+        return null;
+    }
+
+    private void generateRivers() {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                for (int k = 0; k < 6; k++) {
+
+                }
+            }
+        }
+    }
+
+
 }
