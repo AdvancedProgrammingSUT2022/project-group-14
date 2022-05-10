@@ -3,6 +3,7 @@ package models.units;
 public class CombatUnit extends Unit{
     private double defenseStrength;
     private double attackStrength;
+    private int range;
 
     private boolean isAlert;
     private boolean isFortifiedTillHealed;
@@ -12,6 +13,23 @@ public class CombatUnit extends Unit{
         super(unitInfo, x, y, civilization);
         this.defenseStrength = unitInfo.getCombatStrength();
         this.attackStrength = unitInfo.getCombatStrength();
+        this.range = unitInfo.getRange();
+    }
+
+    public void setDefenseStrength(double defenseStrength) {
+        this.defenseStrength = defenseStrength;
+    }
+
+    public void setAttackStrength(double attackStrength) {
+        this.attackStrength = attackStrength;
+    }
+
+    public int getRange() {
+        return range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
     }
 
     public void wakeUpFromAlert(){

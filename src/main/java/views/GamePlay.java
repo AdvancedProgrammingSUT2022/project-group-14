@@ -157,156 +157,20 @@ public class GamePlay {
     }
 
     // showing map methods
-    public void showMap() {
-        for (int i = 0; i < 6 * MapController.getWidth() + 3; i++) {
-            for (int j = 0; j < 8 * MapController.getLength() + 3; j++) {
-                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +
-                        MapController.getCellsMap()[i][j].getCh() + Colors.RESET.getAnsiEscapeCode());
-            }
-            System.out.println();
-        }
-    }
-
     public static void showMapBasedOnTile(int x, int y) {
-        Tile tile = MapController.getTileByCoordinates(x, y);
-        WorldController.setSelectedTile(tile);
-        Tile[][] allTiles = MapController.getMap();
-        Tile[][] wantedTiles = new Tile[3][12];
-        int k = 0, z = 0;
-        for (int i = Math.max(tile.getX() - 1, 0); i < Math.min(tile.getX() + 2, MapController.getWidth()); i++, k++) {
-            z = 0;
-            for (int j = Math.max(tile.getY() - 5, 0); j < Math.min(tile.getY() + 7, MapController.getLength()); j++, z++) {
-                wantedTiles[k][z] = allTiles[i][j];
-            }
-        }
-        showMap(allTiles, k, z, Math.max(tile.getX() - 1, 0), Math.max(tile.getY() - 5, 0));
+        int[] tileCenter = MapController.getTileCenterByCoordinates(x,y);
+        showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
     }
 
-    public static void showMap(Tile[][] map, int m, int n, int originalX, int originalY) {
-        for (int i = 1; i <= m; i++) {
-            showUpMap(i, map, m, n, originalX, originalY);
-            showDownMap(i, map, m, n, originalX, originalY);
-        }
-        showUpMap(m + 1, map, m, n, originalX, originalY);
-    }
-
-    private static void showUpMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
-        int y, x;
-        boolean printingCoordinatesFlag = false;
-        String coordinates = "";
-        int currentChar = 0;
-        boolean changeColor = false;
-        final String resetColor = "\u001B[0m";
-        for (int j = 3; j >= 1; j--) {
-            // if (row == m)
-            // x = 0;
-            // else
-            y = -1;
-            x = row - 2;
-            for (int k = 1; k <= 8 * n + 3; k++) {
-                if (j == 1 && k % 16 == 4 && row <= m) {
-                    printingCoordinatesFlag = true;
-                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
-                }
-                if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m < row && k <= 3)) {
-                    // System.out.print(resetColor + "/");
-                    // changeColor = true;
-                    x++;
-                    y++;
-                }
-                if ((k - j) % 16 == 0 && (row > 1 || k < 8 * n) && (m >= row || k > 3)) {
-                    System.out.print(resetColor + "/");
-                    changeColor = true;
-                    x++;
-                    y++;
-                } else if ((k - (12 - j)) % 16 == 0) {
-                    System.out.print(resetColor + "\\");
-                    changeColor = true;
-                    x--;
-                    y++;
-                } else if (j == 1 && (k % 16 >= 12 || k % 16 == 0)) {
-                    if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + "_");
-                    else
-                        System.out.print("_");
-                } else {
-                    if (printingCoordinatesFlag) {
-                        System.out.print(coordinates.charAt(currentChar));
-                        currentChar++;
-                        if (currentChar > (coordinates.length() - 1)) {
-                            currentChar = 0;
-                            printingCoordinatesFlag = false;
-                        }
-                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m) {
-                        CombatUnit combatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
-                        NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
-                        if (combatUnit != null && j == 3 && k % 16 == 12) {
-                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + combatUnit.getName().charAt(0));
-                        } else if (nonCombatUnit != null && j == 3 && k % 16 == 14) {
-                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + nonCombatUnit.getName().charAt(0));
-                        } else {
-                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + " ");
-                        }
-                    } else
-                        System.out.print(" ");
-                }
+    public static void showMapByCoordinates(int x1, int y1, int x2, int y2) {
+        for (int i = x1; i <= x2; i++) {
+            for (int j = y1; j <= y2; j++) {
+                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() + MapController.getCellsMap()[i][j].getCharacter() + Colors.RESET.getAnsiEscapeCode());
             }
             System.out.println();
         }
-    }
 
-    private static void showDownMap(int row, Tile[][] map, int m, int n, int originalX, int originalY) {
-        int y, x;
-        boolean printingCoordinatesFlag = false;
-        String coordinates = "";
-        int currentChar = 0;
-        boolean changeColor = false;
-        final String resetColor = "\u001B[0m";
-        for (int j = 1; j <= 3; j++) {
-            y = -1;
-            x = row - 1;
-            for (int k = 1; k <= 8 * n + 3; k++) {
-                if (j == 3 && k % 16 == 12) {
-                    printingCoordinatesFlag = true;
-                    coordinates = (originalX + x + 1) + "," + (originalY + y + 1);
-                }
-                if ((k - j) % 16 == 0) {
-                    System.out.print(resetColor + "\\");
-                    changeColor = true;
-                    y++;
-                } else if ((k - (12 - j)) % 16 == 0) {
-                    System.out.print(resetColor + "/");
-                    changeColor = true;
-                    y++;
-                } else if (j == 3 && (k % 16 >= 4 && k % 16 <= 8)) {
-                    if (changeColor == true && -1 < y && -1 < x && y < n && x < m)
-                        System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + "_");
-                    else
-                        System.out.print("_");
-                } else {
-                    if (printingCoordinatesFlag) {
-                        System.out.print(coordinates.charAt(currentChar));
-                        currentChar++;
-                        if (currentChar > (coordinates.length() - 1)) {
-                            currentChar = 0;
-                            printingCoordinatesFlag = false;
-                        }
-                    } else if (changeColor == true && -1 < y && -1 < x && y < n && x < m) {
-                        CombatUnit combatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getCombatUnit();
-                        NonCombatUnit nonCombatUnit = MapController.getTileByCoordinates(originalX + x, originalY + y).getNonCombatUnit();
-                        if (combatUnit != null && j == 1 && k % 16 == 4) {
-                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + combatUnit.getName().charAt(0));
-                        } else if (nonCombatUnit != null && j == 1 && k % 16 == 6) {
-                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + nonCombatUnit.getName().charAt(0));
-                        } else {
-                            System.out.print(map[originalX + x][originalY + y].getColor().getAnsiEscapeCode() + " ");
-                        }
-                    } else
-                        System.out.print(" ");
-                }
-            }
-            System.out.println();
-        }
+        //TODO move to gameplay
     }
 
     // units methods

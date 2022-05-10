@@ -59,6 +59,7 @@ public class WorldController {
 
         world.nextTurn();
         resetSelection();
+        MapController.tileCellsRefresh();
     }
 
     public static String nextTurnImpossible() {

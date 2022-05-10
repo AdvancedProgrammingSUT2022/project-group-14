@@ -76,7 +76,7 @@ public class CityController {
             city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
             city.setGrowthFoodLimit(city.getGrowthFoodLimit() * 2);
             WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(city.getCenterOfCity().getX(),
-                    city.getCenterOfCity().getY()).getCivilizationName()).changeHappiness(-0.5);
+                    city.getCenterOfCity().getY()).getCivilizationName()).addHappiness(-0.5);
         }
     }
 

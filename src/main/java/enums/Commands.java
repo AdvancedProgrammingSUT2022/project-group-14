@@ -57,7 +57,16 @@ public enum Commands {
     UPGRADE_UNIT("upgrade unit to (?<unitName>\\S+)"),
     SHOW_CITY_BANNER("show city banner"),
     SHOW_UNEMPLOYED_CITIZENS("show unemployed citizens"),
-    SHOW_EMPLOYED_CITIZENS("show employed citizens");
+    SHOW_EMPLOYED_CITIZENS("show employed citizens"),
+    //cheat codes
+    INCREASE_GOODS("increase -(?<goods>gold|food|production|happiness) (?<amount>\\d+)"),
+    INCREASE_MP("increase -movementPoints (?<amount>\\d+)"),
+    INCREASE_TURN("increase -turn (?<amount>\\d+)"),
+    BUY_TILE_FREE("buy tile for free (?<x>\\d+) (?<y>\\d+)"),
+    INCREASE_RANGE("increase range of units by (?<amount>\\d+)"),
+    GET_ALL_TECHS("get all technologies"),
+    SEE_WHOLE_MAP("see whole map");
+
 
 
     private final String regex;

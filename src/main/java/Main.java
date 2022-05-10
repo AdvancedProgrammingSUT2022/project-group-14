@@ -1,4 +1,4 @@
-
+import controllers.MapController;
 import controllers.UserController;
 import views.menus.LoginMenu;
 
@@ -11,5 +11,6 @@ public class Main {
          LoginMenu loginMenu = new LoginMenu(scanner);
          loginMenu.run();
          UserController.saveAllUsers();
+
     }
 }
