@@ -92,7 +92,7 @@ public class GamePlay {
         int counter = 1;
         for (City city : currentCivilization.getCities()) {
             int x = city.getCenterOfCity().getX() + 1, y = city.getCenterOfCity().getY() + 1;
-            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + "coordinates");
+            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + " coordinates");
         }
     }
 

@@ -7,7 +7,7 @@ import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.units.CombatUnit;
-import models.units.Unit;
+import models.units.*;
 
 public class City {
     private Tile centerOfCity;
@@ -22,7 +22,6 @@ public class City {
 
     private ArrayList<Building> buildings = new ArrayList<>();
     private ArrayList<Tile> territory = new ArrayList<>();
-
 
     private Unit currentUnit = null;
     private Building currentBuilding = null;
@@ -73,11 +72,19 @@ public class City {
         if (currentUnit instanceof CombatUnit){
             if (centerOfCity.getCombatUnit() == null){
                 centerOfCity.setCombatUnit((models.units.CombatUnit) currentUnit);
+                if (currentUnit instanceof Melee)
+                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addMeleeUnit((Melee) currentUnit);
+                else
+                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addRangedUnit((Ranged) currentUnit);
                 currentUnit = null;
             }
-        }else {
+        } else {
             if (centerOfCity.getNonCombatUnit() == null){
                 centerOfCity.setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
+                if (currentUnit instanceof Settler)
+                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addSettler((Settler) currentUnit);
+                else
+                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addWorker((Worker) currentUnit);
                 currentUnit = null;
             }
         }

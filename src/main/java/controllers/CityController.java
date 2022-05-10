@@ -50,7 +50,7 @@ public class CityController {
 
     public static double consumeCityFood(double cityFood, City city) {
         while (city.getCitizens().size() * 2 > cityFood) {
-            starveCitizen(city.getCitizens());
+            starveCitizen(city);
         }
         cityFood -= city.getCitizens().size() * 2;
 
@@ -60,14 +60,21 @@ public class CityController {
         return cityFood;
     }
 
-    public static void starveCitizen(ArrayList<Citizen> citizens) {
-        for (Citizen citizen : citizens) {
+    public static void starveCitizen(City city) {
+        for (Citizen citizen : city.getCitizens()) {
             if (!citizen.isWorking()) {
-                citizens.remove(citizen);
+                String notification = "In turn " + WorldController.getWorld().getActualTurn() + " the citizen with " +
+                        citizen.getId() + " id in " + city.getName() + "died :)";
+                WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName()).addNotification(notification);
+                city.getCitizens().remove(citizen);
                 return;
             }
         }
-        citizens.remove(citizens.size() - 1);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " the citizen with " +
+                city.getCitizens().size() + " id in " + city.getName() + "died :)";
+        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName()).addNotification(notification);
+
+        city.getCitizens().remove(city.getCitizens().size() - 1);
     }
 
     public static void addCitizenIfPossible(City city) {
@@ -229,7 +236,7 @@ public class CityController {
                 unemployedCitizens.add(citizen);
         }
         if (unemployedCitizens.size() == 0)
-            return "there is no unemployed citizen in this city";
+            return "there is no unemployed citizen in this city\n";
         StringBuilder output = new StringBuilder("unemployed citizens:\n");
         int counter = 1;
         for (Citizen unemployedCitizen : unemployedCitizens) {
@@ -246,13 +253,13 @@ public class CityController {
                 employedCitizens.add(citizen);
         }
         if (employedCitizens.size() == 0)
-            return "there is no employed citizen in this city";
+            return "there is no employed citizen in this city\n";
         StringBuilder output = new StringBuilder("employed citizens:\n");
         int counter = 1;
         for (Citizen employedCitizen : employedCitizens) {
             output.append(counter).append("- citizen with id ").append(employedCitizen.getId());
-            output.append(" is working on tile ").append(employedCitizen.getXOfWorkingTile()).append(" and ");
-            output.append(employedCitizen.getYOfWorkingTile()).append('\n');
+            output.append(" is working on tile ").append(employedCitizen.getXOfWorkingTile() + 1).append(" and ");
+            output.append(employedCitizen.getYOfWorkingTile() + 1).append('\n');
             counter++;
         }
         return output.toString();
