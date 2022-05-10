@@ -9,6 +9,7 @@ import models.units.NonCombatUnit;
 import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class MapController {
 
@@ -26,6 +27,7 @@ public class MapController {
                 tilesMap[i][j] = Tile.generateRandomTile(i, j);
             }
         }
+        generateRivers();
         mapInit();
     }
 
@@ -137,6 +139,19 @@ public class MapController {
 
     }
 
+    private static void generateRivers() {
+        Random rand = new Random();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < length; j++) {
+                for (int k = 0; k < 6; k++) {
+                    if (rand.nextInt(12) == 0) {
+                        setRiver(i, j, k);
+                    }
+                }
+            }
+        }
+    }
+
     private static void mapInit() {
         generateMap();
         bordersInit();
@@ -214,17 +229,17 @@ public class MapController {
         return tilesMap[x][y];
     }
 
-    private void setRiver(int x, int y, int riverSide) { // creates river
+    private static void setRiver(int x, int y, int riverSide) { // creates river
         boolean[] isRiver = tilesMap[x][y].getIsRiver();
         isRiver[riverSide] = true;
         Tile neighbourTile = getTileByRiver(x, y, riverSide);
         boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
-        int neghbourRiverSide = (riverSide + 3) % 6;
-        neighbourIsRiver[neghbourRiverSide] = true;
+        int neighbourRiverSide = (riverSide + 3) % 6;
+        neighbourIsRiver[neighbourRiverSide] = true;
         setRiverCells(x, y, riverSide);
     }
 
-    private Tile getTileByRiver(int x, int y, int riverSide) {
+    private static Tile getTileByRiver(int x, int y, int riverSide) {
         if (y % 2 == 1) {
             if (riverSide == 0)
                 return tilesMap[x - 1][y];
@@ -255,13 +270,5 @@ public class MapController {
         return null;
     }
 
-    private void generateRivers() {
-        for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
-                for (int k = 0; k < 6; k++) {
 
-                }
-            }
-        }
-    }
 }
