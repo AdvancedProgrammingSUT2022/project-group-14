@@ -81,6 +81,16 @@ public class GameCommandsValidation {
             GamePlay.cancelCurrentResearch();
         } else if ((matcher = Commands.getMatcher(input, Commands.START_RESEARCH)) != null) {
             checkStartResearch(matcher);
+        }  else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
+            checkBuyTile(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.UPGRADE_UNIT)) != null) {
+            checkUpgradeUnit(matcher);
+        } else if (Commands.getMatcher(input, Commands.SHOW_CITY_BANNER) != null) {
+            GamePlay.showCityBanner();
+        } else if (Commands.getMatcher(input, Commands.SHOW_EMPLOYED_CITIZENS) != null) {
+            GamePlay.showEmployedCitizens();
+        } else if (Commands.getMatcher(input, Commands.SHOW_UNEMPLOYED_CITIZENS) != null) {
+            GamePlay.showUnemployedCitizens();
         } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_GOODS)) != null) {
             checkIncreaseGoods(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_TURN)) != null) {
@@ -89,8 +99,8 @@ public class GameCommandsValidation {
             checkIncreaseMP(matcher);
         } else if (Commands.getMatcher(input, Commands.SEE_WHOLE_MAP) != null) {
             checkSeeWholeMap();
-        } else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
-            checkBuyTile(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE_FREE)) != null) {
+            checkBuyTileFree(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_RANGE)) != null) {
             checkIncreaseRange(matcher);
         } else if (Commands.getMatcher(input, Commands.GET_ALL_TECHS) != null) {
@@ -268,6 +278,24 @@ public class GameCommandsValidation {
         else GamePlay.startResearch(technologies);
     }
 
+    public void checkBuyTile(Matcher matcher){
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.buyTile(x, y);
+        }
+    }
+
+    public void checkUpgradeUnit(Matcher matcher){
+        String unitName = matcher.group("unitName");
+        Unit unit = Unit.getUnitByName(unitName.toUpperCase());
+
+        if (unit == null) System.out.println("no such unit exists");
+        else {
+            GamePlay.upgradeUnit(unit);
+        }
+    }
+
     public void checkIncreaseGoods(Matcher matcher) {
         String goodsName = matcher.group("goods");
         int amount = Integer.parseInt(matcher.group("amount"));
@@ -307,7 +335,7 @@ public class GameCommandsValidation {
         }
     }
 
-    public void checkBuyTile(Matcher matcher) {
+    public void checkBuyTileFree(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x")) - 1;
         int y = Integer.parseInt(matcher.group("Y")) - 1;
         if (!TileController.selectedTileIsValid(x, y)) {

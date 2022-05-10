@@ -1,5 +1,6 @@
 package controllers;
 
+import enums.Technologies;
 import models.City;
 import models.Civilization;
 import models.Tile;
@@ -47,12 +48,15 @@ public class WorldController {
         CivilizationController.updateTechnology(currentCivilization);
         CivilizationController.updateMapVision(currentCivilization);
         CivilizationController.updateCitiesGoods(currentCivilization);
+        CivilizationController.payRequiredPriceForKeepingRoadsAndRailroads(currentCivilization);
+        CivilizationController.payRequiredPriceForKeepingUnits(currentCivilization);
         CivilizationController.updateCitiesProductions(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }
         //TODO show map
         UnitController.resetMovingPoints(currentCivilization);
+
         world.nextTurn();
         resetSelection();
         MapController.tileCellsRefresh();
@@ -60,7 +64,14 @@ public class WorldController {
 
     public static String nextTurnImpossible() {
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
-        if (currentCivilization.getCurrentTechnology() == null) {
+        boolean civilizationHasAllTechnologies = true;
+        for (Technologies technology : Technologies.values()) {
+            if (!currentCivilizationHasTechnology(technology)){
+                civilizationHasAllTechnologies = false;
+                break;
+            }
+        }
+        if (currentCivilization.getCurrentTechnology() == null && !civilizationHasAllTechnologies) {
             return "you have to choose a technology to research";
         } else {
             for (Unit unit : currentCivilization.getAllUnits()) {
@@ -70,6 +81,10 @@ public class WorldController {
             }
         }
         return null;
+    }
+
+    public static boolean currentCivilizationHasTechnology(Technologies technology){
+        return world.getCivilizationByName(world.getCurrentCivilizationName()).getTechnologies().get(technology) <= 0;
     }
 
     public static World getWorld() {

@@ -293,4 +293,43 @@ public class UnitController {
         }
         return null;
     }
+
+    public static String upgradeUnit(enums.units.Unit unitEnum){
+        if (WorldController.getSelectedCombatUnit() == null) {
+            return "you should select a combat unit first";
+        }else if (unitEnum.getCombatStrength() == 0){
+            return "you can only upgrade a combat unit to a combat unit";
+        }else {
+            Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+            if (currentCivilization.getGold() < ((double) unitEnum.getCost() / 2))
+                return "you don't have enough gold for upgrading to this unit";
+
+            if (WorldController.getSelectedCombatUnit() instanceof Ranged){
+                if (unitEnum.getRangedCombatStrength() == 0)
+                    return "you can't upgrade a ranged unit into a melee unit";
+                currentCivilization.setGold(currentCivilization.getGold() - ((double) unitEnum.getCost() / 2));
+                Ranged newUnit = new Ranged(unitEnum,
+                        WorldController.getSelectedCombatUnit().getCurrentX(),
+                        WorldController.getSelectedCombatUnit().getCurrentY(),
+                        currentCivilization.getName());
+                currentCivilization.getRanges().add(newUnit);
+                currentCivilization.getRanges().remove(WorldController.getSelectedCombatUnit());
+                WorldController.setSelectedCombatUnit(newUnit);
+                MapController.getMap()[newUnit.getCurrentX()][newUnit.getCurrentY()].setCombatUnit(newUnit);
+            }else {
+                if (unitEnum.getRangedCombatStrength() != 0)
+                    return "you can't upgrade a melee unit into a ranged unit";
+                currentCivilization.setGold(currentCivilization.getGold() - ((double) unitEnum.getCost() / 2));
+                Melee newUnit = new Melee(unitEnum,
+                        WorldController.getSelectedCombatUnit().getCurrentX(),
+                        WorldController.getSelectedCombatUnit().getCurrentY(),
+                        currentCivilization.getName());
+                currentCivilization.getMelees().add(newUnit);
+                currentCivilization.getMelees().remove(WorldController.getSelectedCombatUnit());
+                WorldController.setSelectedCombatUnit(newUnit);
+                MapController.getMap()[newUnit.getCurrentX()][newUnit.getCurrentY()].setCombatUnit(newUnit);
+            }
+            return null;
+        }
+    }
 }

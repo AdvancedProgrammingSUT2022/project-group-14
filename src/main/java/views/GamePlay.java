@@ -134,6 +134,18 @@ public class GamePlay {
         }
     }
 
+    public static void diplomacyPanel() {
+    }
+
+    public static void victoryPanel() {
+    }
+
+    public static void diplomaticHistoryPanel() {
+    }
+
+    public static void dealsHistoryPanel() {
+    }
+
     public static void showCombatUnitInfo() {
         //TODO these are temporary
         System.out.println(WorldController.getSelectedCombatUnit().getInfo());
@@ -459,7 +471,6 @@ public class GamePlay {
     }
 
     public static void startProducingUnit(enums.units.Unit unitEnum, String payment) {
-        //TODO checking required resource
         String error;
         if ((error = CityController.producingUnit(unitEnum, payment)) != null) {
             System.out.println(error);
@@ -488,6 +499,10 @@ public class GamePlay {
 
     public static void startResearch(Technologies technology) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if(currentCivilization.getTechnologies().get(technology) <= 0){
+            System.out.println("you have already studied this technology");
+            return;
+        }
         for (String requiredTechnologyName : technology.getRequiredTechnologies()) {
             Technologies requiredTechnology = Technologies.getTechnologyByName(requiredTechnologyName);
             if (currentCivilization.getTechnologies().get(requiredTechnology) > 0) {
@@ -500,5 +515,52 @@ public class GamePlay {
                 technology.getName() + " technology";
         currentCivilization.addNotification(notification);
 
+    }
+
+    public static void buyTile(int x, int y){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        for (City city : currentCivilization.getCities()) {
+            for (Tile tile : city.getTerritory()) {
+                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())){
+                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())){
+                        System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
+                    }else System.out.println("this tile belongs to another civilization");
+                }
+            }
+        }
+        System.out.println("you should choose a neighbor tile to one of your cities territory");
+    }
+
+    public static void upgradeUnit(enums.units.Unit unitEnum){
+        String error;
+        if ((error = UnitController.upgradeUnit(unitEnum)) != null) {
+            System.out.println(error);
+        }else System.out.println("unit upgraded successfully");
+    }
+
+    public static void showCityBanner(){
+        if (WorldController.getSelectedCity() == null) {
+            System.out.println("you should select a city first");
+            return;
+        }
+        //TODO
+
+
+    }
+
+    public static void showEmployedCitizens(){
+        if (WorldController.getSelectedCity() == null) {
+            System.out.println("you should select a city first");
+            return;
+        }
+        System.out.println(CityController.employedCitizensData(WorldController.getSelectedCity()));
+    }
+
+    public static void showUnemployedCitizens(){
+        if (WorldController.getSelectedCity() == null) {
+            System.out.println("you should select a city first");
+            return;
+        }
+        System.out.println(CityController.unemployedCitizensData(WorldController.getSelectedCity()));
     }
 }
