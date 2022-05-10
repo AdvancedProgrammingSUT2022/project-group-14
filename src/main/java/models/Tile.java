@@ -55,9 +55,9 @@ public class Tile {
         this.improvementTurnsLeftToBuild = 9999;
         this.roadState = 9999;
         this.railRoadState = 9999;
-        isRiver = new boolean[6];
+        this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
-            isRiver[i] = false;
+            this.isRiver[i] = false;
     }
 
     public static Tile generateRandomTile(int x, int y) {

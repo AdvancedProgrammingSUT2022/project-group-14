@@ -27,8 +27,8 @@ public class MapController {
                 tilesMap[i][j] = Tile.generateRandomTile(i, j);
             }
         }
-        generateRivers();
         mapInit();
+        generateRivers();
     }
 
     // Initializations for tiles map and cells map
@@ -132,7 +132,7 @@ public class MapController {
         } else {
             int direction = 1;
             if (riverSide == 4) direction = -1;
-            for (int i = cellX + 3, j = cellY + direction * 3; i >= cellX; i--, j += direction)
+            for (int i = cellX + 3, j = cellY + direction * 3; i >= cellX + 1; i--, j += direction)
                 cellsMap[i][j].setColor(Colors.BLUE);
         }
 
@@ -153,17 +153,9 @@ public class MapController {
     }
 
     private static void mapInit() {
-        generateMap();
         bordersInit();
         tileCentersInit();
         tileCellsRefresh();
-        setRiverCells(1, 1, 0);
-        setRiverCells(1, 1, 1);
-        setRiverCells(1, 1, 2);
-        setRiverCells(1, 1, 3);
-        setRiverCells(1, 1, 4);
-        setRiverCells(1, 1, 5);
-
     }
 
     public static void printStringToCellsMap(String input, int x, int y) {
@@ -233,6 +225,8 @@ public class MapController {
         boolean[] isRiver = tilesMap[x][y].getIsRiver();
         isRiver[riverSide] = true;
         Tile neighbourTile = getTileByRiver(x, y, riverSide);
+        if (neighbourTile == null)
+            return;
         boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
         int neighbourRiverSide = (riverSide + 3) % 6;
         neighbourIsRiver[neighbourRiverSide] = true;
@@ -241,30 +235,30 @@ public class MapController {
 
     private static Tile getTileByRiver(int x, int y, int riverSide) {
         if (y % 2 == 1) {
-            if (riverSide == 0)
+            if (riverSide == 0 && x - 1 >= 0)
                 return tilesMap[x - 1][y];
-            else if (riverSide == 1)
+            else if (riverSide == 1 && y + 1 < length)
                 return tilesMap[x][y + 1];
-            else if (riverSide == 2)
+            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
                 return tilesMap[x + 1][y + 1];
-            else if (riverSide == 3)
+            else if (riverSide == 3 && x + 1 < width)
                 return tilesMap[x + 1][y];
-            else if (riverSide == 4)
+            else if (riverSide == 4 && x + 1 < width && y - 1 >= 0)
                 return tilesMap[x + 1][y - 1];
-            else if (riverSide == 5)
+            else if (riverSide == 5 && y - 1 >= 0)
                 return tilesMap[x][y - 1];
         } else if (y % 2 == 0) {
-            if (riverSide == 0)
+            if (riverSide == 0 && x - 1 >= 0)
                 return tilesMap[x - 1][y];
-            if (riverSide == 1)
+            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
                 return tilesMap[x - 1][y + 1];
-            if (riverSide == 2)
+            if (riverSide == 2 && y + 1 < length)
                 return tilesMap[x][y + 1];
-            if (riverSide == 3)
+            if (riverSide == 3 && x + 1 < width)
                 return tilesMap[x + 1][y];
-            if (riverSide == 4)
+            if (riverSide == 4 && y - 1 >= 0)
                 return tilesMap[x][y - 1];
-            if (riverSide == 5)
+            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
                 return tilesMap[x - 1][y - 1];
         }
         return null;
