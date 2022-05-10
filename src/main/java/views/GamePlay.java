@@ -505,7 +505,7 @@ public class GamePlay {
 
     public static void startResearch(Technologies technology) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        if(currentCivilization.getTechnologies().get(technology) <= 0){
+        if (currentCivilization.getTechnologies().get(technology) <= 0) {
             System.out.println("you have already studied this technology");
             return;
         }
@@ -522,29 +522,32 @@ public class GamePlay {
         currentCivilization.addNotification(notification);
 
     }
-  
-    public static void buyTile(int x, int y){
+
+    public static void buyTile(int x, int y) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (City city : currentCivilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())){
-                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())){
+                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())) {
+                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())) {
                         System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
-                    }else System.out.println("this tile belongs to another civilization");
+                    } else {
+                        System.out.println("this tile belongs to another civilization");
+                    }
+                    return;
                 }
             }
         }
         System.out.println("you should choose a neighbor tile to one of your cities territory");
     }
 
-    public static void upgradeUnit(enums.units.Unit unitEnum){
+    public static void upgradeUnit(enums.units.Unit unitEnum) {
         String error;
         if ((error = UnitController.upgradeUnit(unitEnum)) != null) {
             System.out.println(error);
-        }else System.out.println("unit upgraded successfully");
+        } else System.out.println("unit upgraded successfully");
     }
 
-    public static void showCityBanner(){
+    public static void showCityBanner() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
         } else {
@@ -553,7 +556,7 @@ public class GamePlay {
 
     }
 
-    public static void showEmployedCitizens(){
+    public static void showEmployedCitizens() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;
@@ -561,7 +564,7 @@ public class GamePlay {
         System.out.println(CityController.employedCitizensData(WorldController.getSelectedCity()));
     }
 
-    public static void showUnemployedCitizens(){
+    public static void showUnemployedCitizens() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;

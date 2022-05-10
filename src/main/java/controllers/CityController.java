@@ -22,29 +22,22 @@ public class CityController {
     }
 
     public static void addGoodsToCity(City city) {
-        double addedFood = 0;
-        double addedGold = 0;
-        double addedProduction = 0;
+        double addedFood = 0, addedGold = 0, addedProduction = 0;
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+
         for (Citizen citizen : city.getCitizens()) {
             if (citizen.isWorking()) {
-                for (Tile tile : city.getTerritory()) {
-                    if (citizen.getXOfWorkingTile() == tile.getX() && citizen.getYOfWorkingTile() == tile.getY()) {
-                        addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
-                        addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
-                        addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
-                    }
-                }
+                addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
+                addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
+                addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
             }
         }
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         double cityFood = city.getFood() + addedFood;
         double cityGold = addedGold;
-        double cityProduction = city.getProduction() + addedProduction;
-        cityProduction += city.getCitizens().size();
         cityFood = consumeCityFood(cityFood, city);
         city.setFood(cityFood);
         currentCivilization.setGold(currentCivilization.getGold() + cityGold);
-        city.setProduction(cityProduction);
+        city.setProduction(city.getProduction() + addedProduction + city.getCitizens().size());
         addCitizenIfPossible(city);
     }
 

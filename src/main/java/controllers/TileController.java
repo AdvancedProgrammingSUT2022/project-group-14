@@ -69,10 +69,8 @@ public class TileController {
 
     public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile){
         if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0){
-            if (resource instanceof StrategicResource &&
-                    !WorldController.currentCivilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology()))
-                return false;
-            return true;
+            return !(resource instanceof StrategicResource) ||
+                    WorldController.currentCivilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology());
         }
         return false;
     }

@@ -59,7 +59,7 @@ public enum Commands {
     SHOW_UNEMPLOYED_CITIZENS("show unemployed citizens"),
     SHOW_EMPLOYED_CITIZENS("show employed citizens"),
     //cheat codes
-    INCREASE_GOODS("increase -(?<goods>gold|food|production|happiness) (?<amount>\\d+)"),
+    INCREASE_GOODS("increase -(?<goods>gold|food|production|happiness|science) (?<amount>\\d+)"),
     INCREASE_MP("increase -movementPoints (?<amount>\\d+)"),
     INCREASE_TURN("increase -turn (?<amount>\\d+)"),
     BUY_TILE_FREE("buy tile for free (?<x>\\d+) (?<y>\\d+)"),
