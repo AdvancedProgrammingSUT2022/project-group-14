@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class MapController {
 
-    private static final int width = 7;
-    private static final int length = 21;
+    private static final int width = 5;
+    private static final int length = 7;
     private static final int outputMapWidth = 6 * width + 3;
     private static final int outputMapLength = 8 * length + 3;
     private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapLength];
@@ -39,7 +39,7 @@ public class MapController {
                     cell.setCharacter('/');
                 } else if (k % 16 == (8 + j) && (row < width || k < outputMapLength - 3)) {
                     cell.setCharacter('\\');
-                } else if (j == 2 && (k % 16) >= 11 && (k % 16) <= 15) {
+                } else if (j == 2 && (k % 16) >= 11) {
                     cell.setCharacter('_');
                 } else {
                     cell.setCharacter(' ');
@@ -53,7 +53,7 @@ public class MapController {
                 Cell cell = new Cell();
                 cellsMap[6 * row + 3 + j][k] = cell;
                 cell.setColor(Colors.RESET);
-                if (k % 16 == (0 + j)) {
+                if (k % 16 == (j)) {
                     cell.setCharacter('\\');
                 } else if (k % 16 == (10 - j)) {
                     cell.setCharacter('/');
@@ -86,14 +86,14 @@ public class MapController {
             }
     }
 
-    private static void upLayerTileCellsInit(int[] tileCenter, Tile tile) {
+    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
                 cellsMap[i][j].setColor(tile.getColor());
             }
     }
 
-    private static void downLayerTileCellsInit(int[] tileCenter, Tile tile) {
+    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4
                     - (i - tileCenter[0] - 1); j++) {
@@ -101,12 +101,12 @@ public class MapController {
             }
     }
 
-    private static void tileCellsInit() { // initialize cells of every tile
-        String coordinates = "";
+    private static void tileCellsRefresh() { // initialize cells of every tile
+        String coordinates;
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                upLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
-                downLayerTileCellsInit(tileCenter[i][j], tilesMap[i][j]);
+                upLayerTileCellsRefresh(tileCenter[i][j], tilesMap[i][j]);
+                downLayerTileCellsRefresh(tileCenter[i][j], tilesMap[i][j]);
                 coordinates = "(" + i + "," + j + ")";
                 printStringToCellsMap(coordinates, tileCenter[i][j][0] - 1, tileCenter[i][j][1] - 3);
                 printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenter[i][j][0] + 1,
@@ -124,12 +124,17 @@ public class MapController {
         }
     }
 
+    public static void showMapOnTiles(int i , int j)
+    {
+        tileCellsRefresh();
+
+    }
+
     public static void mapInit() {
         generateMap();
         bordersInit();
         tileCentersInit();
-        tileCellsInit();
-        printStringToCellsMap("salam", 3, 1);
+        tileCellsRefresh();
     }
 
     public static void printStringToCellsMap(String input, int x, int y) {
