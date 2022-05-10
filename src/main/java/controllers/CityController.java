@@ -39,6 +39,7 @@ public class CityController {
         double cityFood = city.getFood() + addedFood;
         double cityGold = city.getGold() + addedGold;
         double cityProduction = city.getProduction() + addedProduction;
+        cityProduction += city.getCitizens().size();
         cityFood = consumeCityFood(cityFood, city);
         city.setFood(cityFood);
         city.setGold(cityGold);
