@@ -669,4 +669,30 @@ public class GamePlay {
             System.out.println(error);
         }else System.out.println("unit upgraded successfully");
     }
+
+    public static void showCityBanner(){
+        if (WorldController.getSelectedCity() == null) {
+            System.out.println("you should select a city first");
+            return;
+        }
+        //TODO
+
+
+    }
+
+    public static void showEmployedCitizens(){
+        if (WorldController.getSelectedCity() == null) {
+            System.out.println("you should select a city first");
+            return;
+        }
+        System.out.println(CityController.employedCitizensData(WorldController.getSelectedCity()));
+    }
+
+    public static void showUnemployedCitizens(){
+        if (WorldController.getSelectedCity() == null) {
+            System.out.println("you should select a city first");
+            return;
+        }
+        System.out.println(CityController.unemployedCitizensData(WorldController.getSelectedCity()));
+    }
 }

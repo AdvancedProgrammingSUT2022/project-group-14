@@ -159,7 +159,7 @@ public class City {
     }
 
     public String getInfo() {
-        String output =  "Name : " + name + "\n" +
+        StringBuilder output = new StringBuilder("Name : " + name + "\n" +
                 "Food : " + food + "\n" +
                 "Gold : " + gold + "\n" +
                 "Production : " + production + "\n" +
@@ -167,19 +167,19 @@ public class City {
                 "NumberOfTiles : " + territory.size() + "\n" +
                 "NumberOFBuildings : " + buildings.size() + "\n" +
                 "NumberOfCitizens : " + citizens.size() + "\n" +
-                "Citizens info : \n";
+                "Citizens info : \n");
         for (Citizen citizen : citizens) {
             if (citizen.isWorking())
-                output += citizen.getId() + "is working\n";
+                output.append(citizen.getId()).append("is working\n");
             else
-                output += citizen.getId() + "is not working\n";
+                output.append(citizen.getId()).append("is not working\n");
         }
 
         if (this.getCurrentUnit() != null)
-            output += "current production : " + getCurrentUnit().getName() + "\n";
-        output += "CurrentProductionRemainingCost : " + currentProductionRemainingCost + "\n";
+            output.append("current production : ").append(getCurrentUnit().getName()).append("\n");
+        output.append("CurrentProductionRemainingCost : ").append(currentProductionRemainingCost).append("\n");
 
-        return output;
+        return output.toString();
     }
 
     public String getCombatInfo() {

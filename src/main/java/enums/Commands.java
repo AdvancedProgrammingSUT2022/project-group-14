@@ -54,7 +54,10 @@ public enum Commands {
     START_RESEARCH("start research (?<technology>\\S+)"),
     CANCEL_CURRENT_RESEARCH("cancel current research"),
     BUY_TILE("buy tile (?<x>\\d+) (<?y>\\d+)"),
-    UPGRADE_UNIT("upgrade unit to (?<unitName>\\S+)");
+    UPGRADE_UNIT("upgrade unit to (?<unitName>\\S+)"),
+    SHOW_CITY_BANNER("show city banner"),
+    SHOW_UNEMPLOYED_CITIZENS("show unemployed citizens"),
+    SHOW_EMPLOYED_CITIZENS("show employed citizens");
 
 
     private final String regex;

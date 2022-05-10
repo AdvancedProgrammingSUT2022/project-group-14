@@ -83,6 +83,12 @@ public class GameCommandsValidation {
             checkBuyTile(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.UPGRADE_UNIT)) != null) {
             checkUpgradeUnit(matcher);
+        } else if (Commands.getMatcher(input, Commands.SHOW_CITY_BANNER) != null) {
+            GamePlay.showCityBanner();
+        } else if (Commands.getMatcher(input, Commands.SHOW_EMPLOYED_CITIZENS) != null) {
+            GamePlay.showEmployedCitizens();
+        } else if (Commands.getMatcher(input, Commands.SHOW_UNEMPLOYED_CITIZENS) != null) {
+            GamePlay.showUnemployedCitizens();
         } else System.out.println("invalid command");
 
         return true;
