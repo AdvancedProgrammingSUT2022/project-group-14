@@ -182,7 +182,7 @@ public class MapController {
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
     }
-//------------------------------------------------------------------------------------------------
+
     private void setRiver(int x, int y, int i) {
 
     }
