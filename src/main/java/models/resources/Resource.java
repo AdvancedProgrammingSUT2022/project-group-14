@@ -7,12 +7,14 @@ import enums.resources.ResourceTypes;
 import enums.resources.StrategicResourceTypes;
 
 public class Resource {
+    private String name;
+
     private double food;
     private double production;
     private double gold;
 
     private Improvements requiredImprovement;
-    private boolean isActive;// what the hell is this?
+    private boolean hasBeenUsed = false;
 
     public Resource(double food, double production, double gold, Improvements requiredProgress) {
         this.food = food;
@@ -26,6 +28,7 @@ public class Resource {
         this.production = type.productionGetter();
         this.gold = type.goldGetter();
         this.requiredImprovement = type.requiredImprovementGetter();
+        this.name = type.nameGetter();
     }
 
    
@@ -42,16 +45,19 @@ public class Resource {
         return this.gold;
     }
 
-    public Improvements getRequiredProgress() {
+    public String getName() {
+        return name;
+    }
+
+    public Improvements getRequiredImprovement() {
         return this.requiredImprovement;
     }
 
-    public boolean getIsActive() {
-        return this.isActive;
+    public boolean hasBeenUsed() {
+        return hasBeenUsed;
     }
 
-    public boolean isIsActive() {
-        return this.isActive;
+    public void setHasBeenUsed(boolean hasBeenUsed) {
+        this.hasBeenUsed = hasBeenUsed;
     }
-
 }

@@ -2,6 +2,8 @@ package controllers;
 
 import models.City;
 import models.Civilization;
+import models.Tile;
+import models.units.Melee;
 import models.units.Unit;
 
 import java.util.ArrayList;
@@ -68,5 +70,23 @@ public class CivilizationController {
             addedScience += city.getCitizens().size();
         }
         civilization.setScience(civilization.getScience() + addedScience);
+    }
+
+    public static void payRequiredPriceForKeepingRoadsAndRailroads(Civilization civilization){
+        for (City city : civilization.getCities()) {
+            for (Tile tile : city.getTerritory()) {
+                if (tile.getRoadState() == 0 || tile.getRailRoadState() == 0){
+                    if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
+                    else civilization.setScience(civilization.getScience() - 1);
+                }
+            }
+        }
+    }
+
+    public static void payRequiredPriceForKeepingUnits(Civilization civilization){
+        for (int i = 0; i < civilization.getAllUnits().size(); i++) {
+            if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
+            else civilization.setScience(civilization.getScience() - 1);
+        }
     }
 }

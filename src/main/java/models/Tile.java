@@ -1,9 +1,12 @@
 package models;
 
+import controllers.TileController;
+import controllers.WorldController;
 import enums.Colors;
 import enums.Improvements;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
+import models.resources.BonusResource;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -37,7 +40,7 @@ public class Tile {
 
     private int pillageState; // 0 -> has not been pillaged | 9999 -> been pillaged
 
-    private String civilizationName;
+    private String civilizationName = null;
     private City city;
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
@@ -58,6 +61,43 @@ public class Tile {
         this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
+    }
+
+    public void addAvailableResourcesToCivilizationAndTile(){
+        if (this.bonusResource != null &&
+                !this.bonusResource.hasBeenUsed() &&
+                TileController.resourceIsAvailableToBeUsed(this.bonusResource, this)){
+            addResourceToCivilizationAndTile(this.bonusResource);
+            this.bonusResource.setHasBeenUsed(true);
+        }
+        if (this.luxuryResource != null &&
+                !this.luxuryResource.hasBeenUsed() &&
+                TileController.resourceIsAvailableToBeUsed(this.luxuryResource, this)){
+            addResourceToCivilizationAndTile(this.luxuryResource);
+            this.luxuryResource.setHasBeenUsed(true);
+        }
+        if (this.strategicResource != null &&
+                !this.strategicResource.hasBeenUsed() &&
+                TileController.resourceIsAvailableToBeUsed(this.strategicResource, this)){
+            addResourceToCivilizationAndTile(this.bonusResource);
+            this.strategicResource.setHasBeenUsed(true);
+        }
+    }
+
+    public void addResourceToCivilizationAndTile(Resource resource){
+        this.food += resource.getFood();
+        this.gold += resource.getGold();
+        this.production += resource.getProduction();
+        Civilization currenCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+
+        if (resource instanceof LuxuryResource){
+            currenCivilization.getLuxuryResources().put(resource.getName(),
+                    currenCivilization.getLuxuryResources().get(resource.getName()) + 1);
+            currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
+        }else if (resource instanceof StrategicResource){
+            currenCivilization.getStrategicResources().put(resource.getName(),
+                    currenCivilization.getStrategicResources().get(resource.getName()) + 1);
+        }
     }
 
     public static Tile generateRandomTile(int x, int y) {
