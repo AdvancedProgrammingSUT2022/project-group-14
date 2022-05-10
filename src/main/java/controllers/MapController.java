@@ -119,7 +119,11 @@ public class MapController {
         bordersInit();
         tileCentersInit();
         tileCellsRefresh();
+        MapController.setRiverCells(1, 1, 0);
         MapController.setRiverCells(1, 1, 1);
+        MapController.setRiverCells(1, 1, 3);
+//        MapController.setRiverCells(1, 1, 5);
+
     }
 
     public static void printStringToCellsMap(String input, int x, int y) {
@@ -196,8 +200,12 @@ public class MapController {
         } else if (riverSide == 1 || riverSide == 5) {
             int direction = 1;
             if (riverSide == 5) direction = -1;
-            for (int i = cellX - 2, j = cellY + direction * 3; i >= cellX; i--, j = j + direction)
+            for (int i = cellX - 2, j = cellY + direction * 3; i <= cellX; i++, j = j + direction)
                 cellsMap[i][j].setColor(Colors.PURPLE);
+//            for (int i = cellX - 2, j = cellY + 3; i <= cellX; i--, j++) {
+//                cellsMap[i][j].setColor(Colors.GREEN);
+//            }
+//            cellsMap[cellX][cellY].setColor(Colors.BLACK);
         }
 
 
