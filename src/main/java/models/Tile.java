@@ -6,7 +6,6 @@ import enums.Colors;
 import enums.Improvements;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
-import enums.tiles.TileTypes;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -21,7 +20,7 @@ public class Tile {
 
     private TileBaseTypes type;
     private TileFeatureTypes feature;
-    public final TileTypes name;
+    public final String name;
     private Colors color;
 
     private double food;
@@ -54,31 +53,42 @@ public class Tile {
         this.feature = feature;
         this.type = type;
         this.color = type.getColor();
-        this.food = type.getFood();
-        this.production = type.getProduction();
+        this.food = type.getFood() + feature.getFood();
+        this.production = type.getProduction() + feature.getProduction();
         this.gold = type.getGold() + feature.getGold();
-        this.combatImpact = type.getCombatImpact();
-        this.movingPoint = type.getMovingPoint();
+        this.combatImpact = type.getCombatImpact() + feature.getCombatImpact();
+        this.movingPoint = type.getMovingPoint() + feature.getMovingPoint();
         this.improvementTurnsLeftToBuild = 9999;
         this.roadState = 9999;
         this.railRoadState = 9999;
         this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
-        if (feature != TileFeatureTypes.NULL) {
-            this.food += feature.getFood();
-            this.production += feature.getProduction();
-            this.combatImpact += feature.getCombatImpact();
-            this.movingPoint += feature.getMovingPoint();
-            this.name = feature;
-        } else {
-            this.name = type;
-        }
+        if (feature != TileFeatureTypes.NULL)
+            this.name = feature.getName();
+        else
+            this.name = type.getName();
+
 
     }
 
+    //randomTile generation
+
+    public static TileFeatureTypes generateRandomFeature(TileBaseTypes type) {
+        int featuresNumber = type.getPossibleFeatures().size();
+        TileFeatureTypes[] possibleFeatures = type.getPossibleFeatures().toArray(new TileFeatureTypes[featuresNumber]);
+        Random rand = new Random();
+        int randomInt = rand.nextInt(rand.nextInt(featuresNumber + 2));
+        if (randomInt >= featuresNumber)
+            return TileFeatureTypes.NULL;
+        else
+            return possibleFeatures[randomInt];
+    }
+
     public static Tile generateRandomTile(int x, int y) {
-        return new Tile(TileFeatureTypes.generateRandom(), TileBaseTypes.generateRandom(), x, y);
+        TileBaseTypes baseType = TileBaseTypes.generateRandom();
+        TileFeatureTypes featureType = generateRandomFeature(baseType);
+        return new Tile(featureType, baseType, x, y);
     }
 
     public void addAvailableResourcesToCivilizationAndTile() {
@@ -110,17 +120,6 @@ public class Tile {
         }
     }
 
-    public static TileFeatureTypes generateRandom(TileBaseTypes type) {
-        int featuresNumber = type.getPossibleFeatures().size();
-        TileFeatureTypes[] possibleFeatures = type.getPossibleFeatures().toArray(new TileFeatureTypes[featuresNumber]);
-
-        Random rand = new Random();
-        int randomInt = rand.nextInt(rand.nextInt(featuresNumber + 2));
-        if(randomInt>= featuresNumber)
-            return TileFeatureTypes.NULL;
-        else
-            return possibleFeatures[randomInt];
-    }
 
     // setters and getters
     public int getX() {
