@@ -2,18 +2,20 @@ package enums.tiles;
 
 import enums.Colors;
 
+import java.util.HashSet;
+import java.util.List;
 import java.util.Random;
 
 public enum TileBaseTypes implements TileTypes {
 
-    DESERT("desert", 0, 0, 0, -33, 1, Colors.YELLOW),
-    MEADOW("meadow", 2, 0, 0, -33, 1, Colors.GREEN),
-    HEEL("heel", 0, 2, 0, 25, 2, Colors.BLACK),
-    MOUNTAIN("mountain", 0, 0, 0, 25, 9999, Colors.PURPLE),
-    OCEAN("ocean", 0, 0, 0, 25, 9999, Colors.CYAN),
-    PLAIN("plain", 1, 1, 0, -33, 1, Colors.RED),
-    SNOW("snow", 0, 0, 0, -33, 1, Colors.WHITE),
-    TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK);
+    DESERT("desert", 0, 0, 0, -33, 1, Colors.YELLOW,new HashSet<>(List.of())),
+    MEADOW("meadow", 2, 0, 0, -33, 1, Colors.GREEN,new HashSet<>(List.of())),
+    HEEL("heel", 0, 2, 0, 25, 2, Colors.BLACK,new HashSet<>(List.of())),
+    MOUNTAIN("mountain", 0, 0, 0, 25, 9999, Colors.PURPLE,new HashSet<>(List.of())),
+    OCEAN("ocean", 0, 0, 0, 25, 9999, Colors.CYAN,new HashSet<>(List.of())),
+    PLAIN("plain", 1, 1, 0, -33, 1, Colors.RED,new HashSet<>(List.of())),
+    SNOW("snow", 0, 0, 0, -33, 1, Colors.WHITE,new HashSet<>(List.of())),
+    TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK, new HashSet<>(List.of()));
 
     private final String name;
     private final double food;
@@ -23,8 +25,9 @@ public enum TileBaseTypes implements TileTypes {
     private final int movingPoint;
     private final Colors color;
 
+    private final HashSet<TileFeatureTypes> possibleFeatures;
     TileBaseTypes(String name, double food, double production, double gold, int combatImpact, int movingPoint,
-                  Colors color) {
+                  Colors color , HashSet<TileFeatureTypes> possibleFeatures) {
         this.name = name;
         this.food = food;
         this.production = production;
@@ -32,6 +35,7 @@ public enum TileBaseTypes implements TileTypes {
         this.combatImpact = combatImpact;
         this.movingPoint = movingPoint;
         this.color = color;
+        this.possibleFeatures = possibleFeatures;
     }
 
     public static TileBaseTypes generateRandom() {
