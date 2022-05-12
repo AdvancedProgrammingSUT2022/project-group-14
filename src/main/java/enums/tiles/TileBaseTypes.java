@@ -34,7 +34,7 @@ public enum TileBaseTypes implements TileTypes {
         this.color = color;
     }
 
-    public static TileBaseTypes generateRandomTileType() {
+    public static TileBaseTypes generateRandom() {
         Random rand = new Random();
         return TileBaseTypes.values()[rand.nextInt(TileBaseTypes.values().length - 1)];
     }

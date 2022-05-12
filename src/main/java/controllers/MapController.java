@@ -98,7 +98,7 @@ public class MapController {
     }
 
     private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
-        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 2; i++)
+        for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
                 cellsMap[i][j].setColor(tile.getColor());
             }
@@ -113,6 +113,7 @@ public class MapController {
                 coordinates = "(" + i + "," + j + ")";
                 printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
                 printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
+                printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
             }
     }
 

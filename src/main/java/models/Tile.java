@@ -6,7 +6,7 @@ import enums.Colors;
 import enums.Improvements;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
-import models.resources.BonusResource;
+import enums.tiles.TileTypes;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -19,6 +19,7 @@ public class Tile {
 
     private TileBaseTypes type;
     private TileFeatureTypes feature;
+    public final TileTypes name;
     private Colors color;
 
     private double food;
@@ -45,14 +46,15 @@ public class Tile {
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
 
-    public Tile(TileBaseTypes type, int x, int y) {
+    public Tile(TileFeatureTypes feature, TileBaseTypes type, int x, int y) {
         this.x = x;
         this.y = y;
+        this.feature = feature;
         this.type = type;
         this.color = type.getColor();
         this.food = type.getFood();
         this.production = type.getProduction();
-        this.gold = type.getGold();
+        this.gold = type.getGold() + feature.getGold();
         this.combatImpact = type.getCombatImpact();
         this.movingPoint = type.getMovingPoint();
         this.improvementTurnsLeftToBuild = 9999;
@@ -61,61 +63,52 @@ public class Tile {
         this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
+        if(feature != TileFeatureTypes.NULL)
+        {
+            this.food += feature.getFood();
+            this.production += feature.getProduction();
+            this.combatImpact += feature.getCombatImpact();
+            this.movingPoint += feature.getMovingPoint();
+            this.name = feature;
+        }
+        else{
+            this.name = type;
+        }
+
     }
 
-    public void addAvailableResourcesToCivilizationAndTile(){
-        if (this.bonusResource != null &&
-                !this.bonusResource.hasBeenUsed() &&
-                TileController.resourceIsAvailableToBeUsed(this.bonusResource, this)){
+    public static Tile generateRandomTile(int x, int y) {
+        return new Tile(TileFeatureTypes.generateRandom(), TileBaseTypes.generateRandom(), x, y);
+    }
+
+    public void addAvailableResourcesToCivilizationAndTile() {
+        if (this.bonusResource != null && !this.bonusResource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.bonusResource, this)) {
             addResourceToCivilizationAndTile(this.bonusResource);
             this.bonusResource.setHasBeenUsed(true);
         }
-        if (this.luxuryResource != null &&
-                !this.luxuryResource.hasBeenUsed() &&
-                TileController.resourceIsAvailableToBeUsed(this.luxuryResource, this)){
+        if (this.luxuryResource != null && !this.luxuryResource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.luxuryResource, this)) {
             addResourceToCivilizationAndTile(this.luxuryResource);
             this.luxuryResource.setHasBeenUsed(true);
         }
-        if (this.strategicResource != null &&
-                !this.strategicResource.hasBeenUsed() &&
-                TileController.resourceIsAvailableToBeUsed(this.strategicResource, this)){
+        if (this.strategicResource != null && !this.strategicResource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.strategicResource, this)) {
             addResourceToCivilizationAndTile(this.bonusResource);
             this.strategicResource.setHasBeenUsed(true);
         }
     }
 
-    public void addResourceToCivilizationAndTile(Resource resource){
+    public void addResourceToCivilizationAndTile(Resource resource) {
         this.food += resource.getFood();
         this.gold += resource.getGold();
         this.production += resource.getProduction();
         Civilization currenCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
 
-        if (resource instanceof LuxuryResource){
-            currenCivilization.getLuxuryResources().put(resource.getName(),
-                    currenCivilization.getLuxuryResources().get(resource.getName()) + 1);
+        if (resource instanceof LuxuryResource) {
+            currenCivilization.getLuxuryResources().put(resource.getName(), currenCivilization.getLuxuryResources().get(resource.getName()) + 1);
             currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
-        }else if (resource instanceof StrategicResource){
-            currenCivilization.getStrategicResources().put(resource.getName(),
-                    currenCivilization.getStrategicResources().get(resource.getName()) + 1);
+        } else if (resource instanceof StrategicResource) {
+            currenCivilization.getStrategicResources().put(resource.getName(), currenCivilization.getStrategicResources().get(resource.getName()) + 1);
         }
     }
-
-    public static Tile generateRandomTile(int x, int y) {
-        return new Tile(TileBaseTypes.generateRandomTileType(), x, y);
-    }
-
-    public Tile copy() {
-        Tile tile = new Tile(TileBaseTypes.MEDOW, this.x, this.y);
-        tile.type = this.type;
-        tile.food = this.food;
-        tile.production = this.production;
-        tile.gold = this.gold;
-        tile.combatImpact = this.combatImpact;
-        tile.movingPoint = this.movingPoint;
-        tile.color = this.color;
-        return tile;
-    }
-
 
     public int getX() {
         return this.x;
