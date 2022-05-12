@@ -7,7 +7,7 @@ import java.util.Random;
 public enum TileBaseTypes implements TileTypes {
 
     DESERT("desert", 0, 0, 0, -33, 1, Colors.YELLOW),
-    MEDOW("medow", 2, 0, 0, -33, 1, Colors.GREEN),
+    MEADOW("meadow", 2, 0, 0, -33, 1, Colors.GREEN),
     HEEL("heel", 0, 2, 0, 25, 2, Colors.BLACK),
     MOUNTAIN("mountain", 0, 0, 0, 25, 9999, Colors.PURPLE),
     OCEAN("ocean", 0, 0, 0, 25, 9999, Colors.CYAN),
@@ -16,12 +16,12 @@ public enum TileBaseTypes implements TileTypes {
     TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK);
 
     private final String name;
-    private double food;
-    private double production;
-    private double gold;
-    private int combatImpact;
-    private int movingPoint;
-    private Colors color;
+    private final double food;
+    private final double production;
+    private final double gold;
+    private final int combatImpact;
+    private final int movingPoint;
+    private final Colors color;
 
     TileBaseTypes(String name, double food, double production, double gold, int combatImpact, int movingPoint,
                   Colors color) {

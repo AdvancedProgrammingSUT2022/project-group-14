@@ -13,28 +13,28 @@ public enum Improvements {
             new HashSet<TileTypes>(Arrays.asList(TileFeatureTypes.JUNGLE, TileBaseTypes.TUNDRA, TileBaseTypes.PLAIN,
                     TileBaseTypes.HEEL))), // camp
     FARM("farm", 1, 0, 0, Technologies.AGRICULTURE,
-            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEDOW))), // mazrae
+            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW))), // mazrae
     LUMBERMILL("LubmerMill", 0, 1, 0, Technologies.CONSTRUCTION,
             new HashSet<TileTypes>(Arrays.asList(TileFeatureTypes.JUNGLE))), // karkhane choob
     MINE("mine", 0, 1, 0, Technologies.MINING,
-            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEDOW,
+            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileBaseTypes.TUNDRA, TileBaseTypes.SNOW, TileBaseTypes.HEEL, TileFeatureTypes.JUNGLE,
                     TileFeatureTypes.FOREST, TileFeatureTypes.SWAMP))),
     PASTURE("pasture", 0, 0, 0, Technologies.ANIMAL_HUSBANDRY,
-            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEDOW,
+            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileBaseTypes.HEEL, TileBaseTypes.TUNDRA))), // cheragah
     AGRICULTURE("agriculture", 0, 0, 0, Technologies.CALENDAR,
-            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEDOW,
+            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST, TileFeatureTypes.SWAMP,
                     TileFeatureTypes.VALLEY))), // kesht va kar
     QUARRY("quarry", 0, 0, 0, Technologies.MASONRY,
-            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEDOW,
+            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileBaseTypes.TUNDRA, TileBaseTypes.HEEL))), // madan sang
     TRADINGPOST("trading post", 0, 0, 1, Technologies.TRAPPING,
-            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEDOW,
+            new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileBaseTypes.TUNDRA))), // poste - e - tejari
     FACTORY("factory", 0, 2, 0, Technologies.ENGINEERING, new HashSet<TileTypes>(Arrays.asList(TileBaseTypes.PLAIN,
-            TileBaseTypes.DESERT, TileBaseTypes.MEDOW, TileBaseTypes.TUNDRA, TileBaseTypes.SNOW)));
+            TileBaseTypes.DESERT, TileBaseTypes.MEADOW, TileBaseTypes.TUNDRA, TileBaseTypes.SNOW)));
 
     private String name;
     private double food;
