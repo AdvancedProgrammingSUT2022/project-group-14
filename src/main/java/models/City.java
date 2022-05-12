@@ -10,7 +10,7 @@ import enums.units.CombatUnit;
 import models.units.*;
 
 public class City {
-    private Tile centerOfCity;
+    private final Tile centerOfCity;
 
     private double food = 0;
     private double gold = 0;
@@ -32,7 +32,9 @@ public class City {
     private double attackStrength;
     private double healthPoint;
 
-    private String name;
+    private int numberOfGarrisonedUnit;
+
+    private final String name;
 
     public City(String name, int x, int y) {
         this.name = name;
@@ -44,6 +46,7 @@ public class City {
         for (Tile tile : this.territory) {
             tile.setCivilization(currentCivilization.getName());
         }
+        healthPoint = 20; defenseStrength = 10; attackStrength = 20;
     }
 
     public void finishCityProduction(){
@@ -88,6 +91,14 @@ public class City {
                 currentUnit = null;
             }
         }
+    }
+
+    public void addGarrisonedUnits(){
+        this.numberOfGarrisonedUnit++;
+    }
+
+    public void removeGarrisonedUnits(){
+        this.numberOfGarrisonedUnit--;
     }
 
     public void setFood(double food) {
@@ -160,6 +171,30 @@ public class City {
 
     public double getCurrentProductionRemainingCost() {
         return currentProductionRemainingCost;
+    }
+
+    public void receiveDamage(double amount) {
+        this.healthPoint -= amount;
+    }
+
+    public double getDefenseStrength() {
+        return defenseStrength;
+    }
+
+    public double getAttackStrength() {
+        return attackStrength;
+    }
+
+    public double getHealthPoint() {
+        return healthPoint;
+    }
+
+    public void setHealthPoint(double healthPoint) {
+        this.healthPoint = healthPoint;
+    }
+
+    public int getNumberOfGarrisonedUnit() {
+        return numberOfGarrisonedUnit;
     }
 
     public String getName() {

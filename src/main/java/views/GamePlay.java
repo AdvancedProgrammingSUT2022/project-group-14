@@ -180,8 +180,15 @@ public class GamePlay {
     }
 
     // units methods
-    public static void attack(int destinationX, int destinationY) {
-
+    public static void attack(int x, int y) {
+        String error;
+        if (MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            System.out.println("can't attack your own base");
+        } else if (WorldController.getSelectedNonCombatUnit() != null){
+            System.out.println("can't attack using a nonCombat unit");
+        } else if ((error = WarController.combatUnitAttacksTile(x, y)) != null){
+            System.out.println(error);
+        }
     }
 
     public static void moveTo(int x, int y) {
