@@ -318,4 +318,5 @@ public class Tile {
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
     }
+
 }
