@@ -35,6 +35,7 @@ public enum TileBaseTypes implements TileTypes {
         this.combatImpact = combatImpact;
         this.movingPoint = movingPoint;
         this.color = color;
+        possibleFeatures.add(TileFeatureTypes.NULL);
         this.possibleFeatures = possibleFeatures;
     }
 
@@ -71,4 +72,7 @@ public enum TileBaseTypes implements TileTypes {
         return this.color;
     }
 
+    public HashSet<TileFeatureTypes> getPossibleFeatures() {
+        return possibleFeatures;
+    }
 }

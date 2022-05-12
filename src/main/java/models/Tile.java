@@ -13,6 +13,8 @@ import models.resources.StrategicResource;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 
+import java.util.Random;
+
 public class Tile {
     private int x;
     private int y;
@@ -63,15 +65,13 @@ public class Tile {
         this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
-        if(feature != TileFeatureTypes.NULL)
-        {
+        if (feature != TileFeatureTypes.NULL) {
             this.food += feature.getFood();
             this.production += feature.getProduction();
             this.combatImpact += feature.getCombatImpact();
             this.movingPoint += feature.getMovingPoint();
             this.name = feature;
-        }
-        else{
+        } else {
             this.name = type;
         }
 
@@ -110,6 +110,19 @@ public class Tile {
         }
     }
 
+    public static TileFeatureTypes generateRandom(TileBaseTypes type) {
+        int featuresNumber = type.getPossibleFeatures().size();
+        TileFeatureTypes[] possibleFeatures = type.getPossibleFeatures().toArray(new TileFeatureTypes[featuresNumber]);
+
+        Random rand = new Random();
+        int randomInt = rand.nextInt(rand.nextInt(featuresNumber + 2));
+        if(randomInt>= featuresNumber)
+            return TileFeatureTypes.NULL;
+        else
+            return possibleFeatures[randomInt];
+    }
+
+    // setters and getters
     public int getX() {
         return this.x;
     }

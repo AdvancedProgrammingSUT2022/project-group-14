@@ -7,7 +7,6 @@ import enums.resources.ResourceTypes;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Random;
 
 public enum TileFeatureTypes implements TileTypes {
     VALLEY("valley", 2, 0, 0, -33, 1,
@@ -23,7 +22,7 @@ public enum TileFeatureTypes implements TileTypes {
     SWAMP("swamp", -1, 0, 0, -33, 2, new HashSet<>(List.of(LuxuryResourceTypes.SUGAR))), // mordab
     OASIS("oasis", 3, 0, 1, -33, 1, new HashSet<>()), // vahe
     LAKE("lake", 0, 0, 1, 0, 9999, new HashSet<>()),
-    NULL("nothing" , 0 , 0 , 0 , 0 , 0, new HashSet<>());
+    NULL("nothing", 0, 0, 0, 0, 0, new HashSet<>());
 
     private final String name;
     private double food;
@@ -44,12 +43,7 @@ public enum TileFeatureTypes implements TileTypes {
         this.possibleResources = possibleResources;
     }
 
-    public static TileFeatureTypes generateRandom() {
-        Random rand = new Random();
-        int randomInt = rand.nextInt(rand.nextInt(TileFeatureTypes.values().length +3));
-        if (randomInt >=TileFeatureTypes.values().length - 1) randomInt = TileFeatureTypes.values().length -1 ;
-        return TileFeatureTypes.values()[randomInt];
-    }
+
     public String getName() {
         return this.name;
     }
