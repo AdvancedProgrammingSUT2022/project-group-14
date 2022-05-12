@@ -8,14 +8,14 @@ import java.util.Random;
 
 public enum TileBaseTypes implements TileTypes {
 
-    DESERT("desert", 0, 0, 0, -33, 1, Colors.YELLOW,new HashSet<>(List.of())),
-    MEADOW("meadow", 2, 0, 0, -33, 1, Colors.GREEN,new HashSet<>(List.of())),
-    HEEL("heel", 0, 2, 0, 25, 2, Colors.BLACK,new HashSet<>(List.of())),
+    DESERT("desert", 0, 0, 0, -33, 1, Colors.YELLOW,new HashSet<>(List.of(TileFeatureTypes.OASIS , TileFeatureTypes.VALLEY))), //kavir
+    MEADOW("meadow", 2, 0, 0, -33, 1, Colors.GREEN,new HashSet<>(List.of(TileFeatureTypes.JUNGLE , TileFeatureTypes.SWAMP))),// chamanzar
+    HEEL("heel", 0, 2, 0, 25, 2, Colors.BLACK,new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST))),
     MOUNTAIN("mountain", 0, 0, 0, 25, 9999, Colors.PURPLE,new HashSet<>(List.of())),
     OCEAN("ocean", 0, 0, 0, 25, 9999, Colors.CYAN,new HashSet<>(List.of())),
-    PLAIN("plain", 1, 1, 0, -33, 1, Colors.RED,new HashSet<>(List.of())),
+    PLAIN("plain", 1, 1, 0, -33, 1, Colors.RED,new HashSet<>(List.of(TileFeatureTypes.JUNGLE , TileFeatureTypes.FOREST))), // dasht
     SNOW("snow", 0, 0, 0, -33, 1, Colors.WHITE,new HashSet<>(List.of())),
-    TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK, new HashSet<>(List.of()));
+    TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK, new HashSet<>(List.of(TileFeatureTypes.JUNGLE)));
 
     private final String name;
     private final double food;

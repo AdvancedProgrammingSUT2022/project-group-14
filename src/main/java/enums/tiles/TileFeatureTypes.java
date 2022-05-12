@@ -46,9 +46,10 @@ public enum TileFeatureTypes implements TileTypes {
 
     public static TileFeatureTypes generateRandom() {
         Random rand = new Random();
-        return TileFeatureTypes.values()[rand.nextInt(TileFeatureTypes.values().length - 1)];
+        int randomInt = rand.nextInt(rand.nextInt(TileFeatureTypes.values().length +3));
+        if (randomInt >=TileFeatureTypes.values().length - 1) randomInt = TileFeatureTypes.values().length -1 ;
+        return TileFeatureTypes.values()[randomInt];
     }
-
     public String getName() {
         return this.name;
     }
