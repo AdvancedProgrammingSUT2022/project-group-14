@@ -9,6 +9,8 @@ public class CombatUnit extends Unit{
     private boolean isFortifiedTillHealed;
     private boolean garrisoned;
 
+    private int attackingTileX, attackingTileY;
+
     public CombatUnit(enums.units.Unit unitInfo, int x, int y, String civilization) {
         super(unitInfo, x, y, civilization);
         this.defenseStrength = unitInfo.getCombatStrength();
@@ -74,6 +76,22 @@ public class CombatUnit extends Unit{
 
     public boolean isGarrisoned() {
         return garrisoned;
+    }
+
+    public int getAttackingTileX() {
+        return attackingTileX;
+    }
+
+    public void setAttackingTileX(int attackingTileX) {
+        this.attackingTileX = attackingTileX;
+    }
+
+    public int getAttackingTileY() {
+        return attackingTileY;
+    }
+
+    public void setAttackingTileY(int attackingTileY) {
+        this.attackingTileY = attackingTileY;
     }
 
     public String getCombatInfo() {

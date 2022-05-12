@@ -28,10 +28,16 @@ public class MoveController {
 
         Tile nextTileToMove; String error;
         while (unit.getMovementPoint() > 0 && unit.getDestinationX() != -1 && unit.getDestinationY() != -1) {
+            if (unit instanceof CombatUnit && ((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1) {
+                if (Math.abs(((CombatUnit) unit).getAttackingTileX() - unit.getCurrentX()) +
+                        Math.abs(((CombatUnit) unit).getAttackingTileY() - unit.getCurrentY()) <= ((CombatUnit) unit).getRange()) {
+                    break;
+                }
+            }
             nextTileToMove = bestNextTileToMove(MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()),
                     MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()));
             if ((error = impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit)) != null &&
-                    !error.equals("can not move to those kind of tiles")) {
+                    error.equals("there is not any space left on the tile to move")) {
                 if (unit.getMovementPoint() - (nextTileToMove.getMovingPoint()) <= 0) {
                     unit.cancelMission();
                     break;

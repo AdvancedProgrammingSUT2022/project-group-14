@@ -53,12 +53,26 @@ public class WorldController {
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }
+        applyAttacks();
         //TODO show map
         UnitController.resetMovingPoints(currentCivilization);
 
         world.nextTurn();
         resetSelection();
         MapController.tileCellsRefresh();
+    }
+
+    public static void applyAttacks() {
+        Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            if (unit instanceof CombatUnit)
+                if (((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1)
+                    if (MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity() != null) {
+                        WarController.attackCity((CombatUnit) unit, MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity());
+                    } else {
+                        //TODO attacking unit vs unit
+                    }
+        }
     }
 
     public static String nextTurnImpossible() {

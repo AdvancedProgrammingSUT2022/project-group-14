@@ -18,6 +18,14 @@ public class Ranged extends CombatUnit{
         return isSiegeUnit;
     }
 
+    public double getRangedCombatStrength() {
+        return rangedCombatStrength;
+    }
+
+    public boolean isUnitIsReadyForRangedBattle() {
+        return unitIsReadyForRangedBattle;
+    }
+
     public void setCoordinatesToSetup(int x, int y) {
         this.setDestinationCoordinates(x, y);
         this.unitIsReadyForRangedBattle =  true;
