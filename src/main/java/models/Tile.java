@@ -73,12 +73,11 @@ public class Tile {
     }
 
     //randomTile generation
-
     public static TileFeatureTypes generateRandomFeature(TileBaseTypes type) {
         int featuresNumber = type.getPossibleFeatures().size();
         TileFeatureTypes[] possibleFeatures = type.getPossibleFeatures().toArray(new TileFeatureTypes[featuresNumber]);
         Random rand = new Random();
-        int randomInt = rand.nextInt(rand.nextInt(featuresNumber + 2));
+        int randomInt = rand.nextInt(featuresNumber + 2);
         if (randomInt >= featuresNumber)
             return TileFeatureTypes.NULL;
         else
@@ -187,7 +186,7 @@ public class Tile {
     }
 
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
-        //TODO this returnes wrong answer
+        //TODO this returns wrong answer
         if (x == -1 && y == 0 && isRiver[0]) {
             return movingPoints;
         } else if (x == 0 && y == 1 && isRiver[1]) {
