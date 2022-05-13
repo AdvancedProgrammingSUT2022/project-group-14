@@ -26,7 +26,7 @@ public class LoginMenu {
         }
     }
 
-    private boolean checkCommand(String input) {
+    public boolean checkCommand(String input) {
 
         Matcher matcher;
         if (Commands.startsWith(input, Commands.LOGIN)) {
@@ -49,7 +49,7 @@ public class LoginMenu {
     }
 
 
-    private void checkEnterMenu(Matcher matcher) {
+    public void checkEnterMenu(Matcher matcher) {
         String menuName = matcher.group("menuName");
         switch (menuName){
             case "login menu":
@@ -66,7 +66,7 @@ public class LoginMenu {
     }
 
 
-    private void checkLogin(String input) {
+    public void checkLogin(String input) {
         Matcher usernameMatcher;
         Matcher passwordMatcher;
         if ((usernameMatcher = Commands.matcherFindsRegex(input, Commands.USERNAME)) != null &&
@@ -86,7 +86,7 @@ public class LoginMenu {
 
     }
 
-    private void checkCreateUser(String input) {
+    public void checkCreateUser(String input) {
         Matcher usernameMatcher;
         Matcher passwordMatcher;
         Matcher nicknameMatcher;
@@ -111,19 +111,19 @@ public class LoginMenu {
 
     }
 
-    private boolean usernameExists(Matcher usernameMatcher) {
+    public boolean usernameExists(Matcher usernameMatcher) {
         return UserController.getUserByUsername(usernameMatcher.group("username")) != null;
     }
 
-    private boolean passwordIsCorrect(Matcher passwordMatcher, User user) {
+    public boolean passwordIsCorrect(Matcher passwordMatcher, User user) {
         return user.getPassword().equals(passwordMatcher.group("password"));
     }
 
-    private boolean nicknameExists(Matcher nicknameMatcher) {
+    public boolean nicknameExists(Matcher nicknameMatcher) {
         return UserController.getUserByNickname(nicknameMatcher.group("nickname")) != null;
     }
 
-    private void loginUser(User user) {
+    public void loginUser(User user) {
         MainMenu mainMenu = new MainMenu(this.scanner, user);
         mainMenu.run();
     }
