@@ -15,6 +15,7 @@ import models.units.Worker;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 
@@ -167,6 +168,7 @@ public class GamePlay {
     // showing map methods
     public static void showMapBasedOnTile(int x, int y) {
         int[] tileCenter = MapController.getTileCenterByCoordinates(x, y);
+        WorldController.setSelectedTile(MapController.getTileByCoordinates(x, y));
         showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
     }
 
@@ -184,8 +186,8 @@ public class GamePlay {
         String error;
         if (MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             System.out.println("can't attack your own base");
-        } else if (WorldController.getSelectedNonCombatUnit() != null){
-            System.out.println("can't attack using a nonCombat unit");
+        } else if (WorldController.getSelectedCombatUnit() == null){
+            System.out.println("you should select a combat unit to attack");
         } else if ((error = WarController.combatUnitAttacksTile(x, y)) != null){
             System.out.println(error);
         }
@@ -534,7 +536,7 @@ public class GamePlay {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (City city : currentCivilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())) {
+                if (TileController.coordinatesAreInRange(x, y, tile.getX(), tile.getY(), 1)) {
                     if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())) {
                         System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
                     } else {

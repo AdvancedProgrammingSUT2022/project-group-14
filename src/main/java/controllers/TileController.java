@@ -42,29 +42,51 @@ public class TileController {
 
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
+        if (y%2 == 0) {
+            if (selectedTileIsValid(x-1, y+1))
+                neighbours.add(MapController.getTileByCoordinates(x-1, y+1));
+            if (selectedTileIsValid(x, y+1))
+                neighbours.add(MapController.getTileByCoordinates(x, y+1));
+            if (selectedTileIsValid(x, y-1))
+                neighbours.add(MapController.getTileByCoordinates(x, y-1));
+            if (selectedTileIsValid(x-1, y-1))
+                neighbours.add(MapController.getTileByCoordinates(x, y-1));
+        } else {
+            if (selectedTileIsValid(x, y+1))
+                neighbours.add(MapController.getTileByCoordinates(x, y+1));
+            if (selectedTileIsValid(x+1, y+1))
+                neighbours.add(MapController.getTileByCoordinates(x+1, y+1));
+            if (selectedTileIsValid(x+1, y-1))
+                neighbours.add(MapController.getTileByCoordinates(x+1, y-1));
+            if (selectedTileIsValid(x, y-1))
+                neighbours.add(MapController.getTileByCoordinates(x, y-1));
+        }
         if (selectedTileIsValid(x-1, y))
             neighbours.add(MapController.getTileByCoordinates(x-1, y));
-        if (selectedTileIsValid(x, y+1))
-            neighbours.add(MapController.getTileByCoordinates(x, y+1));
-        if (selectedTileIsValid(x+1, y+1))
-            neighbours.add(MapController.getTileByCoordinates(x+1, y+1));
         if (selectedTileIsValid(x+1, y))
             neighbours.add(MapController.getTileByCoordinates(x+1, y));
-        if (selectedTileIsValid(x+1, y-1))
-            neighbours.add(MapController.getTileByCoordinates(x+1, y-1));
-        if (selectedTileIsValid(x, y-1))
-            neighbours.add(MapController.getTileByCoordinates(x, y-1));
 
         return neighbours;
     }
 
-    public static boolean towTilesAreNeighbors(int x1, int y1, int x2, int y2){
-        return (x1 == x2 - 1 && y1 == y2) ||
-                (x1 == x2 && y1 == y2 + 1) ||
-                (x1 == x2 + 1 && y1 == y2 + 1) ||
-                (x1 == x2 + 1 && y1 == y2) ||
-                (x1 == x2 + 1 && y1 == y2 - 1) ||
-                (x1 == x2 && y1 == y2 - 1);
+    public static boolean coordinatesAreInRange(int x1, int y1, int x2, int y2, int distance) {
+        int[][] neighbors = new int[MapController.getWidth()][MapController.getLength()];
+        int range = 1;
+        for (Tile neighbourTile : getAvailableNeighbourTiles(x2, y2)) {
+            neighbors[neighbourTile.getX()][neighbourTile.getY()] = range;
+        }
+        while (range < distance) {
+            for (int i = 0; i < MapController.getWidth(); i++) {
+                for (int j = 0; j < MapController.getLength(); j++) {
+                    if (neighbors[i][j] == range)
+                        for (Tile neighbourTile : getAvailableNeighbourTiles(i, j)) {
+                            neighbors[neighbourTile.getX()][neighbourTile.getY()] = range + 1;
+                        }
+                }
+            }
+            range++;
+        }
+        return neighbors[x1][y1] > 0;
     }
 
     public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile){
