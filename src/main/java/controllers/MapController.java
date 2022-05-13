@@ -124,17 +124,17 @@ public class MapController {
             int direction = 1;
             if (riverSide == 3) direction = -1;
             for (int i = cellX - direction * 3, j = cellY - 2; j <= cellY + 2; j++)
-                cellsMap[i][j].setColor(Colors.BLUE);
+                cellsMap[i][j].setColor(Colors.CYAN);
         } else if (riverSide == 1 || riverSide == 5) {
             int direction = 1;
             if (riverSide == 5) direction = -1;
             for (int i = cellX - 2, j = cellY + direction * 3; i <= cellX; i++, j += direction)
-                cellsMap[i][j].setColor(Colors.BLUE);
+                cellsMap[i][j].setColor(Colors.CYAN);
         } else {
             int direction = 1;
             if (riverSide == 4) direction = -1;
             for (int i = cellX + 3, j = cellY + direction * 3; i >= cellX + 1; i--, j += direction)
-                cellsMap[i][j].setColor(Colors.BLUE);
+                cellsMap[i][j].setColor(Colors.CYAN);
         }
 
 
