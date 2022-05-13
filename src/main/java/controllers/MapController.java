@@ -92,9 +92,9 @@ public class MapController {
 
     private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile, Civilization civilization) {
         Colors color = tile.getColor();
-//        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
-//        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
-//            color = Colors.BLACK;
+        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
+        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+            color = Colors.BLACK;
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
                 cellsMap[i][j].setColor(color);
@@ -103,9 +103,9 @@ public class MapController {
 
     private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile ,Civilization civilization) {
         Colors color = tile.getColor();
-//        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
-//        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
-//            color = Colors.BLACK;
+        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
+        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+            color = Colors.BLACK;
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
                 cellsMap[i][j].setColor(color);
