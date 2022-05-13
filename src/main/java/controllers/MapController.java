@@ -158,8 +158,10 @@ public class MapController {
         boolean[] isRiver = tilesMap[x][y].getIsRiver();
         isRiver[riverSide] = true;
         Tile neighbourTile = getTileByRiver(x, y, riverSide);
+        tilesMap[x][y].setGold(tilesMap[x][y].getGold() + 1);
         if (neighbourTile == null)
             return;
+        neighbourTile.setGold(neighbourTile.getGold() + 1);
         boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
         int neighbourRiverSide = (riverSide + 3) % 6;
         neighbourIsRiver[neighbourRiverSide] = true;
@@ -223,7 +225,7 @@ public class MapController {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < length; j++) {
                 for (int k = 0; k < 6; k++) {
-                    if (rand.nextInt(12) == 0) {
+                    if (rand.nextInt(12) == 0 && !tilesMap[i][j].getIsRiver()[k]) {
                         setRiver(i, j, k);
                     }
                 }
