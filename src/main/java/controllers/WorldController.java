@@ -8,7 +8,6 @@ import models.World;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
-import views.GamePlay;
 
 import java.util.ArrayList;
 
@@ -24,6 +23,9 @@ public class WorldController {
         MapController.generateMap();
         world = new World(usernames);
         MapController.updateUnitPositions();
+        for (Civilization civilization : world.getAllCivilizations()) {
+            CivilizationController.updateMapVision(civilization);
+        }
     }
 
     public static void resetWorld() {
@@ -59,7 +61,7 @@ public class WorldController {
 
         world.nextTurn();
         resetSelection();
-        MapController.tileCellsRefresh();
+        MapController.tileCellsRefresh(currentCivilization);
     }
 
     public static void applyAttacks() {
@@ -79,7 +81,7 @@ public class WorldController {
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
         boolean civilizationHasAllTechnologies = true;
         for (Technologies technology : Technologies.values()) {
-            if (!currentCivilizationHasTechnology(technology)){
+            if (!currentCivilizationHasTechnology(technology)) {
                 civilizationHasAllTechnologies = false;
                 break;
             }
@@ -97,7 +99,7 @@ public class WorldController {
         return null;
     }
 
-    public static boolean currentCivilizationHasTechnology(Technologies technology){
+    public static boolean currentCivilizationHasTechnology(Technologies technology) {
         return world.getCivilizationByName(world.getCurrentCivilizationName()).getTechnologies().get(technology) <= 0;
     }
 

@@ -90,27 +90,35 @@ public class MapController {
             }
     }
 
-    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
+    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile, Civilization civilization) {
+        Colors color = tile.getColor();
+//        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
+//        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+//            color = Colors.BLACK;
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
-                cellsMap[i][j].setColor(tile.getColor());
+                cellsMap[i][j].setColor(color);
             }
     }
 
-    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
+    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile ,Civilization civilization) {
+        Colors color = tile.getColor();
+//        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
+//        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+//            color = Colors.BLACK;
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
-                cellsMap[i][j].setColor(tile.getColor());
+                cellsMap[i][j].setColor(color);
             }
     }
 
-    public static void tileCellsRefresh() { // initialize cells of every tile
+    public static void tileCellsRefresh(Civilization civilization) { // initialize cells of every tile
         String coordinates;
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
-                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
-                coordinates = "(" + i + "," + j + ")";
+                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
+                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j] , civilization);
+                coordinates = "(" + (i+1) + "," + (j+1) + ")";
                 printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
                 printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
                 printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
@@ -156,7 +164,6 @@ public class MapController {
     private static void mapInit() {
         bordersInit();
         tileCentersInit();
-        tileCellsRefresh();
     }
 
     public static void printStringToCellsMap(String input, int x, int y) {
