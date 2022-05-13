@@ -109,6 +109,7 @@ public class MapController {
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
                 cellsMap[i][j].setColor(color);
+                cellsMap[i][j].setRevealed(visionState == 1);
             }
     }
 
@@ -119,6 +120,7 @@ public class MapController {
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
                 cellsMap[i][j].setColor(color);
+                cellsMap[i][j].setRevealed(visionState == 1);
             }
     }
 
