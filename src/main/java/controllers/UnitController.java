@@ -103,6 +103,7 @@ public class UnitController {
             return "you should be in a city to garrison";
         } else {
             combatUnit.garrisonUnit();
+            currentTile.getCity().addGarrisonedUnits();
         }
         return null;
     }

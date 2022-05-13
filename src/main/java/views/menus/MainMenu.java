@@ -101,9 +101,8 @@ public class MainMenu {
     }
 
     private void startGame(ArrayList<String> usernames){
-        GamePlay gamePlay = new GamePlay();
         WorldController.newWorld(usernames);
-        gamePlay.run(this.scanner);
+        GamePlay.run(scanner);
     }
 
     private void goToProfileMenu() {

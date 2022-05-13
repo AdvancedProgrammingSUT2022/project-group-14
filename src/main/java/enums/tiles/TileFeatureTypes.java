@@ -74,6 +74,14 @@ public enum TileFeatureTypes implements TileTypes {
 
     public void setFood(double food) {
         this.food = food;
+
     }
 
+    public int getCombatImpact() {
+        return combatImpact;
+    }
+
+    public int getMovementPoint() {
+        return movementPoint;
+    }
 }

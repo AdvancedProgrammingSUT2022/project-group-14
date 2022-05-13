@@ -299,15 +299,28 @@ public class GameCommandsValidation {
     public void checkIncreaseGoods(Matcher matcher) {
         String goodsName = matcher.group("goods");
         int amount = Integer.parseInt(matcher.group("amount"));
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+
         switch (goodsName) {
-            case "gold" ->
-                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addGold(amount);
-            case "food" ->
-                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addFood(amount);
-            case "production" ->
-                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addProduction(amount);
-            case "happiness" ->
-                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addHappiness(amount);
+            case "gold":
+                currentCivilization.addGold(amount);
+                break;
+            case "food":
+                for (City city : currentCivilization.getCities()) {
+                    city.setFood(city.getFood() + amount);
+                }
+                break;
+            case "production":
+                for (City city : currentCivilization.getCities()) {
+                    city.setProduction(city.getProduction() + amount);
+                }
+                break;
+            case "happiness":
+                currentCivilization.addHappiness(amount);
+                break;
+            case "science":
+                currentCivilization.addScience(amount);
+                break;
         }
     }
 

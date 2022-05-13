@@ -13,12 +13,20 @@ import models.units.Settler;
 import models.units.Unit;
 import models.units.Worker;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class GamePlay {
+    public static Scanner scanner;
+
+    public static void run(Scanner sc) {
+        String input;
+        scanner = sc;
+        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
+        do {
+            input = scanner.nextLine();
+        } while (gameCommandsValidation.checkCommands(input));
+    }
 
     // selecting methods
     public static void selectUnit(int x, int y, String militaryStatus) {
@@ -84,7 +92,7 @@ public class GamePlay {
         int counter = 1;
         for (City city : currentCivilization.getCities()) {
             int x = city.getCenterOfCity().getX() + 1, y = city.getCenterOfCity().getY() + 1;
-            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + "coordinates");
+            System.out.println(counter + "-> " + city.getName() + " with ( " + x + " , " + y + " )" + " coordinates");
         }
     }
 
@@ -159,6 +167,7 @@ public class GamePlay {
     // showing map methods
     public static void showMapBasedOnTile(int x, int y) {
         int[] tileCenter = MapController.getTileCenterByCoordinates(x, y);
+        WorldController.setSelectedTile(MapController.getTileByCoordinates(x, y));
         showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
     }
 
@@ -172,8 +181,31 @@ public class GamePlay {
     }
 
     // units methods
-    public static void attack(int destinationX, int destinationY) {
+    public static void attack(int x, int y) {
+        String error;
+        if (MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            System.out.println("can't attack your own base");
+        } else if (WorldController.getSelectedCombatUnit() == null){
+            System.out.println("you should select a combat unit to attack");
+        } else if ((error = WarController.combatUnitAttacksTile(x, y)) != null){
+            System.out.println(error);
+        }
+    }
 
+    public static void conquerCity(City city, CombatUnit unit) {
+        if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
+            System.out.println("Congrats! you attached the city to your civilization");
+            CityController.conquerCity(city, unit);
+        } else {
+            System.out.println("If you want to conquer city type 1 otherwise type 0 :");
+            if (scanner.nextInt() == 1) {
+                System.out.println("Congrats! you attached the city to your civilization");
+                CityController.conquerCity(city, unit);
+            } else {
+                System.out.println("Congrats! you destroyed the city");
+                CityController.destroyCity(city, unit);
+            }
+        }
     }
 
     public static void moveTo(int x, int y) {
@@ -497,7 +529,7 @@ public class GamePlay {
 
     public static void startResearch(Technologies technology) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        if(currentCivilization.getTechnologies().get(technology) <= 0){
+        if (currentCivilization.getTechnologies().get(technology) <= 0) {
             System.out.println("you have already studied this technology");
             return;
         }
@@ -515,46 +547,40 @@ public class GamePlay {
 
     }
 
-    public void run(Scanner scanner) {
-        String input;
-        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
-        do {
-            input = scanner.nextLine();
-        } while (gameCommandsValidation.checkCommands(input));
-    }
-  
-    public static void buyTile(int x, int y){
+    public static void buyTile(int x, int y) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (City city : currentCivilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())){
-                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())){
+                if (TileController.coordinatesAreInRange(x, y, tile.getX(), tile.getY(), 1)) {
+                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())) {
                         System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
-                    }else System.out.println("this tile belongs to another civilization");
+                    } else {
+                        System.out.println("this tile belongs to another civilization");
+                    }
+                    return;
                 }
             }
         }
         System.out.println("you should choose a neighbor tile to one of your cities territory");
     }
 
-    public static void upgradeUnit(enums.units.Unit unitEnum){
+    public static void upgradeUnit(enums.units.Unit unitEnum) {
         String error;
         if ((error = UnitController.upgradeUnit(unitEnum)) != null) {
             System.out.println(error);
-        }else System.out.println("unit upgraded successfully");
+        } else System.out.println("unit upgraded successfully");
     }
 
-    public static void showCityBanner(){
+    public static void showCityBanner() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
-            return;
+        } else {
+            System.out.println(WorldController.getSelectedCity().getInfo() + WorldController.getSelectedCity().getCombatInfo());
         }
-        //TODO
-
 
     }
 
-    public static void showEmployedCitizens(){
+    public static void showEmployedCitizens() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;
@@ -562,7 +588,7 @@ public class GamePlay {
         System.out.println(CityController.employedCitizensData(WorldController.getSelectedCity()));
     }
 
-    public static void showUnemployedCitizens(){
+    public static void showUnemployedCitizens() {
         if (WorldController.getSelectedCity() == null) {
             System.out.println("you should select a city first");
             return;

@@ -53,12 +53,26 @@ public class WorldController {
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }
+        applyAttacks();
         //TODO show map
         UnitController.resetMovingPoints(currentCivilization);
 
         world.nextTurn();
         resetSelection();
         MapController.tileCellsRefresh();
+    }
+
+    public static void applyAttacks() {
+        Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            if (unit instanceof CombatUnit)
+                if (((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1)
+                    if (MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity() != null) {
+                        WarController.attackCity((CombatUnit) unit, MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity());
+                    } else {
+                        //TODO attacking unit vs unit
+                    }
+        }
     }
 
     public static String nextTurnImpossible() {
@@ -74,8 +88,9 @@ public class WorldController {
             return "you have to choose a technology to research";
         } else {
             for (Unit unit : currentCivilization.getAllUnits()) {
-                if ((unit.getMovementPoint() > 0) || (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep())) {
-                    return "units need to be moved";
+                int x = unit.getCurrentX() + 1, y = unit.getCurrentY() + 1;
+                if ((unit.getMovementPoint() > 0) && (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep())) {
+                    return unit.getName() + " in ( " + x + " , " + y + " ) coordinates needs to be moved";
                 }
             }
         }

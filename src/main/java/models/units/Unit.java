@@ -1,5 +1,7 @@
 package models.units;
 
+import enums.units.CombatType;
+
 public class Unit {
     private int currentX, currentY;
     private int destinationX, destinationY;
@@ -15,6 +17,8 @@ public class Unit {
     private double healthPoint;
     private boolean isSleep;
 
+    private CombatType combatType;
+
     public Unit(enums.units.Unit unitInfo, int x, int y, String civilization) {
         this.currentX = x; this.currentY = y;
         this.destinationX = -1; this.destinationY = -1;
@@ -22,6 +26,7 @@ public class Unit {
         this.name = unitInfo.getName();
         this.civilizationName = civilization;
         this.requiredGold = unitInfo.getCost();
+        this.combatType = unitInfo.getType();
         if (unitInfo.getRequiredResource() == null){
             this.requiredStrategicResourceName = null;
         } else {
@@ -36,6 +41,10 @@ public class Unit {
 
     public String getCivilizationName() {
         return civilizationName;
+    }
+
+    public void setCivilizationName(String civilizationName) {
+        this.civilizationName = civilizationName;
     }
 
     public String getName() {
@@ -92,8 +101,20 @@ public class Unit {
         this.destinationY = y;
     }
 
+    public CombatType getCombatType() {
+        return combatType;
+    }
+
     public void addHealthPoint(double amount) {
         this.healthPoint += amount;
+    }
+
+    public void receiveDamage(double amount) {
+        this.healthPoint -= amount;
+    }
+
+    public double getHealthPoint() {
+        return healthPoint;
     }
 
     public void cancelMission() {
@@ -118,4 +139,6 @@ public class Unit {
         }
         return output;
     }
+
+
 }

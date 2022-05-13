@@ -27,7 +27,7 @@ public class Citizen {
     }
 
     public void setIsWorking(boolean isWorking) {
-        isWorking = isWorking;
+        this.isWorking = isWorking;
     }
 
     public void setXOfWorkingTile(int xOfWorkingTile) {
