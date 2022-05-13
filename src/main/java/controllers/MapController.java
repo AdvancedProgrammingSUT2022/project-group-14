@@ -102,11 +102,9 @@ public class MapController {
                 }
     }
 
-    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
+    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile, Civilization civilization, int visionState) {
         Colors color = tile.getColor();
-        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
-        if (visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+        if (visionState == 0)
             color = Colors.BLACK;
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
@@ -114,11 +112,9 @@ public class MapController {
             }
     }
 
-    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
+    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile, Civilization civilization, int visionState) {
         Colors color = tile.getColor();
-        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
-        if (visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+        if (visionState == 0)
             color = Colors.BLACK;
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
@@ -126,44 +122,42 @@ public class MapController {
             }
     }
 
-    private static void tileTextsRefresh(int[] tileCenter, Tile tile, Civilization civilization) {
+    private static void tileTextsRefresh(int[] tileCenter, Tile tile, Civilization civilization, int visionState) {
         //TODO name substring
-        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
         String civilizationName = civilization.getName();
-        if (civilizationName.length() > 5)
-            civilizationName = civilizationName.substring(0, 5);
-
-        if (visionStatesOfMap[tile.getX()][tile.getY()] != 0) {
+        if (visionState == 1) {
+            tile = civilization.getRevealedTiles()[tile.getX()][tile.getY()];
+        }
+        if (visionState != 0) {
             String coordinates = "(" + (tile.getX() + 1) + "," + (tile.getY() + 1) + ")";
             printStringToCellsMap(coordinates, tileCenter[0] - 1, tileCenter[1] - 3);
-            printStringToCellsMap(civilizationName, tileCenter[0] - 2, tileCenter[1] - 2);
+            printStringToCellsMap(cutStringLenght(civilizationName, 5), tileCenter[0] - 2, tileCenter[1] - 2);
             printStringToCellsMap(tile.getName(), tileCenter[0] + 1, tileCenter[1] - 4);
-            Unit unit;
-            if ((unit = tile.getCombatUnit()) != null)
-                printStringToCellsMap(unit.getName(), tileCenter[0], tileCenter[1] - 4);
-            if ((unit = tile.getNonCombatUnit()) != null)
-                printStringToCellsMap(unit.getName(), tileCenter[0] + 2, tileCenter[1] - 3);
-
+            if (visionState == 2) {
+                Unit unit;
+                if ((unit = tile.getCombatUnit()) != null)
+                    printStringToCellsMap(cutStringLenght(unit.getName(), 9), tileCenter[0], tileCenter[1] - 4);
+                if ((unit = tile.getNonCombatUnit()) != null)
+                    printStringToCellsMap(cutStringLenght(unit.getName(), 79), tileCenter[0] + 2, tileCenter[1] - 3);
+            }
         }
+    }
 
+    public static String cutStringLenght(String input, int length) {
+        if (input.length() <= length)
+            return input;
+        else
+            return input.substring(0, length);
     }
 
     public static void cellsRefresh() { // initialize cells of every tile
         Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
-        String coordinates;
-        String civilizationName = civilization.getName();
-        if (civilizationName.length() > 5)
-            civilizationName = civilizationName.substring(0, 5);
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
-                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
-                tileTextsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
-
-
-
-
+                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization, visionStatesOfMap[i][j]);
+                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization, visionStatesOfMap[i][j]);
+                tileTextsRefresh(tileCenters[i][j], tilesMap[i][j], civilization, visionStatesOfMap[i][j]);
             }
         riverCellsRefresh();
     }
