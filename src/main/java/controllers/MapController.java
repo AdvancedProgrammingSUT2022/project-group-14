@@ -90,10 +90,22 @@ public class MapController {
             }
     }
 
-    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile, Civilization civilization) {
+    //Refresh data
+    private static void riverCellsRefresh() {
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
+        for (int i = 0; i < width; i++)
+            for (int j = 0; j < length; j++)
+                for (int k = 0; k < 6; k++) {
+                    if (visionStatesOfMap[i][j] != 0 && tilesMap[i][j].getIsRiver()[k])
+                        setRiverCells(i, j, k);
+                }
+    }
+    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         Colors color = tile.getColor();
-        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
-        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
+        if (visionStatesOfMap[tile.getX()][tile.getY()] == 0)
             color = Colors.BLACK;
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
@@ -101,10 +113,11 @@ public class MapController {
             }
     }
 
-    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile ,Civilization civilization) {
+    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         Colors color = tile.getColor();
-        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
-        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
+        if (visionStatesOfMap[tile.getX()][tile.getY()] == 0)
             color = Colors.BLACK;
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
@@ -112,20 +125,77 @@ public class MapController {
             }
     }
 
-    public static void tileCellsRefresh(Civilization civilization) { // initialize cells of every tile
+    public static void cellsRefresh() { // initialize cells of every tile
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
         String coordinates;
+        String civilizationName = civilization.getName();
+        if (civilizationName.length() > 5)
+            civilizationName = civilizationName.substring(0, 5);
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
-                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j] , civilization);
-                coordinates = "(" + (i+1) + "," + (j+1) + ")";
-                printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
-                printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
-                printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
+                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
+
+                if (visionStatesOfMap[i][j] != 0) {
+                    coordinates = "(" + (i + 1) + "," + (j + 1) + ")";
+                    printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
+                    printStringToCellsMap(civilizationName, tileCenters[i][j][0] - 2, tileCenters[i][j][1] - 2);
+                    printStringToCellsMap(tilesMap[i][j].getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
+                    Unit unit;
+                    if ((unit = tilesMap[i][j].getCombatUnit()) != null)
+                        printStringToCellsMap(unit.getName(), tileCenters[i][j][0], tileCenters[i][j][1] - 4);
+                    if ((unit = tilesMap[i][j].getNonCombatUnit()) != null)
+                        printStringToCellsMap(unit.getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+
+                }
             }
+        riverCellsRefresh();
     }
 
     // River initialization
+    private static void setRiver(int x, int y, int riverSide) { // creates river
+        boolean[] isRiver = tilesMap[x][y].getIsRiver();
+        isRiver[riverSide] = true;
+        Tile neighbourTile = getTileByRiver(x, y, riverSide);
+        if (neighbourTile == null)
+            return;
+        boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
+        int neighbourRiverSide = (riverSide + 3) % 6;
+        neighbourIsRiver[neighbourRiverSide] = true;
+    }
+
+    private static Tile getTileByRiver(int x, int y, int riverSide) {
+        if (y % 2 == 1) {
+            if (riverSide == 0 && x - 1 >= 0)
+                return tilesMap[x - 1][y];
+            else if (riverSide == 1 && y + 1 < length)
+                return tilesMap[x][y + 1];
+            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
+                return tilesMap[x + 1][y + 1];
+            else if (riverSide == 3 && x + 1 < width)
+                return tilesMap[x + 1][y];
+            else if (riverSide == 4 && x + 1 < width)
+                return tilesMap[x + 1][y - 1];
+            else if (riverSide == 5)
+                return tilesMap[x][y - 1];
+        } else if (y % 2 == 0) {
+            if (riverSide == 0 && x - 1 >= 0)
+                return tilesMap[x - 1][y];
+            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
+                return tilesMap[x - 1][y + 1];
+            if (riverSide == 2 && y + 1 < length)
+                return tilesMap[x][y + 1];
+            if (riverSide == 3 && x + 1 < width)
+                return tilesMap[x + 1][y];
+            if (riverSide == 4 && y - 1 >= 0)
+                return tilesMap[x][y - 1];
+            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
+                return tilesMap[x - 1][y - 1];
+        }
+        return null;
+    }
+
     private static void setRiverCells(int x, int y, int riverSide) {
         int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
         if (riverSide == 0 || riverSide == 3) {
@@ -168,7 +238,8 @@ public class MapController {
 
     public static void printStringToCellsMap(String input, int x, int y) {
         for (int i = 0; i < input.length(); i++) {
-            cellsMap[x][i + y].setCharacter(input.charAt(i));
+            if (i + y < outputMapLength)
+                cellsMap[x][i + y].setCharacter(input.charAt(i));
         }
     }
 
@@ -227,49 +298,6 @@ public class MapController {
 
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
-    }
-
-    private static void setRiver(int x, int y, int riverSide) { // creates river
-        boolean[] isRiver = tilesMap[x][y].getIsRiver();
-        isRiver[riverSide] = true;
-        Tile neighbourTile = getTileByRiver(x, y, riverSide);
-        if (neighbourTile == null)
-            return;
-        boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
-        int neighbourRiverSide = (riverSide + 3) % 6;
-        neighbourIsRiver[neighbourRiverSide] = true;
-        setRiverCells(x, y, riverSide);
-    }
-
-    private static Tile getTileByRiver(int x, int y, int riverSide) {
-        if (y % 2 == 1) {
-            if (riverSide == 0 && x - 1 >= 0)
-                return tilesMap[x - 1][y];
-            else if (riverSide == 1 && y + 1 < length)
-                return tilesMap[x][y + 1];
-            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
-                return tilesMap[x + 1][y + 1];
-            else if (riverSide == 3 && x + 1 < width)
-                return tilesMap[x + 1][y];
-            else if (riverSide == 4 && x + 1 < width)
-                return tilesMap[x + 1][y - 1];
-            else if (riverSide == 5)
-                return tilesMap[x][y - 1];
-        } else if (y % 2 == 0) {
-            if (riverSide == 0 && x - 1 >= 0)
-                return tilesMap[x - 1][y];
-            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
-                return tilesMap[x - 1][y + 1];
-            if (riverSide == 2 && y + 1 < length)
-                return tilesMap[x][y + 1];
-            if (riverSide == 3 && x + 1 < width)
-                return tilesMap[x + 1][y];
-            if (riverSide == 4 && y - 1 >= 0)
-                return tilesMap[x][y - 1];
-            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
-                return tilesMap[x - 1][y - 1];
-        }
-        return null;
     }
 
 

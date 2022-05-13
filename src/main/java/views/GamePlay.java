@@ -168,7 +168,7 @@ public class GamePlay {
     // showing map methods
     public static void showMapBasedOnTile(int x, int y) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        MapController.tileCellsRefresh(currentCivilization);
+        MapController.cellsRefresh();
         int[] tileCenter = MapController.getTileCenterByCoordinates(x, y);
         WorldController.setSelectedTile(MapController.getTileByCoordinates(x, y));
         showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth -1 , tileCenter[0] + 11), Math.min(MapController.outputMapLength -1, tileCenter[1] + 28));
