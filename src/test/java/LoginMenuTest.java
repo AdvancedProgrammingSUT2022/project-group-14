@@ -21,9 +21,8 @@ import java.lang.reflect.Method;
 import java.util.regex.Matcher;
 //import org.springframework.test.util.ReflectionTestUtils;
 
-import static org.mockito.ArgumentMatchers.isNull;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class LoginMenuTest {
@@ -31,6 +30,7 @@ public class LoginMenuTest {
     LoginMenu loginMenu;
     @Mock
     User user;
+
 
 
     @BeforeEach
@@ -77,21 +77,19 @@ public class LoginMenuTest {
         String testEnterMenu = "menu enter login menu";
         Matcher matcher = Commands.getMatcher(testEnterMenu, Commands.ENTER_MENU);
         when(loginMenu.checkCommand(testEnterMenu)).thenCallRealMethod();
-        loginMenu.checkCommand(testEnterMenu);
-        verify(loginMenu).checkEnterMenu(matcher);
+        boolean output = loginMenu.checkCommand(testEnterMenu);
+        verify(loginMenu).checkEnterMenu(any(Matcher.class));
+        Assertions.assertTrue(output);
     }
 
-//    @Test
-//    public void checkLoginTest1(){
-//        String input = "login user -u ali -p 12";
-//        //when(loginMenu.checkLogin(input)).thenCallRealMethod();
-//        Matcher usernameMatcher = Commands.matcherFindsRegex(input, Commands.USERNAME);
-//        Matcher passwordMatcher = Commands.matcherFindsRegex(input, Commands.PASSWORD);
-//        when(loginMenu.usernameExists(usernameMatcher)).thenReturn(false);
-//        when(UserController.getUserByUsername("ali")).thenReturn(user);
-//        when(loginMenu.passwordIsCorrect(passwordMatcher, user)).thenReturn(true);
-//        loginMenu.checkLogin(input);
-//        verify(loginMenu).loginUser(user);
-//
-//    }
+    @Test
+    public void checkLoginTest1(){
+        String input = "login user -u ali -p 12";
+        doCallRealMethod().when(loginMenu).checkLogin(input);
+        when(loginMenu.usernameExists(any(Matcher.class))).thenReturn(true);
+        when(loginMenu.passwordIsCorrect(any(Matcher.class), any(User.class))).thenReturn(true);
+        loginMenu.checkLogin(input);
+        verify(loginMenu).loginUser(any(User.class));
+
+    }
 }
