@@ -31,9 +31,9 @@ public class Tile {
     private int combatImpact;
     private int movingPoint;
 
-    private StrategicResource strategicResource;
-    private LuxuryResource luxuryResource;
-    private BonusResource bonusResource;
+//    private StrategicResource strategicResource;
+//    private LuxuryResource luxuryResource;
+//    private BonusResource bonusResource;
     private Resource resource;
 
     private Improvements improvement;
@@ -93,17 +93,23 @@ public class Tile {
     }
 
     public void addAvailableResourcesToCivilizationAndTile() {
-        if (this.bonusResource != null && !this.bonusResource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.bonusResource, this)) {
-            addResourceToCivilizationAndTile(this.bonusResource);
-            this.bonusResource.setHasBeenUsed(true);
+        if (this.resource != null &&
+                this.resource instanceof BonusResource &&
+                !this.resource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.resource, this)) {
+            addResourceToCivilizationAndTile(this.resource);
+            this.resource.setHasBeenUsed(true);
         }
-        if (this.luxuryResource != null && !this.luxuryResource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.luxuryResource, this)) {
-            addResourceToCivilizationAndTile(this.luxuryResource);
-            this.luxuryResource.setHasBeenUsed(true);
+        if (this.resource != null &&
+                this.resource instanceof LuxuryResource &&
+                !this.resource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.resource, this)) {
+            addResourceToCivilizationAndTile(this.resource);
+            this.resource.setHasBeenUsed(true);
         }
-        if (this.strategicResource != null && !this.strategicResource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.strategicResource, this)) {
-            addResourceToCivilizationAndTile(this.bonusResource);
-            this.strategicResource.setHasBeenUsed(true);
+        if (this.resource != null &&
+                this.resource instanceof StrategicResource &&
+                !this.resource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.resource, this)) {
+            addResourceToCivilizationAndTile(this.resource);
+            this.resource.setHasBeenUsed(true);
         }
     }
 
@@ -226,30 +232,6 @@ public class Tile {
             this.combatImpact -= this.feature.getCombatImpact();
         }
         this.feature = feature;
-    }
-
-    public StrategicResource getStrategicResource() {
-        return this.strategicResource;
-    }
-
-    public void setStrategicResource(StrategicResource strategicResource) {
-        this.strategicResource = strategicResource;
-    }
-
-    public LuxuryResource getLuxuryResource() {
-        return this.luxuryResource;
-    }
-
-    public void setLuxuryResource(LuxuryResource luxuryResource) {
-        this.luxuryResource = luxuryResource;
-    }
-
-    public Resource getBonusResource() {
-        return this.bonusResource;
-    }
-
-    public void setBonusResource(BonusResource bonusResource) {
-        this.bonusResource = bonusResource;
     }
 
     public Resource getResource() {

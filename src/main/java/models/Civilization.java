@@ -176,6 +176,10 @@ public class Civilization {
         return technologies;
     }
 
+    public City getCurrentCapital() {
+        return currentCapital;
+    }
+
     public Technologies getCurrentTechnology() {
         return currentTechnology;
     }

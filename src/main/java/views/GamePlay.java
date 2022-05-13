@@ -20,6 +20,7 @@ public class GamePlay {
     public static Scanner scanner;
 
     public static void run(Scanner sc) {
+        System.out.println("WELCOME TO CIVILIZATION");
         String input;
         scanner = sc;
         GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
@@ -519,6 +520,14 @@ public class GamePlay {
             }
             WorldController.nextTurn();
             System.out.println(WorldController.getWorld().getCurrentCivilizationName() + "'s turn");
+            currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+            if (currentCivilization.getCurrentCapital() != null) {
+                showMapBasedOnTile(currentCivilization.getCurrentCapital().getCenterOfCity().getX(),
+                        currentCivilization.getCurrentCapital().getCenterOfCity().getY());
+            }else {
+                showMapBasedOnTile(currentCivilization.getAllUnits().get(0).getCurrentX(),
+                        currentCivilization.getAllUnits().get(0).getCurrentY());
+            }
         }
     }
 
