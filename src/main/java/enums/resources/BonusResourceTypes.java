@@ -10,11 +10,11 @@ public enum BonusResourceTypes implements ResourceTypes {
     SHEEP("sheep", 2, 0, 0, Improvements.FARM),
     WHEAT("wheat", 1, 0, 0, Improvements.FARM);
 
-    private String name;
-    private double food;
-    private double production;
-    private double gold;
-    private Improvements requiredImprovement;
+    private final String name;
+    private final double food;
+    private final double production;
+    private final double gold;
+    private final Improvements requiredImprovement;
 
     BonusResourceTypes(String name, double food, double production, double gold, Improvements requiredImprovement) {
         this.name = name;

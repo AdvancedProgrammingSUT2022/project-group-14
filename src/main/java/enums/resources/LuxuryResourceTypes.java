@@ -3,14 +3,14 @@ package enums.resources;
 import enums.Improvements;
 
 public enum LuxuryResourceTypes implements ResourceTypes {
-    COTTON("cotton", 0, 0, 2, Improvements.FARM),
+    COTTON("cotton", 0, 0, 2, Improvements.FARM),//panbeh
     COLOR("color", 0, 0, 2, Improvements.FARM),
     FUR("fur", 0, 0, 2, Improvements.CAMP),
     JEWEL("jewel", 0, 0, 3, Improvements.MINE),
     GOLD("gold", 0, 0, 2, Improvements.MINE),
     INCENSE("incense", 0, 0, 2, Improvements.FARM),
     IVORY("ivory", 0, 0, 2, Improvements.CAMP),
-    MARBLE("marble", 0, 0, 2, Improvements.MINE),
+    MARBLE("marble", 0, 0, 2, Improvements.MINE),//marmar
     SILK("silk", 0, 0, 2, Improvements.FARM),
     SILVER("silver", 0, 0, 2, Improvements.MINE),
     SUGAR("sugar", 0, 0, 2, Improvements.FARM);
