@@ -174,7 +174,7 @@ public class GamePlay {
     public static void showMapByCoordinates(int x1, int y1, int x2, int y2) {
         for (int i = x1; i <= x2; i++) {
             for (int j = y1; j <= y2; j++) {
-                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +"\u001B[1m"+ MapController.getCellsMap()[i][j].getCharacter() + Colors.RESET.getAnsiEscapeCode());
+                System.out.print(MapController.getCellsMap()[i][j].getColor().getAnsiEscapeCode() +"\u001B[38;2;0;0;0m" + "\u001B[1m"+ MapController.getCellsMap()[i][j].getCharacter() + Colors.RESET.getAnsiEscapeCode());
             }
             System.out.println();
         }
