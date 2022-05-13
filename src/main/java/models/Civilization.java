@@ -2,6 +2,7 @@
 package models;
 
 import controllers.MapController;
+import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import enums.resources.LuxuryResourceTypes;
@@ -148,8 +149,13 @@ public class Civilization {
     }
 
     public void removeCity(City city) {
-        cities.remove(city);
-        happiness += 2;
+        if (cities.size() == 1) {
+            WorldController.getWorld().removeCivilization(this);
+        } else {
+            cities.remove(city);
+            currentCapital = cities.get(0);
+            happiness += 2;
+        }
     }
 
     public String getCityName() {
@@ -204,6 +210,10 @@ public class Civilization {
 
     public double getScience() {
         return science;
+    }
+
+    public City getFirstCapital() {
+        return firstCapital;
     }
 
     public void addNotification(String notification) {

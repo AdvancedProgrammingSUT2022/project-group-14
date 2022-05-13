@@ -1,6 +1,5 @@
 package controllers;
 
-import enums.units.CombatType;
 import models.City;
 import models.Civilization;
 import models.Tile;
@@ -8,9 +7,7 @@ import models.units.CombatUnit;
 import models.units.Melee;
 import models.units.Ranged;
 import models.units.Unit;
-import org.w3c.dom.ranges.Range;
-
-import java.util.Map;
+import views.GamePlay;
 
 public class WarController {
 
@@ -21,7 +18,7 @@ public class WarController {
         } else if (!TileController.selectedTileIsValid(x, y)) {
             return "wanted tile is invalid";
         } else if (attackingUnit instanceof Ranged && ((Ranged) attackingUnit).isSiegeUnit() && !((Ranged) attackingUnit).isUnitIsReadyForRangedBattle()) {
-            return "unit isn't ready for attack";
+            return "siege unit isn't ready for attack";
         } else {
             Tile attackingTile = MapController.getTileByCoordinates(x, y);
             attackingUnit.setAttackingTileX(x);
@@ -41,30 +38,32 @@ public class WarController {
     }
 
     public static void attackCity(CombatUnit combatUnit, City city) {
-        double cityDamage, unitDamage;
+        double cityAttackDamage, unitAttackDamage;
         Tile unitTile = MapController.getTileByCoordinates(combatUnit.getCurrentX(), combatUnit.getCurrentY());
-        if (Math.abs(city.getCenterOfCity().getX() - combatUnit.getCurrentX()) +
-                Math.abs(city.getCenterOfCity().getY() - combatUnit.getCurrentY()) <= combatUnit.getRange()) {
-            cityDamage = city.getAttackStrength();
+        if (TileController.coordinatesAreInRange(unitTile.getX(), unitTile.getY(), city.getCenterOfCity().getX(), city.getCenterOfCity().getY(), combatUnit.getRange())) {
+            cityAttackDamage = city.getAttackStrength();
             if (combatUnit.getCombatType().hasDefenseBonuses())
-                cityDamage -= combatUnit.getDefenseStrength() * (100 + unitTile.getMilitaryImpact()) / 100;
-            unitDamage = combatUnit.getAttackStrength() + combatUnit.getCombatType().getBonusAgainstCities() - (city.getDefenseStrength() * (3 + city.getNumberOfGarrisonedUnit()) / 3);
+                cityAttackDamage -= combatUnit.getDefenseStrength() * (100 + unitTile.getMilitaryImpact()) / 100;
+            unitAttackDamage = combatUnit.getAttackStrength() + combatUnit.getCombatType().getBonusAgainstCities() - (city.getDefenseStrength() * (3 + city.getNumberOfGarrisonedUnit()) / 3);
             if (combatUnit instanceof Ranged)
-                unitDamage -= combatUnit.getAttackStrength() - ((Ranged) combatUnit).getRangedCombatStrength();
+                unitAttackDamage -= combatUnit.getAttackStrength() - ((Ranged) combatUnit).getRangedCombatStrength();
 
-            city.receiveDamage(unitDamage);
-            combatUnit.receiveDamage(cityDamage);
+            city.receiveDamage(unitAttackDamage);
+            combatUnit.receiveDamage(cityAttackDamage);
             if (city.getHealthPoint() <= 0) {
                 if (combatUnit instanceof Melee) {
-                    //TODO conquer city
+                    WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
+                    combatUnit.setAttackingTileY(-1); combatUnit.setAttackingTileX(-1);
+                    GamePlay.conquerCity(city, combatUnit);
                 } else {
-                    city.setHealthPoint(10);
+                    city.setHealthPoint(5);
                 }
             }
             if (combatUnit.getHealthPoint() <= 0) {
                 Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
                 String notification = "In turn " + WorldController.getWorld().getActualTurn() + " " + combatUnit.getName() + "died in order to conquer a city :(";
                 currentCivilization.addNotification(notification);
+                unitTile.setCombatUnit(null);
                 if (combatUnit instanceof Melee)
                     currentCivilization.removeMeleeUnit((Melee) combatUnit);
                 else if (combatUnit instanceof Ranged)

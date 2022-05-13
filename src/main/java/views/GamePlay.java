@@ -13,15 +13,15 @@ import models.units.Settler;
 import models.units.Unit;
 import models.units.Worker;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class GamePlay {
+    public static Scanner scanner;
 
-    public void run(Scanner scanner) {
+    public static void run(Scanner sc) {
         String input;
+        scanner = sc;
         GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
         do {
             input = scanner.nextLine();
@@ -167,6 +167,7 @@ public class GamePlay {
     // showing map methods
     public static void showMapBasedOnTile(int x, int y) {
         int[] tileCenter = MapController.getTileCenterByCoordinates(x, y);
+        WorldController.setSelectedTile(MapController.getTileByCoordinates(x, y));
         showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
     }
 
@@ -184,10 +185,26 @@ public class GamePlay {
         String error;
         if (MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             System.out.println("can't attack your own base");
-        } else if (WorldController.getSelectedNonCombatUnit() != null){
-            System.out.println("can't attack using a nonCombat unit");
+        } else if (WorldController.getSelectedCombatUnit() == null){
+            System.out.println("you should select a combat unit to attack");
         } else if ((error = WarController.combatUnitAttacksTile(x, y)) != null){
             System.out.println(error);
+        }
+    }
+
+    public static void conquerCity(City city, CombatUnit unit) {
+        if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
+            System.out.println("Congrats! you attached the city to your civilization");
+            CityController.conquerCity(city, unit);
+        } else {
+            System.out.println("If you want to conquer city type 1 otherwise type 0 :");
+            if (scanner.nextInt() == 1) {
+                System.out.println("Congrats! you attached the city to your civilization");
+                CityController.conquerCity(city, unit);
+            } else {
+                System.out.println("Congrats! you destroyed the city");
+                CityController.destroyCity(city, unit);
+            }
         }
     }
 
@@ -534,7 +551,7 @@ public class GamePlay {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (City city : currentCivilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.towTilesAreNeighbors(x, y, tile.getX(), tile.getY())) {
+                if (TileController.coordinatesAreInRange(x, y, tile.getX(), tile.getY(), 1)) {
                     if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())) {
                         System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
                     } else {

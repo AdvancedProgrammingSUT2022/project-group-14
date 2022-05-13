@@ -29,8 +29,7 @@ public class MoveController {
         Tile nextTileToMove; String error;
         while (unit.getMovementPoint() > 0 && unit.getDestinationX() != -1 && unit.getDestinationY() != -1) {
             if (unit instanceof CombatUnit && ((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1) {
-                if (Math.abs(((CombatUnit) unit).getAttackingTileX() - unit.getCurrentX()) +
-                        Math.abs(((CombatUnit) unit).getAttackingTileY() - unit.getCurrentY()) <= ((CombatUnit) unit).getRange()) {
+                if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), ((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY(), ((CombatUnit) unit).getRange())) {
                     break;
                 }
             }
