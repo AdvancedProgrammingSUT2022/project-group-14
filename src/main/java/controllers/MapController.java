@@ -143,6 +143,50 @@ public class MapController {
     }
 
     // River initialization
+
+    private static void setRiver(int x, int y, int riverSide) { // creates river
+        boolean[] isRiver = tilesMap[x][y].getIsRiver();
+        isRiver[riverSide] = true;
+        Tile neighbourTile = getTileByRiver(x, y, riverSide);
+        if (neighbourTile == null)
+            return;
+        boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
+        int neighbourRiverSide = (riverSide + 3) % 6;
+        neighbourIsRiver[neighbourRiverSide] = true;
+        setRiverCells(x, y, riverSide);
+    }
+
+    private static Tile getTileByRiver(int x, int y, int riverSide) {
+        if (y % 2 == 1) {
+            if (riverSide == 0 && x - 1 >= 0)
+                return tilesMap[x - 1][y];
+            else if (riverSide == 1 && y + 1 < length)
+                return tilesMap[x][y + 1];
+            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
+                return tilesMap[x + 1][y + 1];
+            else if (riverSide == 3 && x + 1 < width)
+                return tilesMap[x + 1][y];
+            else if (riverSide == 4 && x + 1 < width)
+                return tilesMap[x + 1][y - 1];
+            else if (riverSide == 5)
+                return tilesMap[x][y - 1];
+        } else if (y % 2 == 0) {
+            if (riverSide == 0 && x - 1 >= 0)
+                return tilesMap[x - 1][y];
+            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
+                return tilesMap[x - 1][y + 1];
+            if (riverSide == 2 && y + 1 < length)
+                return tilesMap[x][y + 1];
+            if (riverSide == 3 && x + 1 < width)
+                return tilesMap[x + 1][y];
+            if (riverSide == 4 && y - 1 >= 0)
+                return tilesMap[x][y - 1];
+            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
+                return tilesMap[x - 1][y - 1];
+        }
+        return null;
+    }
+
     private static void setRiverCells(int x, int y, int riverSide) {
         int cellX = tileCenters[x][y][0], cellY = tileCenters[x][y][1];
         if (riverSide == 0 || riverSide == 3) {
@@ -245,49 +289,6 @@ public class MapController {
 
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
-    }
-
-    private static void setRiver(int x, int y, int riverSide) { // creates river
-        boolean[] isRiver = tilesMap[x][y].getIsRiver();
-        isRiver[riverSide] = true;
-        Tile neighbourTile = getTileByRiver(x, y, riverSide);
-        if (neighbourTile == null)
-            return;
-        boolean[] neighbourIsRiver = neighbourTile.getIsRiver();
-        int neighbourRiverSide = (riverSide + 3) % 6;
-        neighbourIsRiver[neighbourRiverSide] = true;
-        setRiverCells(x, y, riverSide);
-    }
-
-    private static Tile getTileByRiver(int x, int y, int riverSide) {
-        if (y % 2 == 1) {
-            if (riverSide == 0 && x - 1 >= 0)
-                return tilesMap[x - 1][y];
-            else if (riverSide == 1 && y + 1 < length)
-                return tilesMap[x][y + 1];
-            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
-                return tilesMap[x + 1][y + 1];
-            else if (riverSide == 3 && x + 1 < width)
-                return tilesMap[x + 1][y];
-            else if (riverSide == 4 && x + 1 < width)
-                return tilesMap[x + 1][y - 1];
-            else if (riverSide == 5)
-                return tilesMap[x][y - 1];
-        } else if (y % 2 == 0) {
-            if (riverSide == 0 && x - 1 >= 0)
-                return tilesMap[x - 1][y];
-            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
-                return tilesMap[x - 1][y + 1];
-            if (riverSide == 2 && y + 1 < length)
-                return tilesMap[x][y + 1];
-            if (riverSide == 3 && x + 1 < width)
-                return tilesMap[x + 1][y];
-            if (riverSide == 4 && y - 1 >= 0)
-                return tilesMap[x][y - 1];
-            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
-                return tilesMap[x - 1][y - 1];
-        }
-        return null;
     }
 
 
