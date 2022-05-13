@@ -7,6 +7,7 @@ import models.units.CombatUnit;
 import models.units.Melee;
 import models.units.Ranged;
 import models.units.Unit;
+import views.GamePlay;
 
 public class WarController {
 
@@ -51,7 +52,9 @@ public class WarController {
             combatUnit.receiveDamage(cityAttackDamage);
             if (city.getHealthPoint() <= 0) {
                 if (combatUnit instanceof Melee) {
-                    //TODO conquer city
+                    WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
+                    combatUnit.setAttackingTileY(-1); combatUnit.setAttackingTileX(-1);
+                    GamePlay.conquerCity(city, combatUnit);
                 } else {
                     city.setHealthPoint(5);
                 }

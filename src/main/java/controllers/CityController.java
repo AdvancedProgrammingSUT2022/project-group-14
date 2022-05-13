@@ -258,4 +258,30 @@ public class CityController {
         return output.toString();
     }
 
+    public static void conquerCity(City city, CombatUnit unit) {
+        for (Tile tile : city.getTerritory()) {
+            tile.setCivilization(unit.getCivilizationName());
+        }
+        if (city.getCenterOfCity().getCombatUnit() != null) {
+            if (city.getCenterOfCity().getCombatUnit() instanceof Melee)
+                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeMeleeUnit((Melee) city.getCenterOfCity().getCombatUnit());
+            else
+                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeRangedUnit((Ranged) city.getCenterOfCity().getCombatUnit());
+        }
+        if (city.getCenterOfCity().getNonCombatUnit() != null) {
+            city.getCenterOfCity().getNonCombatUnit().setCivilizationName(unit.getCivilizationName());
+        }
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you conquered the " + city.getName() + "city";
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
+    }
+
+    public static void destroyCity(City city, CombatUnit unit) {
+        for (Tile tile : city.getTerritory()) {
+            tile.setCivilization(null);
+        }
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you destroyed the " + city.getName() + "city";
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
+    }
 }

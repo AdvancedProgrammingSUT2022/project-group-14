@@ -13,16 +13,15 @@ import models.units.Settler;
 import models.units.Unit;
 import models.units.Worker;
 
-import java.util.ArrayList;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 
 public class GamePlay {
+    public static Scanner scanner;
 
-    public void run(Scanner scanner) {
+    public static void run(Scanner sc) {
         String input;
+        scanner = sc;
         GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
         do {
             input = scanner.nextLine();
@@ -190,6 +189,22 @@ public class GamePlay {
             System.out.println("you should select a combat unit to attack");
         } else if ((error = WarController.combatUnitAttacksTile(x, y)) != null){
             System.out.println(error);
+        }
+    }
+
+    public static void conquerCity(City city, CombatUnit unit) {
+        if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
+            System.out.println("Congrats! you attached the city to your civilization");
+            CityController.conquerCity(city, unit);
+        } else {
+            System.out.println("If you want to conquer city type 1 otherwise type 0 :");
+            if (scanner.nextInt() == 1) {
+                System.out.println("Congrats! you attached the city to your civilization");
+                CityController.conquerCity(city, unit);
+            } else {
+                System.out.println("Congrats! you destroyed the city");
+                CityController.destroyCity(city, unit);
+            }
         }
     }
 

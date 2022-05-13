@@ -43,6 +43,10 @@ public class Unit {
         return civilizationName;
     }
 
+    public void setCivilizationName(String civilizationName) {
+        this.civilizationName = civilizationName;
+    }
+
     public String getName() {
         return name;
     }
@@ -135,4 +139,6 @@ public class Unit {
         }
         return output;
     }
+
+
 }
