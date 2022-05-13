@@ -170,7 +170,7 @@ public class GamePlay {
         MapController.tileCellsRefresh(currentCivilization);
         int[] tileCenter = MapController.getTileCenterByCoordinates(x, y);
         WorldController.setSelectedTile(MapController.getTileByCoordinates(x, y));
-        showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth, tileCenter[0] + 11), Math.min(MapController.outputMapLength, tileCenter[1] + 28));
+        showMapByCoordinates(Math.max(0, tileCenter[0] - 11), Math.max(0, tileCenter[1] - 28), Math.min(MapController.outputMapWidth -1 , tileCenter[0] + 11), Math.min(MapController.outputMapLength -1, tileCenter[1] + 28));
     }
 
     public static void showMapByCoordinates(int x1, int y1, int x2, int y2) {

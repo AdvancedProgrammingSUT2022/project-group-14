@@ -14,7 +14,6 @@ import models.Civilization;
 import models.Tile;
 import models.units.Ranged;
 
-import java.util.Map;
 import java.util.regex.Matcher;
 
 public class GameCommandsValidation {
@@ -81,7 +80,7 @@ public class GameCommandsValidation {
             GamePlay.cancelCurrentResearch();
         } else if ((matcher = Commands.getMatcher(input, Commands.START_RESEARCH)) != null) {
             checkStartResearch(matcher);
-        }  else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE)) != null) {
             checkBuyTile(matcher);
         } else if ((matcher = Commands.getMatcher(input, Commands.UPGRADE_UNIT)) != null) {
             checkUpgradeUnit(matcher);
@@ -187,8 +186,8 @@ public class GameCommandsValidation {
     }
 
     public void checkShowMapByPosition(Matcher matcher) {
-        int x = Integer.parseInt(matcher.group("x"));
-        int y = Integer.parseInt(matcher.group("y"));
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
         if (TileController.selectedTileIsValid(x, y)) {
             GamePlay.showMapBasedOnTile(x, y);
         } else System.out.println("given position is invalid");
@@ -278,7 +277,7 @@ public class GameCommandsValidation {
         else GamePlay.startResearch(technologies);
     }
 
-    public void checkBuyTile(Matcher matcher){
+    public void checkBuyTile(Matcher matcher) {
         int x = Integer.parseInt(matcher.group("x")) - 1;
         int y = Integer.parseInt(matcher.group("y")) - 1;
         if (TileController.selectedTileIsValid(x, y)) {
@@ -286,7 +285,7 @@ public class GameCommandsValidation {
         }
     }
 
-    public void checkUpgradeUnit(Matcher matcher){
+    public void checkUpgradeUnit(Matcher matcher) {
         String unitName = matcher.group("unitName");
         Unit unit = Unit.getUnitByName(unitName.toUpperCase());
 
