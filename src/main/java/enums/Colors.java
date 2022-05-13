@@ -15,10 +15,21 @@ public enum Colors {
     CYAN("\u001B[48;2;0;255;238m"),
     WHITE("\u001B[48;2;255;255;255m");
 
-    private String ansiEscapeCode;
+    private final String ansiEscapeCode;
 
     Colors(String ansiEscapeCode) {
         this.ansiEscapeCode = ansiEscapeCode;
+    }
+
+    public Colors getColorByName(String input) {
+        for (var color : Colors.values())
+            if (color.getAnsiEscapeCode().equals(input))
+                return color;
+        return null;
+    }
+
+    public Colors getLightColor(Colors color) {
+        return getColorByName("light " + color.getAnsiEscapeCode());
     }
 
     public String getAnsiEscapeCode() {
