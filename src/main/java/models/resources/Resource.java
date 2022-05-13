@@ -1,10 +1,12 @@
 package models.resources;
 
 import enums.Improvements;
-import enums.resources.BonusResourceTypes;
-import enums.resources.LuxuryResourceTypes;
 import enums.resources.ResourceTypes;
-import enums.resources.StrategicResourceTypes;
+import enums.tiles.TileBaseTypes;
+import enums.tiles.TileFeatureTypes;
+
+import java.util.HashSet;
+import java.util.Random;
 
 public class Resource {
     private String name;
@@ -31,7 +33,18 @@ public class Resource {
         this.name = type.nameGetter();
     }
 
-   
+    public static Resource generateRandomResource(TileBaseTypes type, TileFeatureTypes feature) {
+        HashSet<ResourceTypes> allPossibleResources = type.getPossibleResources();
+        allPossibleResources.addAll(feature.getPossibleResources());
+        int possibleResourcesNumber = allPossibleResources.size();
+        Random rand = new Random();
+        if (rand.nextBoolean()) {
+            ResourceTypes[] allPossibleResourcesArray = allPossibleResources.toArray(new ResourceTypes[possibleResourcesNumber]);
+            int randomInt = rand.nextInt(possibleResourcesNumber);
+            return new Resource(allPossibleResourcesArray[randomInt]);
+        }
+        return null;
+    }
 
     public double getFood() {
         return this.food;
