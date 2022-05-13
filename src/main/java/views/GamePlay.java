@@ -571,14 +571,14 @@ public class GamePlay {
 
     public static void buyTile(int x, int y) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if (MapController.getTileByCoordinates(x, y).getCivilizationName() != null) {
+            System.out.println("this tile belongs to a civilization");
+            return;
+        }
         for (City city : currentCivilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.coordinatesAreInRange(x, y, tile.getX(), tile.getY(), 1)) {
-                    if (tile.getCivilizationName() == null || tile.getCivilizationName().equals(currentCivilization.getName())) {
-                        System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
-                    } else {
-                        System.out.println("this tile belongs to another civilization");
-                    }
+                if (TileController.coordinatesAreInRange(tile.getX(), tile.getY(), x, y, 1)) {
+                    System.out.println(CityController.buyTileAndAddItToCityTerritory(currentCivilization, city, x, y));
                     return;
                 }
             }
