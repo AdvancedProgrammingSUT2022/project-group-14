@@ -117,17 +117,27 @@ public class MapController {
     public static void tileCellsRefresh() { // initialize cells of every tile
         Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         String coordinates;
+        String civilizationName = civilization.getName();
+        if (civilizationName.length() > 5)
+            civilizationName = civilizationName.substring(0, 5);
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
                 upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
                 downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
                 int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
                 if (visionStatesOfMap[i][j] != 0) {
+
                     coordinates = "(" + (i + 1) + "," + (j + 1) + ")";
                     printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
-                    printStringToCellsMap(civilization.getName(),tileCenters[i][j][0],tileCenters[i][j][1] -4);
-                    printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
-                    printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+                    printStringToCellsMap(civilizationName, tileCenters[i][j][0] - 2, tileCenters[i][j][1] - 2);
+                    printStringToCellsMap(tilesMap[i][j].getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
+                    //printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+                    Unit unit;
+                    if ((unit = tilesMap[i][j].getCombatUnit()) != null)
+                        printStringToCellsMap(unit.getName(), tileCenters[i][j][0], tileCenters[i][j][1] - 4);
+                    if ((unit = tilesMap[i][j].getNonCombatUnit()) != null)
+                        printStringToCellsMap(unit.getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+
                 }
             }
     }
@@ -175,7 +185,8 @@ public class MapController {
 
     public static void printStringToCellsMap(String input, int x, int y) {
         for (int i = 0; i < input.length(); i++) {
-            cellsMap[x][i + y].setCharacter(input.charAt(i));
+            if (i + y < outputMapLength)
+                cellsMap[x][i + y].setCharacter(input.charAt(i));
         }
     }
 

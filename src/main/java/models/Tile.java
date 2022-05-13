@@ -68,7 +68,7 @@ public class Tile {
             this.name = feature.getName();
         else
             this.name = type.getName();
-        this.resource = Resource.generateRandomResource(type,feature);
+        this.resource = Resource.generateRandomResource(type, feature);
     }
 
     //randomTile generation
@@ -193,15 +193,15 @@ public class Tile {
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
         if (x == -1 && y == 0 && isRiver[0]) {
             return movingPoints;
-        } else if ((this.y%2 == 0 && x == -1 && y == 1 && isRiver[1]) || (this.y%2 == 1 && x == 0 && y == 1 && isRiver[1])) {
+        } else if ((this.y % 2 == 0 && x == -1 && y == 1 && isRiver[1]) || (this.y % 2 == 1 && x == 0 && y == 1 && isRiver[1])) {
             return movingPoints;
-        } else if ((this.y%2 == 0 && x == 0 && y == 1 && isRiver[2]) || (this.y%2 == 1 && x == 1 && y == 1 && isRiver[2])) {
+        } else if ((this.y % 2 == 0 && x == 0 && y == 1 && isRiver[2]) || (this.y % 2 == 1 && x == 1 && y == 1 && isRiver[2])) {
             return movingPoints;
         } else if (x == 1 && y == 0 && isRiver[3]) {
             return movingPoints;
-        } else if ((this.y%2 == 0 && x == 0 && y == -1 && isRiver[4]) || (this.y%2 == 1 && x == 1 && y == -1 && isRiver[4])) {
+        } else if ((this.y % 2 == 0 && x == 0 && y == -1 && isRiver[4]) || (this.y % 2 == 1 && x == 1 && y == -1 && isRiver[4])) {
             return movingPoints;
-        } else if ((this.y%2 == 0 && x == -1 && y == -1 && isRiver[5]) || (this.y%2 == 1 && x == 0 && y == -1 && isRiver[5])) {
+        } else if ((this.y % 2 == 0 && x == -1 && y == -1 && isRiver[5]) || (this.y % 2 == 1 && x == 0 && y == -1 && isRiver[5])) {
             return movingPoints;
         }
         return this.movingPoint;
@@ -220,7 +220,7 @@ public class Tile {
     }
 
     public void setFeature(TileFeatureTypes feature) {
-        if (feature == null){
+        if (feature == null) {
             this.food -= this.feature.getFood();
             this.production -= this.feature.getProduction();
             this.gold -= this.feature.getGold();
@@ -249,7 +249,7 @@ public class Tile {
     public void setRoadState(int roadState) {
         this.roadState = roadState;
         if (this.roadState == 0 && this.movingPoint != 9999)
-            this.movingPoint *= 2/3;
+            this.movingPoint *= 2 / 3;
     }
 
     public int getRailRoadState() {
@@ -260,7 +260,7 @@ public class Tile {
     public void setRailRoadState(int railRoadState) {
         this.railRoadState = railRoadState;
         if (this.railRoadState == 0 && this.movingPoint != 9999)
-            this.movingPoint *= 1/2;
+            this.movingPoint *= 1 / 2;
     }
 
     public Improvements getImprovement() {
@@ -285,16 +285,16 @@ public class Tile {
 
     public void setPillageState(int pillageState) {
         this.pillageState = pillageState;
-        if (this.pillageState == 9999){
+        if (this.pillageState == 9999) {
             this.food -= this.resource.getFood();
             this.gold -= this.resource.getGold();
             this.production -= this.resource.getProduction();
-            this.movingPoint *= 3/2;
+            this.movingPoint *= 3 / 2;
         } else if (this.pillageState == 0) {
             this.food += this.resource.getFood();
             this.gold += this.resource.getGold();
             this.production += this.resource.getProduction();
-            this.movingPoint /= 3/2;
+            this.movingPoint /= 3 / 2;
         }
     }
 
@@ -330,4 +330,7 @@ public class Tile {
         this.civilizationName = civilizationName;
     }
 
+    public String getName() {
+        return name;
+    }
 }
