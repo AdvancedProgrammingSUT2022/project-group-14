@@ -90,10 +90,11 @@ public class MapController {
             }
     }
 
-    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile, Civilization civilization) {
+    private static void upLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         Colors color = tile.getColor();
-        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
-        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
+        if (visionStatesOfMap[tile.getX()][tile.getY()] == 0)
             color = Colors.BLACK;
         for (int i = tileCenter[0]; i >= tileCenter[0] - 2; i--)
             for (int j = tileCenter[1] - 4 + (tileCenter[0] - i); j <= tileCenter[1] + 4 - (tileCenter[0] - i); j++) {
@@ -101,10 +102,11 @@ public class MapController {
             }
     }
 
-    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile ,Civilization civilization) {
+    private static void downLayerTileCellsRefresh(int[] tileCenter, Tile tile) {
         Colors color = tile.getColor();
-        int[][] visionStatesOfMap=civilization.getVisionStatesOfMap();
-        if(visionStatesOfMap[tile.getX()][tile.getY()] == 0)
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
+        if (visionStatesOfMap[tile.getX()][tile.getY()] == 0)
             color = Colors.BLACK;
         for (int i = tileCenter[0] + 1; i <= tileCenter[0] + 3; i++)
             for (int j = tileCenter[1] - 4 + (i - tileCenter[0] - 1); j <= tileCenter[1] + 4 - (i - tileCenter[0] - 1); j++) {
@@ -112,12 +114,13 @@ public class MapController {
             }
     }
 
-    public static void tileCellsRefresh(Civilization civilization) { // initialize cells of every tile
+    public static void tileCellsRefresh() { // initialize cells of every tile
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         String coordinates;
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
-                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
-                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
+                upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
+                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j]);
                 int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
                 if (visionStatesOfMap[i][j] != 0) {
                     coordinates = "(" + (i + 1) + "," + (j + 1) + ")";
