@@ -125,6 +125,7 @@ public class MapController {
                 if (visionStatesOfMap[i][j] != 0) {
                     coordinates = "(" + (i + 1) + "," + (j + 1) + ")";
                     printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
+                    printStringToCellsMap(civilization.getName(),tileCenters[i][j][0],tileCenters[i][j][1] -4);
                     printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
                     printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
                 }
