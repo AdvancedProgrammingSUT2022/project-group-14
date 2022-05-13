@@ -4,6 +4,7 @@ import models.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
+import views.GamePlay;
 
 import java.util.ArrayList;
 
@@ -45,9 +46,11 @@ public class MoveController {
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
             unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
                     nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));
-            if (nextTileToMove.getCivilizationName() != null && !nextTileToMove.getCivilizationName().equals(unit.getCivilizationName()))
+
+            if ((unit.getMovementPoint() < 0) || (nextTileToMove.getCivilizationName() != null && !nextTileToMove.getCivilizationName().equals(unit.getCivilizationName())))
                 unit.setMovementPoint(0);
             MapController.updateUnitPositions();
+            CivilizationController.updateMapVision(WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()));
         }
     }
 

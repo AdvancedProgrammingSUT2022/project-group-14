@@ -18,6 +18,7 @@ public class UnitController {
             return reason;
         } else {
             unit.setDestinationCoordinates(x, y);
+            MoveController.moveUnitToDestination(unit);
             x++; y++;
             String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you moved " +
                     unit.getName() + " to ( " + x + " , " + y + " ) coordinates";
@@ -122,6 +123,7 @@ public class UnitController {
             City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY());
             currentTile.setCity(city);
             currentCivilization.addCity(city);
+            CivilizationController.updateMapVision(currentCivilization);
             int x = settler.getCurrentX()+1, y = settler.getCurrentY()+1;
             String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you found the city " +
                     city.getName() + " in ( " + x + " , " + y + " ) coordinates";

@@ -12,8 +12,8 @@ public class CivilizationController {
 
     public static void updateMapVision(Civilization civilization) {
         int[][] visionState = civilization.getVisionStatesOfMap();
-        for (int i = 0; i < visionState.length; i++) {
-            for (int j = 0; j < visionState.length; j++) {
+        for (int i = 0; i < MapController.width; i++) {
+            for (int j = 0; j < MapController.length; j++) {
                 if (visionState[i][j] == 0 && tileIsInRange(i, j, civilization)) {
                     visionState[i][j] = 2;
                 } else if (visionState[i][j] == 1 && tileIsInRange(i, j, civilization)) {
@@ -33,8 +33,10 @@ public class CivilizationController {
                 return true;
         }
         for (City city : civilization.getCities()) {
-            if (TileController.coordinatesAreInRange(city.getCenterOfCity().getX(), city.getCenterOfCity().getY(), x, y, 4)){
-                return true;
+            for (Tile tile : city.getTerritory()) {
+                if (TileController.coordinatesAreInRange(tile.getX(), tile.getY(), x, y, 1)){
+                    return true;
+                }
             }
         }
 

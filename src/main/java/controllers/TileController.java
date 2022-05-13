@@ -50,7 +50,7 @@ public class TileController {
             if (selectedTileIsValid(x, y-1))
                 neighbours.add(MapController.getTileByCoordinates(x, y-1));
             if (selectedTileIsValid(x-1, y-1))
-                neighbours.add(MapController.getTileByCoordinates(x, y-1));
+                neighbours.add(MapController.getTileByCoordinates(x-1, y-1));
         } else {
             if (selectedTileIsValid(x, y+1))
                 neighbours.add(MapController.getTileByCoordinates(x, y+1));
@@ -71,7 +71,14 @@ public class TileController {
 
     public static boolean coordinatesAreInRange(int x1, int y1, int x2, int y2, int distance) {
         int[][] neighbors = new int[MapController.getWidth()][MapController.getLength()];
+        for (int i = 0; i < MapController.getWidth(); i++) {
+            for (int j = 0; j < MapController.getLength(); j++) {
+                neighbors[i][j] = 0;
+            }
+        }
         int range = 1;
+        if (x1 == x2 && y1 == y2 && distance >= 0)
+            return true;
         for (Tile neighbourTile : getAvailableNeighbourTiles(x2, y2)) {
             neighbors[neighbourTile.getX()][neighbourTile.getY()] = range;
         }
@@ -80,12 +87,14 @@ public class TileController {
                 for (int j = 0; j < MapController.getLength(); j++) {
                     if (neighbors[i][j] == range)
                         for (Tile neighbourTile : getAvailableNeighbourTiles(i, j)) {
-                            neighbors[neighbourTile.getX()][neighbourTile.getY()] = range + 1;
+                            if (neighbors[neighbourTile.getX()][neighbourTile.getY()] == 0)
+                                neighbors[neighbourTile.getX()][neighbourTile.getY()] = range + 1;
                         }
                 }
             }
             range++;
         }
+
         return neighbors[x1][y1] > 0;
     }
 

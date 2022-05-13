@@ -219,6 +219,7 @@ public class CityController {
         Tile tile = MapController.getMap()[tileX][tileY];
         tile.setCivilization(civilization.getName());
         city.getTerritory().add(tile);
+        CivilizationController.updateMapVision(civilization);
         return "tile was bought successfully";
     }
 

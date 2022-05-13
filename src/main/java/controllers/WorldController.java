@@ -56,12 +56,9 @@ public class WorldController {
             MoveController.moveUnitToDestination(unit);
         }
         applyAttacks();
-        //TODO show map
         UnitController.resetMovingPoints(currentCivilization);
-
         world.nextTurn();
         resetSelection();
-        MapController.tileCellsRefresh(currentCivilization);
     }
 
     public static void applyAttacks() {
