@@ -37,6 +37,7 @@ public class Unit {
         } else {
             this.requiredTechnology = unitInfo.getRequiredTechnology().getName();
         }
+        this.healthPoint = 10;
     }
 
     public String getCivilizationName() {

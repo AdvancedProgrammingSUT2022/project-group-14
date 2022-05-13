@@ -47,21 +47,31 @@ public class WarController {
             unitAttackDamage = combatUnit.getAttackStrength() + combatUnit.getCombatType().getBonusAgainstCities() - (city.getDefenseStrength() * (3 + city.getNumberOfGarrisonedUnit()) / 3);
             if (combatUnit instanceof Ranged)
                 unitAttackDamage -= combatUnit.getAttackStrength() - ((Ranged) combatUnit).getRangedCombatStrength();
+            cityAttackDamage = Math.max(0, cityAttackDamage);
+            unitAttackDamage = Math.max(0, unitAttackDamage);
 
             city.receiveDamage(unitAttackDamage);
             combatUnit.receiveDamage(cityAttackDamage);
             if (city.getHealthPoint() <= 0) {
                 if (combatUnit instanceof Melee) {
+                    if (city.getCenterOfCity().getCombatUnit() != null) {
+                        if (city.getCenterOfCity().getCombatUnit() instanceof Melee)
+                            WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeMeleeUnit((Melee) city.getCenterOfCity().getCombatUnit());
+                        else
+                            WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeRangedUnit((Ranged) city.getCenterOfCity().getCombatUnit());
+                    }
+                    if (city.getCenterOfCity().getNonCombatUnit() != null) {
+                        city.getCenterOfCity().getNonCombatUnit().setCivilizationName(combatUnit.getCivilizationName());
+                    }
                     WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
                     combatUnit.setAttackingTileY(-1); combatUnit.setAttackingTileX(-1);
                     GamePlay.conquerCity(city, combatUnit);
                 } else {
                     city.setHealthPoint(5);
                 }
-            }
-            if (combatUnit.getHealthPoint() <= 0) {
-                Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-                String notification = "In turn " + WorldController.getWorld().getActualTurn() + " " + combatUnit.getName() + "died in order to conquer a city :(";
+            } else if (combatUnit.getHealthPoint() <= 0) {
+                Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(combatUnit.getCivilizationName());
+                String notification = "In turn " + WorldController.getWorld().getActualTurn() + " " + combatUnit.getName() + " died in order to conquer a city :(";
                 currentCivilization.addNotification(notification);
                 unitTile.setCombatUnit(null);
                 if (combatUnit instanceof Melee)

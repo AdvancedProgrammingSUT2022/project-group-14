@@ -24,7 +24,7 @@ public class MoveController {
     }
 
     public static void moveUnitToDestination(Unit unit) {
-        if (unit.getDestinationX() == -1 && unit.getDestinationY() == -1)
+        if ((unit == null) || (unit.getDestinationX() == -1 && unit.getDestinationY() == -1))
             return;
 
         Tile nextTileToMove; String error;

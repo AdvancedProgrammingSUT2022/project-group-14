@@ -29,7 +29,8 @@ public class UnitController {
 
     public static void resetMovingPoints(Civilization currentCivilization) {
         for (Unit unit : currentCivilization.getAllUnits()) {
-            unit.setMovementPoint(enums.units.Unit.getUnitByName(unit.getName()).getMovement());
+            if (unit != null)
+                unit.setMovementPoint(enums.units.Unit.getUnitByName(unit.getName()).getMovement());
         }
     }
 

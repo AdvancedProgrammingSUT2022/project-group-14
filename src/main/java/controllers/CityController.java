@@ -81,6 +81,15 @@ public class CityController {
     }
 
     public static String lockCitizenToTile(City city, int id, int x, int y) {
+        boolean isValid = false;
+        for (Tile tile : city.getTerritory()) {
+            if (tile.getX() == x && tile.getY() == y){
+                isValid = true;
+                break;
+            }
+        }
+        if (!isValid)
+            return "you should select a tile in city";
         for (Citizen citizen : city.getCitizens()) {
             if (id == citizen.getId()) {
                 if (citizen.isWorking()) return "the citizen is currently working";
@@ -262,15 +271,6 @@ public class CityController {
     public static void conquerCity(City city, CombatUnit unit) {
         for (Tile tile : city.getTerritory()) {
             tile.setCivilization(unit.getCivilizationName());
-        }
-        if (city.getCenterOfCity().getCombatUnit() != null) {
-            if (city.getCenterOfCity().getCombatUnit() instanceof Melee)
-                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeMeleeUnit((Melee) city.getCenterOfCity().getCombatUnit());
-            else
-                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeRangedUnit((Ranged) city.getCenterOfCity().getCombatUnit());
-        }
-        if (city.getCenterOfCity().getNonCombatUnit() != null) {
-            city.getCenterOfCity().getNonCombatUnit().setCivilizationName(unit.getCivilizationName());
         }
         WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
         String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you conquered the " + city.getName() + "city";

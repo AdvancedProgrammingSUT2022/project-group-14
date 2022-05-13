@@ -209,8 +209,9 @@ public class GamePlay {
     }
 
     public static void conquerCity(City city, CombatUnit unit) {
-        if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
-            System.out.println("Congrats! you attached the city to your civilization");
+        if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()) == null ||
+                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
+            System.out.println("Congrats! you attached the first capital of the enemy to your civilization");
             CityController.conquerCity(city, unit);
         } else {
             System.out.println("If you want to conquer city type 1 otherwise type 0 :");
