@@ -38,7 +38,9 @@ public class Resource {
         allPossibleResources.addAll(feature.getPossibleResources());
         int possibleResourcesNumber = allPossibleResources.size();
         Random rand = new Random();
-        if (rand.nextBoolean()) {
+        if(possibleResourcesNumber == 0)
+            return null;
+        else if (rand.nextBoolean()) {
             ResourceTypes[] allPossibleResourcesArray = allPossibleResources.toArray(new ResourceTypes[possibleResourcesNumber]);
             int randomInt = rand.nextInt(possibleResourcesNumber);
             return new Resource(allPossibleResourcesArray[randomInt]);
