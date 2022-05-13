@@ -138,7 +138,7 @@ public class MapController {
                 if ((unit = tile.getCombatUnit()) != null)
                     printStringToCellsMap(cutStringLenght(unit.getName(), 9), tileCenter[0], tileCenter[1] - 4);
                 if ((unit = tile.getNonCombatUnit()) != null)
-                    printStringToCellsMap(cutStringLenght(unit.getName(), 79), tileCenter[0] + 2, tileCenter[1] - 3);
+                    printStringToCellsMap(cutStringLenght(unit.getName(), 7), tileCenter[0] + 2, tileCenter[1] - 3);
             }
         }
     }
