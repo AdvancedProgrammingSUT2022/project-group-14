@@ -29,11 +29,13 @@ public class CivilizationController {
 
     public static boolean tileIsInRange(int x, int y, Civilization civilization) {
         for (Unit unit : civilization.getAllUnits()) {
-            if (Math.abs(x - unit.getCurrentX()) <= 2 && Math.abs(y - unit.getCurrentY()) <= 2)
+            if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), x, y, 2))
                 return true;
         }
         for (City city : civilization.getCities()) {
-            //TODO return true if its in range
+            if (TileController.coordinatesAreInRange(city.getCenterOfCity().getX(), city.getCenterOfCity().getY(), x, y, 4)){
+                return true;
+            }
         }
 
         return false;

@@ -36,6 +36,7 @@ public enum Commands {
     UNIT_GARRISON("unit garrison"),
     UNIT_SETUP_RANGED("uit setup ranged"),
     UNIT_ATTACK("unit attack (?<x>\\d+) (?<y>\\d+)"),
+    UNIT_PILLAGE("unit pillage (?<x>\\d+) (?<y>\\d+)"),
     UNIT_FOUND_CITY("unit found city"),
     UNIT_CANCEL_MISSION("unit cancel mission"),
     UNIT_WAKE("unit wake"),
@@ -71,7 +72,7 @@ public enum Commands {
 
     private final String regex;
 
-    private Commands(String regex) {
+    Commands(String regex) {
         this.regex = regex;
     }
 

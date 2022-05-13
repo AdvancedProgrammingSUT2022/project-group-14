@@ -273,6 +273,22 @@ public class UnitController {
         return null;
     }
 
+    public static String pillage(int x, int y) {
+        Tile currentTile = MapController.getTileByCoordinates(x, y);
+        if (!WorldController.getSelectedCombatUnit().getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+            return "the unit is not under your control";
+        } else if (currentTile.getPillageState() == 9999) {
+            return "this tile has been pillaged before";
+        } else {
+            currentTile.setPillageState(9999);
+            x++; y++;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you pillaged the tile on " +
+                    "( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addNotification(notification);
+        }
+        return null;
+    }
+
     public static String delete(Unit unit) {
         Civilization wantedCivilization = WorldController.getWorld().getCivilizationByName(unit.getCivilizationName());
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {

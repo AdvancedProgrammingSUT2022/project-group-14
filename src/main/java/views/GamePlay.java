@@ -193,6 +193,19 @@ public class GamePlay {
         }
     }
 
+    public static void pillage(int x, int y) {
+        String error;
+        if (WorldController.getSelectedCombatUnit() == null){
+            System.out.println("you should select a combat unit to attack");
+        } else if (MapController.getTileByCoordinates(x, y).getRoadState() != 0 &&
+                MapController.getTileByCoordinates(x, y).getRailRoadState() != 0 &&
+                MapController.getTileByCoordinates(x, y).getImprovementTurnsLeftToBuild() != 0) {
+            System.out.println("there isn't anything for you to pillage");
+        } else if ((error = UnitController.pillage(x, y)) != null) {
+            System.out.println(error);
+        }
+    }
+
     public static void conquerCity(City city, CombatUnit unit) {
         if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
             System.out.println("Congrats! you attached the city to your civilization");

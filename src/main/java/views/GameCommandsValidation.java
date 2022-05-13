@@ -46,6 +46,8 @@ public class GameCommandsValidation {
             GamePlay.setupRanged();
         } else if ((matcher = Commands.getMatcher(input, Commands.UNIT_ATTACK)) != null) {
             checkAttack(matcher);
+        } else if ((matcher = Commands.getMatcher(input, Commands.UNIT_PILLAGE)) != null) {
+            checkPillage(matcher);
         } else if (Commands.getMatcher(input, Commands.UNIT_FOUND_CITY) != null) {
             GamePlay.foundCity();
         } else if (Commands.getMatcher(input, Commands.UNIT_CANCEL_MISSION) != null) {
@@ -159,6 +161,17 @@ public class GameCommandsValidation {
         int y = Integer.parseInt(matcher.group("y")) - 1;
         if (TileController.selectedTileIsValid(x, y)) {
             GamePlay.attack(x, y);
+            return;
+        }
+        System.out.println("the given position is invalid");
+
+    }
+
+    private void checkPillage(Matcher matcher) {
+        int x = Integer.parseInt(matcher.group("x")) - 1;
+        int y = Integer.parseInt(matcher.group("y")) - 1;
+        if (TileController.selectedTileIsValid(x, y)) {
+            GamePlay.pillage(x, y);
             return;
         }
         System.out.println("the given position is invalid");
