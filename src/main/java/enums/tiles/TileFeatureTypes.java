@@ -77,10 +77,6 @@ public enum TileFeatureTypes implements TileTypes {
 
     }
 
-    public int getCombatImpact() {
-        return combatImpact;
-    }
-
     public int getMovementPoint() {
         return movementPoint;
     }
