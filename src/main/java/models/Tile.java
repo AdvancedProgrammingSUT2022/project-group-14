@@ -6,6 +6,7 @@ import enums.Colors;
 import enums.Improvements;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
+import models.resources.BonusResource;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -32,7 +33,9 @@ public class Tile {
 
     private StrategicResource strategicResource;
     private LuxuryResource luxuryResource;
-    private Resource bonusResource;
+    private BonusResource bonusResource;
+    private Resource resource;
+
     private Improvements improvement;
     private int improvementTurnsLeftToBuild; // 9999 -> has not been started to build | 0 -> has been build
 
@@ -68,8 +71,7 @@ public class Tile {
             this.name = feature.getName();
         else
             this.name = type.getName();
-
-
+        this.resource = Resource.generateRandomResource(type,feature);
     }
 
     //randomTile generation
@@ -239,8 +241,16 @@ public class Tile {
         return this.bonusResource;
     }
 
-    public void setBonusResource(Resource bonusResource) {
+    public void setBonusResource(BonusResource bonusResource) {
         this.bonusResource = bonusResource;
+    }
+
+    public Resource getResource() {
+        return resource;
+    }
+
+    public void setResource(Resource resource) {
+        this.resource = resource;
     }
 
     public boolean[] getIsRiver() {
