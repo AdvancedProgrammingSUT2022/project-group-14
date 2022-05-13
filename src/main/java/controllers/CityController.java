@@ -22,35 +22,28 @@ public class CityController {
     }
 
     public static void addGoodsToCity(City city) {
-        double addedFood = 0;
-        double addedGold = 0;
-        double addedProduction = 0;
+        double addedFood = 0, addedGold = 0, addedProduction = 0;
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+
         for (Citizen citizen : city.getCitizens()) {
             if (citizen.isWorking()) {
-                for (Tile tile : city.getTerritory()) {
-                    if (citizen.getXOfWorkingTile() == tile.getX() && citizen.getYOfWorkingTile() == tile.getY()) {
-                        addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
-                        addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
-                        addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
-                    }
-                }
+                addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
+                addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
+                addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
             }
         }
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         double cityFood = city.getFood() + addedFood;
         double cityGold = addedGold;
-        double cityProduction = city.getProduction() + addedProduction;
-        cityProduction += city.getCitizens().size();
         cityFood = consumeCityFood(cityFood, city);
         city.setFood(cityFood);
         currentCivilization.setGold(currentCivilization.getGold() + cityGold);
-        city.setProduction(cityProduction);
+        city.setProduction(city.getProduction() + addedProduction + city.getCitizens().size());
         addCitizenIfPossible(city);
     }
 
     public static double consumeCityFood(double cityFood, City city) {
         while (city.getCitizens().size() * 2 > cityFood) {
-            starveCitizen(city.getCitizens());
+            starveCitizen(city);
         }
         cityFood -= city.getCitizens().size() * 2;
 
@@ -60,14 +53,21 @@ public class CityController {
         return cityFood;
     }
 
-    public static void starveCitizen(ArrayList<Citizen> citizens) {
-        for (Citizen citizen : citizens) {
+    public static void starveCitizen(City city) {
+        for (Citizen citizen : city.getCitizens()) {
             if (!citizen.isWorking()) {
-                citizens.remove(citizen);
+                String notification = "In turn " + WorldController.getWorld().getActualTurn() + " the citizen with " +
+                        citizen.getId() + " id in " + city.getName() + "died :)";
+                WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName()).addNotification(notification);
+                city.getCitizens().remove(citizen);
                 return;
             }
         }
-        citizens.remove(citizens.size() - 1);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " the citizen with " +
+                city.getCitizens().size() + " id in " + city.getName() + "died :)";
+        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName()).addNotification(notification);
+
+        city.getCitizens().remove(city.getCitizens().size() - 1);
     }
 
     public static void addCitizenIfPossible(City city) {
@@ -171,7 +171,6 @@ public class CityController {
                 return "can't produce settlers in an unhappy civilization";
             }
             unit = new Settler(unitEnum, wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
-
         } else if (unitEnum.getName().equals("worker")) {
             unit = new Worker(unitEnum,
                     wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
@@ -183,7 +182,7 @@ public class CityController {
                     wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
         }
 
-        if (unitEnum.getRequiredResource() != null){
+        if (unitEnum.getRequiredResource() != null) {
             currentCivilization.getStrategicResources().put(unitEnum.getRequiredResource().nameGetter(),
                     currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().nameGetter()) - 1);
         }
@@ -192,8 +191,8 @@ public class CityController {
         wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
         wantedCity.setCurrentProductionRemainingCost(unitEnum.getCost());
 
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
+        int x = WorldController.getSelectedCity().getCenterOfCity().getX() + 1;
+        int y = WorldController.getSelectedCity().getCenterOfCity().getY() + 1;
         String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
                 unit.getName() + " in ( " + x + " , " + y + " ) coordinates";
         currentCivilization.addNotification(notification);
@@ -205,15 +204,15 @@ public class CityController {
         wantedCity.setCurrentBuilding(building);
         wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
         wantedCity.setCurrentProductionRemainingCost(building.getCost());
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX()+1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY()+1;
+        int x = WorldController.getSelectedCity().getCenterOfCity().getX() + 1;
+        int y = WorldController.getSelectedCity().getCenterOfCity().getY() + 1;
         String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
                 "building" + " in ( " + x + " , " + y + " ) coordinates";
-        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x-1, y-1).getCivilizationName()).addNotification(notification);
+        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x - 1, y - 1).getCivilizationName()).addNotification(notification);
         return null;
     }
 
-    public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY){
+    public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY) {
         if (civilization.getGold() < 100) return "you don't have enough gold for buying this tile";
 
         civilization.setGold(civilization.getGold() - 100);
@@ -223,14 +222,14 @@ public class CityController {
         return "tile was bought successfully";
     }
 
-    public static String unemployedCitizensData(City city){
+    public static String unemployedCitizensData(City city) {
         ArrayList<Citizen> unemployedCitizens = new ArrayList<>();
         for (Citizen citizen : city.getCitizens()) {
             if (!citizen.isWorking())
                 unemployedCitizens.add(citizen);
         }
         if (unemployedCitizens.size() == 0)
-            return "there is no unemployed citizen in this city";
+            return "there is no unemployed citizen in this city\n";
         StringBuilder output = new StringBuilder("unemployed citizens:\n");
         int counter = 1;
         for (Citizen unemployedCitizen : unemployedCitizens) {
@@ -240,23 +239,49 @@ public class CityController {
         return output.toString();
     }
 
-    public static String employedCitizensData(City city){
+    public static String employedCitizensData(City city) {
         ArrayList<Citizen> employedCitizens = new ArrayList<>();
         for (Citizen citizen : city.getCitizens()) {
             if (citizen.isWorking())
                 employedCitizens.add(citizen);
         }
         if (employedCitizens.size() == 0)
-            return "there is no employed citizen in this city";
+            return "there is no employed citizen in this city\n";
         StringBuilder output = new StringBuilder("employed citizens:\n");
         int counter = 1;
         for (Citizen employedCitizen : employedCitizens) {
             output.append(counter).append("- citizen with id ").append(employedCitizen.getId());
-            output.append(" is working on tile ").append(employedCitizen.getXOfWorkingTile()).append(" and ");
-            output.append(employedCitizen.getYOfWorkingTile()).append('\n');
+            output.append(" is working on tile ").append(employedCitizen.getXOfWorkingTile() + 1).append(" and ");
+            output.append(employedCitizen.getYOfWorkingTile() + 1).append('\n');
             counter++;
         }
         return output.toString();
     }
 
+    public static void conquerCity(City city, CombatUnit unit) {
+        for (Tile tile : city.getTerritory()) {
+            tile.setCivilization(unit.getCivilizationName());
+        }
+        if (city.getCenterOfCity().getCombatUnit() != null) {
+            if (city.getCenterOfCity().getCombatUnit() instanceof Melee)
+                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeMeleeUnit((Melee) city.getCenterOfCity().getCombatUnit());
+            else
+                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeRangedUnit((Ranged) city.getCenterOfCity().getCombatUnit());
+        }
+        if (city.getCenterOfCity().getNonCombatUnit() != null) {
+            city.getCenterOfCity().getNonCombatUnit().setCivilizationName(unit.getCivilizationName());
+        }
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you conquered the " + city.getName() + "city";
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
+    }
+
+    public static void destroyCity(City city, CombatUnit unit) {
+        for (Tile tile : city.getTerritory()) {
+            tile.setCivilization(null);
+        }
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
+        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you destroyed the " + city.getName() + "city";
+        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
+    }
 }

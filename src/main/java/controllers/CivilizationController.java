@@ -48,6 +48,11 @@ public class CivilizationController {
                 civilization.getTechnologies().get(civilization.getCurrentTechnology()) - civilizationScience);
         civilization.setScience(0);
         if (civilization.getTechnologies().get(civilization.getCurrentTechnology()) <= 0) {
+            for (City city : civilization.getCities()) {
+                for (Tile tile : city.getTerritory()) {
+                    tile.addAvailableResourcesToCivilizationAndTile();
+                }
+            }
             civilization.setCurrentTechnology(null);
         }
     }

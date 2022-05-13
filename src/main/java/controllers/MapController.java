@@ -244,9 +244,9 @@ public class MapController {
                 return tilesMap[x + 1][y + 1];
             else if (riverSide == 3 && x + 1 < width)
                 return tilesMap[x + 1][y];
-            else if (riverSide == 4 && x + 1 < width && y - 1 >= 0)
+            else if (riverSide == 4 && x + 1 < width)
                 return tilesMap[x + 1][y - 1];
-            else if (riverSide == 5 && y - 1 >= 0)
+            else if (riverSide == 5)
                 return tilesMap[x][y - 1];
         } else if (y % 2 == 0) {
             if (riverSide == 0 && x - 1 >= 0)

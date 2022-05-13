@@ -28,11 +28,11 @@ public enum CombatType {
         this.badAgainst = badAgainst;
     }
 
-    public boolean isHasDefenseBonuses() {
+    public boolean hasDefenseBonuses() {
         return hasDefenseBonuses;
     }
 
-    public boolean isCanMoveAfterAttack() {
+    public boolean canMoveAfterAttack() {
         return canMoveAfterAttack;
     }
 

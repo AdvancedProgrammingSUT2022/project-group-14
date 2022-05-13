@@ -2,6 +2,7 @@
 package models;
 
 import controllers.MapController;
+import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import enums.resources.LuxuryResourceTypes;
@@ -33,7 +34,7 @@ public class Civilization {
     private Technologies currentTechnology;
     private ArrayList<Researches> researches = new ArrayList<>();
 
-    private double food, gold, production, happiness, science;
+    private double gold, happiness, science;
 
     ArrayList<String> notifications = new ArrayList<>();
 
@@ -130,16 +131,8 @@ public class Civilization {
         return settlers;
     }
 
-    public double getFood() {
-        return food;
-    }
-
     public double getGold() {
         return gold;
-    }
-
-    public double getProduction() {
-        return production;
     }
 
     public ArrayList<City> getCities() {
@@ -149,14 +142,20 @@ public class Civilization {
     public void addCity(City city) {
         if(cities.size() == 0 && firstCapital == null) {
             firstCapital = city;
+            currentCapital = city;
         }
         cities.add(city);
         happiness -= 2;
     }
 
     public void removeCity(City city) {
-        cities.remove(city);
-        happiness += 2;
+        if (cities.size() == 1) {
+            WorldController.getWorld().removeCivilization(this);
+        } else {
+            cities.remove(city);
+            currentCapital = cities.get(0);
+            happiness += 2;
+        }
     }
 
     public String getCityName() {
@@ -189,12 +188,8 @@ public class Civilization {
         gold += amount;
     }
 
-    public void addFood(double amount) {
-        gold += amount;
-    }
-
-    public void addProduction(double amount) {
-        gold += amount;
+    public void addScience(double amount) {
+        this.science += amount;
     }
 
     public void setHappiness(double happiness) {
@@ -217,6 +212,10 @@ public class Civilization {
         return science;
     }
 
+    public City getFirstCapital() {
+        return firstCapital;
+    }
+
     public void addNotification(String notification) {
         notifications.add(notification);
     }
@@ -236,9 +235,7 @@ public class Civilization {
         }
 
         return "Total tiles in map : " + totalTiles + "\n" +
-                "Food : " + food + "\n" +
                 "Gold : " + gold + "\n" +
-                "Production : " + production + "\n" +
                 "Happiness : " + happiness + "\n" +
                 "Science : " + science + "\n" +
                 "Total number of units : " + getAllUnits().size() + "\n" +
@@ -246,15 +243,8 @@ public class Civilization {
                 "Total Technologies Acquired : " + totalTechnologiesAcquired + "\n";
     }
 
-    public void setFood(double food) {
-        this.food = food;
-    }
-
     public void setGold(double gold) {
         this.gold = gold;
     }
 
-    public void setProduction(double production) {
-        this.production = production;
-    }
 }

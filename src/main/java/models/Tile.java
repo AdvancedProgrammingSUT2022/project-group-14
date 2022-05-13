@@ -218,6 +218,13 @@ public class Tile {
     }
 
     public void setFeature(TileFeatureTypes feature) {
+        if (feature == null){
+            this.food -= this.feature.getFood();
+            this.production -= this.feature.getProduction();
+            this.gold -= this.feature.getGold();
+            this.movingPoint -= this.feature.getMovementPoint();
+            this.combatImpact -= this.feature.getCombatImpact();
+        }
         this.feature = feature;
     }
 
