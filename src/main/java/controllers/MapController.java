@@ -117,11 +117,14 @@ public class MapController {
         for (int i = 0; i < width; i++)
             for (int j = 0; j < length; j++) {
                 upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
-                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j] , civilization);
-                coordinates = "(" + (i+1) + "," + (j+1) + ")";
-                printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
-                printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
-                printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+                downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization);
+                int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
+                if (visionStatesOfMap[i][j] != 0) {
+                    coordinates = "(" + (i + 1) + "," + (j + 1) + ")";
+                    printStringToCellsMap(coordinates, tileCenters[i][j][0] - 1, tileCenters[i][j][1] - 3);
+                    printStringToCellsMap(tilesMap[i][j].getType().getName(), tileCenters[i][j][0] + 1, tileCenters[i][j][1] - 4);
+                    printStringToCellsMap(tilesMap[i][j].getFeature().getName(), tileCenters[i][j][0] + 2, tileCenters[i][j][1] - 3);
+                }
             }
     }
 
