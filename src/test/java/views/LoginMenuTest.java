@@ -1,3 +1,5 @@
+package views;
+
 import controllers.TileController;
 import controllers.UserController;
 import enums.Commands;
