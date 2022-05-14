@@ -31,6 +31,17 @@ public class UserControllerTest {
     }
 
     @Test
+    public void saveAllUsersTest() throws IOException {
+        UserController.saveAllUsers();
+    }
+
+    @Test
+    public void addUserTest() {
+        UserController.addUser("majid", "12", "majid");
+        Assertions.assertNotNull(UserController.getUserByUsername("majid"));
+    }
+
+    @Test
     public void getUserByUsernameTest(){
         String username = "hossein";
         User user = UserController.getUserByUsername(username);
@@ -69,6 +80,16 @@ public class UserControllerTest {
         Matcher matcher = Commands.matcherFindsRegex(input, Commands.PLAYER_USERNAME);
         UserController.checkPlayerValidation(matcher, usernames, 1);
         Assertions.assertEquals("", outputStreamCaptor.toString().trim());
+    }
+
+    @Test
+    public void getUserByNickNameValidTest() {
+        Assertions.assertNotNull(UserController.getUserByNickname("ali"));
+    }
+
+    @Test
+    public void getUserByNickNameInValidTest() {
+        Assertions.assertNull(UserController.getUserByNickname("majid"));
     }
 
     @AfterEach
