@@ -82,7 +82,4 @@ public class UserController {
         return "";
     }
 
-    public static ArrayList<User> getUsers() {
-        return users;
-    }
 }

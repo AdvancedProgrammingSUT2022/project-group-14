@@ -25,7 +25,7 @@ public class ProfileMenu {
         }
     }
 
-    private boolean checkCommand(String input) {
+    public boolean checkCommand(String input) {
         Matcher matcher;
 
         if ((matcher = Commands.getMatcher(input, Commands.ENTER_MENU)) != null) {
@@ -43,7 +43,7 @@ public class ProfileMenu {
         return true;
     }
 
-    private boolean checkEnterMenu(Matcher matcher) {
+    public boolean checkEnterMenu(Matcher matcher) {
         switch (matcher.group("menuName")) {
             case "login menu":
                 System.out.println("menu navigation is not possible");
@@ -63,7 +63,7 @@ public class ProfileMenu {
         return false;
     }
 
-    private void checkChangeProfile(String input) {
+    public void checkChangeProfile(String input) {
         Matcher matcher;
 
         if ((matcher = Commands.matcherFindsRegex(input, Commands.NICKNAME)) != null) {
@@ -75,7 +75,7 @@ public class ProfileMenu {
 
     }
 
-    private void checkChangeNickname(Matcher matcher) {
+    public void checkChangeNickname(Matcher matcher) {
         if (UserController.getUserByNickname(matcher.group("nickname")) != null)
             System.out.println("user with nickname " + matcher.group("nickname") + " already exists");
 
@@ -85,7 +85,7 @@ public class ProfileMenu {
         }
     }
 
-    private void checkChangePassword(String input) {
+    public void checkChangePassword(String input) {
         Matcher currentPasswordMatcher;
         Matcher newPasswordMatcher;
 
