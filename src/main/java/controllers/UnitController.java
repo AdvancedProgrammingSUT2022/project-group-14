@@ -101,7 +101,7 @@ public class UnitController {
     public static String garrisonCity(CombatUnit combatUnit) {
         Tile currentTile = MapController.getTileByCoordinates(combatUnit.getCurrentX(), combatUnit.getCurrentY());
         if (!combatUnit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getCity() == null) {
             return "you should be in a city to garrison";
         } else {
@@ -114,7 +114,7 @@ public class UnitController {
     public static String foundCity(Settler settler) {
         Tile currentTile = MapController.getTileByCoordinates(settler.getCurrentX(), settler.getCurrentY());
         if (!settler.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getCity() != null) {
             return "can not found a city over another city";
         } else if (currentTile.getCivilizationName() != null
@@ -137,7 +137,7 @@ public class UnitController {
     public static String buildRoad(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getRoadState() == 0) {
             return "there is already road on this tile";
         } else {
@@ -154,7 +154,7 @@ public class UnitController {
     public static String buildRailRoad(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getRailRoadState() == 0) {
             return "there is already railRoad on this tile";
         } else {
@@ -171,7 +171,7 @@ public class UnitController {
     public static String removeRouteFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getRoadState() != 0 && currentTile.getRailRoadState() != 0) {
             return "there is not any roads or railRoads on this tile";
         } else {
@@ -189,7 +189,7 @@ public class UnitController {
     public static String buildImprovement(Worker worker, Improvements improvement) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getImprovement() != null && currentTile.getImprovement().equals(improvement)) {
             return "there is already this kind of improvement on this tile";
         } else if (WorldController.getWorld().getCivilizationByName(worker.getCivilizationName())
@@ -212,7 +212,7 @@ public class UnitController {
     public static String removeJungleFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getFeature() != TileFeatureTypes.JUNGLE) {
             return "there is not a jungle on this tile";
         } else {
@@ -229,7 +229,7 @@ public class UnitController {
     public static String removeForestFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getFeature() != TileFeatureTypes.FOREST) {
             return "there is not a forest on this tile";
         } else {
@@ -246,7 +246,7 @@ public class UnitController {
     public static String removeMarshFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getFeature() != TileFeatureTypes.SWAMP) {
             return "there is not a marsh on this tile";
         } else {
@@ -263,7 +263,7 @@ public class UnitController {
     public static String repairTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
         if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getPillageState() == 0) {
             return "this tile has not been pillaged";
         } else {
@@ -280,7 +280,7 @@ public class UnitController {
     public static String pillage(int x, int y) {
         Tile currentTile = MapController.getTileByCoordinates(x, y);
         if (!WorldController.getSelectedCombatUnit().getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
+            return "unit is not under your control";
         } else if (currentTile.getPillageState() == 9999) {
             return "this tile has been pillaged before";
         } else {
