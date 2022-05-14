@@ -1,14 +1,14 @@
 package controllers;
 
 
-import java.util.ArrayList;
-
 import models.Civilization;
 import models.Tile;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.Unit;
 import models.units.Worker;
+
+import java.util.ArrayList;
 
 public class TileController {
 
@@ -30,9 +30,9 @@ public class TileController {
                     } else if (tile.getRailRoadState() != 0 && tile.getRailRoadState() != 9999) {
                         tile.setRailRoadState(tile.getRailRoadState() - 1);
                     } else if (tile.getImprovementTurnsLeftToBuild() != 0 && tile.getImprovementTurnsLeftToBuild() != 9999) {
-                        tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() -1 );
+                        tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() - 1);
                     }
-                    if (tile.getImprovementTurnsLeftToBuild() == 0){
+                    if (tile.getImprovementTurnsLeftToBuild() == 0) {
                         tile.addAvailableResourcesToCivilizationAndTile();
                     }
                 }
@@ -42,29 +42,19 @@ public class TileController {
 
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
-        if (y%2 == 0) {
-            if (selectedTileIsValid(x-1, y+1))
-                neighbours.add(MapController.getTileByCoordinates(x-1, y+1));
-            if (selectedTileIsValid(x, y+1))
-                neighbours.add(MapController.getTileByCoordinates(x, y+1));
-            if (selectedTileIsValid(x, y-1))
-                neighbours.add(MapController.getTileByCoordinates(x, y-1));
-            if (selectedTileIsValid(x-1, y-1))
-                neighbours.add(MapController.getTileByCoordinates(x-1, y-1));
+        if (y % 2 == 0) {
+            if (selectedTileIsValid(x - 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y + 1));
+            if (selectedTileIsValid(x, y + 1)) neighbours.add(MapController.getTileByCoordinates(x, y + 1));
+            if (selectedTileIsValid(x, y - 1)) neighbours.add(MapController.getTileByCoordinates(x, y - 1));
+            if (selectedTileIsValid(x - 1, y - 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y - 1));
         } else {
-            if (selectedTileIsValid(x, y+1))
-                neighbours.add(MapController.getTileByCoordinates(x, y+1));
-            if (selectedTileIsValid(x+1, y+1))
-                neighbours.add(MapController.getTileByCoordinates(x+1, y+1));
-            if (selectedTileIsValid(x+1, y-1))
-                neighbours.add(MapController.getTileByCoordinates(x+1, y-1));
-            if (selectedTileIsValid(x, y-1))
-                neighbours.add(MapController.getTileByCoordinates(x, y-1));
+            if (selectedTileIsValid(x, y + 1)) neighbours.add(MapController.getTileByCoordinates(x, y + 1));
+            if (selectedTileIsValid(x + 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y + 1));
+            if (selectedTileIsValid(x + 1, y - 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y - 1));
+            if (selectedTileIsValid(x, y - 1)) neighbours.add(MapController.getTileByCoordinates(x, y - 1));
         }
-        if (selectedTileIsValid(x-1, y))
-            neighbours.add(MapController.getTileByCoordinates(x-1, y));
-        if (selectedTileIsValid(x+1, y))
-            neighbours.add(MapController.getTileByCoordinates(x+1, y));
+        if (selectedTileIsValid(x - 1, y)) neighbours.add(MapController.getTileByCoordinates(x - 1, y));
+        if (selectedTileIsValid(x + 1, y)) neighbours.add(MapController.getTileByCoordinates(x + 1, y));
 
         return neighbours;
     }
@@ -77,19 +67,17 @@ public class TileController {
             }
         }
         int range = 1;
-        if (x1 == x2 && y1 == y2 && distance >= 0)
-            return true;
+        if (x1 == x2 && y1 == y2 && distance >= 0) return true;
         for (Tile neighbourTile : getAvailableNeighbourTiles(x2, y2)) {
             neighbors[neighbourTile.getX()][neighbourTile.getY()] = range;
         }
         while (range < distance) {
             for (int i = 0; i < MapController.getWidth(); i++) {
                 for (int j = 0; j < MapController.getLength(); j++) {
-                    if (neighbors[i][j] == range)
-                        for (Tile neighbourTile : getAvailableNeighbourTiles(i, j)) {
-                            if (neighbors[neighbourTile.getX()][neighbourTile.getY()] == 0)
-                                neighbors[neighbourTile.getX()][neighbourTile.getY()] = range + 1;
-                        }
+                    if (neighbors[i][j] == range) for (Tile neighbourTile : getAvailableNeighbourTiles(i, j)) {
+                        if (neighbors[neighbourTile.getX()][neighbourTile.getY()] == 0)
+                            neighbors[neighbourTile.getX()][neighbourTile.getY()] = range + 1;
+                    }
                 }
             }
             range++;
@@ -98,8 +86,8 @@ public class TileController {
         return neighbors[x1][y1] > 0;
     }
 
-    public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile){
-        if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0){
+    public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile) {
+        if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0) {
             return !(resource instanceof StrategicResource) ||
                     WorldController.currentCivilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology());
         }

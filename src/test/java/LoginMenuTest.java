@@ -25,6 +25,7 @@ import java.util.regex.Matcher;
 //import org.springframework.test.util.ReflectionTestUtils;
 
 import static org.mockito.ArgumentMatchers.*;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -179,5 +180,12 @@ public class LoginMenuTest {
     @AfterEach
     public void closing(){
         System.setOut(standardOut);
+    }
+    @Test
+    public void checkCommandTest2(){
+        String testEnterMenu = "menu enter login menu";
+        when(loginMenu.checkCommand(testEnterMenu)).thenCallRealMethod();
+        loginMenu.checkCommand(testEnterMenu);
+        verify(loginMenu).checkEnterMenu(any(Matcher.class));
     }
 }
