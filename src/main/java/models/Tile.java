@@ -285,12 +285,12 @@ public class Tile {
 
     public void setPillageState(int pillageState) {
         this.pillageState = pillageState;
-        if (this.pillageState == 9999) {
+        if (this.pillageState == 9999 && this.resource != null) {
             this.food -= this.resource.getFood();
             this.gold -= this.resource.getGold();
             this.production -= this.resource.getProduction();
             this.movingPoint *= 3 / 2;
-        } else if (this.pillageState == 0) {
+        } else if (this.pillageState == 0 && this.resource != null) {
             this.food += this.resource.getFood();
             this.gold += this.resource.getGold();
             this.production += this.resource.getProduction();
