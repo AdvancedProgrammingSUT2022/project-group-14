@@ -3,6 +3,7 @@ package views;
 import controllers.UserController;
 import enums.Commands;
 import models.User;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -129,6 +130,11 @@ public class MainMenuTest {
         newMainMenu.checkPlayGame(input);
         Assertions.assertEquals("one of the usernames is repetitive", outputStreamCaptor.toString().trim());
 
+    }
+
+    @AfterEach
+    public void closing() throws IOException {
+        System.setOut(standardOut);
     }
 
 }
