@@ -46,7 +46,7 @@ public class City {
         for (Tile tile : this.territory) {
             tile.setCivilization(currentCivilization.getName());
         }
-        healthPoint = 1; defenseStrength = 1; attackStrength = 2;
+        healthPoint = 20; defenseStrength = 10; attackStrength = 10;
     }
 
     public void finishCityProduction(){
