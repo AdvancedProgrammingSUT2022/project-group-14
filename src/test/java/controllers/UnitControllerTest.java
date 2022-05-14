@@ -64,15 +64,6 @@ public class UnitControllerTest {
     }
 
     @Test
-    public void setUnitDestinationCoordinatesTest2() {
-        when(unit.getCivilizationName()).thenReturn("ali");
-        MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
-        MapController.getTileByCoordinates(20,20).setCombatUnit(ranged);
-        MapController.getTileByCoordinates(20,20).setNonCombatUnit(worker);
-        when(unit.getCivilizationName()).thenReturn(WorldController.getWorld().getCurrentCivilizationName());
-    }
-
-    @Test
     public void resetMovingPointsTest() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("ali");
         currentCivilization.addMeleeUnit(melee);

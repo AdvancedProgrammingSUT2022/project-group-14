@@ -31,6 +31,8 @@ public class WarControllerTest {
     CombatUnit combatUnit;
     @Mock
     City city;
+    @Mock
+    City city2;
 
     private final PrintStream standardOut = System.out;
     private final ByteArrayOutputStream outputStreamCaptor = new ByteArrayOutputStream();
@@ -60,6 +62,40 @@ public class WarControllerTest {
     }
 
     @Test
+    public void attackCityRangedConquerTest() {
+        Ranged ranged = new Ranged(Unit.WARRIOR, 10, 10, "ali");
+        WorldController.setSelectedCombatUnit(ranged);
+        when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(11,10));
+        when(city.getAttackStrength()).thenReturn(0.0);
+        when(city.getHealthPoint()).thenReturn(0.0);
+        when(city.getDefenseStrength()).thenReturn(0.0);
+        MapController.getTileByCoordinates(10, 10).setCombatUnit(ranged);
+        MapController.getTileByCoordinates(11,10).setCivilization("hassan");
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("hassan");
+        currentCivilization.addCity(city);
+        currentCivilization.addCity(city2);
+        MapController.getTileByCoordinates(11,10).setCity(city);
+        WarController.combatUnitAttacksTile(11, 10);
+    }
+
+    @Test
+    public void attackCityMeleeConquerTest() {
+        Melee melee = new Melee(Unit.WARRIOR, 10, 10, "ali");
+        WorldController.setSelectedCombatUnit(melee);
+        when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(11,10));
+        when(city.getAttackStrength()).thenReturn(0.0);
+        when(city.getHealthPoint()).thenReturn(0.0);
+        when(city.getDefenseStrength()).thenReturn(0.0);
+        MapController.getTileByCoordinates(10, 10).setCombatUnit(melee);
+        MapController.getTileByCoordinates(11,10).setCivilization("hassan");
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("hassan");
+        currentCivilization.addCity(city);
+        currentCivilization.addCity(city2);
+        MapController.getTileByCoordinates(11,10).setCity(city);
+        WarController.combatUnitAttacksTile(11, 10);
+    }
+
+    @Test
     public void testAttackCityMelee(){
         Melee melee = new Melee(Unit.WARRIOR, 10, 10, "ali");
         WorldController.setSelectedCombatUnit(melee);
@@ -67,10 +103,9 @@ public class WarControllerTest {
         when(city.getAttackStrength()).thenReturn(300.0);
         when(city.getHealthPoint()).thenReturn(20.0);
         when(city.getDefenseStrength()).thenReturn(10.0);
-        //when(melee.getCombatType()).thenReturn(CombatType.MELEE);
         MapController.getTileByCoordinates(10, 10).setCombatUnit(melee);
         MapController.getTileByCoordinates(11,10).setCivilization("hassan");
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("hassan");
         currentCivilization.addCity(city);
         MapController.getTileByCoordinates(11,10).setCity(city);
         String output = WarController.combatUnitAttacksTile(11, 10);
@@ -85,10 +120,9 @@ public class WarControllerTest {
         when(city.getAttackStrength()).thenReturn(300.0);
         when(city.getHealthPoint()).thenReturn(20.0);
         when(city.getDefenseStrength()).thenReturn(10.0);
-        //when(melee.getCombatType()).thenReturn(CombatType.MELEE);
         MapController.getTileByCoordinates(10, 10).setCombatUnit(ranged);
         MapController.getTileByCoordinates(11,10).setCivilization("hassan");
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("hassan");
         currentCivilization.addCity(city);
         MapController.getTileByCoordinates(11,10).setCity(city);
         String output = WarController.combatUnitAttacksTile(11, 10);
