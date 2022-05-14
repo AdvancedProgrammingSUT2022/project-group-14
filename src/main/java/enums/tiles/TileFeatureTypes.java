@@ -21,7 +21,7 @@ public enum TileFeatureTypes implements TileTypes {
     // anbooh
     SWAMP("swamp", -1, 0, 0, -33, 2, new HashSet<>(List.of(LuxuryResourceTypes.SUGAR))), // mordab
     OASIS("oasis", 3, 0, 1, -33, 1, new HashSet<>()), // vahe
-    LAKE("lake", 0, 0, 1, 0, 9999, new HashSet<>()),
+    RIVER("river", 0, 0, 1, 0, 9999, new HashSet<>()),
     NULL("nothing", 0, 0, 0, 0, 0, new HashSet<>());
 
     private final String name;

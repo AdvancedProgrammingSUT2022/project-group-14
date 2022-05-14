@@ -2,11 +2,13 @@
 package models;
 
 import controllers.MapController;
+import controllers.MoveController;
 import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.StrategicResourceTypes;
+import enums.tiles.TileBaseTypes;
 import models.resources.LuxuryResource;
 import models.resources.StrategicResource;
 import models.units.*;
@@ -40,7 +42,13 @@ public class Civilization {
 
     public Civilization(String name) {
         Random random = new Random();
-        int randomX = random.nextInt(MapController.width), randomY = random.nextInt(MapController.length);
+        int randomX, randomY;
+        while (true){
+            randomX = random.nextInt(MapController.width);
+            randomY = random.nextInt(MapController.length);
+            if (MapController.getMap()[randomX][randomY].getType().getMovingPoint() != 9999)
+                break;
+        }
         Melee melee = new Melee(enums.units.Unit.getUnitByName("warrior"), randomX, randomY, name);
         Settler settler = new Settler(enums.units.Unit.getUnitByName("settler"), randomX, randomY, name);
         addMeleeUnit(melee);
