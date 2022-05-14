@@ -1,4 +1,4 @@
-package view;
+package views;
 
 import controllers.UserController;
 import models.User;
@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import views.menus.LoginMenu;
 import views.menus.MainMenu;
 
 import java.io.ByteArrayOutputStream;

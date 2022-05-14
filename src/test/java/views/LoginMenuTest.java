@@ -1,10 +1,7 @@
 package views;
 
-import controllers.TileController;
 import controllers.UserController;
 import enums.Commands;
-import enums.tiles.TileBaseTypes;
-import models.Tile;
 import models.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -12,17 +9,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
 import org.mockito.junit.jupiter.MockitoExtension;
 import views.menus.LoginMenu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 //import org.springframework.test.util.ReflectionTestUtils;
 
@@ -39,6 +32,8 @@ public class LoginMenuTest {
     LoginMenu loginMenu;
     @Mock
     User user;
+    @Mock
+    Scanner scanner;
 
 
 
@@ -46,6 +41,13 @@ public class LoginMenuTest {
     public void setUpUsers() throws IOException {
         UserController.readAllUsers();
         System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @Test
+    public void runTest(){
+        LoginMenu newLoginMenu = new LoginMenu(scanner);
+        when(scanner.nextLine()).thenReturn("menu exit");
+        newLoginMenu.run();
     }
 
     @Test
@@ -171,7 +173,7 @@ public class LoginMenuTest {
 
     @Test
     public void checkCreateUserAllIsFine(){
-        String input = "create user -n alipour -u hamid -p 12";
+        String input = "create user -n aliii -u ahmad -p 12";
         doCallRealMethod().when(loginMenu).checkCreateUser(input);
         when(loginMenu.usernameExists(any(Matcher.class))).thenCallRealMethod();
         when(loginMenu.nicknameExists(any(Matcher.class))).thenCallRealMethod();
@@ -180,7 +182,7 @@ public class LoginMenuTest {
     }
 
     @AfterEach
-    public void closing(){
+    public void closing() throws IOException {
         System.setOut(standardOut);
     }
 }
