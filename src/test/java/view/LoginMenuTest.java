@@ -1,3 +1,5 @@
+package view;
+
 import controllers.TileController;
 import controllers.UserController;
 import enums.Commands;
@@ -169,7 +171,7 @@ public class LoginMenuTest {
 
     @Test
     public void checkCreateUserAllIsFine(){
-        String input = "create user -n alipour -u hamid -p 12";
+        String input = "create user -n aliii -u ahmad -p 12";
         doCallRealMethod().when(loginMenu).checkCreateUser(input);
         when(loginMenu.usernameExists(any(Matcher.class))).thenCallRealMethod();
         when(loginMenu.nicknameExists(any(Matcher.class))).thenCallRealMethod();
@@ -178,14 +180,7 @@ public class LoginMenuTest {
     }
 
     @AfterEach
-    public void closing(){
+    public void closing() throws IOException {
         System.setOut(standardOut);
-    }
-    @Test
-    public void checkCommandTest2(){
-        String testEnterMenu = "menu enter login menu";
-        when(loginMenu.checkCommand(testEnterMenu)).thenCallRealMethod();
-        loginMenu.checkCommand(testEnterMenu);
-        verify(loginMenu).checkEnterMenu(any(Matcher.class));
     }
 }
