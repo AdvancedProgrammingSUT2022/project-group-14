@@ -23,6 +23,7 @@ import java.io.PrintStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Scanner;
 import java.util.regex.Matcher;
 //import org.springframework.test.util.ReflectionTestUtils;
 
@@ -39,6 +40,8 @@ public class LoginMenuTest {
     LoginMenu loginMenu;
     @Mock
     User user;
+    @Mock
+    Scanner scanner;
 
 
 
@@ -46,6 +49,13 @@ public class LoginMenuTest {
     public void setUpUsers() throws IOException {
         UserController.readAllUsers();
         System.setOut(new PrintStream(outputStreamCaptor));
+    }
+
+    @Test
+    public void runTest(){
+        LoginMenu newLoginMenu = new LoginMenu(scanner);
+        when(scanner.nextLine()).thenReturn("menu exit");
+        newLoginMenu.run();
     }
 
     @Test
