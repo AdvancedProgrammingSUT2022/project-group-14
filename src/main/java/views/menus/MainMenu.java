@@ -30,7 +30,7 @@ public class MainMenu {
         }
     }
 
-    private boolean checkCommand(String input) {
+    public boolean checkCommand(String input) {
 
 
         Matcher matcher;
@@ -51,7 +51,7 @@ public class MainMenu {
         return true;
     }
 
-    private boolean checkEnterMenu(Matcher matcher) {
+    public boolean checkEnterMenu(Matcher matcher) {
         String menuName = matcher.group("menuName");
         switch (menuName) {
             case "login menu":
@@ -73,7 +73,7 @@ public class MainMenu {
     }
 
 
-    private void checkPlayGame(String input) {
+    public void checkPlayGame(String input) {
         Matcher matcher;
         int numberOfPlayersSoFar = 1;
 
@@ -100,12 +100,12 @@ public class MainMenu {
         } else System.out.println("invalid command");
     }
 
-    private void startGame(ArrayList<String> usernames){
+    public void startGame(ArrayList<String> usernames){
         WorldController.newWorld(usernames);
         GamePlay.run(scanner);
     }
 
-    private void goToProfileMenu() {
+    public void goToProfileMenu() {
         ProfileMenu profileMenu = new ProfileMenu(this.scanner, this.user);
         profileMenu.run();
     }
