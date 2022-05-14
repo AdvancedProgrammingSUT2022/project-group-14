@@ -114,10 +114,10 @@ public class CityController {
             if (id == citizen.getId()) {
                 if (!citizen.isWorking()) return "the citizen with the given id isn't currently locked to any tile";
                 else {
+                    int x = citizen.getXOfWorkingTile() + 1, y = citizen.getYOfWorkingTile() + 1;
                     citizen.setYOfWorkingTile(-1);
                     citizen.setXOfWorkingTile(-1);
                     citizen.setIsWorking(false);
-                    int x = citizen.getXOfWorkingTile() + 1, y = citizen.getYOfWorkingTile() + 1;
                     String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you unlocked " +
                             citizen.getId() + " from ( " + x + " , " + y + " ) coordinates";
                     WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x - 1, y - 1).getCivilizationName()).addNotification(notification);
