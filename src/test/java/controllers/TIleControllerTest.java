@@ -1,7 +1,12 @@
 package controllers;
 
+import enums.Improvements;
+import enums.Technologies;
+import enums.resources.StrategicResourceTypes;
 import models.Civilization;
 import models.Tile;
+import models.resources.Resource;
+import models.resources.StrategicResource;
 import models.units.Settler;
 import models.units.Worker;
 import org.junit.jupiter.api.Assertions;
@@ -11,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
@@ -28,6 +34,8 @@ public class TIleControllerTest {
     Settler settler;
     @Mock
     Tile tile;
+    @Mock
+    Resource resource;
 
     @BeforeEach
     public void setup() {
@@ -74,7 +82,25 @@ public class TIleControllerTest {
 
 
         Assertions.assertEquals(0, tile.getImprovementTurnsLeftToBuild());
+    }
 
+    @Test
+    public void resourceIsAvailableToBeUsed() {
+        for (Technologies value : Technologies.values()) {
+        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().put(value, 100);
+        }
+        StrategicResource resource1 = new StrategicResource(StrategicResourceTypes.IRON);
+
+//        when(resource.getRequiredImprovement()).thenReturn(Improvements.FARM);
+        when(tile.getImprovement()).thenReturn(Improvements.MINE);
+        when(tile.getImprovementTurnsLeftToBuild()).thenReturn(0);// inja error mide
+//        when(resource instanceof StrategicResource).thenReturn(true);
+
+
+
+        boolean result = TileController.resourceIsAvailableToBeUsed(resource1, tile);
+
+        Assertions.assertFalse(result);
 
     }
 }
