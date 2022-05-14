@@ -16,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -67,8 +66,8 @@ public class UnitControllerTest {
     public void setUnitDestinationCoordinatesTest2() {
         when(unit.getCivilizationName()).thenReturn("ali");
         MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
-        MapController.getTileByCoordinates(20,20).setCombatUnit(ranged);
-        MapController.getTileByCoordinates(20,20).setNonCombatUnit(worker);
+        MapController.getTileByCoordinates(20, 20).setCombatUnit(ranged);
+        MapController.getTileByCoordinates(20, 20).setNonCombatUnit(worker);
         when(unit.getCivilizationName()).thenReturn(WorldController.getWorld().getCurrentCivilizationName());
     }
 
@@ -276,4 +275,7 @@ public class UnitControllerTest {
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(ranged.getCivilizationName()).getAllUnits().contains(melee));
         Assertions.assertNotSame(WorldController.getSelectedCombatUnit(), ranged);
     }
+
+
+
 }
