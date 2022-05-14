@@ -1,5 +1,6 @@
 package controllers;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,6 +32,38 @@ public class MapControllerTest {
             }
         }
         MapController.cellsRefresh();
+    }
+
+    @Test
+    public void updateUnitPostionstest(){
+
+    }
+
+    @Test
+    public void cutStringLengthTest() {
+        MapController.cutStringLenght("               ", 2);
+    }
+
+
+    @Test
+    public void resetMapTest() {
+        MapController.resetMap();
+        Assertions.assertNotNull(MapController.getCellsMap());
+    }
+
+    @Test
+    public void getCellsMapTest() {
+        Assertions.assertNotNull(MapController.getCellsMap());
+    }
+
+    @Test
+    public void getTileCenterByCoordinatesTest() {
+        Assertions.assertNotNull(MapController.getTileCenterByCoordinates(10, 10));
+    }
+
+    @Test
+    public void getTileByCoordinatesTest() {
+        Assertions.assertNotNull(MapController.getTileByCoordinates(10, 10));
     }
 
 }
