@@ -44,8 +44,9 @@ public class UnitControllerTest {
     public void setUnitDestinationCoordinatesTest() {
         when(unit.getCivilizationName()).thenReturn("ali");
         UnitController.setUnitDestinationCoordinates(unit, 10, 10);
-        if (MoveController.impossibleToMoveToTile(10, 10, unit) == null)
-            verify(unit).setDestinationCoordinates(10, 10);
+        MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
+        verify(unit).setDestinationCoordinates(10, 10);
+        Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
     }
 
     @Test
@@ -230,9 +231,26 @@ public class UnitControllerTest {
     }
 
     @Test
-    public void upgradeUnitTest() {
-        WorldController.setSelectedCombatUnit(melee);
+    public void upgradeMeleeUnitTest() {
         enums.units.Unit unitEnum = enums.units.Unit.SWORD_MAN;
+        when(melee.getCivilizationName()).thenReturn("ali");
+        WorldController.setSelectedCombatUnit(melee);
+        WorldController.getWorld().getCivilizationByName(melee.getCivilizationName()).setGold(200.0);
+        UnitController.upgradeUnit(unitEnum);
+        Assertions.assertNotEquals(200.0, WorldController.getWorld().getCivilizationByName(melee.getCivilizationName()).getGold());
+        Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(melee.getCivilizationName()).getAllUnits().contains(melee));
+        Assertions.assertNotSame(WorldController.getSelectedCombatUnit(), melee);
+    }
 
+    @Test
+    public void upgradeRangedUnitTest() {
+        enums.units.Unit unitEnum = enums.units.Unit.CROSSBOW_MAN;
+        when(ranged.getCivilizationName()).thenReturn("ali");
+        WorldController.setSelectedCombatUnit(ranged);
+        WorldController.getWorld().getCivilizationByName(ranged.getCivilizationName()).setGold(200.0);
+        UnitController.upgradeUnit(unitEnum);
+        Assertions.assertNotEquals(200.0, WorldController.getWorld().getCivilizationByName(ranged.getCivilizationName()).getGold());
+        Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(ranged.getCivilizationName()).getAllUnits().contains(melee));
+        Assertions.assertNotSame(WorldController.getSelectedCombatUnit(), ranged);
     }
 }

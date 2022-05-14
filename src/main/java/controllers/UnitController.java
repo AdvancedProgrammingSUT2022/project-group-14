@@ -325,7 +325,6 @@ public class UnitController {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
             if (currentCivilization.getGold() < ((double) unitEnum.getCost() / 2))
                 return "you don't have enough gold for upgrading to this unit";
-
             if (WorldController.getSelectedCombatUnit() instanceof Ranged) {
                 if (unitEnum.getRangedCombatStrength() == 0)
                     return "you can't upgrade a ranged unit into a melee unit";
