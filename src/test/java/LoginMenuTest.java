@@ -181,11 +181,4 @@ public class LoginMenuTest {
     public void closing(){
         System.setOut(standardOut);
     }
-    @Test
-    public void checkCommandTest2(){
-        String testEnterMenu = "menu enter login menu";
-        when(loginMenu.checkCommand(testEnterMenu)).thenCallRealMethod();
-        loginMenu.checkCommand(testEnterMenu);
-        verify(loginMenu).checkEnterMenu(any(Matcher.class));
-    }
 }

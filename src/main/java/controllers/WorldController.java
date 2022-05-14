@@ -57,6 +57,7 @@ public class WorldController {
         }
         applyAttacks();
         UnitController.resetMovingPoints(currentCivilization);
+        addAllHeals();
         world.nextTurn();
         resetSelection();
     }
@@ -71,6 +72,14 @@ public class WorldController {
                     } else {
                         //TODO attacking unit vs unit
                     }
+        }
+    }
+
+    public static void addAllHeals() {
+        Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        for (Unit unit : currentCivilization.getAllUnits()) {
+            if (unit instanceof CombatUnit && ((CombatUnit) unit).isFortifiedTillHealed())
+                ((CombatUnit) unit).healUnit(5);
         }
     }
 
