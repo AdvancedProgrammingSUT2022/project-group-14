@@ -1,4 +1,4 @@
-package view;
+package views;
 
 import controllers.UserController;
 import models.User;
