@@ -13,9 +13,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.mockito.Mockito.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class UnitControllerTest {
@@ -36,7 +40,8 @@ public class UnitControllerTest {
     @BeforeEach
     public void setUpWorld() {
         ArrayList<String> usernames = new ArrayList<>();
-        usernames.add("ali"); usernames.add("hassan");
+        usernames.add("ali");
+        usernames.add("hassan");
         WorldController.newWorld(usernames);
     }
 
@@ -47,6 +52,24 @@ public class UnitControllerTest {
         MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
         verify(unit).setDestinationCoordinates(10, 10);
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
+    }
+
+    @Test
+    public void setUnitDestinationCoordinatesTest1() {
+        when(unit.getCivilizationName()).thenReturn("ali");
+        MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
+        when(unit.getCivilizationName()).thenReturn("bastani");
+
+        Assertions.assertEquals("the unit is not under your control", UnitController.setUnitDestinationCoordinates(unit, 10, 10));
+    }
+
+    @Test
+    public void setUnitDestinationCoordinatesTest2() {
+        when(unit.getCivilizationName()).thenReturn("ali");
+        MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
+        MapController.getTileByCoordinates(20,20).setCombatUnit(ranged);
+        MapController.getTileByCoordinates(20,20).setNonCombatUnit(worker);
+        when(unit.getCivilizationName()).thenReturn(WorldController.getWorld().getCurrentCivilizationName());
     }
 
     @Test
