@@ -38,6 +38,13 @@ public class UserControllerTest {
     }
 
     @Test
+    public void getUserByNicknameTest(){
+        String username = "hossein";
+        User user = UserController.getUserByUsername(username);
+        Assertions.assertNull(user);
+    }
+
+    @Test
     public void playerNumberIsCorrectTest(){
         String input = "play game -pl2 hassan";
         Matcher matcher = Commands.matcherFindsRegex(input, Commands.PLAYER_USERNAME);
