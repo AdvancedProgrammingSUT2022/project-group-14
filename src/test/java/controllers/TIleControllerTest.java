@@ -91,10 +91,8 @@ public class TIleControllerTest {
         }
         StrategicResource resource1 = new StrategicResource(StrategicResourceTypes.IRON);
 
-//        when(resource.getRequiredImprovement()).thenReturn(Improvements.FARM);
         when(tile.getImprovement()).thenReturn(Improvements.MINE);
-        when(tile.getImprovementTurnsLeftToBuild()).thenReturn(0);// inja error mide
-//        when(resource instanceof StrategicResource).thenReturn(true);
+        when(tile.getImprovementTurnsLeftToBuild()).thenReturn(0);
 
 
 
