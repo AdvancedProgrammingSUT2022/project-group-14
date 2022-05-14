@@ -81,5 +81,8 @@ public class UserController {
         usernames.add(matcher.group("username"));
         return "";
     }
-    
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
 }
