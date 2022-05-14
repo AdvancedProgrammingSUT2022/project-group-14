@@ -23,6 +23,7 @@ public enum StrategicResourceTypes implements ResourceTypes {
         this.production = production;
         this.gold = gold;
         this.requiredImprovement = requiredImprovement;
+        this.requiredTechnology = requiredTechnology;
     }
 
     @Override
