@@ -11,6 +11,7 @@ import java.util.ArrayList;
 public class MoveController {
 
     public static String impossibleToMoveToTile(int x, int y, Unit unit) {
+        System.out.println("hello");
         if (MapController.getTileByCoordinates(x, y).getCivilizationName() != null &&
                 !MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "chosen tile is in the enemy territory";
