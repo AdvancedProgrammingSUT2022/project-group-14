@@ -126,7 +126,9 @@ public class MapController {
 
     private static void tileTextsRefresh(int[] tileCenter, Tile tile, Civilization civilization, int visionState) {
         //TODO name substring
-        String civilizationName = civilization.getName();
+        String civilizationName = tile.getCivilizationName();
+        if (civilizationName == null)
+            civilizationName = "";
         if (visionState == 1) {
             tile = civilization.getRevealedTiles()[tile.getX()][tile.getY()];
         }
@@ -153,6 +155,7 @@ public class MapController {
     }
 
     public static void cellsRefresh() { // initialize cells of every tile
+        mapInit();
         Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
         for (int i = 0; i < width; i++)

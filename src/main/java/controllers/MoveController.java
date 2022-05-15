@@ -20,7 +20,6 @@ public class MoveController {
                 (MapController.getTileByCoordinates(x, y).getNonCombatUnit() != null && unit instanceof NonCombatUnit)) {
             return "there is not any space left on the tile to move";
         }
-        System.out.println("hello");
         return null;
     }
 
