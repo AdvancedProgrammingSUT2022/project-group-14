@@ -41,7 +41,7 @@ public enum Commands {
     UNIT_CANCEL_MISSION("unit cancel mission"),
     UNIT_WAKE("unit wake"),
     UNIT_DELETE("unit delete"),
-    UNIT_BUILD("unit build (?<progress>road|railroad|farm|mine|tradingPost|lumberMill|pasture|camp|plantation|quarry)"),
+    UNIT_BUILD("unit build (?<progress>road|railroad|farm|mine|tradingPost|lumberMill|pasture|agriculture|camp|plantation|quarry|factory)"),
     UNIT_REMOVE("unit remove (?<foundation>jungle|forest|marsh|route)"),
     UNIT_REPAIR("unit repair"),
     MAP_SHOW_BY_POSITION("show map (?<x>\\d+) (?<y>\\d+)"),
