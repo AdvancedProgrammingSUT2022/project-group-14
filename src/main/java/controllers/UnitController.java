@@ -195,7 +195,8 @@ public class UnitController {
         } else if (WorldController.getWorld().getCivilizationByName(worker.getCivilizationName())
                 .getTechnologies().get(improvement.getRequiredTechnology()) > 0) {
             return "you don't have the required technology";
-        } else if (!improvement.getPossibleTiles().contains(currentTile.getType())) {
+        } else if (!improvement.getPossibleTiles().contains(currentTile.getType()) &&
+                !improvement.getPossibleTiles().contains(currentTile.getFeature())) {
             return "can't build on these kinds of tiles";
         } else {
             currentTile.setImprovement(improvement);

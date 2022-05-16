@@ -62,11 +62,11 @@ public class Civilization {
         }
 
         for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values()) {
-            strategicResources.put(strategicResource.name(), 0);
+            strategicResources.put(strategicResource.nameGetter(), 0);
         }
 
         for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values()) {
-            luxuryResources.put(luxuryResource.name(), 0);
+            luxuryResources.put(luxuryResource.nameGetter(), 0);
         }
     }
 
