@@ -35,6 +35,8 @@ public class App extends javafx.application.Application {
         stage.setScene(App.scene);
         stage.setTitle("CivilizationV");
         stage.setResizable(false);
+        stage.setWidth(1280);
+        stage.setHeight(720);
         stage.show();
     }
 
