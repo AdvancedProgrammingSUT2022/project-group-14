@@ -5,10 +5,11 @@
 <?import javafx.scene.text.Font?>
 
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.shape.Circle?>
 <AnchorPane id="mainMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.MainMenuController">
 
       <Text layoutX="100" layoutY="100" styleClass="sceneTitle" text="Main Menu" />
-
+      <Circle fx:id="usersAvatar" layoutX="1100" layoutY="140" radius="100" stroke="WHITE" />
       <Button layoutX="145.0" layoutY="240.0" text="start game" onMouseClicked="#startGame"/>
       <Button layoutX="145.0" layoutY="300.0" text="profile" onMouseClicked="#goToProfileMenu"/>
       <Button layoutX="145.0" layoutY="360.0" text="scoreboard" onMouseClicked="#goToScoreboard"/>
