@@ -68,7 +68,6 @@ public class LoginPageController {
             usernameTextField.setStyle("-fx-border-color: #11aa11");
             nicknameTextField.setStyle("-fx-border-color: #11aa11");
             passwordTextField.setStyle("-fx-border-color: #11aa11");
-            App.changeScene("mainMenuPage");
         }
     }
 
