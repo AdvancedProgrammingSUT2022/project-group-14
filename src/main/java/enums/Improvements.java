@@ -14,7 +14,7 @@ public enum Improvements {
                     TileBaseTypes.HEEL))), // camp
     FARM("farm", 1, 0, 0, Technologies.AGRICULTURE,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW))), // mazrae
-    LUMBERMILL("LubmerMill", 0, 1, 0, Technologies.CONSTRUCTION,
+    LUMBERMILL("LumberMill", 0, 1, 0, Technologies.CONSTRUCTION,
             new HashSet<>(Arrays.asList(TileFeatureTypes.JUNGLE))), // karkhane choob
     MINE("mine", 0, 1, 0, Technologies.MINING,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
