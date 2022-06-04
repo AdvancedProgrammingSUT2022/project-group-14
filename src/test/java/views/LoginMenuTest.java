@@ -1,11 +1,8 @@
 package views;
 
 
-import controllers.TileController;
 import controllers.UserController;
 import enums.Commands;
-import enums.tiles.TileBaseTypes;
-import models.Tile;
 import models.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -14,19 +11,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoJUnitRunner;
-
 import org.mockito.junit.jupiter.MockitoExtension;
 import views.menus.LoginMenu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;

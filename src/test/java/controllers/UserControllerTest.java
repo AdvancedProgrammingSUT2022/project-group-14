@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.io.ByteArrayOutputStream;
@@ -16,7 +15,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 
-import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserControllerTest {
 

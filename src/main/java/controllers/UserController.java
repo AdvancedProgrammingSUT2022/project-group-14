@@ -1,13 +1,10 @@
 package controllers;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.regex.Matcher;
 
 import com.google.gson.Gson;
@@ -18,12 +15,11 @@ public class UserController {
     private static ArrayList<User> users = new ArrayList<>();
     private static User loggedInUser = null;
 
-    public static User getLoggedInUser() {
-        return loggedInUser;
-    }
 
     public static void setLoggedInUser(User loggedInUser) {
+
         UserController.loggedInUser = loggedInUser;
+        loggedInUser.setDateOfLastLogin(new Date());
     }
 
     public static void readAllUsers() throws IOException {
@@ -90,4 +86,28 @@ public class UserController {
         return "";
     }
 
+    public static void sortUsers(){
+        users.sort((o1, o2) -> {
+            if (o1.getScore() == o2.getScore()) {
+                if ((o1.getDateOfLastWin() == null && o2.getDateOfLastWin() == null) || o1.getDateOfLastWin().equals(o2.getDateOfLastWin())){
+                    return o1.getUsername().compareTo(o2.getUsername());
+                } else {
+                    if (o1.getDateOfLastWin() == null || o2.getDateOfLastWin() == null){
+                        return o1.getDateOfLastWin() == null?-1:1;
+                    }
+                    return o1.getDateOfLastWin().before(o2.getDateOfLastWin())?1:-1;
+                }
+            } else {
+                return o1.getScore() > o2.getScore()?1:-1;
+            }
+        });
+    }
+
+    public static ArrayList<User> getUsers() {
+        return users;
+    }
+
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
 }

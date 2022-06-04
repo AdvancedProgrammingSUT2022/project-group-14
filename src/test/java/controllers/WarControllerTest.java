@@ -1,10 +1,8 @@
 package controllers;
 
-import enums.units.CombatType;
 import enums.units.Unit;
 import models.City;
 import models.Civilization;
-import models.User;
 import models.units.CombatUnit;
 import models.units.Melee;
 import models.units.Ranged;
@@ -15,13 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import views.menus.ProfileMenu;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Scanner;
 
 import static org.mockito.Mockito.when;
 

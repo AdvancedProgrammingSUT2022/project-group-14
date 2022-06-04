@@ -1,14 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="views.scoreboardController"
-            prefHeight="720" prefWidth="1280">
+<AnchorPane id="scoreboardScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.scoreboardController">
+
+<!--    <GridPane fx:id="users"/>-->
+    <Label layoutX="475.0" styleClass="sceneTitle" text="Scoreboard" />
+
+    <HBox fx:id="scoreboardHbox" alignment="CENTER" layoutX="100" layoutY="100">
+        <VBox fx:id="ranksVBox" alignment="TOP_CENTER" spacing="10" style="-fx-padding: 0">
+            <Text id="topChart" />
+        </VBox>
+        <VBox fx:id="avatarsVBox" alignment="TOP_CENTER" spacing="10" style="-fx-padding: 0">
+            <Text id="topChart" />
+        </VBox>
+        <VBox fx:id="usernamesVBox" alignment="TOP_CENTER" prefHeight="258.0" prefWidth="189.0" spacing="10" style="-fx-padding: 0">
+            <Text id="topChart" text="Username" />
+        </VBox>
+        <VBox fx:id="scoresVBox" alignment="TOP_CENTER" prefHeight="300.0" prefWidth="147.0" spacing="10" style="-fx-padding: 0">
+            <Text id="topChart" text="Score" />
+        </VBox>
+        <VBox fx:id="dateOfLastWinVBox" alignment="TOP_CENTER" prefHeight="300.0" prefWidth="250.0" spacing="10" style="-fx-padding: 0">
+            <Text id="topChart" text="last win" />
+        </VBox>
+        <VBox fx:id="dateOfLastLoginVBox" alignment="TOP_CENTER" prefHeight="300.0" prefWidth="250.0" spacing="10" style="-fx-padding: 0">
+            <Text id="topChart" text="last login" />
+        </VBox>
+    </HBox>
+    <Button layoutX="50" layoutY="600" onMouseClicked="#goToMainMenu" prefWidth="100" text="back" />
 
 </AnchorPane>
