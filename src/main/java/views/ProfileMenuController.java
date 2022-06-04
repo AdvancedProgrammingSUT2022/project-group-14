@@ -38,6 +38,10 @@ public class ProfileMenuController {
     private final FileChooser fileChooser = new FileChooser();
 
     public void initialize() {
+        passwordTextField.setFocusTraversable(false);
+        newNicknameTextField.setFocusTraversable(false);
+        oldPasswordTextField.setFocusTraversable(false);
+        newPasswordTextField.setFocusTraversable(false);
         usersAvatar.setFill(new ImagePattern(new Image(UserController.getLoggedInUser().getAvatarFileAddress())));
         first.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/1.jpg")).toExternalForm()));
         second.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/2.jpg")).toExternalForm()));

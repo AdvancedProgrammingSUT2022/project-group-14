@@ -2,6 +2,7 @@ package models;
 
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Objects;
 import java.util.Random;
 
@@ -13,6 +14,7 @@ public class User {
     private Date dateOfLastWin;
     private Date dateOfLastLogin;
     private String avatarFileAddress;
+    private final HashMap<String, Chat> chats;
 
     public User(String username, String password, String nickname)
     {
@@ -23,7 +25,9 @@ public class User {
         this.dateOfLastWin = null;
         this.dateOfLastLogin = null;
         this.avatarFileAddress = Objects.requireNonNull(getClass().getResource("/images/avatars/" + new Random().nextInt(1, 5) + ".jpg")).toExternalForm();
+        chats = new HashMap<>();
     }
+
     public String getUsername() {
         return this.username;
     }
@@ -79,5 +83,13 @@ public class User {
 
     public void setDateOfLastLogin(Date dateOfLastLogin) {
         this.dateOfLastLogin = dateOfLastLogin;
+    }
+
+    public HashMap<String, Chat> getChats() {
+        return chats;
+    }
+
+    public void addChats(Chat chat) {
+        this.chats.put(chat.getName(), chat);
     }
 }

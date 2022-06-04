@@ -30,7 +30,7 @@ public class MainMenuController {
     }
 
     public void goToChatroom(MouseEvent mouseEvent) {
-        App.changeScene("chatroomPage");
+        App.changeScene("chatRoomPage");
     }
 
     public void logout(MouseEvent mouseEvent) {
