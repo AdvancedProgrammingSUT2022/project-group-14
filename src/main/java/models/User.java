@@ -1,5 +1,7 @@
 package models;
 
+
+import java.util.Date;
 import java.util.Objects;
 import java.util.Random;
 
@@ -8,6 +10,7 @@ public class User {
     private String password;
     private String nickname;
     private int score;
+    private Date dateOfLastWin = null;
     private String avatarFileAddress;
 
     public User(String username, String password, String nickname)
@@ -16,6 +19,7 @@ public class User {
         this.password = password;
         this.nickname = nickname;
         this.score = 0;
+        this.dateOfLastWin = new Date();
         this.avatarFileAddress = Objects.requireNonNull(getClass().getResource("/images/avatars/" + new Random().nextInt(1, 5) + ".jpg")).toExternalForm();
     }
     public String getUsername() {
@@ -50,6 +54,15 @@ public class User {
         this.score += score;
     }
 
+
+    public Date getDateOfLastWin() {
+        return dateOfLastWin;
+    }
+
+    public void setDateOfLastWin(Date dateOfLastWin) {
+        this.dateOfLastWin = dateOfLastWin;
+    }
+
     public String getAvatarFileAddress() {
         return avatarFileAddress;
     }
@@ -57,5 +70,4 @@ public class User {
     public void setAvatarFileAddress(String avatarFileAddress) {
         this.avatarFileAddress = avatarFileAddress;
     }
-
 }
