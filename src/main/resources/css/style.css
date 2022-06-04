@@ -1,0 +1,25 @@
+#mainMenuScene {
+    -fx-background-image: url("../images/main_menu_background.jpg");
+    -fx-background-size: cover;
+}
+
+Button {
+    -fx-cursor: hand;
+    -fx-background-radius: 15;
+    -fx-background-color: #ee8000;
+    -fx-text-fill: white;
+    -fx-pref-height: 35;
+    -fx-pref-width: 150;
+    -fx-font-family: "Arial Rounded MT Bold";
+    -fx-font-size: 20;
+}
+
+Button:hover {
+    -fx-background-color: #090505;
+    -fx-text-fill: #e09408;
+}
+
+.sceneTitle {
+    -fx-font-family: "AppleMyungjo";
+    -fx-font-size: 70;
+}

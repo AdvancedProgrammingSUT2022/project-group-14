@@ -24,7 +24,7 @@ public class App extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         UserController.readAllUsers();
 
-        Parent root = loadFXML("loginPage");
+        Parent root = loadFXML("mainMenuPage");
         assert root != null;
         App.scene = new Scene(root);
 
@@ -33,7 +33,7 @@ public class App extends javafx.application.Application {
 //        mediaPlayer.play();
 
         stage.setScene(App.scene);
-        stage.setTitle("CivilizationV");
+        stage.setTitle("CivilizationVI");
         stage.setResizable(false);
         stage.setWidth(1280);
         stage.setHeight(720);
