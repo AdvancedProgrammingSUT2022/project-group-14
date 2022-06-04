@@ -6,6 +6,8 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -15,44 +17,74 @@ import java.util.Objects;
 
 public class scoreboardController {
     @FXML
-    private GridPane users;
+    private HBox scoreboardHbox;
+    @FXML
+    private VBox avatarsVBox;
+    @FXML
+    private VBox ranksVBox;
+    @FXML
+    private VBox usernamesVBox;
+    @FXML
+    private VBox scoresVBox;
+    @FXML
+    private VBox dateOfLastWinVBox;
+    @FXML
+    private VBox dateOfLastLoginVBox;
+
 
     public void initialize(){
         UserController.sortUsers();
-        users.setLayoutX(500);
-        users.setLayoutY(150);
-        for (int i = 0; i < UserController.getUsers().size(); i++) {
-//            Circle avatar = new Circle();
-//            avatar.setRadius(30);
-//            ImagePattern imagePattern = new ImagePattern(new Image(
-//                    Objects.requireNonNull(getClass().getResource(
-//                            "/images/avatar" + GameNet.getUsers().get(i).getAvatar() + ".jpeg")).toExternalForm()));
-//            avatar.setFill(imagePattern);
-            Text username = new Text();
-            Text point = new Text();
-            username.setText("  " + UserController.getUsers().get(i).getUsername());
-            point.setText("  score: " + UserController.getUsers().get(i).getScore());
-            username.setStyle("-fx-font-size: 20");
-            point.setStyle("-fx-font-size: 20");
-            if (i == 0) {
-                username.setFill(Color.GOLD);
-                point.setFill(Color.GOLD);
+
+//        scoreboardHbox.setLayoutX(100);
+//        scoreboardHbox.setLayoutY(100);
+        Text rank, username, score, dateOfLastWin, dateOfLastLogin;
+        Circle avatar;
+        boolean currentUserWasShowed = false;
+        for (int i = 0, j = 1; i < Math.min(10,UserController.getUsers().size()); i++, j++) {
+            if (i == 9 && !currentUserWasShowed){
+              i = UserController.getUsers().indexOf(UserController.getLoggedInUser());
+              j = i + 1;
             }
-            if (i == 1) {
-                username.setFill(Color.SILVER);
-                point.setFill(Color.SILVER);
+            avatar = new Circle(18, new ImagePattern(new Image(UserController.getUsers().get(i).getAvatarFileAddress())));
+            rank = new Text(j + "-");
+            username = new Text(UserController.getUsers().get(i).getUsername());
+            score = new Text("- " + UserController.getUsers().get(i).getScore() + " -");
+            dateOfLastWin = new Text("- N/A -");
+            if (UserController.getUsers().get(i).getDateOfLastWin() != null) {
+                dateOfLastWin.setText("- " + UserController.getUsers().get(i).getDateOfLastWin().toString().substring(4, 19) + " -");
             }
-            if (i == 2) {
-                username.setFill(Color.BROWN);
-                point.setFill(Color.BROWN);
+
+
+            dateOfLastLogin = new Text("- N/A -");
+            if (UserController.getUsers().get(i).getDateOfLastLogin() != null) {
+                dateOfLastLogin.setText("- " + UserController.getUsers().get(i).getDateOfLastLogin().toString().substring(4, 19) + " -");
             }
-            if (UserController.getUsers().get(i) == UserController.getLoggedInUser()){
-                username.setFill(Color.BLUE);
-                point.setFill(Color.BLUE);
+            rank.setStyle("-fx-font-size: 30");
+            username.setStyle("-fx-font-size: 30");
+            score.setStyle("-fx-font-size: 30");
+            dateOfLastWin.setStyle("-fx-font-size: 30");
+            dateOfLastLogin.setStyle("-fx-font-size: 30");
+            if (UserController.getUsers().get(i) == UserController.getLoggedInUser()) {
+                rank.setFill(Color.RED);
+                username.setFill(Color.RED);
+                score.setFill(Color.RED);
+                dateOfLastWin.setFill(Color.RED);
+                dateOfLastLogin.setFill(Color.RED);
+                currentUserWasShowed = true;
+
+            } else {
+                rank.setFill(Color.ORANGE);
+                username.setFill(Color.ORANGE);
+                score.setFill(Color.ORANGE);
+                dateOfLastWin.setFill(Color.ORANGE);
+                dateOfLastLogin.setFill(Color.ORANGE);
             }
-            //users.add(avatar, 0, i);
-            users.add(username, 1, i);
-            users.add(point, 3, i);
+            avatarsVBox.getChildren().add(avatar);
+            ranksVBox.getChildren().add(rank);
+            usernamesVBox.getChildren().add(username);
+            scoresVBox.getChildren().add(score);
+            dateOfLastWinVBox.getChildren().add(dateOfLastWin);
+            dateOfLastLoginVBox.getChildren().add(dateOfLastLogin);
         }
     }
 
