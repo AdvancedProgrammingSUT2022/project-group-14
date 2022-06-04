@@ -24,7 +24,7 @@ public class App extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         UserController.readAllUsers();
 
-        Parent root = loadFXML("mainMenuPage");
+        Parent root = loadFXML("loginPage");
         assert root != null;
         App.scene = new Scene(root);
 

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.image.ImageView?>
+<AnchorPane id="profileMenuScene" xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="views.ProfileMenuController" stylesheets="@../css/style.css" prefWidth="1280"
+            prefHeight="720">
+    <Circle fx:id="usersAvatar" layoutX="1100" layoutY="140" radius="100" stroke="WHITE"/>
+    <VBox alignment="CENTER" layoutX="50" layoutY="100" spacing="5">
+        <PasswordField fx:id="passwordTextField" onKeyTyped="#resetChangeNicknameTextFields" promptText="Password"/>
+        <TextField fx:id="newNicknameTextField" onKeyTyped="#resetChangeNicknameTextFields" promptText="New nickname"/>
+        <Button style="-fx-pref-width: 250" onMouseClicked="#changeNicknameButtonClicked" text="Change nickname"/>
+    </VBox>
+    <VBox alignment="CENTER" layoutX="50" layoutY="250" spacing="5">
+        <PasswordField fx:id="oldPasswordTextField" onKeyTyped="#resetChangePasswordTextFields"
+                       promptText="Old password"/>
+        <TextField fx:id="newPasswordTextField" onKeyTyped="#resetChangePasswordTextFields" promptText="New password"/>
+        <Button style="-fx-pref-width: 250" onMouseClicked="#changePasswordButtonClicked" text="Change password"/>
+    </VBox>
+    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
+    <Button layoutX="900" layoutY="342.5" style="-fx-pref-width: 250" text="Choose from file" onMouseClicked="#chooseFileButtonClicked"/>
+    <ImageView fx:id="first" fitHeight="200.0" fitWidth="200" layoutX="440" layoutY="150" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
+    <ImageView fx:id="second" fitHeight="200.0" fitWidth="200" layoutX="440" layoutY="370" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
+    <ImageView fx:id="third" fitHeight="200.0" fitWidth="200" layoutX="660" layoutY="150" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
+    <ImageView fx:id="fourth" fitHeight="200.0" fitWidth="200" layoutX="660" layoutY="370" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
+
+
+</AnchorPane>
