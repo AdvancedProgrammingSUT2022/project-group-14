@@ -1,9 +1,7 @@
 package controllers;
 
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
@@ -16,6 +14,11 @@ import models.User;
 public class UserController {
     private static ArrayList<User> users = new ArrayList<>();
     private static User loggedInUser = null;
+
+
+    public static void setLoggedInUser(User loggedInUser) {
+        UserController.loggedInUser = loggedInUser;
+    }
 
     public static void readAllUsers() throws IOException {
         String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/usersData.json")));

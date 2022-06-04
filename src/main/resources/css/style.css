@@ -1,10 +1,17 @@
+
 #mainMenuScene {
     -fx-background-image: url("../images/main_menu_background.jpg");
     -fx-background-size: cover;
 }
 
+
 #scoreboardScene {
     -fx-background-image: url("../images/scoreboard_background.jpg");
+    -fx-background-size: cover;
+}
+
+#background{
+    -fx-background-image: url("../images/loginPageBG.jpg");
     -fx-background-size: cover;
 }
 
@@ -20,11 +27,20 @@ Button {
 }
 
 Button:hover {
-    -fx-background-color: #090505;
-    -fx-text-fill: #e09408;
+    -fx-background-color: black;
+    -fx-text-fill: #ee8000;
 }
 
 .sceneTitle {
     -fx-font-family: "AppleMyungjo";
     -fx-font-size: 70;
+}
+
+
+TextField, PasswordField{
+    -fx-pref-height: 35;
+}
+
+Text{
+    -fx-font-size: 20;
 }

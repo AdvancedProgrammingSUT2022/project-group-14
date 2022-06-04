@@ -6,7 +6,6 @@ import models.User;
 
 import java.util.Scanner;
 import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class LoginMenu {
 
@@ -124,6 +123,7 @@ public class LoginMenu {
     }
 
     public void loginUser(User user) {
+        UserController.setLoggedInUser(user);
         MainMenu mainMenu = new MainMenu(this.scanner, user);
         mainMenu.run();
     }
