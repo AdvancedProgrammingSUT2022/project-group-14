@@ -14,6 +14,11 @@
     -fx-background-size: cover;
 }
 
+#scoreboardScene {
+    -fx-background-image: url("../images/scoreboard_background.jpg");
+    -fx-background-size: cover;
+}
+
 Button {
     -fx-cursor: hand;
     -fx-background-radius: 15;
