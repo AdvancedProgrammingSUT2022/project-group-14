@@ -18,6 +18,14 @@ public class UserController {
     private static ArrayList<User> users = new ArrayList<>();
     private static User loggedInUser = null;
 
+    public static User getLoggedInUser() {
+        return loggedInUser;
+    }
+
+    public static void setLoggedInUser(User loggedInUser) {
+        UserController.loggedInUser = loggedInUser;
+    }
+
     public static void readAllUsers() throws IOException {
         String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/usersData.json")));
         users = new Gson().fromJson(json,
