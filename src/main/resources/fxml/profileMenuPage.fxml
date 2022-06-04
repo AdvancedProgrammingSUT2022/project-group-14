@@ -1,29 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-
-<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.ImageView?>
-<AnchorPane id="profileMenuScene" xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="views.ProfileMenuController" stylesheets="@../css/style.css" prefWidth="1280"
-            prefHeight="720">
-    <Circle fx:id="usersAvatar" layoutX="1100" layoutY="140" radius="100" stroke="WHITE"/>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+
+<AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ProfileMenuController">
+    <Circle fx:id="usersAvatar" layoutX="1100" layoutY="140" radius="100" stroke="WHITE" />
     <VBox alignment="CENTER" layoutX="50" layoutY="100" spacing="5">
-        <PasswordField fx:id="passwordTextField" onKeyTyped="#resetChangeNicknameTextFields" promptText="Password"/>
-        <TextField fx:id="newNicknameTextField" onKeyTyped="#resetChangeNicknameTextFields" promptText="New nickname"/>
-        <Button style="-fx-pref-width: 250" onMouseClicked="#changeNicknameButtonClicked" text="Change nickname"/>
+        <PasswordField fx:id="passwordTextField" onKeyTyped="#resetChangeNicknameTextFields" promptText="Password" />
+        <TextField fx:id="newNicknameTextField" onKeyTyped="#resetChangeNicknameTextFields" promptText="New nickname" />
+        <Button onMouseClicked="#changeNicknameButtonClicked" style="-fx-pref-width: 250" text="Change nickname" />
     </VBox>
-    <VBox alignment="CENTER" layoutX="50" layoutY="250" spacing="5">
-        <PasswordField fx:id="oldPasswordTextField" onKeyTyped="#resetChangePasswordTextFields"
-                       promptText="Old password"/>
-        <TextField fx:id="newPasswordTextField" onKeyTyped="#resetChangePasswordTextFields" promptText="New password"/>
-        <Button style="-fx-pref-width: 250" onMouseClicked="#changePasswordButtonClicked" text="Change password"/>
+    <VBox alignment="CENTER" layoutX="50.0" layoutY="320.0" spacing="5">
+        <PasswordField fx:id="oldPasswordTextField" onKeyTyped="#resetChangePasswordTextFields" promptText="Old password" />
+        <TextField fx:id="newPasswordTextField" onKeyTyped="#resetChangePasswordTextFields" promptText="New password" />
+        <Button onMouseClicked="#changePasswordButtonClicked" style="-fx-pref-width: 250" text="Change password" />
     </VBox>
-    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
-    <Button layoutX="900" layoutY="342.5" style="-fx-pref-width: 250" text="Choose from file" onMouseClicked="#chooseFileButtonClicked"/>
+    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back" />
+    <Button layoutX="900" layoutY="342.5" onMouseClicked="#chooseFileButtonClicked" style="-fx-pref-width: 250" text="Choose from file" />
     <ImageView fx:id="first" fitHeight="200.0" fitWidth="200" layoutX="440" layoutY="150" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
     <ImageView fx:id="second" fitHeight="200.0" fitWidth="200" layoutX="440" layoutY="370" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
     <ImageView fx:id="third" fitHeight="200.0" fitWidth="200" layoutX="660" layoutY="150" onMouseClicked="#clickedOnAvatar" pickOnBounds="true" preserveRatio="true" />
