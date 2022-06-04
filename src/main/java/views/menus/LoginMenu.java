@@ -124,6 +124,7 @@ public class LoginMenu {
     }
 
     public void loginUser(User user) {
+        UserController.setLoggedInUser(user);
         MainMenu mainMenu = new MainMenu(this.scanner, user);
         mainMenu.run();
     }
