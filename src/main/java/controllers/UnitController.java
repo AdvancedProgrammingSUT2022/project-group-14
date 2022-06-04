@@ -5,7 +5,6 @@ import enums.tiles.TileFeatureTypes;
 import models.*;
 import models.units.*;
 
-import java.awt.*;
 import java.util.Locale;
 
 public class UnitController {
