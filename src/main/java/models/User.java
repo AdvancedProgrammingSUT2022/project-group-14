@@ -1,10 +1,13 @@
 package models;
 
+import java.util.Date;
+
 public class User {
     private String username;
     private String password;
     private String nickname;
     private int score;
+    private Date dateOfLastWin = null;
 
     public User(String username, String password, String nickname)
     {
@@ -12,6 +15,7 @@ public class User {
         this.password = password;
         this.nickname = nickname;
         this.score = 0;
+        this.dateOfLastWin = new Date();
     }
     public String getUsername() {
         return this.username;
@@ -45,4 +49,11 @@ public class User {
         this.score += score;
     }
 
+    public Date getDateOfLastWin() {
+        return dateOfLastWin;
+    }
+
+    public void setDateOfLastWin(Date dateOfLastWin) {
+        this.dateOfLastWin = dateOfLastWin;
+    }
 }

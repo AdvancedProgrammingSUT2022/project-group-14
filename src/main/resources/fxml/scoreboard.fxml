@@ -6,9 +6,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
+<AnchorPane id="scoreboardScene" xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="views.scoreboardController"
-            prefHeight="720" prefWidth="1280">
+            prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css">
+
+    <GridPane fx:id="users"/>
+
+    <Button text="back" layoutX="100" layoutY="600" prefWidth="100" onMouseClicked="#goToMainMenu"/>
 
 </AnchorPane>
