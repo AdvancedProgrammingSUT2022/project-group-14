@@ -8,16 +8,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<?import javafx.scene.control.ChoiceBox?>
 <AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.ChatRoomPageController">
     <ScrollPane hbarPolicy="NEVER" prefHeight="590.0" prefWidth="520" vbarPolicy="NEVER">
         <AnchorPane prefHeight="720" prefWidth="520">
-            <Button layoutX="164.0" layoutY="20.0" text="Public Chat" />
-            <Button fx:id="privateChatButton" layoutX="14.0" layoutY="162.0" onMouseClicked="#createChatClicked" style="-fx-pref-width: 225" text="Create Private Chat" />
-            <Button layoutX="14.0" layoutY="207.0" onMouseClicked="#createChatClicked" style="-fx-pref-width: 225" text="Create Group Chat" />
-            <VBox fx:id="chatNamesVBox" alignment="CENTER" layoutX="24.0" layoutY="252.0" prefHeight="50.0" prefWidth="472.0" spacing="3" />
-            <TextField fx:id="chatNameTextField" layoutX="14.0" layoutY="120.0" prefWidth="224.0" promptText="Enter your chat name" style="-fx-pref-width: 225;" />
-            <MenuButton fx:id="usernamesMenuButton" layoutX="14.0" layoutY="77.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Usernames"/>
+            <Button layoutX="185.0" layoutY="14.0" onMouseClicked="#publicChatButtonClicked" text="Public Chat" />
+            <Button fx:id="privateChatButton" layoutX="25.0" layoutY="162.0" onMouseClicked="#createChatClicked" style="-fx-pref-width: 225" text="Create Private Chat" />
+            <Button layoutX="270.0" layoutY="162.0" onMouseClicked="#createChatClicked" style="-fx-pref-width: 225" text="Create Group Chat" />
+            <VBox fx:id="chatNamesVBox" alignment="CENTER" layoutX="25.0" layoutY="229.0" prefHeight="50.0" prefWidth="472.0" spacing="3" />
+            <TextField fx:id="chatNameTextField" layoutX="110.0" layoutY="119.0" prefWidth="300.0" promptText="Enter your chat name" />
+            <MenuButton fx:id="usernamesMenuButton" layoutX="148.0" layoutY="78.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Usernames" />
         </AnchorPane>
     </ScrollPane>
     <ScrollPane fx:id="chatMessagesScrollPane" hbarPolicy="NEVER" layoutX="520" layoutY="45.0" prefHeight="545.0" prefWidth="760" vbarPolicy="NEVER">
@@ -26,7 +25,7 @@
         </AnchorPane>
     </ScrollPane>
     <Text fx:id="chatTitle" fill="WHITE" layoutX="761.0" layoutY="39.0" text="Text" textAlignment="CENTER" wrappingWidth="277.5611572265625" />
-    <TextField fx:id="chatMessageTextField" layoutX="750.0" layoutY="600" prefWidth="349.0" />
+    <TextField fx:id="chatMessageTextField" promptText="Message" layoutX="750.0" layoutY="600" prefWidth="349.0" />
     <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back" />
 
 </AnchorPane>

@@ -17,26 +17,11 @@ import java.util.Objects;
 
 public class scoreboardController {
     @FXML
-    private HBox scoreboardHbox;
-    @FXML
-    private VBox avatarsVBox;
-    @FXML
-    private VBox ranksVBox;
-    @FXML
-    private VBox usernamesVBox;
-    @FXML
-    private VBox scoresVBox;
-    @FXML
-    private VBox dateOfLastWinVBox;
-    @FXML
-    private VBox dateOfLastLoginVBox;
+    private GridPane gridPane;
 
 
     public void initialize(){
         UserController.sortUsers();
-
-//        scoreboardHbox.setLayoutX(100);
-//        scoreboardHbox.setLayoutY(100);
         Text rank, username, score, dateOfLastWin, dateOfLastLogin;
         Circle avatar;
         boolean currentUserWasShowed = false;
@@ -45,7 +30,7 @@ public class scoreboardController {
               i = UserController.getUsers().indexOf(UserController.getLoggedInUser());
               j = i + 1;
             }
-            avatar = new Circle(18, new ImagePattern(new Image(UserController.getUsers().get(i).getAvatarFileAddress())));
+            avatar = new Circle(15, new ImagePattern(UserController.getUsers().get(i).getImage()));
             rank = new Text(j + "-");
             username = new Text(UserController.getUsers().get(i).getUsername());
             score = new Text("- " + UserController.getUsers().get(i).getScore() + " -");
@@ -53,8 +38,6 @@ public class scoreboardController {
             if (UserController.getUsers().get(i).getDateOfLastWin() != null) {
                 dateOfLastWin.setText("- " + UserController.getUsers().get(i).getDateOfLastWin().toString().substring(4, 19) + " -");
             }
-
-
             dateOfLastLogin = new Text("- N/A -");
             if (UserController.getUsers().get(i).getDateOfLastLogin() != null) {
                 dateOfLastLogin.setText("- " + UserController.getUsers().get(i).getDateOfLastLogin().toString().substring(4, 19) + " -");
@@ -71,7 +54,6 @@ public class scoreboardController {
                 dateOfLastWin.setFill(Color.RED);
                 dateOfLastLogin.setFill(Color.RED);
                 currentUserWasShowed = true;
-
             } else {
                 rank.setFill(Color.ORANGE);
                 username.setFill(Color.ORANGE);
@@ -79,12 +61,13 @@ public class scoreboardController {
                 dateOfLastWin.setFill(Color.ORANGE);
                 dateOfLastLogin.setFill(Color.ORANGE);
             }
-            avatarsVBox.getChildren().add(avatar);
-            ranksVBox.getChildren().add(rank);
-            usernamesVBox.getChildren().add(username);
-            scoresVBox.getChildren().add(score);
-            dateOfLastWinVBox.getChildren().add(dateOfLastWin);
-            dateOfLastLoginVBox.getChildren().add(dateOfLastLogin);
+            i = Math.min(9, i);
+            gridPane.add(rank, 0, i+1);
+            gridPane.add(avatar, 1, i+1);
+            gridPane.add(username, 2, i+1);
+            gridPane.add(score, 3, i+1);
+            gridPane.add(dateOfLastWin, 4, i+1);
+            gridPane.add(dateOfLastLogin, 5, i+1);
         }
     }
 

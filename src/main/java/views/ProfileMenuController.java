@@ -11,6 +11,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
+import models.imagesEnums.Avatars;
 
 import java.io.File;
 import java.util.Objects;
@@ -42,11 +43,11 @@ public class ProfileMenuController {
         newNicknameTextField.setFocusTraversable(false);
         oldPasswordTextField.setFocusTraversable(false);
         newPasswordTextField.setFocusTraversable(false);
-        usersAvatar.setFill(new ImagePattern(new Image(UserController.getLoggedInUser().getAvatarFileAddress())));
-        first.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/1.jpg")).toExternalForm()));
-        second.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/2.jpg")).toExternalForm()));
-        third.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/3.jpg")).toExternalForm()));
-        fourth.setImage(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/4.jpg")).toExternalForm()));
+        usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
+        first.setImage(Avatars.IMG0.getImage());
+        second.setImage(Avatars.IMG1.getImage());
+        third.setImage(Avatars.IMG2.getImage());
+        fourth.setImage(Avatars.IMG3.getImage());
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
     }
 
@@ -107,17 +108,17 @@ public class ProfileMenuController {
     public void clickedOnAvatar(MouseEvent mouseEvent) {
         Object source = mouseEvent.getSource();
         if (first.equals(source)) {
-            usersAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/1.jpg")).toExternalForm())));
-            UserController.getLoggedInUser().setAvatarFileAddress(Objects.requireNonNull(getClass().getResource("/images/avatars/1.jpg")).toExternalForm());
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG0");
+            usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         } else if (second.equals(source)) {
-            usersAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/2.jpg")).toExternalForm())));
-            UserController.getLoggedInUser().setAvatarFileAddress(Objects.requireNonNull(getClass().getResource("/images/avatars/2.jpg")).toExternalForm());
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG1");
+            usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         } else if (third.equals(source)) {
-            usersAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/3.jpg")).toExternalForm())));
-            UserController.getLoggedInUser().setAvatarFileAddress(Objects.requireNonNull(getClass().getResource("/images/avatars/3.jpg")).toExternalForm());
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG2");
+            usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         } else if (fourth.equals(source)) {
-            usersAvatar.setFill(new ImagePattern(new Image(Objects.requireNonNull(getClass().getResource("/images/avatars/4.jpg")).toExternalForm())));
-            UserController.getLoggedInUser().setAvatarFileAddress(Objects.requireNonNull(getClass().getResource("/images/avatars/4.jpg")).toExternalForm());
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG3");
+            usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         }
     }
 

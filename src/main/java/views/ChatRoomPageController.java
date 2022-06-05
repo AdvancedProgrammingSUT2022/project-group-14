@@ -9,9 +9,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -63,7 +63,7 @@ public class ChatRoomPageController {
                     for (Chat selectedChat : selectedChats) {
                         selectedChat.addMessage(message);
                     }
-                    HBox hBox = new HBox(new Circle(20, new ImagePattern(new Image(Objects.requireNonNull(UserController.getUserByUsername(message.getSenderUsername())).getAvatarFileAddress()))),
+                    HBox hBox = new HBox(new Circle(20, new ImagePattern(Objects.requireNonNull(UserController.getUserByUsername(message.getSenderUsername())).getImage())),
                             new Text(" " + message.getSenderUsername() + " :\t" + message.getText() + "\t\t\t" + message.getDate().toString().substring(4, 16)));
                     chatMessageTextField.setText("");
                     hBox.setPrefWidth(chatMessagesVBox.getPrefWidth());
@@ -96,6 +96,7 @@ public class ChatRoomPageController {
 
     public void createChatClicked(MouseEvent mouseEvent) {
         ArrayList<String> usernames = new ArrayList<>();
+        usernames.add(UserController.getLoggedInUser().getUsername());
         for (MenuItem item : usernamesMenuButton.getItems()) {
             if (((CheckMenuItem) item).isSelected())
                 usernames.add(item.getText());
@@ -111,12 +112,20 @@ public class ChatRoomPageController {
         for (int i = 0; i < usernames.size(); i++) {
             Objects.requireNonNull(UserController.getUserByUsername(usernames.get(i))).addChats(new Chat(usernames, chatNameTextField.getText()));
         }
+        for (MenuItem item : usernamesMenuButton.getItems()) {
+            ((CheckMenuItem) item).setSelected(false);
+        }
         addChatButtons();
     }
 
     public boolean creatingChatIsValid(ArrayList<String> usernames) {
         if (chatNameTextField.getText().equals("")) {
             chatNameTextField.setPromptText("You should give a name to your chat");
+            chatNameTextField.setStyle("-fx-border-color: #ff0022");
+            return false;
+        }
+        if (usernames.size() == 1) {
+            chatNameTextField.setPromptText("You should select at least one more person");
             chatNameTextField.setStyle("-fx-border-color: #ff0022");
             return false;
         }
@@ -134,15 +143,17 @@ public class ChatRoomPageController {
     public void addChatButtons() {
         chatNamesVBox.getChildren().clear();
         for (Chat value : UserController.getLoggedInUser().getChats().values()) {
-            Button button = new Button(value.getName());
-            button.setStyle("-fx-border-radius: 0; -fx-background-color: #111a4d; -fx-pref-width: 350");
-            button.setOnMouseClicked(mouseEvent -> {
-                for (String username : UserController.getLoggedInUser().getChats().get(button.getText()).getUsernames()) {
-                    selectedChats.add(Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(button.getText()));
-                }
-                changeChat(UserController.getLoggedInUser().getChats().get(button.getText()));
-            });
-            chatNamesVBox.getChildren().add(button);
+            if (!value.getName().equals("Public Chat")) {
+                Button button = new Button(value.getName());
+                button.setStyle("-fx-border-radius: 0; -fx-background-color: #111a4d; -fx-pref-width: 350");
+                button.setOnMouseClicked(mouseEvent -> {
+                    for (String username : UserController.getLoggedInUser().getChats().get(button.getText()).getUsernames()) {
+                        selectedChats.add(Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(button.getText()));
+                    }
+                    changeChat(UserController.getLoggedInUser().getChats().get(button.getText()));
+                });
+                chatNamesVBox.getChildren().add(button);
+            }
         }
     }
 
@@ -151,12 +162,19 @@ public class ChatRoomPageController {
         chatMessageTextField.setVisible(true);
         chatMessagesVBox.getChildren().clear();
         for (Message message : chat.getMessages()) {
-            HBox hBox = new HBox(new Circle(20, new ImagePattern(new Image(Objects.requireNonNull(UserController.getUserByUsername(message.getSenderUsername())).getAvatarFileAddress()))),
-                    new Text(" " + message.getSenderUsername() + " :\t" + message.getText() + "\t\t\t" + message.getDate().toString().substring(4, 16)));
+            Text text = new Text(" " + message.getSenderUsername() + " :\t" + message.getText() + "\t\t\t" + message.getDate().toString().substring(4, 16));
+            text.setFill(Color.ORANGE);
+            HBox hBox = new HBox(new Circle(20, new ImagePattern(Objects.requireNonNull(UserController.getUserByUsername(message.getSenderUsername())).getImage())), text);
             hBox.setPrefWidth(chatMessagesVBox.getPrefWidth());
             hBox.setPrefHeight(50);
             chatMessagesVBox.getChildren().add(hBox);
         }
     }
 
+    public void publicChatButtonClicked(MouseEvent mouseEvent) {
+        for (String username : UserController.getLoggedInUser().getChats().get("Public Chat").getUsernames()) {
+            selectedChats.add(Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get("Public Chat"));
+        }
+        changeChat(UserController.getLoggedInUser().getChats().get("Public Chat"));
+    }
 }

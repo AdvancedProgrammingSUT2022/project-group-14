@@ -1,10 +1,11 @@
 package models;
 
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Objects;
-import java.util.Random;
+import controllers.UserController;
+import javafx.scene.image.Image;
+import models.imagesEnums.Avatars;
+
+import java.util.*;
 
 public class User {
     private String username;
@@ -24,8 +25,17 @@ public class User {
         this.score = 0;
         this.dateOfLastWin = null;
         this.dateOfLastLogin = null;
-        this.avatarFileAddress = Objects.requireNonNull(getClass().getResource("/images/avatars/" + new Random().nextInt(1, 5) + ".jpg")).toExternalForm();
+        this.avatarFileAddress = Avatars.getAllAddresses().get(new Random().nextInt(0, 52));
         chats = new HashMap<>();
+        ArrayList<String> usernames = new ArrayList<>();
+        usernames.add(this.username);
+        for (User user : UserController.getUsers()) {
+            usernames.add(user.getUsername());
+        }
+        chats.put("Public Chat", new Chat(usernames, "Public Chat"));
+        for (User user : UserController.getUsers()) {
+            user.getChats().get("Public Chat").addUsername(this.username);
+        }
     }
 
     public String getUsername() {
@@ -60,7 +70,6 @@ public class User {
         this.score += score;
     }
 
-
     public Date getDateOfLastWin() {
         return dateOfLastWin;
     }
@@ -69,8 +78,12 @@ public class User {
         this.dateOfLastWin = dateOfLastWin;
     }
 
-    public String getAvatarFileAddress() {
-        return avatarFileAddress;
+    public Image getImage() {
+        if (Avatars.contains(this.avatarFileAddress)) {
+            return new Image(Avatars.valueOf(avatarFileAddress).getAddress());
+        } else {
+            return new Image(avatarFileAddress);
+        }
     }
 
     public void setAvatarFileAddress(String avatarFileAddress) {

@@ -14,7 +14,7 @@ public class MainMenuController {
     private Circle usersAvatar;
 
     public void initialize() {
-        usersAvatar.setFill(new ImagePattern(new Image(UserController.getLoggedInUser().getAvatarFileAddress())));
+        usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
     }
 
     public void startGame(MouseEvent mouseEvent) {
