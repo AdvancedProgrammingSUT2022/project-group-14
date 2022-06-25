@@ -9,6 +9,11 @@
     -fx-background-size: cover;
 }
 
+#gameMenuScene {
+    -fx-background-image: url("../images/profileMenuBG.png");
+    -fx-background-size: cover;
+}
+
 #profileMenuScene {
     -fx-background-image: url("../images/profileMenuBG.png");
     -fx-background-size: cover;
