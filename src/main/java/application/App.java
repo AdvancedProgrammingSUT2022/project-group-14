@@ -22,7 +22,7 @@ public class App extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        //UserController.readAllUsers();
+        UserController.readAllUsers();
 
         Parent root = loadFXML("loginPage");
         assert root != null;
