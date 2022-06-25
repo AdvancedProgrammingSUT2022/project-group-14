@@ -1,15 +1,15 @@
 
-#mainMenuScene{
+#mainMenuScene {
     -fx-background-image: url("../images/main_menu_background.jpg");
     -fx-background-size: cover;
 }
 
-#loginPageScene{
+#loginPageScene {
     -fx-background-image: url("../images/loginPageBG.jpg");
     -fx-background-size: cover;
 }
 
-#profileMenuScene{
+#profileMenuScene {
     -fx-background-image: url("../images/profileMenuBG.png");
     -fx-background-size: cover;
 }
@@ -35,20 +35,29 @@ Button:hover {
     -fx-text-fill: #ee8000;
 }
 
-.sceneTitle {
-    -fx-font-family: "AppleMyungjo";
-    -fx-font-size: 70;
-}
 
-TextField, PasswordField{
+TextField, PasswordField {
     -fx-pref-height: 35;
     -fx-pref-width: 300;
 }
 
-Text{
+Text {
     -fx-font-size: 20;
 }
 
 ImageView {
     -fx-cursor: hand;
+}
+
+.sceneTitle {
+    -fx-font-family: "AppleMyungjo";
+    -fx-font-size: 70;
+}
+
+.scroll-pane{
+    -fx-background-color:transparent;
+}
+
+.scroll-pane > .viewport {
+-fx-background-color: transparent;
 }
