@@ -15,6 +15,7 @@ import models.imagesEnums.Avatars;
 
 import java.io.File;
 import java.util.Objects;
+import java.util.Random;
 
 public class ProfileMenuController {
     @FXML
@@ -37,6 +38,7 @@ public class ProfileMenuController {
     private ImageView fourth;
 
     private final FileChooser fileChooser = new FileChooser();
+    private int random = new Random().nextInt(0,40);
 
     public void initialize() {
         passwordTextField.setFocusTraversable(false);
@@ -44,10 +46,13 @@ public class ProfileMenuController {
         oldPasswordTextField.setFocusTraversable(false);
         newPasswordTextField.setFocusTraversable(false);
         usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
-        first.setImage(Avatars.IMG0.getImage());
-        second.setImage(Avatars.IMG1.getImage());
-        third.setImage(Avatars.IMG2.getImage());
-        fourth.setImage(Avatars.IMG3.getImage());
+        first.setImage(Avatars.valueOf("IMG" + random).getImage());
+        random = (random+1)%40;
+        second.setImage(Avatars.valueOf("IMG" + random).getImage());
+        random = (random+1)%40;
+        third.setImage(Avatars.valueOf("IMG" + random).getImage());
+        random = (random+1)%40;
+        fourth.setImage(Avatars.valueOf("IMG" + random).getImage());
         fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
     }
 
@@ -108,16 +113,16 @@ public class ProfileMenuController {
     public void clickedOnAvatar(MouseEvent mouseEvent) {
         Object source = mouseEvent.getSource();
         if (first.equals(source)) {
-            UserController.getLoggedInUser().setAvatarFileAddress("IMG0");
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG" + (random + 37)%40);
             usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         } else if (second.equals(source)) {
-            UserController.getLoggedInUser().setAvatarFileAddress("IMG1");
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG" + (random + 38)%40);
             usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         } else if (third.equals(source)) {
-            UserController.getLoggedInUser().setAvatarFileAddress("IMG2");
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG" + (random + 39)%40);
             usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         } else if (fourth.equals(source)) {
-            UserController.getLoggedInUser().setAvatarFileAddress("IMG3");
+            UserController.getLoggedInUser().setAvatarFileAddress("IMG" + random);
             usersAvatar.setFill(new ImagePattern(UserController.getLoggedInUser().getImage()));
         }
     }
