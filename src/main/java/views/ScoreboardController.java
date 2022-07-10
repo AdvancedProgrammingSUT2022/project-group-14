@@ -3,19 +3,14 @@ package views;
 import application.App;
 import controllers.UserController;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
-import java.util.Objects;
-
-public class scoreboardController {
+public class ScoreboardController {
     @FXML
     private GridPane gridPane;
 

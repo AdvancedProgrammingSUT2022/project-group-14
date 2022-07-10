@@ -7,6 +7,7 @@ import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.units.CombatUnit;
+import models.tiles.Tile;
 import models.units.*;
 
 public class City {

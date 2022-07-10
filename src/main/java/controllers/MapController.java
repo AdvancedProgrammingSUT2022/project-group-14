@@ -3,7 +3,7 @@ package controllers;
 import enums.Colors;
 import models.Cell;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
@@ -13,35 +13,39 @@ import java.util.Random;
 
 public class MapController {
 
-    public static final int width = 40;
-    public static final int length = 80;
-    public static final int outputMapWidth = 6 * width + 3;
-    public static final int outputMapLength = 8 * length + 3;
-    private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapLength];
-    private static int[][][] tileCenters = new int[width][length][2];
-    private static Tile[][] tilesMap = new Tile[width][length];
+    public static int width;
+    public static int height;
+    public static int outputMapWidth;
+    public static int outputMapHeight;
+    private static Cell[][] cellsMap = new Cell[outputMapWidth][outputMapHeight];
+    private static int[][][] tileCenters = new int[width][height][2];
+    private static Tile[][] tilesMap = new Tile[width][height];
 
-    public static void generateMap() {
+    public static void generateMap(int wantedWidth, int wantedHeight) {
+        width = wantedWidth;
+        height = wantedHeight;
+        outputMapWidth = 6 * width + 3;
+        outputMapHeight = 8 * height + 3;
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
+            for (int j = 0; j < MapController.height; j++) {
                 tilesMap[i][j] = Tile.generateRandomTile(i, j);
             }
         }
-        mapInit();
+        //mapInit();
         generateRivers();
     }
 
     // Initializations for tiles map and cells map
     private static void upLayerBordersInit(int row) {
         for (int j = 0; j < 3; j++)
-            for (int k = 0; k < outputMapLength; k++) {
+            for (int k = 0; k < outputMapHeight; k++) {
                 Cell cell = new Cell();
                 cellsMap[6 * row + j][k] = cell;
                 cell.setColor(Colors.RESET);
 
-                if (k % 16 == (2 - j) && (k < outputMapLength - 3 || row > 0) && (k > 2 || row < width)) {
+                if (k % 16 == (2 - j) && (k < outputMapHeight - 3 || row > 0) && (k > 2 || row < width)) {
                     cell.setCharacter('/');
-                } else if (k % 16 == (8 + j) && (row < width || k < outputMapLength - 3)) {
+                } else if (k % 16 == (8 + j) && (row < width || k < outputMapHeight - 3)) {
                     cell.setCharacter('\\');
                 } else if (j == 2 && (k % 16) >= 11) {
                     cell.setCharacter('_');
@@ -53,7 +57,7 @@ public class MapController {
 
     private static void downLayerBordersInit(int row) {
         for (int j = 0; j < 3; j++)
-            for (int k = 0; k < outputMapLength; k++) {
+            for (int k = 0; k < outputMapHeight; k++) {
                 Cell cell = new Cell();
                 cellsMap[6 * row + 3 + j][k] = cell;
                 cell.setColor(Colors.RESET);
@@ -79,12 +83,12 @@ public class MapController {
 
     private static void tileCentersInit() {
         for (int x = 2, i = 0; i < width; x += 6, i++)
-            for (int y = 5, j = 0; j < length; y += 16, j += 2) {
+            for (int y = 5, j = 0; j < height; y += 16, j += 2) {
                 tileCenters[i][j][0] = x;
                 tileCenters[i][j][1] = y;
             }
         for (int x = 5, i = 0; i < width; x += 6, i++)
-            for (int y = 13, j = 1; j < length; y += 16, j += 2) {
+            for (int y = 13, j = 1; j < height; y += 16, j += 2) {
                 tileCenters[i][j][0] = x;
                 tileCenters[i][j][1] = y;
             }
@@ -95,7 +99,7 @@ public class MapController {
         Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
         for (int i = 0; i < width; i++)
-            for (int j = 0; j < length; j++)
+            for (int j = 0; j < height; j++)
                 for (int k = 0; k < 6; k++) {
                     if (visionStatesOfMap[i][j] != 0 && tilesMap[i][j].getIsRiver()[k])
                         setRiverCells(i, j, k);
@@ -135,19 +139,19 @@ public class MapController {
         if (visionState != 0) {
             String coordinates = "(" + (tile.getX() + 1) + "," + (tile.getY() + 1) + ")";
             printStringToCellsMap(coordinates, tileCenter[0] - 1, tileCenter[1] - 3);
-            printStringToCellsMap(cutStringLenght(civilizationName, 5), tileCenter[0] - 2, tileCenter[1] - 2);
+            printStringToCellsMap(cutStringLength(civilizationName, 5), tileCenter[0] - 2, tileCenter[1] - 2);
             printStringToCellsMap(tile.getName(), tileCenter[0] + 1, tileCenter[1] - 4);
             if (visionState == 2) {
                 Unit unit;
                 if ((unit = tile.getCombatUnit()) != null)
-                    printStringToCellsMap(cutStringLenght(unit.getName(), 9), tileCenter[0], tileCenter[1] - 4);
+                    printStringToCellsMap(cutStringLength(unit.getName(), 9), tileCenter[0], tileCenter[1] - 4);
                 if ((unit = tile.getNonCombatUnit()) != null)
-                    printStringToCellsMap(cutStringLenght(unit.getName(), 7), tileCenter[0] + 2, tileCenter[1] - 3);
+                    printStringToCellsMap(cutStringLength(unit.getName(), 7), tileCenter[0] + 2, tileCenter[1] - 3);
             }
         }
     }
 
-    public static String cutStringLenght(String input, int length) {
+    public static String cutStringLength(String input, int length) {
         if (input.length() <= length)
             return input;
         else
@@ -159,7 +163,7 @@ public class MapController {
         Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         int[][] visionStatesOfMap = civilization.getVisionStatesOfMap();
         for (int i = 0; i < width; i++)
-            for (int j = 0; j < length; j++) {
+            for (int j = 0; j < height; j++) {
                 upLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization, visionStatesOfMap[i][j]);
                 downLayerTileCellsRefresh(tileCenters[i][j], tilesMap[i][j], civilization, visionStatesOfMap[i][j]);
                 tileTextsRefresh(tileCenters[i][j], tilesMap[i][j], civilization, visionStatesOfMap[i][j]);
@@ -185,9 +189,9 @@ public class MapController {
         if (y % 2 == 1) {
             if (riverSide == 0 && x - 1 >= 0)
                 return tilesMap[x - 1][y];
-            else if (riverSide == 1 && y + 1 < length)
+            else if (riverSide == 1 && y + 1 < height)
                 return tilesMap[x][y + 1];
-            else if (riverSide == 2 && x + 1 < width && y + 1 < length)
+            else if (riverSide == 2 && x + 1 < width && y + 1 < height)
                 return tilesMap[x + 1][y + 1];
             else if (riverSide == 3 && x + 1 < width)
                 return tilesMap[x + 1][y];
@@ -198,9 +202,9 @@ public class MapController {
         } else if (y % 2 == 0) {
             if (riverSide == 0 && x - 1 >= 0)
                 return tilesMap[x - 1][y];
-            if (riverSide == 1 && x - 1 >= 0 && y + 1 < length)
+            if (riverSide == 1 && x - 1 >= 0 && y + 1 < height)
                 return tilesMap[x - 1][y + 1];
-            if (riverSide == 2 && y + 1 < length)
+            if (riverSide == 2 && y + 1 < height)
                 return tilesMap[x][y + 1];
             if (riverSide == 3 && x + 1 < width)
                 return tilesMap[x + 1][y];
@@ -237,7 +241,7 @@ public class MapController {
     private static void generateRivers() {
         Random rand = new Random();
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
+            for (int j = 0; j < height; j++) {
                 for (int k = 0; k < 6; k++) {
                     if (rand.nextInt(12) == 0 && !tilesMap[i][j].getIsRiver()[k]) {
                         setRiver(i, j, k);
@@ -254,15 +258,15 @@ public class MapController {
 
     public static void printStringToCellsMap(String input, int x, int y) {
         for (int i = 0; i < input.length(); i++) {
-            if (i + y < outputMapLength)
+            if (i + y < outputMapHeight)
                 cellsMap[x][i + y].setCharacter(input.charAt(i));
         }
     }
 
     public static void resetMap() {
-        tileCenters = new int[width][length][2];
-        cellsMap = new Cell[outputMapWidth][outputMapLength];
-        tilesMap = new Tile[width][length];
+        tileCenters = new int[width][height][2];
+        cellsMap = new Cell[outputMapWidth][outputMapHeight];
+        tilesMap = new Tile[width][height];
     }
 
     public static void updateUnitPositions() {
@@ -296,8 +300,8 @@ public class MapController {
         return width;
     }
 
-    public static int getLength() {
-        return length;
+    public static int getHeight() {
+        return height;
     }
 
     public static Tile[][] getMap() {

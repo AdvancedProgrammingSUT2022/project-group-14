@@ -3,6 +3,7 @@ package controllers;
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
 import models.*;
+import models.tiles.Tile;
 import models.units.*;
 
 import java.util.Locale;

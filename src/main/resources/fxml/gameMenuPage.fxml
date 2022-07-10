@@ -11,7 +11,7 @@
 
 <AnchorPane id="gameMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css"
             xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="views.GameMenuController">
+            fx:controller="views.StartGameMenuController">
     <ScrollPane hbarPolicy="NEVER" prefHeight="590.0" prefWidth="400.0" vbarPolicy="NEVER">
         <AnchorPane prefHeight="720" prefWidth="520"/>
         <VBox fx:id="invitationsVBox" alignment="CENTER" layoutX="25.0" layoutY="229.0" prefHeight="50.0"

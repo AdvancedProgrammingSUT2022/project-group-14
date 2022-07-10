@@ -1,4 +1,4 @@
-package models;
+package models.tiles;
 
 import controllers.TileController;
 import controllers.WorldController;
@@ -6,6 +6,8 @@ import enums.Colors;
 import enums.Improvements;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
+import models.City;
+import models.Civilization;
 import models.resources.BonusResource;
 import models.resources.LuxuryResource;
 import models.resources.Resource;
@@ -16,6 +18,7 @@ import models.units.NonCombatUnit;
 import java.util.Random;
 
 public class Tile {
+    private Hex hex;
     private int x;
     private int y;
 

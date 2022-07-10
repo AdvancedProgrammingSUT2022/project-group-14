@@ -5,6 +5,7 @@ import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
 import enums.units.Unit;
 import models.*;
+import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import org.junit.jupiter.api.Assertions;
@@ -15,10 +16,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 

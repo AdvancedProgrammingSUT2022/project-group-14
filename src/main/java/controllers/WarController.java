@@ -2,7 +2,7 @@ package controllers;
 
 import models.City;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.Melee;
 import models.units.Ranged;

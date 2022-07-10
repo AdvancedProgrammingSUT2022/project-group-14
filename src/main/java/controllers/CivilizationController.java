@@ -2,18 +2,15 @@ package controllers;
 
 import models.City;
 import models.Civilization;
-import models.Tile;
-import models.units.Melee;
+import models.tiles.Tile;
 import models.units.Unit;
-
-import java.util.ArrayList;
 
 public class CivilizationController {
 
     public static void updateMapVision(Civilization civilization) {
         int[][] visionState = civilization.getVisionStatesOfMap();
         for (int i = 0; i < MapController.width; i++) {
-            for (int j = 0; j < MapController.length; j++) {
+            for (int j = 0; j < MapController.height; j++) {
                 if (visionState[i][j] == 0 && tileIsInRange(i, j, civilization)) {
                     visionState[i][j] = 2;
                 } else if (visionState[i][j] == 1 && tileIsInRange(i, j, civilization)) {

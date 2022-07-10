@@ -2,23 +2,20 @@
 package models;
 
 import controllers.MapController;
-import controllers.MoveController;
 import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.StrategicResourceTypes;
-import enums.tiles.TileBaseTypes;
-import models.resources.LuxuryResource;
-import models.resources.StrategicResource;
+import models.tiles.Tile;
 import models.units.*;
 
 import java.util.*;
 
 public class Civilization {
     private String name;
-    private int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getLength()];
-    private Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getLength()];
+    private int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getHeight()];
+    private Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getHeight()];
 
     private ArrayList<Melee> melees = new ArrayList<>();
     private ArrayList<Ranged> ranges = new ArrayList<>();
@@ -45,7 +42,7 @@ public class Civilization {
         int randomX, randomY;
         while (true){
             randomX = random.nextInt(MapController.width);
-            randomY = random.nextInt(MapController.length);
+            randomY = random.nextInt(MapController.height);
             if (MapController.getMap()[randomX][randomY].getType().getMovingPoint() != 9999)
                 break;
         }

@@ -1,4 +1,4 @@
-package models.imagesEnums;
+package enums;
 
 import javafx.scene.image.Image;
 

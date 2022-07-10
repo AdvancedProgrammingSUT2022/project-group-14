@@ -3,7 +3,7 @@ package controllers;
 import enums.Technologies;
 import models.City;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.World;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
@@ -19,8 +19,8 @@ public class WorldController {
     private static CombatUnit selectedCombatUnit;
     private static NonCombatUnit selectedNonCombatUnit;
 
-    public static void newWorld(ArrayList<String> usernames) {
-        MapController.generateMap();
+    public static void newWorld(ArrayList<String> usernames, int width, int height) {
+        MapController.generateMap(width, height);
         world = new World(usernames);
         MapController.updateUnitPositions();
         for (Civilization civilization : world.getAllCivilizations()) {
@@ -42,8 +42,8 @@ public class WorldController {
     }
 
     public static void nextTurn() {
-        //TODO buildings
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
+        //TODO buildings
         TileController.updateBuildingProgress(currentCivilization);
         CivilizationController.updateScience(currentCivilization);
         CivilizationController.updateTechnology(currentCivilization);

@@ -13,10 +13,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.User;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
-public class GameMenuController {
+public class StartGameMenuController {
     @FXML
     private Spinner<Integer> numberOfPlayersSpinner;
     @FXML
@@ -100,9 +99,15 @@ public class GameMenuController {
     }
 
     public void startGameButtonClicked(MouseEvent mouseEvent) {
-        //TODO player number issues
+        if (UserController.getLoggedInUser().getPeopleInLobby().size() < 2) {
+            System.out.println("can't start");
+            return;
+        } else if (UserController.getLoggedInUser().getPeopleInLobby().size() > numberOfPlayersSpinner.getValue()) {
+            System.out.println("number of players is less the actual players");
+            return;
+        }
         System.out.println(UserController.getLoggedInUser().getPeopleInLobby());
-        WorldController.newWorld(UserController.getLoggedInUser().getPeopleInLobby());
+        WorldController.newWorld(UserController.getLoggedInUser().getPeopleInLobby(), mapWidthSpinner.getValue(), mapHeightSpinner.getValue());
         App.changeScene("gamePage");
     }
 }

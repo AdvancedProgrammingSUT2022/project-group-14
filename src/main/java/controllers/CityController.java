@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.tiles.Tile;
 import models.units.*;
 
 import java.util.ArrayList;

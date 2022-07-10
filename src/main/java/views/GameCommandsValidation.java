@@ -11,7 +11,7 @@ import enums.units.Unit;
 import models.Building;
 import models.City;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.units.Ranged;
 
 import java.util.regex.Matcher;
@@ -354,7 +354,7 @@ public class GameCommandsValidation {
     public void checkSeeWholeMap() {
         int[][] visionStates = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getVisionStatesOfMap();
         for (int i = 0; i < MapController.getWidth(); i++) {
-            for (int j = 0; j < MapController.getLength(); j++) {
+            for (int j = 0; j < MapController.getHeight(); j++) {
                 visionStates[i][j] = 2;
             }
         }

@@ -9,15 +9,15 @@ import enums.tiles.TileBaseTypes;
 import models.units.Unit;
 
 public class World {
-    private ArrayList<Civilization> civilizations = new ArrayList<>();
+    private final ArrayList<Civilization> civilizations = new ArrayList<>();
 
     private int year;
     private int evolutionSpeed;
     private int turn, actualTurn;
 
     public World(ArrayList<String> players) {
-        for (int i = 0; i < players.size(); i++) {
-            civilizations.add(new Civilization(players.get(i)));
+        for (String player : players) {
+            civilizations.add(new Civilization(player));
         }
         year = -3000;
         evolutionSpeed = 10;
