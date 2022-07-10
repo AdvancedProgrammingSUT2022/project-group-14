@@ -1,7 +1,5 @@
 package controllers;
 
-import enums.Colors;
-import models.Cell;
 import models.Civilization;
 import models.tiles.Tile;
 import models.units.CombatUnit;
@@ -15,13 +13,14 @@ public class MapController {
 
     public static int width;
     public static int height;
-    private static final Tile[][] tilesMap = new Tile[width][height];
+    private static Tile[][] tilesMap;
 
     public static void generateMap(int wantedWidth, int wantedHeight) {
         width = wantedWidth;
         height = wantedHeight;
+        tilesMap = new Tile[width][height];
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < MapController.height; j++) {
+            for (int j = 0; j < height; j++) {
                 tilesMap[i][j] = Tile.generateRandomTile(i, j);
             }
         }

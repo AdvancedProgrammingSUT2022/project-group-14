@@ -13,7 +13,6 @@ import java.util.ArrayList;
 
 public class WorldController {
     private static World world;
-
     private static Tile selectedTile;
     private static City selectedCity;
     private static CombatUnit selectedCombatUnit;

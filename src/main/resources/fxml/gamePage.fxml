@@ -6,7 +6,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="views.GamePageController"
+<AnchorPane fx:id="hexPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" fx:controller="views.GamePageController"
             stylesheets="@../css/style.css" prefHeight="720" prefWidth="1280">
 
 </AnchorPane>

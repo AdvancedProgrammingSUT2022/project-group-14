@@ -72,6 +72,7 @@ public class Tile {
         else
             this.name = type.getName();
         this.resource = Resource.generateRandomResource(type, feature);
+        this.hex = new Hex(this);
     }
 
     //randomTile generation
@@ -335,5 +336,9 @@ public class Tile {
 
     public String getName() {
         return name;
+    }
+
+    public Hex getHex() {
+        return hex;
     }
 }
