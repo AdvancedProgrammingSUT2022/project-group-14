@@ -65,7 +65,7 @@ public class WarController {
                     }
                     WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
                     combatUnit.setAttackingTileY(-1); combatUnit.setAttackingTileX(-1);
-                    GamePlay.conquerCity(city, combatUnit);
+                    //GamePlay.conquerCity(city, combatUnit);
                 } else {
                     city.setHealthPoint(5);
                 }

@@ -30,7 +30,6 @@ public class WorldController {
 
     public static void resetWorld() {
         world = null;
-        MapController.resetMap();
         resetSelection();
     }
 

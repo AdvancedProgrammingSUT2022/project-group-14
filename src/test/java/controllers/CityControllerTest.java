@@ -34,7 +34,7 @@ public class CityControllerTest {
     public void setUpWorld() {
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali"); usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 10, 10);
     }
 
     @Test

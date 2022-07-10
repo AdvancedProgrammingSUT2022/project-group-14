@@ -37,7 +37,7 @@ public class WarControllerTest {
     public void setUpUsers() throws IOException {
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali"); usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40, 40);
         System.setOut(new PrintStream(outputStreamCaptor));
         MapController.getTileByCoordinates(10, 10).setCombatUnit(combatUnit);
         WorldController.setSelectedCombatUnit(combatUnit);

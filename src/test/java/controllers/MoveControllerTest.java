@@ -25,7 +25,7 @@ public class MoveControllerTest {
     public void setUpWorld() {
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali"); usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40, 40);
     }
 
     @Test
