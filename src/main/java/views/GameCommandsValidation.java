@@ -1,21 +1,5 @@
 package views;
 
-import controllers.CityController;
-import controllers.MapController;
-import controllers.TileController;
-import controllers.WorldController;
-import enums.Buildings;
-import enums.Commands;
-import enums.Technologies;
-import enums.units.Unit;
-import models.Building;
-import models.City;
-import models.Civilization;
-import models.tiles.Tile;
-import models.units.Ranged;
-
-import java.util.regex.Matcher;
-
 public class GameCommandsValidation {
 
     public boolean checkCommands(String input) {

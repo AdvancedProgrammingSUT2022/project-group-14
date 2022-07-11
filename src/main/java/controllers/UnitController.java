@@ -2,6 +2,7 @@ package controllers;
 
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
+import enums.units.UnitTypes;
 import models.*;
 import models.tiles.Tile;
 import models.units.*;
@@ -31,7 +32,7 @@ public class UnitController {
     public static void resetMovingPoints(Civilization currentCivilization) {
         for (Unit unit : currentCivilization.getAllUnits()) {
             if (unit != null)
-                unit.setMovementPoint(enums.units.Unit.getUnitByName(unit.getName()).getMovement());
+                unit.setMovementPoint(UnitTypes.getUnitByName(unit.getName()).getMovement());
         }
     }
 
@@ -317,7 +318,7 @@ public class UnitController {
         return null;
     }
 
-    public static String upgradeUnit(enums.units.Unit unitEnum) {
+    public static String upgradeUnit(UnitTypes unitEnum) {
         if (WorldController.getSelectedCombatUnit() == null) {
             return "you should select a combat unit first";
         } else if (unitEnum.getCombatStrength() == 0) {

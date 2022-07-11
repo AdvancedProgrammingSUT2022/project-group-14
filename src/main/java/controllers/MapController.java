@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Civilization;
+import models.tiles.Coordination;
 import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
@@ -125,6 +126,10 @@ public class MapController {
 
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
+    }
+
+    public static Tile getTileByCoordinates(Coordination coordination) {
+        return tilesMap[coordination.getX()][coordination.getY()];
     }
 
 

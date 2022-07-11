@@ -13,11 +13,11 @@ public enum CombatType {
     ARMORED(false, false, 0, 10, new HashMap<>(Map.of("anti_tank_gun", 10))),
     NON_COMBAT(true, true, 0, 0, null);
 
-    private boolean hasDefenseBonuses;
-    private boolean canMoveAfterAttack;
-    private int bonusAgainstCities;
-    private int penaltyAttackingCities;
-    private HashMap<String, Integer> badAgainst;
+    private final boolean hasDefenseBonuses;
+    private final boolean canMoveAfterAttack;
+    private final int bonusAgainstCities;
+    private final int penaltyAttackingCities;
+    private final HashMap<String, Integer> badAgainst;
 
     CombatType(boolean hasDefenseBonuses, boolean canMoveAfterAttack, int bonusAgainstCities, int penaltyAttackingCities,
                HashMap<String, Integer> badAgainst) {

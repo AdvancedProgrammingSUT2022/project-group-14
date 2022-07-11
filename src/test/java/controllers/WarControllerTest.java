@@ -1,6 +1,6 @@
 package controllers;
 
-import enums.units.Unit;
+import enums.units.UnitTypes;
 import models.City;
 import models.Civilization;
 import models.units.CombatUnit;
@@ -59,7 +59,7 @@ public class WarControllerTest {
 
     @Test
     public void attackCityRangedConquerTest() {
-        Ranged ranged = new Ranged(Unit.WARRIOR, 10, 10, "ali");
+        Ranged ranged = new Ranged(UnitTypes.WARRIOR, 10, 10, "ali");
         WorldController.setSelectedCombatUnit(ranged);
         when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(11,10));
         when(city.getAttackStrength()).thenReturn(0.0);
@@ -76,7 +76,7 @@ public class WarControllerTest {
 
     @Test
     public void attackCityMeleeConquerTest() {
-        Melee melee = new Melee(Unit.WARRIOR, 10, 10, "ali");
+        Melee melee = new Melee(UnitTypes.WARRIOR, 10, 10, "ali");
         WorldController.setSelectedCombatUnit(melee);
         when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(11,10));
         when(city.getAttackStrength()).thenReturn(0.0);
@@ -93,7 +93,7 @@ public class WarControllerTest {
 
     @Test
     public void testAttackCityMelee(){
-        Melee melee = new Melee(Unit.WARRIOR, 10, 10, "ali");
+        Melee melee = new Melee(UnitTypes.WARRIOR, 10, 10, "ali");
         WorldController.setSelectedCombatUnit(melee);
         when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(11,10));
         when(city.getAttackStrength()).thenReturn(300.0);
@@ -110,7 +110,7 @@ public class WarControllerTest {
 
     @Test
     public void testAttackCityRanged(){
-        Ranged ranged = new Ranged(Unit.WARRIOR, 10, 10, "ali");
+        Ranged ranged = new Ranged(UnitTypes.WARRIOR, 10, 10, "ali");
         WorldController.setSelectedCombatUnit(ranged);
         when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(11,10));
         when(city.getAttackStrength()).thenReturn(300.0);

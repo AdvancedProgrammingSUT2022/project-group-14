@@ -1,5 +1,6 @@
 package controllers;
 
+import enums.units.UnitTypes;
 import models.*;
 import models.tiles.Tile;
 import models.units.*;
@@ -160,7 +161,7 @@ public class CityController {
         return null;
     }
 
-    public static String producingUnit(enums.units.Unit unitEnum, String payment) {
+    public static String producingUnit(UnitTypes unitEnum, String payment) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         City wantedCity = WorldController.getSelectedCity();
         Unit unit;
@@ -170,8 +171,8 @@ public class CityController {
         }
 
         if (unitEnum.getRequiredResource() != null &&
-                currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().nameGetter()) < 1) {
-            return "resource" + unitEnum.getRequiredResource().nameGetter() + " is required for producing this unit. you should gain it first";
+                currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().getName()) < 1) {
+            return "resource" + unitEnum.getRequiredResource().getName() + " is required for producing this unit. you should gain it first";
         }
 
         if (unitEnum.getName().equals("settler")) {
@@ -193,8 +194,8 @@ public class CityController {
         }
 
         if (unitEnum.getRequiredResource() != null) {
-            currentCivilization.getStrategicResources().put(unitEnum.getRequiredResource().nameGetter(),
-                    currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().nameGetter()) - 1);
+            currentCivilization.getStrategicResources().put(unitEnum.getRequiredResource().getName(),
+                    currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().getName()) - 1);
         }
 
         wantedCity.setCurrentUnit(unit);

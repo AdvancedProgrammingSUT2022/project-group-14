@@ -4,20 +4,19 @@ import enums.Improvements;
 import enums.Technologies;
 
 public enum StrategicResourceTypes implements ResourceTypes {
-
     COAL("coal", 0, 1, 0, Improvements.MINE, Technologies.SCIENTIFIC_THEORY),
     HORSE("horse", 0, 1, 0, Improvements.AGRICULTURE, Technologies.ANIMAL_HUSBANDRY),
     IRON("iron", 0, 1, 0, Improvements.MINE, Technologies.IRON_WORKING);
 
-    private String name;
-    private double food;
-    private double production;
-    private double gold;
-    private Improvements requiredImprovement;
-    private Technologies requiredTechnology;
+    private final String name;
+    private final double food;
+    private final double production;
+    private final double gold;
+    private final Improvements requiredImprovement;
+    private final Technologies requiredTechnology;
 
     StrategicResourceTypes(String name, double food, double production, double gold, Improvements requiredImprovement,
-            Technologies requiredTechnology) {
+                           Technologies requiredTechnology) {
         this.name = name;
         this.food = food;
         this.production = production;
@@ -27,31 +26,31 @@ public enum StrategicResourceTypes implements ResourceTypes {
     }
 
     @Override
-    public double foodGetter() {
+    public double getFood() {
         return this.food;
     }
 
     @Override
-    public double productionGetter() {
+    public double getProduction() {
         return this.production;
     }
 
     @Override
-    public double goldGetter() {
+    public double getGold() {
         return this.gold;
     }
 
     @Override
-    public Improvements requiredImprovementGetter() {
+    public Improvements getRequiredImprovement() {
         return this.requiredImprovement;
     }
 
     @Override
-    public String nameGetter(){
+    public String getName() {
         return this.name;
     }
 
-    public Technologies requiredTechnologyGetter() {
+    public Technologies getRequiredTechnology() {
         return this.requiredTechnology;
     }
 

@@ -1,9 +1,9 @@
 package controllers;
 
-import enums.Buildings;
+import enums.BuildingTypes;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
-import enums.units.Unit;
+import enums.units.UnitTypes;
 import models.*;
 import models.tiles.Tile;
 import models.units.CombatUnit;
@@ -170,9 +170,9 @@ public class CityControllerTest {
     @Test
     public void producingUnitTest() {
         WorldController.setSelectedCity(city);
-        Unit unitEnum = Unit.HORSE_MAN;
+        UnitTypes unitEnum = UnitTypes.HORSE_MAN;
         WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().put(unitEnum.getRequiredTechnology(), 0);
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getStrategicResources().put(unitEnum.getRequiredResource().nameGetter(), 2);
+        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getStrategicResources().put(unitEnum.getRequiredResource().getName(), 2);
         when(city.getCenterOfCity()).thenReturn(MapController.getTileByCoordinates(10, 10));
         CityController.producingUnit(unitEnum, "gold");
         verify(city).setCurrentUnit(any(models.units.Unit.class));
@@ -183,7 +183,7 @@ public class CityControllerTest {
     @Test
     public void producingSettlerUnitTest() {
         WorldController.setSelectedCity(city);
-        Unit unitEnum = Unit.SETTLER;
+        UnitTypes unitEnum = UnitTypes.SETTLER;
         ArrayList<Citizen> citizens = new ArrayList<>();
         citizens.add(new Citizen(1));
         citizens.add(new Citizen(2));
@@ -200,7 +200,7 @@ public class CityControllerTest {
     @Test
     public void producingBuildingTest() {
         WorldController.setSelectedCity(city);
-        Building building = new Building(Buildings.ARMORY);
+        Building building = new Building(BuildingTypes.ARMORY);
         Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;

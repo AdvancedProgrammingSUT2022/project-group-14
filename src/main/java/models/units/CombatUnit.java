@@ -1,37 +1,29 @@
 package models.units;
 
+import enums.units.UnitTypes;
+import models.tiles.Coordination;
+
 public class CombatUnit extends Unit{
-    private double defenseStrength;
-    private double attackStrength;
-    private int range;
+    private final double defenseStrength;
+    private final double attackStrength;
+    private final int range;
 
     private boolean isAlert;
     private boolean isFortifiedTillHealed;
     private boolean garrisoned;
 
-    private int attackingTileX, attackingTileY;
+    private final Coordination attackingCoordination;
 
-    public CombatUnit(enums.units.Unit unitInfo, int x, int y, String civilization) {
+    public CombatUnit(UnitTypes unitInfo, int x, int y, String civilization) {
         super(unitInfo, x, y, civilization);
         this.defenseStrength = unitInfo.getCombatStrength();
         this.attackStrength = unitInfo.getCombatStrength();
         this.range = unitInfo.getRange();
-    }
-
-    public void setDefenseStrength(double defenseStrength) {
-        this.defenseStrength = defenseStrength;
-    }
-
-    public void setAttackStrength(double attackStrength) {
-        this.attackStrength = attackStrength;
+        this.attackingCoordination = new Coordination(-1, -1);
     }
 
     public int getRange() {
         return range;
-    }
-
-    public void setRange(int range) {
-        this.range = range;
     }
 
     public void wakeUpFromAlert(){
@@ -79,19 +71,19 @@ public class CombatUnit extends Unit{
     }
 
     public int getAttackingTileX() {
-        return attackingTileX;
+        return this.attackingCoordination.getX();
     }
 
     public void setAttackingTileX(int attackingTileX) {
-        this.attackingTileX = attackingTileX;
+        this.attackingCoordination.setX(attackingTileX);
     }
 
     public int getAttackingTileY() {
-        return attackingTileY;
+        return this.attackingCoordination.getY();
     }
 
     public void setAttackingTileY(int attackingTileY) {
-        this.attackingTileY = attackingTileY;
+        this.attackingCoordination.setY(attackingTileY);
     }
 
     public String getCombatInfo() {

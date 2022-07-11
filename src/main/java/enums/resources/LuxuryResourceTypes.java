@@ -15,11 +15,11 @@ public enum LuxuryResourceTypes implements ResourceTypes {
     SILVER("silver", 0, 0, 2, Improvements.MINE),
     SUGAR("sugar", 0, 0, 2, Improvements.FARM);
 
-    private String name;
-    private double food;
-    private double production;
-    private double gold;
-    private Improvements requiredImprovement;
+    private final String name;
+    private final double food;
+    private final double production;
+    private final double gold;
+    private final Improvements requiredImprovement;
 
     LuxuryResourceTypes(String name, double food, double production, double gold, Improvements requiredImprovement) {
         this.name = name;
@@ -30,27 +30,27 @@ public enum LuxuryResourceTypes implements ResourceTypes {
     }
 
     @Override
-    public double foodGetter() {
+    public double getFood() {
         return this.food;
     }
 
     @Override
-    public double productionGetter() {
+    public double getProduction() {
         return this.production;
     }
 
     @Override
-    public double goldGetter() {
+    public double getGold() {
         return this.gold;
     }
 
     @Override
-    public Improvements requiredImprovementGetter() {
+    public Improvements getRequiredImprovement() {
         return this.requiredImprovement;
     }
 
     @Override
-    public String nameGetter(){
+    public String getName() {
         return this.name;
     }
 
