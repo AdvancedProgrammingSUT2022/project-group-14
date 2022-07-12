@@ -7,7 +7,9 @@ import javafx.fxml.FXML;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import models.tiles.Hex;
@@ -17,17 +19,19 @@ import java.util.Objects;
 
 public class GamePageController {
     @FXML
-    private Circle foodCircle;
-    @FXML
-    private Circle productionCircle;
-    @FXML
     private Circle goldCircle;
     @FXML
-    private Text foodText;
+    private Circle happinessCircle;
     @FXML
-    private Text productionText;
+    private Circle scienceCircle;
     @FXML
     private Text goldText;
+    @FXML
+    private Text happinessText;
+    @FXML
+    private Text scienceText;
+    @FXML
+    private Text yearText;
     @FXML
     private AnchorPane hexPane;
 
@@ -37,12 +41,15 @@ public class GamePageController {
     }
 
     private void initNavBar() {
-        foodCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/foodLogo.png")).toString())));
-        productionCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/productionLogo.png")).toString())));
         goldCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/goldLogo.png")).toString())));
-        foodText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getFood());
-        productionText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getProduction());
+        happinessCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/happinessLogo.png")).toString())));
+        scienceCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/scienceLogo.png")).toString())));
         goldText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getGold());
+        goldText.setFill(Color.GOLD);
+        happinessText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getHappiness());
+        happinessText.setFill(Color.rgb(17, 140, 33));
+        scienceText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getScience());
+        scienceText.setFill(Color.rgb(7, 146, 169));
     }
 
     public void initHexes(){
