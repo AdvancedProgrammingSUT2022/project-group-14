@@ -1,10 +1,9 @@
 package controllers;
 
 import enums.Technologies;
-import models.Tile;
+import models.tiles.Tile;
 import models.units.Melee;
 import models.units.Settler;
-import models.units.Unit;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,7 @@ public class WorldControllerTest {
     public void setUpWorld() {
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali"); usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40, 40);
     }
 
     @Test

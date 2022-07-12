@@ -4,7 +4,7 @@ import enums.Improvements;
 import enums.Technologies;
 import enums.resources.StrategicResourceTypes;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.Settler;
@@ -42,14 +42,14 @@ public class TileControllerTest {
         usernames.add("ali");
         usernames.add("hassan");
 
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40 , 40);
 
 
     }
 
     @Test
     public void selectedTileIsValidTestTrue() {
-        Assertions.assertTrue(TileController.selectedTileIsValid(MapController.width - 20, MapController.length - 30));
+        Assertions.assertTrue(TileController.selectedTileIsValid(MapController.width - 20, MapController.height - 30));
     }
 
     @Test

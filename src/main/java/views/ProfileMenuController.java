@@ -11,10 +11,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
-import models.imagesEnums.Avatars;
+import enums.Avatars;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.Random;
 
 public class ProfileMenuController {

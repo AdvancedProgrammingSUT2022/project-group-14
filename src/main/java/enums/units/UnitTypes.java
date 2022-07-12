@@ -6,7 +6,7 @@ import enums.resources.StrategicResourceTypes;
 
 import java.util.Locale;
 
-public enum Unit {
+public enum UnitTypes {
     SCOUT("scout", 25, CombatType.RECON, 4, 0, 1, 2, null, null),
     SPEARMAN("spearman", 50, CombatType.MELEE, 7, 0, 1, 2, null, Technologies.BRONZE_WORKING),
     WARRIOR("warrior", 40, CombatType.MELEE, 6, 0, 1, 2, null, null),
@@ -36,17 +36,17 @@ public enum Unit {
     WORKER("worker", 70, CombatType.NON_COMBAT, 0, 0, 1, 2, null, null);
 
     private final String name;
-    private int cost;
-    private CombatType type;
-    private int combatStrength;
-    private int rangedCombatStrength;
-    private int range;
-    private int movement;
-    private ResourceTypes requiredResource;
-    private Technologies requiredTechnology;
+    private final int cost;
+    private final CombatType type;
+    private final int combatStrength;
+    private final int rangedCombatStrength;
+    private final int range;
+    private final int movement;
+    private final ResourceTypes requiredResource;
+    private final Technologies requiredTechnology;
 
-    Unit(String name, int cost, CombatType type, int combatStrength, int rangedCombatStrength, int range, int movement,
-         ResourceTypes requiredResource, Technologies requiredTechnology) {
+    UnitTypes(String name, int cost, CombatType type, int combatStrength, int rangedCombatStrength, int range, int movement,
+              ResourceTypes requiredResource, Technologies requiredTechnology) {
         this.name = name;
         this.cost = cost;
         this.type = type;
@@ -94,7 +94,7 @@ public enum Unit {
         return requiredTechnology;
     }
 
-    public static Unit getUnitByName(String name) {
-        return Unit.valueOf(name.toUpperCase(Locale.ROOT));
+    public static UnitTypes getUnitByName(String name) {
+        return UnitTypes.valueOf(name.toUpperCase(Locale.ROOT));
     }
 }

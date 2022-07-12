@@ -3,7 +3,8 @@ package models;
 
 import controllers.UserController;
 import javafx.scene.image.Image;
-import models.imagesEnums.Avatars;
+import enums.Avatars;
+import models.chats.Chat;
 
 import java.util.*;
 

@@ -2,7 +2,7 @@ package controllers;
 
 import models.City;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.Melee;
 import models.units.Ranged;
@@ -65,7 +65,7 @@ public class WarController {
                     }
                     WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
                     combatUnit.setAttackingTileY(-1); combatUnit.setAttackingTileX(-1);
-                    GamePlay.conquerCity(city, combatUnit);
+                    //GamePlay.conquerCity(city, combatUnit);
                 } else {
                     city.setHealthPoint(5);
                 }

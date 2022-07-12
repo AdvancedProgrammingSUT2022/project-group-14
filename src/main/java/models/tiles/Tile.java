@@ -1,13 +1,14 @@
-package models;
+package models.tiles;
 
 import controllers.TileController;
 import controllers.WorldController;
-import enums.Colors;
 import enums.Improvements;
+import enums.resources.BonusResourceTypes;
+import enums.resources.LuxuryResourceTypes;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
-import models.resources.BonusResource;
-import models.resources.LuxuryResource;
+import models.City;
+import models.Civilization;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.CombatUnit;
@@ -16,18 +17,16 @@ import models.units.NonCombatUnit;
 import java.util.Random;
 
 public class Tile {
-    private int x;
-    private int y;
+    private final Hex hex;
+    private final Coordination coordination;
 
     private TileBaseTypes type;
     private TileFeatureTypes feature;
     public final String name;
-    private Colors color;
 
     private double food;
     private double production;
     private double gold;
-
     private int combatImpact;
     private int movingPoint;
 
@@ -36,28 +35,26 @@ public class Tile {
     private Improvements improvement;
     private int improvementTurnsLeftToBuild; // 9999 -> has not been started to build | 0 -> has been build
 
-    private boolean[] isRiver;
+    private final boolean[] isRiver;
     private int roadState; // 9999 -> has not been started to build | 0 -> has been build
     private int railRoadState; // 9999 -> has not been started to build | 0 -> has been build
 
     private int pillageState; // 0 -> has not been pillaged | 9999 -> been pillaged
 
-    private String civilizationName = null;
+    private String civilizationName;
     private City city;
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
 
     public Tile(TileFeatureTypes feature, TileBaseTypes type, int x, int y) {
-        this.x = x;
-        this.y = y;
+        this.coordination = new Coordination(x, y);
         this.feature = feature;
         this.type = type;
-        this.color = type.getColor();
         this.food = type.getFood() + feature.getFood();
         this.production = type.getProduction() + feature.getProduction();
         this.gold = type.getGold() + feature.getGold();
         this.combatImpact = type.getCombatImpact() + feature.getCombatImpact();
-        this.movingPoint = type.getMovingPoint() + feature.getMovingPoint();
+        this.movingPoint = type.getMovementPoint() + feature.getMovementPoint();
         this.improvementTurnsLeftToBuild = 9999;
         this.roadState = 9999;
         this.railRoadState = 9999;
@@ -69,6 +66,7 @@ public class Tile {
         else
             this.name = type.getName();
         this.resource = Resource.generateRandomResource(type, feature);
+        this.hex = new Hex(this);
     }
 
     //randomTile generation
@@ -91,13 +89,13 @@ public class Tile {
 
     public void addAvailableResourcesToCivilizationAndTile() {
         if (this.resource != null &&
-                this.resource instanceof BonusResource &&
+                this.resource.getType() instanceof BonusResourceTypes &&
                 !this.resource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.resource, this)) {
             addResourceToCivilizationAndTile(this.resource);
             this.resource.setHasBeenUsed(true);
         }
         if (this.resource != null &&
-                this.resource instanceof LuxuryResource &&
+                this.resource.getType() instanceof LuxuryResourceTypes &&
                 !this.resource.hasBeenUsed() && TileController.resourceIsAvailableToBeUsed(this.resource, this)) {
             addResourceToCivilizationAndTile(this.resource);
             this.resource.setHasBeenUsed(true);
@@ -116,7 +114,7 @@ public class Tile {
         this.production += resource.getProduction();
         Civilization currenCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
 
-        if (resource instanceof LuxuryResource) {
+        if (resource.getType() instanceof LuxuryResourceTypes) {
             currenCivilization.getLuxuryResources().put(resource.getName(), currenCivilization.getLuxuryResources().get(resource.getName()) + 1);
             currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
         } else if (resource instanceof StrategicResource) {
@@ -127,19 +125,19 @@ public class Tile {
 
     // setters and getters
     public int getX() {
-        return this.x;
+        return this.coordination.getX();
     }
 
     public void setX(int x) {
-        this.x = x;
+        this.coordination.setX(x);
     }
 
     public int getY() {
-        return this.y;
+        return this.coordination.getY();
     }
 
     public void setY(int y) {
-        this.y = y;
+        this.coordination.setY(y);
     }
 
     public TileBaseTypes getType() {
@@ -193,26 +191,18 @@ public class Tile {
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
         if (x == -1 && y == 0 && isRiver[0]) {
             return movingPoints;
-        } else if ((this.y % 2 == 0 && x == -1 && y == 1 && isRiver[1]) || (this.y % 2 == 1 && x == 0 && y == 1 && isRiver[1])) {
+        } else if ((this.coordination.getY() % 2 == 0 && x == -1 && y == 1 && isRiver[1]) || (this.coordination.getY() % 2 == 1 && x == 0 && y == 1 && isRiver[1])) {
             return movingPoints;
-        } else if ((this.y % 2 == 0 && x == 0 && y == 1 && isRiver[2]) || (this.y % 2 == 1 && x == 1 && y == 1 && isRiver[2])) {
+        } else if ((this.coordination.getY() % 2 == 0 && x == 0 && y == 1 && isRiver[2]) || (this.coordination.getY() % 2 == 1 && x == 1 && y == 1 && isRiver[2])) {
             return movingPoints;
         } else if (x == 1 && y == 0 && isRiver[3]) {
             return movingPoints;
-        } else if ((this.y % 2 == 0 && x == 0 && y == -1 && isRiver[4]) || (this.y % 2 == 1 && x == 1 && y == -1 && isRiver[4])) {
+        } else if ((this.coordination.getY() % 2 == 0 && x == 0 && y == -1 && isRiver[4]) || (this.coordination.getY() % 2 == 1 && x == 1 && y == -1 && isRiver[4])) {
             return movingPoints;
-        } else if ((this.y % 2 == 0 && x == -1 && y == -1 && isRiver[5]) || (this.y % 2 == 1 && x == 0 && y == -1 && isRiver[5])) {
+        } else if ((this.coordination.getY() % 2 == 0 && x == -1 && y == -1 && isRiver[5]) || (this.coordination.getY() % 2 == 1 && x == 0 && y == -1 && isRiver[5])) {
             return movingPoints;
         }
         return this.movingPoint;
-    }
-
-    public Colors getColor() {
-        return this.color;
-    }
-
-    public void setColor(Colors color) {
-        this.color = color;
     }
 
     public TileFeatureTypes getFeature() {
@@ -332,5 +322,9 @@ public class Tile {
 
     public String getName() {
         return name;
+    }
+
+    public Hex getHex() {
+        return hex;
     }
 }

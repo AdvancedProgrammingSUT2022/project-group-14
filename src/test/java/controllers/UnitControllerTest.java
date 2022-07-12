@@ -3,6 +3,7 @@ package controllers;
 
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
+import enums.units.UnitTypes;
 import models.City;
 import models.Civilization;
 import models.units.*;
@@ -41,7 +42,7 @@ public class UnitControllerTest {
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali");
         usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40, 40);
     }
 
     @Test
@@ -297,7 +298,7 @@ public class UnitControllerTest {
 
     @Test
     public void upgradeMeleeUnitTest() {
-        enums.units.Unit unitEnum = enums.units.Unit.SWORD_MAN;
+        UnitTypes unitEnum = UnitTypes.SWORD_MAN;
         when(melee.getCivilizationName()).thenReturn("ali");
         WorldController.setSelectedCombatUnit(melee);
         WorldController.getWorld().getCivilizationByName(melee.getCivilizationName()).setGold(200.0);
@@ -309,7 +310,7 @@ public class UnitControllerTest {
 
     @Test
     public void upgradeRangedUnitTest() {
-        enums.units.Unit unitEnum = enums.units.Unit.CROSSBOW_MAN;
+        UnitTypes unitEnum = UnitTypes.CROSSBOW_MAN;
         when(ranged.getCivilizationName()).thenReturn("ali");
         WorldController.setSelectedCombatUnit(ranged);
         WorldController.getWorld().getCivilizationByName(ranged.getCivilizationName()).setGold(200.0);
@@ -344,7 +345,7 @@ public class UnitControllerTest {
         Assertions.assertEquals("unit is not under your control", UnitController.repairTile(worker));
         Assertions.assertEquals("unit is not under your control", UnitController.pillage(10, 10));
         Assertions.assertEquals("unit is not under your control", UnitController.delete(melee));
-        Assertions.assertEquals("you can only upgrade a combat unit to a combat unit", UnitController.upgradeUnit(enums.units.Unit.SETTLER));
+        Assertions.assertEquals("you can only upgrade a combat unit to a combat unit", UnitController.upgradeUnit(UnitTypes.SETTLER));
 
     }
 

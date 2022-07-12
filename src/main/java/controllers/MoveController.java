@@ -1,10 +1,9 @@
 package controllers;
 
-import models.Tile;
+import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
-import views.GamePlay;
 
 import java.util.ArrayList;
 
@@ -55,7 +54,7 @@ public class MoveController {
     }
 
     public static Tile bestNextTileToMove(Tile startingTile, Tile finishingTile) {
-        int width = MapController.getWidth(), length = MapController.getLength(), INFINITE = 9999;
+        int width = MapController.getWidth(), length = MapController.getHeight(), INFINITE = 9999;
         boolean[][] visitedTiles = new boolean[width][length];
         int[][] distanceFromStartingTile = new int[width][length];
         Tile[][] previousTile = new Tile[width][length];

@@ -8,6 +8,14 @@ module Civilization {
     exports application;
     exports views;
     exports models;
+    exports enums.tiles;
+    exports enums.resources;
+    exports enums.units;
     opens views to javafx.fxml;
     opens models;
+    exports models.chats;
+    exports models.resources;
+    opens models.chats;
+    exports models.tiles;
+    opens models.tiles;
 }

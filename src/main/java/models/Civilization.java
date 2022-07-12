@@ -2,39 +2,37 @@
 package models;
 
 import controllers.MapController;
-import controllers.MoveController;
 import controllers.WorldController;
 import enums.Researches;
 import enums.Technologies;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.StrategicResourceTypes;
-import enums.tiles.TileBaseTypes;
-import models.resources.LuxuryResource;
-import models.resources.StrategicResource;
+import enums.units.UnitTypes;
+import models.tiles.Tile;
 import models.units.*;
 
 import java.util.*;
 
 public class Civilization {
-    private String name;
-    private int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getLength()];
-    private Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getLength()];
+    private final String name;
+    private final int[][] visionStatesOfMap = new int[MapController.getWidth()][MapController.getHeight()];
+    private final Tile[][] revealedTiles = new Tile[MapController.getWidth()][MapController.getHeight()];
 
-    private ArrayList<Melee> melees = new ArrayList<>();
-    private ArrayList<Ranged> ranges = new ArrayList<>();
-    private ArrayList<Worker> workers = new ArrayList<>();
-    private ArrayList<Settler> settlers = new ArrayList<>();
+    private final ArrayList<Melee> melees = new ArrayList<>();
+    private final ArrayList<Ranged> ranges = new ArrayList<>();
+    private final ArrayList<Worker> workers = new ArrayList<>();
+    private final ArrayList<Settler> settlers = new ArrayList<>();
 
-    private ArrayList<City> cities = new ArrayList<>();
-    private ArrayList<String> citiesNames = new ArrayList<>();
-    private HashMap<String, Integer> strategicResources = new HashMap<>();
-    private HashMap<String, Integer> luxuryResources = new HashMap<>();
+    private final ArrayList<City> cities = new ArrayList<>();
+    private final ArrayList<String> citiesNames = new ArrayList<>();
+    private final HashMap<String, Integer> strategicResources = new HashMap<>();
+    private final HashMap<String, Integer> luxuryResources = new HashMap<>();
     private City firstCapital;
     private City currentCapital;
 
-    private HashMap<Technologies, Integer> technologies = new HashMap<>();
+    private final HashMap<Technologies, Integer> technologies = new HashMap<>();
     private Technologies currentTechnology;
-    private ArrayList<Researches> researches = new ArrayList<>();
+    private final ArrayList<Researches> researches = new ArrayList<>();
 
     private double gold, happiness, science;
 
@@ -43,14 +41,12 @@ public class Civilization {
     public Civilization(String name) {
         Random random = new Random();
         int randomX, randomY;
-        while (true){
+        do {
             randomX = random.nextInt(MapController.width);
-            randomY = random.nextInt(MapController.length);
-            if (MapController.getMap()[randomX][randomY].getType().getMovingPoint() != 9999)
-                break;
-        }
-        Melee melee = new Melee(enums.units.Unit.getUnitByName("warrior"), randomX, randomY, name);
-        Settler settler = new Settler(enums.units.Unit.getUnitByName("settler"), randomX, randomY, name);
+            randomY = random.nextInt(MapController.height);
+        } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
+        Melee melee = new Melee(UnitTypes.getUnitByName("warrior"), randomX, randomY, name);
+        Settler settler = new Settler(UnitTypes.getUnitByName("settler"), randomX, randomY, name);
         addMeleeUnit(melee);
         addSettler(settler);
         this.name = name;
@@ -62,11 +58,11 @@ public class Civilization {
         }
 
         for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values()) {
-            strategicResources.put(strategicResource.nameGetter(), 0);
+            strategicResources.put(strategicResource.getName(), 0);
         }
 
         for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values()) {
-            luxuryResources.put(luxuryResource.nameGetter(), 0);
+            luxuryResources.put(luxuryResource.getName(), 0);
         }
     }
 

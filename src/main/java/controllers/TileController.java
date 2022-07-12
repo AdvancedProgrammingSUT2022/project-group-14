@@ -2,7 +2,7 @@ package controllers;
 
 
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.Unit;
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class TileController {
 
     public static boolean selectedTileIsValid(int x, int y) {
-        return x < MapController.getWidth() && y < MapController.getLength() && x >= 0 && y >= 0;
+        return x < MapController.getWidth() && y < MapController.getHeight() && x >= 0 && y >= 0;
     }
 
     public static void updateBuildingProgress(Civilization civilization) {
@@ -60,9 +60,9 @@ public class TileController {
     }
 
     public static boolean coordinatesAreInRange(int x1, int y1, int x2, int y2, int distance) {
-        int[][] neighbors = new int[MapController.getWidth()][MapController.getLength()];
+        int[][] neighbors = new int[MapController.getWidth()][MapController.getHeight()];
         for (int i = 0; i < MapController.getWidth(); i++) {
-            for (int j = 0; j < MapController.getLength(); j++) {
+            for (int j = 0; j < MapController.getHeight(); j++) {
                 neighbors[i][j] = 0;
             }
         }
@@ -73,7 +73,7 @@ public class TileController {
         }
         while (range < distance) {
             for (int i = 0; i < MapController.getWidth(); i++) {
-                for (int j = 0; j < MapController.getLength(); j++) {
+                for (int j = 0; j < MapController.getHeight(); j++) {
                     if (neighbors[i][j] == range) for (Tile neighbourTile : getAvailableNeighbourTiles(i, j)) {
                         if (neighbors[neighbourTile.getX()][neighbourTile.getY()] == 0)
                             neighbors[neighbourTile.getX()][neighbourTile.getY()] = range + 1;

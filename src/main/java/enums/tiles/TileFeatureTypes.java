@@ -25,7 +25,7 @@ public enum TileFeatureTypes implements TileTypes {
     NULL("nothing", 0, 0, 0, 0, 0, new HashSet<>());
 
     private final String name;
-    private double food;
+    private final double food;
     private final double production;
     private final double gold;
     private final int combatImpact;
@@ -43,40 +43,31 @@ public enum TileFeatureTypes implements TileTypes {
         this.possibleResources = possibleResources;
     }
 
-
+    @Override
     public String getName() {
         return this.name;
     }
-
+    @Override
     public double getFood() {
         return this.food;
     }
-
+    @Override
     public double getProduction() {
         return this.production;
     }
-
+    @Override
     public double getGold() {
         return this.gold;
     }
-
-    public int getMovingPoint() {
-        return movementPoint;
-    }
-
+    @Override
     public HashSet<ResourceTypes> getPossibleResources() {
         return possibleResources;
     }
-
+    @Override
     public int getCombatImpact() {
         return combatImpact;
     }
-
-    public void setFood(double food) {
-        this.food = food;
-
-    }
-
+    @Override
     public int getMovementPoint() {
         return movementPoint;
     }

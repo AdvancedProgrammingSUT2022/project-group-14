@@ -6,42 +6,43 @@ import controllers.CityController;
 import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
-import enums.units.CombatUnit;
+import models.tiles.Coordination;
+import models.tiles.Tile;
 import models.units.*;
 
 public class City {
-    private final Tile centerOfCity;
+    private final String name;
+    private final String civilizationName;
+    private final Coordination centerCoordination;
 
     private double food = 0;
     private double gold = 0;
     private double production = 0;
-
     private double growthFoodLimit = 1;
 
-    ArrayList<Citizen> citizens = new ArrayList<>();
+    private final ArrayList<Citizen> citizens = new ArrayList<>();
+    private final ArrayList<Building> buildings = new ArrayList<>();
+    private final ArrayList<Tile> territory = new ArrayList<>();
 
-    private ArrayList<Building> buildings = new ArrayList<>();
-    private ArrayList<Tile> territory = new ArrayList<>();
+    private Unit currentUnit;
+    private Building currentBuilding;
+    private boolean payingGoldForCityProduction;
+    private double currentProductionRemainingCost;
 
-    private Unit currentUnit = null;
-    private Building currentBuilding = null;
-    private boolean payingGoldForCityProduction = false;
-    private double currentProductionRemainingCost = 0;
-
-    private double defenseStrength;
-    private double attackStrength;
+    private final double defenseStrength;
+    private final double attackStrength;
     private double healthPoint;
 
     private int numberOfGarrisonedUnit;
 
-    private final String name;
 
     public City(String name, int x, int y) {
         this.name = name;
-        this.centerOfCity = MapController.getMap()[x][y];
+        this.civilizationName = MapController.getTileByCoordinates(x, y).getCivilizationName();
+        this.centerCoordination = new Coordination(x, y);
         citizens.add(new Citizen(1));
-        this.territory.add(centerOfCity);
-        territory.addAll(TileController.getAvailableNeighbourTiles(centerOfCity.getX(), centerOfCity.getY()));
+        this.territory.add(MapController.getTileByCoordinates(x, y));
+        territory.addAll(TileController.getAvailableNeighbourTiles(x, y));
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         for (Tile tile : this.territory) {
             tile.setCivilization(currentCivilization.getName());
@@ -73,21 +74,21 @@ public class City {
 
     public void addUnitToCity(){
         if (currentUnit instanceof CombatUnit){
-            if (centerOfCity.getCombatUnit() == null){
-                centerOfCity.setCombatUnit((models.units.CombatUnit) currentUnit);
+            if (MapController.getTileByCoordinates(centerCoordination).getCombatUnit() == null){
+                MapController.getTileByCoordinates(centerCoordination).setCombatUnit((models.units.CombatUnit) currentUnit);
                 if (currentUnit instanceof Melee)
-                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addMeleeUnit((Melee) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).addMeleeUnit((Melee) currentUnit);
                 else
-                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addRangedUnit((Ranged) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).addRangedUnit((Ranged) currentUnit);
                 currentUnit = null;
             }
         } else {
-            if (centerOfCity.getNonCombatUnit() == null){
-                centerOfCity.setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
+            if (MapController.getTileByCoordinates(centerCoordination).getNonCombatUnit() == null){
+                MapController.getTileByCoordinates(centerCoordination).setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
                 if (currentUnit instanceof Settler)
-                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addSettler((Settler) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).addSettler((Settler) currentUnit);
                 else
-                    WorldController.getWorld().getCivilizationByName(centerOfCity.getCivilizationName()).addWorker((Worker) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).addWorker((Worker) currentUnit);
                 currentUnit = null;
             }
         }
@@ -150,7 +151,7 @@ public class City {
     }
 
     public Tile getCenterOfCity() {
-        return centerOfCity;
+        return MapController.getTileByCoordinates(centerCoordination);
     }
 
     public ArrayList<Building> getBuildings() {
