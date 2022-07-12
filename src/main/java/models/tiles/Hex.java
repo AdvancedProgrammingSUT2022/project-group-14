@@ -4,13 +4,16 @@ import application.App;
 import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
+import enums.tiles.TileFeatureTypes;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
@@ -29,7 +32,6 @@ public class Hex {
     private final Text coordinationText;
     private final ColorAdjust colorAdjust = new ColorAdjust();
     private final Popup popup = new Popup();
-    private ImageView hexImage;
 
     public Hex(Tile tile) {
         this.coordination = new Coordination(tile.getX(), tile.getY());
@@ -42,6 +44,11 @@ public class Hex {
         this.coordinationText = new Text(tile.getX() + "," + tile.getY());
         this.coordinationText.setLayoutX(this.getCenterX() - this.coordinationText.getBoundsInLocal().getWidth() / 2);
         this.coordinationText.setLayoutY(this.getCenterY());
+        if (tile.getFeature() != TileFeatureTypes.NULL) {
+            this.polygon.setFill(new ImagePattern(tile.getFeature().getImage()));
+        } else {
+            this.polygon.setFill(new ImagePattern(tile.getType().getImage()));
+        }
         this.group = new Group();
         setEventHandlers();
         this.group.setEffect(this.colorAdjust);
@@ -70,11 +77,11 @@ public class Hex {
     }
 
     public void updateHexOfGivenTile(Tile tile) {
-        polygon.setFill(Color.ORANGE);
         this.group.getChildren().clear();
         this.group.getChildren().add(this.polygon);
+        //this.group.getChildren().add(this.hexImage);
         this.group.getChildren().add(this.coordinationText);
-        //TODO adding units and features
+        //TODO adding units
     }
 
     private double setX(double x) {

@@ -54,8 +54,7 @@ public enum Technologies {
     RAILROAD("railroad", 1900, new HashSet<>(of("STEAM_POWER"))),
     REPLACEABLE_PARTS("replaceable_parts", 1900, new HashSet<>(of("STEAM_POWER"))),
     DYNAMITE("dynamite", 1900, new HashSet<>(Arrays.asList("FERTILIZER", "RIFLING"))),
-    COMBUSTION("combustion", 2200,
-            new HashSet<>(Arrays.asList("REPLACEABLE_PARTS", "RAILROAD", "DYNAMITE"))),
+    COMBUSTION("combustion", 2200, new HashSet<>(Arrays.asList("REPLACEABLE_PARTS", "RAILROAD", "DYNAMITE"))),
     ELECTRICITY("electricity", 1900, new HashSet<>(Arrays.asList("BIOLOGY", "STEAM_POWER"))),
     RADIO("radio", 220, new HashSet<>(of("ELECTRICITY"))),
     TELEGRAPH("telegraph", 2200, new HashSet<>(of("ELECTRICITY")));
@@ -77,6 +76,7 @@ public enum Technologies {
     public int getCost() {
         return this.cost;
     }
+
     public Image getImage() {
         return new Image(Objects.requireNonNull(App.class.getResource("/images/technologies/" + this.name + ".png")).toString());
     }

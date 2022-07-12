@@ -23,7 +23,6 @@ public class Tile {
 
     private TileBaseTypes type;
     private TileFeatureTypes feature;
-    public final String name;
 
     private double food;
     private double production;
@@ -62,10 +61,6 @@ public class Tile {
         this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
-        if (feature != TileFeatureTypes.NULL)
-            this.name = feature.getName();
-        else
-            this.name = type.getName();
         this.resource = Resource.generateRandomResource(type, feature);
         this.hex = new Hex(this);
     }
@@ -323,10 +318,6 @@ public class Tile {
 
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Hex getHex() {

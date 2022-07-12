@@ -2,7 +2,6 @@ package enums;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 
 import enums.tiles.TileBaseTypes;
@@ -12,25 +11,25 @@ import enums.tiles.TileTypes;
 public enum Improvements {
     CAMP("camp", 0, 0, 0, Technologies.TRAPPING,
             new HashSet<>(Arrays.asList(TileFeatureTypes.JUNGLE, TileBaseTypes.TUNDRA, TileBaseTypes.PLAIN,
-                    TileBaseTypes.HEEL))), // camp
+                    TileBaseTypes.HILL))), // camp
     FARM("farm", 1, 0, 0, Technologies.AGRICULTURE,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW))), // mazrae
     LUMBER_MILL("LumberMill", 0, 1, 0, Technologies.CONSTRUCTION,
             new HashSet<>(Arrays.asList(TileFeatureTypes.JUNGLE))), // karkhane choob
     MINE("mine", 0, 1, 0, Technologies.MINING,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
-                    TileBaseTypes.TUNDRA, TileBaseTypes.SNOW, TileBaseTypes.HEEL, TileFeatureTypes.JUNGLE,
+                    TileBaseTypes.TUNDRA, TileBaseTypes.SNOW, TileBaseTypes.HILL, TileFeatureTypes.JUNGLE,
                     TileFeatureTypes.FOREST, TileFeatureTypes.SWAMP))),
     PASTURE("pasture", 0, 0, 0, Technologies.ANIMAL_HUSBANDRY,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
-                    TileBaseTypes.HEEL, TileBaseTypes.TUNDRA))), // cheragah
+                    TileBaseTypes.HILL, TileBaseTypes.TUNDRA))), // cheragah
     AGRICULTURE("agriculture", 0, 0, 0, Technologies.CALENDAR,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST, TileFeatureTypes.SWAMP,
-                    TileFeatureTypes.VALLEY))), // kesht va kar
+                    TileFeatureTypes.FLOODPLAIN))), // kesht va kar
     QUARRY("quarry", 0, 0, 0, Technologies.MASONRY,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
-                    TileBaseTypes.TUNDRA, TileBaseTypes.HEEL))), // madan sang
+                    TileBaseTypes.TUNDRA, TileBaseTypes.HILL))), // madan sang
     TRADING_POST("trading post", 0, 0, 1, Technologies.TRAPPING,
             new HashSet<>(Arrays.asList(TileBaseTypes.PLAIN, TileBaseTypes.DESERT, TileBaseTypes.MEADOW,
                     TileBaseTypes.TUNDRA))), // poste - e - tejari

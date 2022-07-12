@@ -1,20 +1,19 @@
 package enums.tiles;
 
+import application.App;
 import enums.resources.BonusResourceTypes;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.ResourceTypes;
 import enums.resources.StrategicResourceTypes;
+import javafx.scene.image.Image;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public enum TileBaseTypes implements TileTypes {
 
-    DESERT("desert", 0, 0, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.OASIS, TileFeatureTypes.VALLEY)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.INCENSE, BonusResourceTypes.SHEEP))), //kavir
+    DESERT("desert", 0, 0, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.OASIS, TileFeatureTypes.FLOODPLAIN)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.INCENSE, BonusResourceTypes.SHEEP))), //kavir
     MEADOW("meadow", 2, 0, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.SWAMP)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.HORSE, StrategicResourceTypes.COAL, BonusResourceTypes.COW, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.MARBLE, BonusResourceTypes.SHEEP))),// chamanzar
-    HEEL("heel", 0, 2, 0, 25, 2, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.COAL, BonusResourceTypes.GAZELLE, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, BonusResourceTypes.SHEEP))),
+    HILL("hill", 0, 2, 0, 25, 2, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.COAL, BonusResourceTypes.GAZELLE, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, BonusResourceTypes.SHEEP))),
     MOUNTAIN("mountain", 0, 0, 0, 25, 9999, new HashSet<>(List.of()), new HashSet<>()),
     OCEAN("ocean", 0, 0, 0, 25, 9999, new HashSet<>(List.of()), new HashSet<>()),
     PLAIN("plain", 1, 1, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.HORSE, StrategicResourceTypes.COAL, BonusResourceTypes.WHEAT, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.IVORY, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.INCENSE, BonusResourceTypes.SHEEP))), // dasht
@@ -48,6 +47,10 @@ public enum TileBaseTypes implements TileTypes {
     public static TileBaseTypes generateRandom() {
         Random rand = new Random();
         return TileBaseTypes.values()[rand.nextInt(TileBaseTypes.values().length)];
+    }
+
+    public Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/tiles/bases/" + this.name + ".png")).toString());
     }
 
     @Override
