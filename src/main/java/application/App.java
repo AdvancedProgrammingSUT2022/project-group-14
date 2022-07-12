@@ -64,6 +64,8 @@ public class App extends javafx.application.Application {
     }
 
     public static void showPopUp(Popup popup) {
+        popup.setX(popup.getX() + stage.getX());
+        popup.setY(popup.getY() + stage.getY());
         popup.show(stage);
     }
 

@@ -1,5 +1,6 @@
 package models.tiles;
 
+import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.Improvements;
@@ -22,7 +23,6 @@ public class Tile {
 
     private TileBaseTypes type;
     private TileFeatureTypes feature;
-    public final String name;
 
     private double food;
     private double production;
@@ -61,10 +61,6 @@ public class Tile {
         this.isRiver = new boolean[6];
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
-        if (feature != TileFeatureTypes.NULL)
-            this.name = feature.getName();
-        else
-            this.name = type.getName();
         this.resource = Resource.generateRandomResource(type, feature);
         this.hex = new Hex(this);
     }
@@ -84,6 +80,10 @@ public class Tile {
     public static Tile generateRandomTile(int x, int y) {
         TileBaseTypes baseType = TileBaseTypes.generateRandom();
         TileFeatureTypes featureType = generateRandomFeature(baseType);
+        if (x == 0 || x == MapController.getHeight()-1 || (y == 0 && x % 2 == 0) || (y == MapController.getWidth()-1 && x % 2 == 1)){
+            baseType = TileBaseTypes.OCEAN;
+            featureType = TileFeatureTypes.NULL;
+        }
         return new Tile(featureType, baseType, x, y);
     }
 
@@ -318,10 +318,6 @@ public class Tile {
 
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
-    }
-
-    public String getName() {
-        return name;
     }
 
     public Hex getHex() {
