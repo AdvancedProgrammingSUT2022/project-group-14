@@ -15,9 +15,9 @@ public class City {
     private final String civilizationName;
     private final Coordination centerCoordination;
 
-    private double food = 0;
-    private double gold = 0;
-    private double production = 0;
+    private double food;
+    private double gold;
+    private double production;
     private double growthFoodLimit = 1;
 
     private final ArrayList<Citizen> citizens = new ArrayList<>();

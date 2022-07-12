@@ -327,4 +327,16 @@ public class Tile {
     public Hex getHex() {
         return hex;
     }
+
+    public String getInfo() {
+        return "Food : " + food + "\n" +
+                "Production : " + production + "\n" +
+                "Gold : " + gold + "\n" +
+                "CombatImpact : " + combatImpact + "\n" +
+                "MovementPoint : " + (movingPoint != 9999 ? movingPoint : "N/A") + "\n" +
+                "BaseType : " + type.getName() + "\n" +
+                "Feature : " + (feature != null ? feature.getName() : "N/A") + "\n" +
+                "Owner : " + (civilizationName != null ? civilizationName : "N/A") + "\n" +
+                "Improvement : " + (improvement != null ? improvement.getName() : "N/A") + "\n";
+    }
 }
