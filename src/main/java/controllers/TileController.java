@@ -1,7 +1,12 @@
 package controllers;
 
 
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import models.Civilization;
+import models.tiles.Coordination;
 import models.tiles.Tile;
 import models.resources.Resource;
 import models.resources.StrategicResource;
@@ -92,6 +97,18 @@ public class TileController {
                     WorldController.currentCivilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology());
         }
         return false;
+    }
+
+    public static Group getInfoPopup(Coordination coordination){
+        Group group = new Group();
+        Text text = new Text(MapController.getTileByCoordinates(coordination).getInfo());
+        Rectangle rectangle = new Rectangle(text.getBoundsInLocal().getWidth() + 10, text.getBoundsInLocal().getHeight() - 5, Color.WHITE);
+        text.setLayoutY(rectangle.getLayoutY() + 15);
+        text.setLayoutX(rectangle.getLayoutX() + 5);
+        group.getChildren().add(rectangle);
+        group.getChildren().add(text);
+
+        return group;
     }
 
     public static boolean combatUnitExistsInTile(Tile tile) {

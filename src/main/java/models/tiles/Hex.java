@@ -2,6 +2,7 @@ package models.tiles;
 
 import application.App;
 import controllers.MapController;
+import controllers.TileController;
 import controllers.WorldController;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
@@ -60,8 +61,7 @@ public class Hex {
         this.group.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
-                Text text = new Text(40, 80, "majid");
-                popup.getContent().add(text);
+                popup.getContent().add(TileController.getInfoPopup(coordination));
                 popup.setX(Hex.this.getCenterX());
                 popup.setY(Hex.this.getCenterY());
                 App.showPopUp(popup);
