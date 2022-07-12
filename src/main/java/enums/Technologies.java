@@ -1,29 +1,33 @@
 package enums;
 
+import application.App;
+import javafx.scene.image.Image;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Objects;
 
 import static java.util.List.*;
 
-public enum Technologies{
+public enum Technologies {
     AGRICULTURE("agriculture", 20, new HashSet<>()), // keshavarzi
     ANIMAL_HUSBANDRY("animal_husbandry", 35, new HashSet<>(of("AGRICULTURE"))),
     ARCHERY("archery", 35, new HashSet<>(of("AGRICULTURE"))),
     MINING("mining", 35, new HashSet<>(of("AGRICULTURE"))),
     BRONZE_WORKING("bronze_working", 55, new HashSet<>(of("MINING"))),
-               POTTERY("pottery", 35, new HashSet<>(of("AGRICULTURE"))),
+    POTTERY("pottery", 35, new HashSet<>(of("AGRICULTURE"))),
     MASONRY("masonry", 55, new HashSet<>(of("MINING"))),
-               CALENDAR("calendar", 70, new HashSet<>(of("POTTERY"))),
-                THE_WHEEL("the_wheel", 55, new HashSet<>(of("ANIMAL_HUSBANDRY"))),
+    CALENDAR("calendar", 70, new HashSet<>(of("POTTERY"))),
+    THE_WHEEL("the_wheel", 55, new HashSet<>(of("ANIMAL_HUSBANDRY"))),
     TRAPPING("trapping", 55, new HashSet<>(of("ANIMAL_HUSBANDRY"))),
     CONSTRUCTION("construction", 100, new HashSet<>(of("MASONRY"))),
-                WRITING("writing", 55, new HashSet<>(of("POTTERY"))),
-                HORSEBACK_RIDING("horseback_riding", 100, new HashSet<>(of("THE_WHEEL"))),
+    WRITING("writing", 55, new HashSet<>(of("POTTERY"))),
+    HORSEBACK_RIDING("horseback_riding", 100, new HashSet<>(of("THE_WHEEL"))),
     IRON_WORKING("iron_working", 150, new HashSet<>(of("BRONZE_WORKING"))),
     MATHEMATICS("mathematics", 100, new HashSet<>(Arrays.asList("THE_WHEEL", "ARCHERY"))),
     PHILOSOPHY("philosophy", 100, new HashSet<>(of("WRITING"))),
-                CIVIL_SERVICE("civil_service", 440, new HashSet<>(Arrays.asList("PHILOSOPHY", "TRAPPING"))),
+    CIVIL_SERVICE("civil_service", 440, new HashSet<>(Arrays.asList("PHILOSOPHY", "TRAPPING"))),
     CURRENCY("currency", 250, new HashSet<>(of("MATHEMATICS"))),
     CHIVALRY("chivalry", 440, new HashSet<>(Arrays.asList("CIVIL_SERVICE", "HORSEBACK_RIDING", "CURRENCY"))),
     THEOLOGY("theology", 250, new HashSet<>(Arrays.asList("CALENDAR", "PHILOSOPHY"))),
@@ -73,12 +77,15 @@ public enum Technologies{
     public int getCost() {
         return this.cost;
     }
+    public Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/technologies/" + this.name + ".png")).toString());
+    }
 
     public HashSet<String> getRequiredTechnologies() {
         return this.requiredTechnologies;
     }
 
-    public static Technologies getTechnologyByName(String name){
+    public static Technologies getTechnologyByName(String name) {
         return Technologies.valueOf(name.toUpperCase(Locale.ROOT));
     }
 }

@@ -23,6 +23,6 @@
    <Button layoutX="716.0" layoutY="23.0" style="-fx-pref-width: 85;" text="Cities" />
    <Text fx:id="yearText" layoutX="994.0" layoutY="48.0" fill="white" text="4000 BC" wrappingWidth="112" />
    <Button layoutX="1106.0" layoutY="22.0" text="Menu" />
-   <Circle fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0" />
-   <Text fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145" />
+   <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0" />
+   <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145" />
 </AnchorPane>
