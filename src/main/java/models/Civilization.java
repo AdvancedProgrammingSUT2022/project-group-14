@@ -135,10 +135,25 @@ public class Civilization {
         return settlers;
     }
 
+    public double getFood() {
+        double food = 0;
+        for (City city : cities) {
+            food += city.getFood();
+        }
+        return food;
+    }
+
+    public double getProduction() {
+        double production = 0;
+        for (City city : cities) {
+            production += city.getProduction();
+        }
+        return production;
+    }
+
     public double getGold() {
         return gold;
     }
-
     public ArrayList<City> getCities() {
         return cities;
     }
