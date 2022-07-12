@@ -1,5 +1,6 @@
 package models.tiles;
 
+import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
 import enums.Improvements;
@@ -84,6 +85,10 @@ public class Tile {
     public static Tile generateRandomTile(int x, int y) {
         TileBaseTypes baseType = TileBaseTypes.generateRandom();
         TileFeatureTypes featureType = generateRandomFeature(baseType);
+        if (x == 0 || x == MapController.getHeight()-1 || (y == 0 && x % 2 == 0) || (y == MapController.getWidth()-1 && x % 2 == 1)){
+            baseType = TileBaseTypes.OCEAN;
+            featureType = TileFeatureTypes.NULL;
+        }
         return new Tile(featureType, baseType, x, y);
     }
 

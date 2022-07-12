@@ -62,8 +62,8 @@ public class Hex {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
                 popup.getContent().add(TileController.getInfoPopup(coordination));
-                popup.setX(Hex.this.getCenterX());
-                popup.setY(Hex.this.getCenterY());
+                popup.setX(mouseEvent.getSceneX() + 30);
+                popup.setY(mouseEvent.getSceneY() + 15);
                 App.showPopUp(popup);
             }
         });
