@@ -16,6 +16,8 @@ public class User {
     private Date dateOfLastLogin;
     private String avatarFileAddress;
     private final HashMap<String, Chat> chats;
+    private final ArrayList<String> invitations;
+    private final ArrayList<String> peopleInLobby;
 
     public User(String username, String password, String nickname)
     {
@@ -36,6 +38,8 @@ public class User {
         for (User user : UserController.getUsers()) {
             user.getChats().get("Public Chat").addUsername(this.username);
         }
+        invitations = new ArrayList<>();
+        peopleInLobby = new ArrayList<>(List.of(username));
     }
 
     public String getUsername() {
@@ -104,5 +108,39 @@ public class User {
 
     public void addChats(Chat chat) {
         this.chats.put(chat.getName(), chat);
+    }
+
+    public ArrayList<String> getInvitations() {
+        return invitations;
+    }
+
+    public void addInvitations(String name) {
+        invitations.remove("Invitation from " + name);
+        invitations.add("Invitation from " + name);
+    }
+
+    public void removeInvitation(String invitation) {
+        invitations.remove(invitation);
+    }
+
+    public ArrayList<String> getPeopleInLobby() {
+        return peopleInLobby;
+    }
+
+    public void addPersonToLobby(String username) {
+        peopleInLobby.add(username);
+    }
+
+    public void removePersonFromLobby(String username) {
+        peopleInLobby.remove(username);
+    }
+
+    public void resetPeopleInLobby() {
+        for (String s : peopleInLobby) {
+            if (!s.equals(username))
+                Objects.requireNonNull(UserController.getUserByUsername(s)).removePersonFromLobby(username);
+        }
+        peopleInLobby.clear();
+        peopleInLobby.add(username);
     }
 }
