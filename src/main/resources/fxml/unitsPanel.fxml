@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.UnitsPanelController">
+
+    <ScrollPane fx:id="unitsScrollPane" hbarPolicy="NEVER" layoutX="206.0" layoutY="22.0" prefHeight="641.0" prefWidth="760" vbarPolicy="NEVER">
+        <AnchorPane prefHeight="775.0" prefWidth="760">
+            <VBox fx:id="unitsVBox" alignment="CENTER" layoutX="130.0" layoutY="45" prefWidth="500.0" spacing="5" />
+        </AnchorPane>
+    </ScrollPane>
+    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back" />
+</AnchorPane>
