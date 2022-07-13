@@ -9,7 +9,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import models.tiles.Hex;
@@ -25,6 +24,8 @@ public class GamePageController {
     @FXML
     private Circle scienceCircle;
     @FXML
+    private Circle techCircle;
+    @FXML
     private Text goldText;
     @FXML
     private Text happinessText;
@@ -32,6 +33,8 @@ public class GamePageController {
     private Text scienceText;
     @FXML
     private Text yearText;
+    @FXML
+    private Text techText;
     @FXML
     private AnchorPane hexPane;
 
@@ -50,6 +53,8 @@ public class GamePageController {
         happinessText.setFill(Color.rgb(17, 140, 33));
         scienceText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getScience());
         scienceText.setFill(Color.rgb(7, 146, 169));
+        techCircle.setVisible(false);
+        techText.setText("");
     }
 
     public void initHexes(){

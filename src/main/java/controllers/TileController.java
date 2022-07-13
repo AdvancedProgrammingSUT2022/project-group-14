@@ -110,12 +110,4 @@ public class TileController {
 
         return group;
     }
-
-    public static boolean combatUnitExistsInTile(Tile tile) {
-        return tile.getCombatUnit() != null;
-    }
-
-    public static boolean nonCombatUnitExistsInTile(Tile tile) {
-        return tile.getNonCombatUnit() != null;
-    }
 }
