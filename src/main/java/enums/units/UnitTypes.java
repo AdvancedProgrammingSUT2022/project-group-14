@@ -27,7 +27,7 @@ public enum UnitTypes {
     CATAPULT("catapult", 100, CombatType.SIEGE, 4, 14, 2, 2, StrategicResourceTypes.IRON, Technologies.MATHEMATICS),
     CROSSBOW_MAN("crossbow_man", 120, CombatType.ARCHERY, 6, 12, 2, 2, null, Technologies.MACHINERY),
     TREBUCHET("trebuchet", 170, CombatType.SIEGE, 6, 20, 2, 2, StrategicResourceTypes.IRON, Technologies.PHYSICS),
-    CANON("canon", 250, CombatType.SIEGE, 10, 26, 2, 2, null, Technologies.CHEMISTRY),
+    CANNON("cannon", 250, CombatType.SIEGE, 10, 26, 2, 2, null, Technologies.CHEMISTRY),
     ARTILLERY("artillery", 420, CombatType.SIEGE, 16, 32, 3, 2, null, Technologies.DYNAMITE),
     PANZER("panzer", 450, CombatType.ARMORED, 60, 9999, 1, 5, null, Technologies.COMBUSTION),
     TANK("tank", 450 , CombatType.ARMORED , 50 , 9999 , 1, 4 , null , Technologies.COMBUSTION),

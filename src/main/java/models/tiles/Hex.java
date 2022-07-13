@@ -12,6 +12,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
@@ -34,6 +35,7 @@ public class Hex {
     private final Popup popup = new Popup();
 
     public Hex(Tile tile) {
+        this.group = new Group();
         this.coordination = new Coordination(tile.getX(), tile.getY());
         this.verticalSpacing = tile.getY() * 70 + 5;
         this.horizontalSpacing = 5 * Math.sqrt(3) * tile.getX() * 7 + 5;
@@ -49,7 +51,7 @@ public class Hex {
         } else {
             this.polygon.setFill(new ImagePattern(tile.getType().getImage()));
         }
-        this.group = new Group();
+        this.polygon.setStroke(Color.BLACK);
         setEventHandlers();
         this.group.setEffect(this.colorAdjust);
     }
@@ -79,7 +81,6 @@ public class Hex {
     public void updateHexOfGivenTile(Tile tile) {
         this.group.getChildren().clear();
         this.group.getChildren().add(this.polygon);
-        //this.group.getChildren().add(this.hexImage);
         this.group.getChildren().add(this.coordinationText);
         //TODO adding units
     }
