@@ -90,8 +90,12 @@ public class Unit {
         this.destinationCoordination = new Coordination(x, y);
     }
 
+    public UnitTypes getUnitType() {
+        return unitType;
+    }
+
     public CombatType getCombatType() {
-        return unitType.getType();
+        return unitType.getCombatType();
     }
 
     public void addHealthPoint(double amount) {

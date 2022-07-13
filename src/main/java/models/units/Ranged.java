@@ -11,7 +11,7 @@ public class Ranged extends CombatUnit{
     public Ranged(UnitTypes unitInfo, int x, int y, String civilization) {
         super(unitInfo, x, y, civilization);
         this.rangedCombatStrength = unitInfo.getRangedCombatStrength();
-        this.isSiegeUnit = unitInfo.getType().name().equals("SIEGE");
+        this.isSiegeUnit = unitInfo.getCombatType().name().equals("SIEGE");
     }
 
     public boolean isSiegeUnit() {
