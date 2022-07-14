@@ -118,6 +118,14 @@ public class Unit {
             ((NonCombatUnit) this).finishWork();
     }
 
+    public Coordination getCurrentCoordination() {
+        return currentCoordination;
+    }
+
+    public Coordination getDestinationCoordination() {
+        return destinationCoordination;
+    }
+
     public String getInfo() {
         int x = this.currentCoordination.getX()+1, y = this.currentCoordination.getY()+1,
                 destX = this.destinationCoordination.getX()+1, destY = this.destinationCoordination.getY()+1;
@@ -127,7 +135,7 @@ public class Unit {
                 "Civilization's name : " + civilizationName + '\n' +
                 "HealthPoint : " + healthPoint + "\n" +
                 "IsSleeping : " + isSleep + "\n";
-        if (this.destinationCoordination.equals(new Coordination(-1 , -1))) {
+        if (!this.destinationCoordination.equals(new Coordination(-1 , -1))) {
             output += "IsMoving : true\nDestination coordinates : ( " + destX + " , " + destY + " )\n";
         } else {
             output += "IsMoving : false\n";

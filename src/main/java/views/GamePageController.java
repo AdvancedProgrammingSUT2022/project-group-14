@@ -108,4 +108,11 @@ public class GamePageController {
     public void backButtonClicked(MouseEvent mouseEvent) {
         App.changeScene("startGameMenuPage");
     }
+    public void goToUnitsPanel(MouseEvent mouseEvent) {
+        App.changeScene("unitsPanel");
+    }
+
+    public void goToCitiesPage(MouseEvent mouseEvent) {
+        App.changeScene("citiesPage");
+    }
 }
