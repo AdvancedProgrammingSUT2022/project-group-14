@@ -58,6 +58,40 @@ public enum BuildingTypes {
     private final int percentOfProduction;
     private final int percentOfGold;
 
+
+    public HashSet<String> getRequiredBuildings() {
+        return requiredBuildings;
+    }
+
+    public StrategicResourceTypes getRequiredResource() {
+        return requiredResource;
+    }
+
+    public double getDefense() {
+        return defense;
+    }
+
+    public double getFood() {
+        return food;
+    }
+
+    public double getHappiness() {
+        return happiness;
+    }
+
+    public boolean isRequiresRiver() {
+        return requiresRiver;
+    }
+
+    public int getPercentOfProduction() {
+        return percentOfProduction;
+    }
+
+    public int getPercentOfGold() {
+        return percentOfGold;
+    }
+
+
     BuildingTypes(String name, int cost, int maintenance, Technologies requiredTechnology, HashSet<String> requiredBuildings, StrategicResourceTypes requiredResource, double defense, double food, double happiness, boolean requiresRiver, int percentOfProduction, int percentOfGold) {
         this.name = name;
         this.cost = cost;

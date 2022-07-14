@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 public class Building {
     private final BuildingTypes buildingType;
-    private ArrayList<String> requiredBuildings;
-
     public Building(BuildingTypes type) {
         this.buildingType = type;
     }
@@ -28,5 +26,9 @@ public class Building {
 
     public Technologies getRequiredTechnology() {
         return this.buildingType.getRequiredTechnology();
+    }
+
+    public BuildingTypes getBuildingType() {
+        return buildingType;
     }
 }

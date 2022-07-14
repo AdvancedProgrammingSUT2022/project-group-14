@@ -122,6 +122,13 @@ public class Tile {
         }
     }
 
+    public boolean hasRiver(){
+        for (int i = 0; i < this.isRiver.length; i++) {
+            if (this.isRiver[i]) return true;
+        }
+        return false;
+    }
+
 
     // setters and getters
     public int getX() {

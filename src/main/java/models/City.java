@@ -1,11 +1,14 @@
 package models;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import controllers.CityController;
 import controllers.MapController;
 import controllers.TileController;
 import controllers.WorldController;
+import enums.BuildingTypes;
 import models.tiles.Coordination;
 import models.tiles.Tile;
 import models.units.*;
@@ -29,7 +32,7 @@ public class City {
     private boolean payingGoldForCityProduction;
     private double currentProductionRemainingCost;
 
-    private final double defenseStrength;
+    private double defenseStrength;
     private final double attackStrength;
     private double healthPoint;
 
@@ -47,19 +50,22 @@ public class City {
         for (Tile tile : this.territory) {
             tile.setCivilization(currentCivilization.getName());
         }
-        healthPoint = 20; defenseStrength = 10; attackStrength = 10;
+        healthPoint = 20;
+        defenseStrength = 10;
+        attackStrength = 10;
     }
 
-    public void finishCityProduction(){
+    public void finishCityProduction() {
         this.currentProductionRemainingCost = 0;
-        if (currentBuilding != null)
+        if (currentBuilding != null) {
             addBuildingToCity();
-        else
+            this.defenseStrength += currentBuilding.getBuildingType().getDefense();
+        } else
             addUnitToCity();
 
     }
 
-    public void addBuildingToCity(){
+    public void addBuildingToCity() {
         buildings.add(currentBuilding);
         currentBuilding = null;
     }
@@ -72,9 +78,9 @@ public class City {
         this.currentBuilding = currentBuilding;
     }
 
-    public void addUnitToCity(){
-        if (currentUnit instanceof CombatUnit){
-            if (MapController.getTileByCoordinates(centerCoordination).getCombatUnit() == null){
+    public void addUnitToCity() {
+        if (currentUnit instanceof CombatUnit) {
+            if (MapController.getTileByCoordinates(centerCoordination).getCombatUnit() == null) {
                 MapController.getTileByCoordinates(centerCoordination).setCombatUnit((models.units.CombatUnit) currentUnit);
                 if (currentUnit instanceof Melee)
                     WorldController.getWorld().getCivilizationByName(civilizationName).addMeleeUnit((Melee) currentUnit);
@@ -83,7 +89,7 @@ public class City {
                 currentUnit = null;
             }
         } else {
-            if (MapController.getTileByCoordinates(centerCoordination).getNonCombatUnit() == null){
+            if (MapController.getTileByCoordinates(centerCoordination).getNonCombatUnit() == null) {
                 MapController.getTileByCoordinates(centerCoordination).setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
                 if (currentUnit instanceof Settler)
                     WorldController.getWorld().getCivilizationByName(civilizationName).addSettler((Settler) currentUnit);
@@ -94,11 +100,27 @@ public class City {
         }
     }
 
-    public void addGarrisonedUnits(){
+    public boolean cityHasRequiredBuildings(HashSet<String> buildings) {
+        Iterator<String> iterator = buildings.iterator();
+        while (iterator.hasNext()) {
+            BuildingTypes buildingTypes = BuildingTypes.getBuildingByName(iterator.next());
+            boolean cityHasBuilding = false;
+            for (int i = 0; i < this.buildings.size(); i++) {
+                if (this.buildings.get(i).getBuildingType().equals(buildingTypes)) {
+                    cityHasBuilding = true;
+                    break;
+                }
+            }
+            if (!cityHasBuilding) return false;
+        }
+        return true;
+    }
+
+    public void addGarrisonedUnits() {
         this.numberOfGarrisonedUnit++;
     }
 
-    public void removeGarrisonedUnits(){
+    public void removeGarrisonedUnits() {
         this.numberOfGarrisonedUnit--;
     }
 

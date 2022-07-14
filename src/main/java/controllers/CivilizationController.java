@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Building;
 import models.City;
 import models.Civilization;
 import models.tiles.Tile;
@@ -93,6 +94,15 @@ public class CivilizationController {
         for (int i = 0; i < civilization.getAllUnits().size(); i++) {
             if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
             else civilization.setScience(civilization.getScience() - 1);
+        }
+    }
+
+    public static void payRequiredPriceForKeepingBuildings(Civilization civilization){
+        for (City city : civilization.getCities()) {
+            for (Building building : city.getBuildings()) {
+                if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - building.getMaintenance());
+                else civilization.setScience(civilization.getScience() - building.getMaintenance());
+            }
         }
     }
 }

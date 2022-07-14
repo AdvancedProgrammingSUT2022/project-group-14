@@ -34,6 +34,12 @@ public class CityController {
                 addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
             }
         }
+        for (Building building : city.getBuildings()) {
+            addedFood += building.getBuildingType().getFood();
+            currentCivilization.addHappiness(building.getBuildingType().getHappiness());
+            addedGold += addedGold * building.getBuildingType().getPercentOfGold() / 100;
+            addedProduction += addedProduction * building.getBuildingType().getPercentOfProduction() / 100;
+        }
         double cityFood = city.getFood() + addedFood;
         double cityGold = addedGold;
         cityFood = consumeCityFood(cityFood, city);
@@ -212,15 +218,44 @@ public class CityController {
 
     public static String producingBuilding(Building building, String payment) {
         City wantedCity = WorldController.getSelectedCity();
-        wantedCity.setCurrentBuilding(building);
-        wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
-        wantedCity.setCurrentProductionRemainingCost(building.getCost());
-        int x = WorldController.getSelectedCity().getCenterOfCity().getX() + 1;
-        int y = WorldController.getSelectedCity().getCenterOfCity().getY() + 1;
-        String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
-                "building" + " in ( " + x + " , " + y + " ) coordinates";
-        WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x - 1, y - 1).getCivilizationName()).addNotification(notification);
-        return null;
+        if (cityCanProduceBuilding(wantedCity, building)) {
+            wantedCity.setCurrentBuilding(building);
+            wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
+            wantedCity.setCurrentProductionRemainingCost(building.getCost());
+            int x = WorldController.getSelectedCity().getCenterOfCity().getX() + 1;
+            int y = WorldController.getSelectedCity().getCenterOfCity().getY() + 1;
+            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you started producing " +
+                    "building" + " in ( " + x + " , " + y + " ) coordinates";
+            WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(x - 1, y - 1).getCivilizationName()).addNotification(notification);
+            return null;
+        }
+        return "couldn't build building";
+    }
+
+    public static boolean cityCanProduceBuilding(City city, Building building){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if (building.getBuildingType().isRequiresRiver() && !city.getCenterOfCity().hasRiver()){
+            return false;
+        }
+        if (building.getBuildingType().getRequiredTechnology() != null &&
+                currentCivilization.getTechnologies().get(building.getBuildingType().getRequiredTechnology()) > 0){
+            return false;
+        }
+        if (building.getBuildingType().getRequiredBuildings() != null &&
+            !city.cityHasRequiredBuildings(building.getBuildingType().getRequiredBuildings())){
+            return false;
+        }
+        if (building.getBuildingType().getRequiredResource() != null){
+            for (int i = 0; i < city.getTerritory().size(); i++) {
+                if (building.getBuildingType().getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())){
+                    if (currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) > 0){
+                        currentCivilization.getStrategicResources().put(building.getBuildingType().getRequiredResource().getName(), currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) - 1);
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY) {
