@@ -85,7 +85,7 @@ public class GamePageController {
 
     public void initUnitPanel() {
         unitPanelPane.setVisible(false);
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(500), actionEvent -> {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
             if (WorldController.getSelectedCombatUnit() != null) {
                 unitPanelPane.setVisible(true);
                 setUnitPanelInfo(WorldController.getSelectedCombatUnit());
@@ -101,7 +101,7 @@ public class GamePageController {
     }
 
     public void setUnitPanelInfo(Unit unit) {
-        unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getImage()));
+        unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
         unitPanelText.setText(unit.getName());
     }
 
