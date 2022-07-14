@@ -6,6 +6,7 @@ import enums.units.UnitTypes;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -365,8 +366,8 @@ public class UnitController {
     public static Group getUnitGroup(Unit unit) {
         Group group = new Group();
         ImageView imageView = new ImageView(unit.getUnitType().getImage());
-        imageView.setFitWidth(50);
-        imageView.setFitHeight(50);
+        imageView.setFitWidth(60);
+        imageView.setFitHeight(60);
         imageView.setLayoutX(9 - imageView.getImage().getWidth() / 2);
         imageView.setLayoutY(12);
         group.getChildren().add(imageView);

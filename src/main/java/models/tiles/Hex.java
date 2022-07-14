@@ -84,10 +84,10 @@ public class Hex {
 
         this.group.getChildren().clear();
         this.group.getChildren().add(this.polygon);
-        if (tile.getCombatUnit() != null)
-            this.addUnitToGroup(tile.getCombatUnit());
         if (tile.getNonCombatUnit() != null)
             this.addUnitToGroup(tile.getNonCombatUnit());
+        if (tile.getCombatUnit() != null)
+            this.addUnitToGroup(tile.getCombatUnit());
 
         this.group.getChildren().add(this.coordinationText);
         //TODO adding units
@@ -95,15 +95,17 @@ public class Hex {
 
     private void addUnitToGroup(Unit unit) {
         Group unitGroup = UnitController.getUnitGroup(unit);
+        System.out.println(unitGroup.getLayoutX() + " * " + unitGroup.getLayoutY());
         setUnitGroupEventHandlers(group, unit);
         unitGroup.setTranslateY(this.getCenterY() - 12);
-        unitGroup.setTranslateX(this.getCenterX() + 88 + 21 * (unit instanceof NonCombatUnit ? 1 : -1));
+        unitGroup.setTranslateX(this.getCenterX() + 85 + 24 * (unit instanceof NonCombatUnit ? 1 : -1));
         this.group.getChildren().add(unitGroup);
     }
 
     public void setUnitGroupEventHandlers(Group group, Unit unit) {
         group.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                System.out.println(unit.getName());
                 if (unit instanceof CombatUnit) {
                     if (WorldController.getSelectedCombatUnit() != null && WorldController.getSelectedCombatUnit().equals(unit)) {
                         WorldController.setSelectedCombatUnit(null);
