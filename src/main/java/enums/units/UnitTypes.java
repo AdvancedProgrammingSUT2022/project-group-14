@@ -64,6 +64,10 @@ public enum UnitTypes {
         return new Image(Objects.requireNonNull(App.class.getResource("/images/units/" + this.name + ".png")).toString());
     }
 
+    public Image getLogoImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/logos/" + this.name + ".png")).toString());
+    }
+
     public String getName() {
         return name;
     }

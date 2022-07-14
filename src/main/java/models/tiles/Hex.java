@@ -6,22 +6,21 @@ import controllers.TileController;
 import controllers.UnitController;
 import controllers.WorldController;
 import enums.tiles.TileFeatureTypes;
+import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.image.Image;
+import javafx.scene.effect.Glow;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.BackgroundFill;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
-import javafx.stage.PopupWindow;
-import javafx.stage.Stage;
-import javafx.stage.Window;
+import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
@@ -36,7 +35,6 @@ public class Hex {
     private final Text coordinationText;
     private final ColorAdjust colorAdjust = new ColorAdjust();
     private final Popup popup = new Popup();
-    private ImageView unitImageView;
 
     public Hex(Tile tile) {
         this.group = new Group();
@@ -50,11 +48,11 @@ public class Hex {
         this.coordinationText = new Text(tile.getX() + "," + tile.getY());
         this.coordinationText.setLayoutX(this.getCenterX() - this.coordinationText.getBoundsInLocal().getWidth() / 2);
         this.coordinationText.setLayoutY(this.getCenterY());
-        setEventHandlers();
+        setGroupEventHandlers();
         this.group.setEffect(this.colorAdjust);
     }
 
-    public void setEventHandlers() {
+    public void setGroupEventHandlers() {
         this.group.setCursor(Cursor.HAND);
         this.group.setOnMouseEntered(mouseEvent -> {
             Hex.this.group.toFront();
@@ -66,12 +64,13 @@ public class Hex {
             popup.hide();
         });
         this.group.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
+            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
                 popup.getContent().add(TileController.getInfoPopup(coordination));
                 popup.setX(mouseEvent.getSceneX() + 30);
                 popup.setY(mouseEvent.getSceneY() + 15);
                 App.showPopUp(popup);
+            } else if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
             }
         });
     }
@@ -96,10 +95,30 @@ public class Hex {
 
     private void addUnitToGroup(Unit unit) {
         Group unitGroup = UnitController.getUnitGroup(unit);
+        setUnitGroupEventHandlers(group, unit);
+        unitGroup.setTranslateY(this.getCenterY() - 12);
+        unitGroup.setTranslateX(this.getCenterX() + 88 + 21 * (unit instanceof NonCombatUnit ? 1 : -1));
         this.group.getChildren().add(unitGroup);
-        unitGroup.setTranslateY(this.getCenterY() + 42);
-        unitGroup.setTranslateX(this.getCenterX() - 12 + 21 * (unit instanceof NonCombatUnit ? 1 : -1));
-        System.out.println("hello + " + this.coordination.getX() + " " + this.coordination.getY());
+    }
+
+    public void setUnitGroupEventHandlers(Group group, Unit unit) {
+        group.setOnMouseClicked(mouseEvent -> {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                if (unit instanceof CombatUnit) {
+                    if (WorldController.getSelectedCombatUnit() != null && WorldController.getSelectedCombatUnit().equals(unit)) {
+                        WorldController.setSelectedCombatUnit(null);
+                    } else {
+                        WorldController.setSelectedCombatUnit((CombatUnit) unit);
+                    }
+                } else {
+                    if (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit().equals(unit)) {
+                        WorldController.setSelectedNonCombatUnit(null);
+                    } else {
+                        WorldController.setSelectedNonCombatUnit((NonCombatUnit) unit);
+                    }
+                }
+            }
+        });
     }
 
     private double setX(double x) {
