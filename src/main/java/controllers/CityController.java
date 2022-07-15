@@ -1,15 +1,19 @@
 package controllers;
 
+
 import enums.BuildingTypes;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
 import enums.units.CombatType;
+import application.App;
 import enums.units.UnitTypes;
+import javafx.scene.image.Image;
 import models.*;
 import models.tiles.Tile;
 import models.units.*;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class CityController {
 
@@ -362,5 +366,9 @@ public class CityController {
         WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
         String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you destroyed the " + city.getName() + "city";
         WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
+    }
+
+    public static Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/cities/cityCenter.png")).toString());
     }
 }

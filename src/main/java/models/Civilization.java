@@ -42,11 +42,11 @@ public class Civilization {
         Random random = new Random();
         int randomX, randomY;
         do {
-            randomX = random.nextInt(MapController.width);
-            randomY = random.nextInt(MapController.height);
+            randomX = random.nextInt(2, MapController.width-2);
+            randomY = random.nextInt(2, MapController.height-2);
         } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
-        Melee melee = new Melee(UnitTypes.getUnitByName("warrior"), randomX, randomY, name);
-        Settler settler = new Settler(UnitTypes.getUnitByName("settler"), randomX, randomY, name);
+        Melee melee = new Melee(UnitTypes.WARRIOR, randomX, randomY, name);
+        Settler settler = new Settler(UnitTypes.SETTLER, randomX, randomY, name);
         addMeleeUnit(melee);
         addSettler(settler);
         this.name = name;

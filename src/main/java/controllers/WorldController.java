@@ -135,6 +135,7 @@ public class WorldController {
 
     public static void setSelectedCombatUnit(CombatUnit selectedCombatUnit) {
         WorldController.selectedCombatUnit = selectedCombatUnit;
+        WorldController.selectedNonCombatUnit = null;
     }
 
     public static NonCombatUnit getSelectedNonCombatUnit() {
@@ -143,6 +144,7 @@ public class WorldController {
 
     public static void setSelectedNonCombatUnit(NonCombatUnit selectedNonCombatUnit) {
         WorldController.selectedNonCombatUnit = selectedNonCombatUnit;
+        WorldController.selectedCombatUnit = null;
     }
 
     public static boolean unitIsNotSelected() {

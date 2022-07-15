@@ -16,6 +16,8 @@ import models.resources.StrategicResource;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Tile {
@@ -353,5 +355,20 @@ public class Tile {
                 "Feature : " + (feature != null ? feature.getName() : "N/A") + "\n" +
                 "Owner : " + (civilizationName != null ? civilizationName : "N/A") + "\n" +
                 "Improvement : " + (improvement != null ? improvement.getName() : "N/A") + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tile tile = (Tile) o;
+        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && hex.equals(tile.hex) && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(city, tile.city) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(hex, coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, city, combatUnit, nonCombatUnit);
+        result = 31 * result + Arrays.hashCode(isRiver);
+        return result;
     }
 }

@@ -4,6 +4,8 @@ import enums.units.CombatType;
 import enums.units.UnitTypes;
 import models.tiles.Coordination;
 
+import java.util.Objects;
+
 public class Unit {
     private Coordination currentCoordination;
     private Coordination destinationCoordination;
@@ -90,8 +92,12 @@ public class Unit {
         this.destinationCoordination = new Coordination(x, y);
     }
 
+    public UnitTypes getUnitType() {
+        return unitType;
+    }
+
     public CombatType getCombatType() {
-        return unitType.getType();
+        return unitType.getCombatType();
     }
 
     public void addHealthPoint(double amount) {
@@ -137,5 +143,16 @@ public class Unit {
         return output;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Unit unit = (Unit) o;
+        return movementPoint == unit.movementPoint && Double.compare(unit.healthPoint, healthPoint) == 0 && isSleep == unit.isSleep && currentCoordination.equals(unit.currentCoordination) && Objects.equals(destinationCoordination, unit.destinationCoordination) && name.equals(unit.name) && civilizationName.equals(unit.civilizationName) && unitType == unit.unitType;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentCoordination, destinationCoordination, movementPoint, name, civilizationName, healthPoint, isSleep, unitType);
+    }
 }

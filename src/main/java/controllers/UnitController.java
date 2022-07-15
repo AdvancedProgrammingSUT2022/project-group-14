@@ -1,13 +1,23 @@
 package controllers;
 
+import application.App;
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
 import enums.units.UnitTypes;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import models.*;
 import models.tiles.Tile;
 import models.units.*;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class UnitController {
 
@@ -32,7 +42,7 @@ public class UnitController {
     public static void resetMovingPoints(Civilization currentCivilization) {
         for (Unit unit : currentCivilization.getAllUnits()) {
             if (unit != null)
-                unit.setMovementPoint(UnitTypes.getUnitByName(unit.getName()).getMovement());
+                unit.setMovementPoint(UnitTypes.valueOf(unit.getName().toUpperCase(Locale.ROOT)).getMovement());
         }
     }
 
@@ -354,5 +364,21 @@ public class UnitController {
             }
             return null;
         }
+    }
+
+    public static Group getUnitGroup(Unit unit) {
+        Group group = new Group();
+        ImageView imageView = new ImageView(unit.getUnitType().getImage());
+        imageView.setFitWidth(30);
+        imageView.setFitHeight(50);
+        imageView.setLayoutX(4 - 2 * imageView.getImage().getWidth() / 3);
+        imageView.setLayoutY(12);
+        group.getChildren().add(imageView);
+        group.setCursor(Cursor.HAND);
+        return group;
+    }
+
+    public static Image getActionImage(String name) {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions/" + name + ".png")).toString());
     }
 }
