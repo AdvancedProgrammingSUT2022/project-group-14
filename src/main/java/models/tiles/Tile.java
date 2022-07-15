@@ -10,6 +10,7 @@ import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
 import models.City;
 import models.Civilization;
+import models.Ruin;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.CombatUnit;
@@ -45,8 +46,9 @@ public class Tile {
     private City city;
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
+    private Ruin ruin;
 
-    public Tile(TileFeatureTypes feature, TileBaseTypes type, int x, int y) {
+    public Tile(TileFeatureTypes feature, TileBaseTypes type, int x, int y, Ruin ruin) {
         this.coordination = new Coordination(x, y);
         this.feature = feature;
         this.type = type;
@@ -63,6 +65,7 @@ public class Tile {
             this.isRiver[i] = false;
         this.resource = Resource.generateRandomResource(type, feature);
         this.hex = new Hex(this);
+        this.ruin = ruin;
     }
 
     //randomTile generation
@@ -80,11 +83,12 @@ public class Tile {
     public static Tile generateRandomTile(int x, int y) {
         TileBaseTypes baseType = TileBaseTypes.generateRandom();
         TileFeatureTypes featureType = generateRandomFeature(baseType);
+        Ruin ruin = Ruin.generateRandomRuin(new Coordination(x, y));
         if (x == 0 || x == MapController.getHeight()-1 || (y == 0 && x % 2 == 0) || (y == MapController.getWidth()-1 && x % 2 == 1)){
             baseType = TileBaseTypes.OCEAN;
             featureType = TileFeatureTypes.NULL;
         }
-        return new Tile(featureType, baseType, x, y);
+        return new Tile(featureType, baseType, x, y, ruin);
     }
 
     public void addAvailableResourcesToCivilizationAndTile() {
