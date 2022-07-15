@@ -1,26 +1,24 @@
 package enums.tiles;
 
-import enums.Colors;
+import application.App;
 import enums.resources.BonusResourceTypes;
 import enums.resources.LuxuryResourceTypes;
 import enums.resources.ResourceTypes;
 import enums.resources.StrategicResourceTypes;
+import javafx.scene.image.Image;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public enum TileBaseTypes implements TileTypes {
 
-    DESERT("desert", 0, 0, 0, -33, 1, Colors.BROWN,new HashSet<>(List.of(TileFeatureTypes.OASIS , TileFeatureTypes.VALLEY)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON,LuxuryResourceTypes.GOLD,LuxuryResourceTypes.SILVER,LuxuryResourceTypes.JEWEL,LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.COTTON,LuxuryResourceTypes.INCENSE,BonusResourceTypes.SHEEP))), //kavir
-    MEADOW("meadow", 2, 0, 0, -33, 1, Colors.SOFT_GREEN,new HashSet<>(List.of(TileFeatureTypes.JUNGLE , TileFeatureTypes.SWAMP)),new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON,StrategicResourceTypes.HORSE,StrategicResourceTypes.COAL, BonusResourceTypes.COW, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.JEWEL,LuxuryResourceTypes.COTTON,LuxuryResourceTypes.MARBLE,BonusResourceTypes.SHEEP))),// chamanzar
-    HEEL("heel", 0, 2, 0, 25, 2, Colors.RED,new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.COAL , BonusResourceTypes.GAZELLE , LuxuryResourceTypes.GOLD,LuxuryResourceTypes.SILVER,LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE,BonusResourceTypes.SHEEP))),
-    MOUNTAIN("mountain", 0, 0, 0, 25, 9999, Colors.GREY,new HashSet<>(List.of()), new HashSet<>()),
-    OCEAN("ocean", 0, 0, 0, 25, 9999, Colors.OCEAN_BLUE,new HashSet<>(List.of()), new HashSet<>()),
-    PLAIN("plain", 1, 1, 0, -33, 1, Colors.YELLOW,new HashSet<>(List.of(TileFeatureTypes.JUNGLE , TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON,StrategicResourceTypes.HORSE,StrategicResourceTypes.COAL,BonusResourceTypes.WHEAT,LuxuryResourceTypes.GOLD,LuxuryResourceTypes.JEWEL,LuxuryResourceTypes.MARBLE,LuxuryResourceTypes.IVORY,LuxuryResourceTypes.COTTON,LuxuryResourceTypes.INCENSE,BonusResourceTypes.SHEEP))), // dasht
-    SNOW("snow", 0, 0, 0, -33, 1, Colors.WHITE,new HashSet<>(List.of()),new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON))),
-    TUNDRA("tundra", 1, 0, 0, -33, 1, Colors.PINK, new HashSet<>(List.of(TileFeatureTypes.JUNGLE)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON,StrategicResourceTypes.HORSE, BonusResourceTypes.GAZELLE , LuxuryResourceTypes.SILVER,LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.COTTON)));
+    DESERT("desert", 0, 0, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.OASIS, TileFeatureTypes.FLOODPLAIN)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.INCENSE, BonusResourceTypes.SHEEP))), //kavir
+    MEADOW("meadow", 2, 0, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.SWAMP)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.HORSE, StrategicResourceTypes.COAL, BonusResourceTypes.COW, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.MARBLE, BonusResourceTypes.SHEEP))),// chamanzar
+    HILL("hill", 0, 2, 0, 25, 2, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.COAL, BonusResourceTypes.GAZELLE, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, BonusResourceTypes.SHEEP))),
+    MOUNTAIN("mountain", 0, 0, 0, 25, 9999, new HashSet<>(List.of()), new HashSet<>()),
+    OCEAN("ocean", 0, 0, 0, 25, 9999, new HashSet<>(List.of()), new HashSet<>()),
+    PLAIN("plain", 1, 1, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.JUNGLE, TileFeatureTypes.FOREST)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.HORSE, StrategicResourceTypes.COAL, BonusResourceTypes.WHEAT, LuxuryResourceTypes.GOLD, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.IVORY, LuxuryResourceTypes.COTTON, LuxuryResourceTypes.INCENSE, BonusResourceTypes.SHEEP))), // dasht
+    SNOW("snow", 0, 0, 0, -33, 1, new HashSet<>(List.of()), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON))),
+    TUNDRA("tundra", 1, 0, 0, -33, 1, new HashSet<>(List.of(TileFeatureTypes.JUNGLE)), new HashSet<>(Arrays.asList(StrategicResourceTypes.IRON, StrategicResourceTypes.HORSE, BonusResourceTypes.GAZELLE, LuxuryResourceTypes.SILVER, LuxuryResourceTypes.JEWEL, LuxuryResourceTypes.MARBLE, LuxuryResourceTypes.COTTON)));
 
     private final String name;
     private final double food;
@@ -28,20 +26,19 @@ public enum TileBaseTypes implements TileTypes {
     private final double gold;
     private final int combatImpact;
     private final int movingPoint;
-    private final Colors color;
 
     private final HashSet<TileFeatureTypes> possibleFeatures;
 
     private final HashSet<ResourceTypes> possibleResources;
+
     TileBaseTypes(String name, double food, double production, double gold, int combatImpact, int movingPoint,
-                  Colors color , HashSet<TileFeatureTypes> possibleFeatures , HashSet<ResourceTypes> possibleResources) {
+                  HashSet<TileFeatureTypes> possibleFeatures, HashSet<ResourceTypes> possibleResources) {
         this.name = name;
         this.food = food;
         this.production = production;
         this.gold = gold;
         this.combatImpact = combatImpact;
         this.movingPoint = movingPoint;
-        this.color = color;
         possibleFeatures.add(TileFeatureTypes.NULL);
         this.possibleFeatures = possibleFeatures;
         this.possibleResources = possibleResources;
@@ -52,38 +49,46 @@ public enum TileBaseTypes implements TileTypes {
         return TileBaseTypes.values()[rand.nextInt(TileBaseTypes.values().length)];
     }
 
+    public Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/tiles/bases/" + this.name + ".png")).toString());
+    }
+
+    @Override
     public String getName() {
         return this.name;
     }
 
+    @Override
     public double getFood() {
         return this.food;
     }
 
+    @Override
     public double getProduction() {
         return this.production;
     }
 
+    @Override
     public double getGold() {
         return this.gold;
     }
 
+    @Override
     public int getCombatImpact() {
         return this.combatImpact;
     }
 
-    public int getMovingPoint() {
+    @Override
+    public int getMovementPoint() {
         return this.movingPoint;
-    }
-
-    public Colors getColor() {
-        return this.color;
     }
 
     public HashSet<TileFeatureTypes> getPossibleFeatures() {
         return possibleFeatures;
     }
-    public HashSet<ResourceTypes> getPossibleResources(){
+
+    @Override
+    public HashSet<ResourceTypes> getPossibleResources() {
         return possibleResources;
     }
 }

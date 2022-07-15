@@ -18,7 +18,7 @@ public class MainMenuController {
     }
 
     public void startGame(MouseEvent mouseEvent) {
-        App.changeScene("gameMenuPage");
+        App.changeScene("startGameMenuPage");
     }
 
     public void goToProfileMenu(MouseEvent mouseEvent) {

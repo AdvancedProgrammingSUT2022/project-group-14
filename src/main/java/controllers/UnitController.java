@@ -2,7 +2,15 @@ package controllers;
 
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
+import enums.units.UnitTypes;
+import javafx.event.EventHandler;
+import javafx.scene.Cursor;
+import javafx.scene.Group;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import models.*;
+import models.tiles.Tile;
 import models.units.*;
 
 import java.util.Locale;
@@ -30,7 +38,7 @@ public class UnitController {
     public static void resetMovingPoints(Civilization currentCivilization) {
         for (Unit unit : currentCivilization.getAllUnits()) {
             if (unit != null)
-                unit.setMovementPoint(enums.units.Unit.getUnitByName(unit.getName()).getMovement());
+                unit.setMovementPoint(UnitTypes.valueOf(unit.getName().toUpperCase(Locale.ROOT)).getMovement());
         }
     }
 
@@ -316,7 +324,7 @@ public class UnitController {
         return null;
     }
 
-    public static String upgradeUnit(enums.units.Unit unitEnum) {
+    public static String upgradeUnit(UnitTypes unitEnum) {
         if (WorldController.getSelectedCombatUnit() == null) {
             return "you should select a combat unit first";
         } else if (unitEnum.getCombatStrength() == 0) {
@@ -352,5 +360,17 @@ public class UnitController {
             }
             return null;
         }
+    }
+
+    public static Group getUnitGroup(Unit unit) {
+        Group group = new Group();
+        ImageView imageView = new ImageView(unit.getUnitType().getImage());
+        imageView.setFitWidth(50);
+        imageView.setFitHeight(50);
+        imageView.setLayoutX(9 - imageView.getImage().getWidth() / 2);
+        imageView.setLayoutY(12);
+        group.getChildren().add(imageView);
+        group.setCursor(Cursor.HAND);
+        return group;
     }
 }

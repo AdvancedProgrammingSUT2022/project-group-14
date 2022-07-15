@@ -1,42 +1,31 @@
 package models.units;
 
 import enums.units.CombatType;
+import enums.units.UnitTypes;
+import models.tiles.Coordination;
+
+import java.util.Objects;
 
 public class Unit {
-    private int currentX, currentY;
-    private int destinationX, destinationY;
+    private Coordination currentCoordination;
+    private Coordination destinationCoordination;
     private int movementPoint;
 
     private String name;
     private String civilizationName;
 
-    private int requiredGold;
-    private String requiredStrategicResourceName;
-    private String requiredTechnology;
-
     private double healthPoint;
     private boolean isSleep;
 
-    private CombatType combatType;
+    private final UnitTypes unitType;
 
-    public Unit(enums.units.Unit unitInfo, int x, int y, String civilization) {
-        this.currentX = x; this.currentY = y;
-        this.destinationX = -1; this.destinationY = -1;
+    public Unit(UnitTypes unitInfo, int x, int y, String civilization) {
+        this.currentCoordination = new Coordination(x, y);
+        this.destinationCoordination = new Coordination(-1, -1);
         this.movementPoint = unitInfo.getMovement();
         this.name = unitInfo.getName();
         this.civilizationName = civilization;
-        this.requiredGold = unitInfo.getCost();
-        this.combatType = unitInfo.getType();
-        if (unitInfo.getRequiredResource() == null){
-            this.requiredStrategicResourceName = null;
-        } else {
-            this.requiredStrategicResourceName = unitInfo.getRequiredResource().nameGetter();
-        }
-        if (unitInfo.getRequiredTechnology() == null){
-            this.requiredTechnology = null;
-        } else {
-            this.requiredTechnology = unitInfo.getRequiredTechnology().getName();
-        }
+        this.unitType = unitInfo;
         this.healthPoint = 10;
     }
 
@@ -57,19 +46,19 @@ public class Unit {
     }
 
     public int getCurrentX() {
-        return currentX;
+        return this.currentCoordination.getX();
     }
 
     public int getCurrentY() {
-        return currentY;
+        return this.currentCoordination.getY();
     }
 
     public int getDestinationX() {
-        return destinationX;
+        return this.destinationCoordination.getX();
     }
 
     public int getDestinationY() {
-        return destinationY;
+        return this.destinationCoordination.getY();
     }
 
     public int getMovementPoint() {
@@ -81,11 +70,9 @@ public class Unit {
     }
 
     public void updatePosition(int x, int y) {
-        this.currentX = x;
-        this.currentY = y;
-        if (currentX == destinationX && currentY == destinationY) {
-            destinationX = -1;
-            destinationY = -1;
+        this.currentCoordination = new Coordination(x, y);
+        if (currentCoordination.equals(destinationCoordination)) {
+            destinationCoordination = new Coordination(-1, -1);
         }
     }
 
@@ -102,12 +89,15 @@ public class Unit {
     }
 
     public void setDestinationCoordinates(int x, int y) {
-        this.destinationX = x;
-        this.destinationY = y;
+        this.destinationCoordination = new Coordination(x, y);
+    }
+
+    public UnitTypes getUnitType() {
+        return unitType;
     }
 
     public CombatType getCombatType() {
-        return combatType;
+        return unitType.getCombatType();
     }
 
     public void addHealthPoint(double amount) {
@@ -123,21 +113,29 @@ public class Unit {
     }
 
     public void cancelMission() {
-        this.destinationX = -1;
-        this.destinationY = -1;
+        this.destinationCoordination = new Coordination(-1, -1);
         if (this instanceof NonCombatUnit)
             ((NonCombatUnit) this).finishWork();
     }
 
+    public Coordination getCurrentCoordination() {
+        return currentCoordination;
+    }
+
+    public Coordination getDestinationCoordination() {
+        return destinationCoordination;
+    }
+
     public String getInfo() {
-        int x = currentX+1, y = currentY+1, destX = destinationX+1, destY = destinationY+1;
+        int x = this.currentCoordination.getX()+1, y = this.currentCoordination.getY()+1,
+                destX = this.destinationCoordination.getX()+1, destY = this.destinationCoordination.getY()+1;
         String output = "Name : " + name + '\n' +
                 "Current coordination : ( " + x + " , " + y + " )\n" +
                 "Total MovementPoints : " + movementPoint + "\n" +
                 "Civilization's name : " + civilizationName + '\n' +
                 "HealthPoint : " + healthPoint + "\n" +
                 "IsSleeping : " + isSleep + "\n";
-        if (destinationX != -1 && destinationY != -1) {
+        if (!this.destinationCoordination.equals(new Coordination(-1 , -1))) {
             output += "IsMoving : true\nDestination coordinates : ( " + destX + " , " + destY + " )\n";
         } else {
             output += "IsMoving : false\n";
@@ -145,5 +143,16 @@ public class Unit {
         return output;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Unit unit = (Unit) o;
+        return movementPoint == unit.movementPoint && Double.compare(unit.healthPoint, healthPoint) == 0 && isSleep == unit.isSleep && currentCoordination.equals(unit.currentCoordination) && Objects.equals(destinationCoordination, unit.destinationCoordination) && name.equals(unit.name) && civilizationName.equals(unit.civilizationName) && unitType == unit.unitType;
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(currentCoordination, destinationCoordination, movementPoint, name, civilizationName, healthPoint, isSleep, unitType);
+    }
 }

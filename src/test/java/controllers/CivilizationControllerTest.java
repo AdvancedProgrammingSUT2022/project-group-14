@@ -1,11 +1,9 @@
 package controllers;
 
 import enums.Technologies;
-import enums.tiles.TileBaseTypes;
-import enums.tiles.TileFeatureTypes;
 import models.City;
 import models.Civilization;
-import models.Tile;
+import models.tiles.Tile;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,7 +31,7 @@ public class CivilizationControllerTest
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali");
         usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40, 40);
     }
 
     @Test

@@ -1,10 +1,9 @@
 package models.units;
 
-import enums.units.Unit;
+import enums.units.UnitTypes;
 
 public class Settler extends NonCombatUnit{
-
-    public Settler(Unit unitInfo, int x, int y, String civilization) {
+    public Settler(UnitTypes unitInfo, int x, int y, String civilization) {
         super(unitInfo, x, y, civilization);
     }
 }

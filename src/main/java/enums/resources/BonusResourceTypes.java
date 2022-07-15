@@ -23,29 +23,24 @@ public enum BonusResourceTypes implements ResourceTypes {
         this.gold = gold;
         this.requiredImprovement = requiredImprovement;
     }
-
     @Override
-    public double foodGetter() {
+    public double getFood() {
         return this.food;
     }
-
     @Override
-    public double productionGetter() {
+    public double getProduction() {
         return this.production;
     }
-
     @Override
-    public double goldGetter() {
+    public double getGold() {
         return this.gold;
     }
-
     @Override
-    public Improvements requiredImprovementGetter() {
+    public Improvements getRequiredImprovement() {
         return this.requiredImprovement;
     }
-
     @Override
-    public String nameGetter(){
+    public String getName(){
         return this.name;
     }
 }

@@ -9,28 +9,11 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class Resource {
-    private String name;
-
-    private double food;
-    private double production;
-    private double gold;
-
-    private Improvements requiredImprovement;
-    private boolean hasBeenUsed = false;
-
-    public Resource(double food, double production, double gold, Improvements requiredProgress) {
-        this.food = food;
-        this.production = production;
-        this.gold = gold;
-        this.requiredImprovement = requiredProgress;
-    }
+    private final ResourceTypes type;
+    private boolean hasBeenUsed;
 
     public Resource(ResourceTypes type) {
-        this.food = type.foodGetter();
-        this.production = type.productionGetter();
-        this.gold = type.goldGetter();
-        this.requiredImprovement = type.requiredImprovementGetter();
-        this.name = type.nameGetter();
+        this.type = type;
     }
 
     public static Resource generateRandomResource(TileBaseTypes type, TileFeatureTypes feature) {
@@ -48,28 +31,32 @@ public class Resource {
         return null;
     }
 
+    public ResourceTypes getType() {
+        return this.type;
+    }
+
     public double getFood() {
-        return this.food;
+        return this.type.getFood();
     }
 
     public double getProduction() {
-        return this.production;
+        return this.type.getProduction();
     }
 
     public double getGold() {
-        return this.gold;
+        return this.type.getGold();
     }
 
     public String getName() {
-        return name;
+        return this.type.getName();
     }
 
     public Improvements getRequiredImprovement() {
-        return this.requiredImprovement;
+        return this.type.getRequiredImprovement();
     }
 
     public boolean hasBeenUsed() {
-        return hasBeenUsed;
+        return this.hasBeenUsed;
     }
 
     public void setHasBeenUsed(boolean hasBeenUsed) {

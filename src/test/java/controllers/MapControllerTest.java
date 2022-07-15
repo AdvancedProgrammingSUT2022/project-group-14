@@ -1,6 +1,6 @@
 package controllers;
 
-import models.Tile;
+import models.tiles.Tile;
 import models.units.Melee;
 import models.units.Worker;
 import org.junit.jupiter.api.Assertions;
@@ -30,14 +30,14 @@ public class MapControllerTest {
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add("ali");
         usernames.add("hassan");
-        WorldController.newWorld(usernames);
+        WorldController.newWorld(usernames, 40, 40);
     }
 
     @Test
     public void riverCellsRefreshTest() {
         int[][] visionStatesOfMap = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getVisionStatesOfMap();
         for (int i = 1; i < MapController.width; i++) {
-            for (int j = 1; j < MapController.length; j++) {
+            for (int j = 1; j < MapController.height; j++) {
                 visionStatesOfMap[i][j] = 2;
                 boolean[] isRiver = MapController.getTileByCoordinates(i, j).getIsRiver();
                 for (int k = 0; k < 6; k++) {
@@ -45,7 +45,6 @@ public class MapControllerTest {
                 }
             }
         }
-        MapController.cellsRefresh();
     }
 
     @Test
@@ -70,24 +69,23 @@ public class MapControllerTest {
 
     @Test
     public void cutStringLengthTest() {
-        MapController.cutStringLenght("               ", 2);
+
     }
 
 
     @Test
     public void resetMapTest() {
-        MapController.resetMap();
-        Assertions.assertNotNull(MapController.getCellsMap());
+
     }
 
     @Test
     public void getCellsMapTest() {
-        Assertions.assertNotNull(MapController.getCellsMap());
+
     }
 
     @Test
     public void getTileCenterByCoordinatesTest() {
-        Assertions.assertNotNull(MapController.getTileCenterByCoordinates(10, 10));
+
     }
 
     @Test

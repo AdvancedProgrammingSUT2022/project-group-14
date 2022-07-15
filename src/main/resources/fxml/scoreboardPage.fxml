@@ -10,7 +10,7 @@
 
 <AnchorPane id="scoreboardScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css"
             xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="views.scoreboardController">
+            fx:controller="views.ScoreboardController">
 
     <Label layoutX="475.0" styleClass="sceneTitle" text="Scoreboard"/>
     <Button layoutX="50" layoutY="600" onMouseClicked="#goToMainMenu" prefWidth="100" text="back"/>

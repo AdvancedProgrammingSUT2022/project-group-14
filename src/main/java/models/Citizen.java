@@ -1,29 +1,31 @@
 package models;
 
+import models.tiles.Coordination;
+
 public class Citizen {
-    private int id;
-    private boolean isWorking = false;
-    private int xOfWorkingTile = -1;
-    private int YOfWorkingTile = -1;
+    private final int id;
+    private boolean isWorking;
+    private final Coordination workingCoordination;
 
     public Citizen(int id){
         this.id = id;
+        this.workingCoordination = new Coordination(-1, -1);
     }
 
     public int getId() {
-        return id;
+        return this.id;
     }
 
     public boolean isWorking() {
-        return isWorking;
+        return this.isWorking;
     }
 
     public int getXOfWorkingTile() {
-        return xOfWorkingTile;
+        return this.workingCoordination.getX();
     }
 
     public int getYOfWorkingTile() {
-        return YOfWorkingTile;
+        return this.workingCoordination.getY();
     }
 
     public void setIsWorking(boolean isWorking) {
@@ -31,10 +33,10 @@ public class Citizen {
     }
 
     public void setXOfWorkingTile(int xOfWorkingTile) {
-        this.xOfWorkingTile = xOfWorkingTile;
+        this.workingCoordination.setX(xOfWorkingTile);
     }
 
-    public void setYOfWorkingTile(int YOfWorkingTile) {
-        this.YOfWorkingTile = YOfWorkingTile;
+    public void setYOfWorkingTile(int yOfWorkingTile) {
+        this.workingCoordination.setY(yOfWorkingTile);
     }
 }

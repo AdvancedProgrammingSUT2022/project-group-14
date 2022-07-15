@@ -1,25 +1,32 @@
 package models;
 
-import enums.Buildings;
+import enums.BuildingTypes;
 import enums.Technologies;
 
 import java.util.ArrayList;
 
 public class Building {
-    private String name;
-    private int cost;
-    private int maintenance;
-    private Technologies requiredTechnology;
+    private final BuildingTypes buildingType;
     private ArrayList<String> requiredBuildings;
 
-    public Building(Buildings buildings){
-        this.name = buildings.name();
-        this.cost = buildings.getCost();
-        this.maintenance = buildings.getMaintenance();
-        this.requiredTechnology = buildings.getRequiredTechnology();
+    public Building(BuildingTypes type) {
+        this.buildingType = type;
+    }
+
+
+    public String getName() {
+        return this.buildingType.getName();
     }
 
     public int getCost() {
-        return cost;
+        return this.buildingType.getCost();
+    }
+
+    public int getMaintenance() {
+        return this.buildingType.getMaintenance();
+    }
+
+    public Technologies getRequiredTechnology() {
+        return this.buildingType.getRequiredTechnology();
     }
 }

@@ -3,14 +3,14 @@ package enums.resources;
 import enums.Improvements;
 
 public interface ResourceTypes {
-    double foodGetter();
+    double getFood();
 
-    double productionGetter();
+    double getProduction();
 
-    double goldGetter();
+    double getGold();
 
-    Improvements requiredImprovementGetter();
+    Improvements getRequiredImprovement();
 
-    String nameGetter();
+    String getName();
 
 }

@@ -1,11 +1,13 @@
 package application;
 
 import controllers.UserController;
+import enums.resources.StrategicResourceTypes;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -15,6 +17,7 @@ import java.util.Objects;
 public class App extends javafx.application.Application {
     private static Scene scene;
     private static MediaPlayer mediaPlayer;
+    private static Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -23,7 +26,7 @@ public class App extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         UserController.readAllUsers();
-
+        App.stage = stage;
         Parent root = loadFXML("loginPage");
         assert root != null;
         App.scene = new Scene(root);
@@ -58,6 +61,12 @@ public class App extends javafx.application.Application {
             e.printStackTrace();
         }
         return null;
+    }
+
+    public static void showPopUp(Popup popup) {
+        popup.setX(popup.getX() + stage.getX());
+        popup.setY(popup.getY() + stage.getY());
+        popup.show(stage);
     }
 
     public static void muteMedia() {
