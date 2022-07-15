@@ -335,6 +335,14 @@ public class Tile {
         return hex;
     }
 
+    public void setRuin(Ruin ruin) {
+        this.ruin = ruin;
+    }
+
+    public Ruin getRuin() {
+        return ruin;
+    }
+
     public String getInfo() {
         return "Food : " + food + "\n" +
                 "Production : " + production + "\n" +

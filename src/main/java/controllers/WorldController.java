@@ -51,6 +51,7 @@ public class WorldController {
         CivilizationController.payRequiredPriceForKeepingUnits(currentCivilization);
         CivilizationController.payRequiredPriceForKeepingBuildings(currentCivilization);
         CivilizationController.updateCitiesProductions(currentCivilization);
+        CivilizationController.updateRuins(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }
