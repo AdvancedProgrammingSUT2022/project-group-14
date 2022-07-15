@@ -1,12 +1,10 @@
 package enums;
 
 import application.App;
+import enums.tiles.TileBaseTypes;
 import javafx.scene.image.Image;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Objects;
+import java.util.*;
 
 import static java.util.List.*;
 
@@ -87,5 +85,10 @@ public enum Technologies {
 
     public static Technologies getTechnologyByName(String name) {
         return Technologies.valueOf(name.toUpperCase(Locale.ROOT));
+    }
+
+    public static Technologies generateRandom() {
+        Random rand = new Random();
+        return Technologies.values()[rand.nextInt(Technologies.values().length)];
     }
 }
