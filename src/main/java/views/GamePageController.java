@@ -68,9 +68,9 @@ public class GamePageController {
     }
 
     private void initNavBar() {
-        goldCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/goldLogo.png")).toString())));
-        happinessCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/happinessLogo.png")).toString())));
-        scienceCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resourceLogos/scienceLogo.png")).toString())));
+        goldCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/goldLogo.png")).toString())));
+        happinessCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/happinessLogo.png")).toString())));
+        scienceCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/scienceLogo.png")).toString())));
         goldText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getGold());
         goldText.setFill(Color.GOLD);
         happinessText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getHappiness());
@@ -119,22 +119,38 @@ public class GamePageController {
     }
 
     public void setUnitPanelInfo(Unit unit) {
-        initUnitAbilities(unit);
+        initUnitActions(unit);
         unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
         unitPanelText.setText(unit.getName());
     }
 
-    private void initUnitAbilities(Unit unit) {
-        if (unitPanelPane.getChildren().size() > 5)
-            unitPanelPane.getChildren().subList(5, unitPanelPane.getChildren().size()).clear();
-        Circle sleep = new Circle(25, new ImagePattern(UnitController.getActionImage("sleep")));
+    private void initUnitActions(Unit unit) {
+        System.out.println(unitPanelPane.getChildren().size());
+        if (unitPanelPane.getChildren().size() > 9)
+            unitPanelPane.getChildren().subList(9, unitPanelPane.getChildren().size()).clear();
+        ((Circle) unitPanelPane.getChildren().get(5)).setFill(new ImagePattern(UnitController.getActionImage("move")));
+        ((Circle) unitPanelPane.getChildren().get(6)).setFill(new ImagePattern(UnitController.getActionImage("delete")));
+        ((Circle) unitPanelPane.getChildren().get(7)).setFill(new ImagePattern(UnitController.getActionImage("sleep")));
+        ((Circle) unitPanelPane.getChildren().get(8)).setFill(new ImagePattern(UnitController.getActionImage("wake")));
         if (unit instanceof CombatUnit) {
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("alert"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("fortify"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("fortifyTillHealed"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("garrison"))));
             if (unit instanceof Ranged) {
+                unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged"))));
             }
         } else if (unit.getUnitType() == UnitTypes.WORKER) {
-
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("buildImprovement"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("buildRoad"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("repair"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("remove"))));
         } else {
-
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("foundCity"))));
+        }
+        for (int i = 9; i < unitPanelPane.getChildren().size(); i++) {
+            unitPanelPane.getChildren().get(i).setLayoutX(unitPanelPane.getChildren().get(i - 2).getLayoutX() + 62);
+            unitPanelPane.getChildren().get(i).setLayoutY(unitPanelPane.getChildren().get(i - 2).getLayoutY());
         }
     }
 

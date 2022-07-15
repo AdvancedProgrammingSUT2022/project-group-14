@@ -84,10 +84,10 @@ public class Hex {
 
         this.group.getChildren().clear();
         this.group.getChildren().add(this.polygon);
-        if (tile.getNonCombatUnit() != null)
-            this.addUnitToGroup(tile.getNonCombatUnit());
         if (tile.getCombatUnit() != null)
             this.addUnitToGroup(tile.getCombatUnit());
+        if (tile.getNonCombatUnit() != null)
+            this.addUnitToGroup(tile.getNonCombatUnit());
 
         this.group.getChildren().add(this.coordinationText);
         //TODO adding units

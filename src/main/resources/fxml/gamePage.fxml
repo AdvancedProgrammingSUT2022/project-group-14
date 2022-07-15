@@ -7,37 +7,37 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GamePageController">
+<AnchorPane prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GamePageController">
     <ScrollPane layoutY="80" prefHeight="620" prefWidth="1280" style="-fx-background-color: transparent;">
-        <AnchorPane fx:id="hexPane" />
+        <AnchorPane fx:id="hexPane"/>
     </ScrollPane>
-    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="black" height="80.0" stroke="BLACK" strokeType="INSIDE" width="1280.0" />
-    <Circle fx:id="scienceCircle" layoutX="24.0" layoutY="26.0" radius="10.0" />
-    <Circle fx:id="goldCircle" layoutX="104.0" layoutY="26.0" radius="10.0" />
-    <Circle fx:id="happinessCircle" layoutX="184.0" layoutY="26.0" radius="10.0" />
-    <Text fx:id="scienceText" layoutX="34.0" layoutY="33.0" text="1000" wrappingWidth="70" />
-    <Text fx:id="goldText" layoutX="114.0" layoutY="33.0" text="1000" wrappingWidth="70" />
-    <Text fx:id="happinessText" layoutX="194.0" layoutY="33.0" text="1000" wrappingWidth="70" />
-    <Button layoutX="480.0" layoutY="22.0" onMouseClicked="#goToUnitsPanel" style="-fx-pref-width: 85;" text="Units" />
-    <Button layoutX="577.5" layoutY="23.0" prefHeight="36.0" prefWidth="127.0" style="-fx-pref-width: 125;" text="Research" />
-    <Button layoutX="716.0" layoutY="23.0" onMouseClicked="#goToCitiesPage" style="-fx-pref-width: 85;" text="Cities" />
-    <Text fx:id="yearText" fill="white" layoutX="994.0" layoutY="48.0" text="4000 BC" wrappingWidth="112" />
-    <Button layoutX="1106.0" layoutY="22.0" text="Menu" />
-    <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0" />
-    <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145" />
-    <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="404.0" style="-fx-background-color: transparent">
-        <Rectangle fill="cadetblue" height="28.0" layoutX="90.0" layoutY="36.0" stroke="BLACK" width="193.0" />
-        <Rectangle height="162.0" layoutY="64.0" stroke="BLACK" width="404.0" />
-        <Circle fill="cadetblue" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK" />
-        <Circle fx:id="unitPanelCircle" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK" />
-        <Text fx:id="unitPanelText" layoutX="168.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-<!--      <Circle fill="DODGERBLUE" layoutX="168.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="230.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="292.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="168.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="230.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="292.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="354.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
-<!--      <Circle fill="DODGERBLUE" layoutX="354.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+    <Rectangle arcHeight="5.0" arcWidth="5.0" fill="black" height="80.0" stroke="BLACK" strokeType="INSIDE"
+               width="1280.0"/>
+    <Circle fx:id="scienceCircle" layoutX="24.0" layoutY="26.0" radius="10.0"/>
+    <Circle fx:id="goldCircle" layoutX="104.0" layoutY="26.0" radius="10.0"/>
+    <Circle fx:id="happinessCircle" layoutX="184.0" layoutY="26.0" radius="10.0"/>
+    <Text fx:id="scienceText" layoutX="34.0" layoutY="33.0" text="1000" wrappingWidth="70"/>
+    <Text fx:id="goldText" layoutX="114.0" layoutY="33.0" text="1000" wrappingWidth="70"/>
+    <Text fx:id="happinessText" layoutX="194.0" layoutY="33.0" text="1000" wrappingWidth="70"/>
+    <Button layoutX="480.0" layoutY="22.0" onMouseClicked="#goToUnitsPanel" style="-fx-pref-width: 85;" text="Units"/>
+    <Button layoutX="577.5" layoutY="23.0" prefHeight="36.0" prefWidth="127.0" style="-fx-pref-width: 125;"
+            text="Research"/>
+    <Button layoutX="716.0" layoutY="23.0" onMouseClicked="#goToCitiesPage" style="-fx-pref-width: 85;" text="Cities"/>
+    <Text fx:id="yearText" fill="white" layoutX="994.0" layoutY="48.0" text="4000 BC" wrappingWidth="112"/>
+    <Button layoutX="1106.0" layoutY="22.0" text="Menu"/>
+    <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0"/>
+    <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145"/>
+    <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="404.0"
+                style="-fx-background-color: transparent">
+        <Rectangle fill="cadetblue" height="28.0" layoutX="90.0" layoutY="36.0" stroke="BLACK" width="193.0"/>
+        <Rectangle height="162.0" layoutY="64.0" stroke="BLACK" width="404.0"/>
+        <Circle fill="cadetblue" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK"/>
+        <Circle fx:id="unitPanelCircle" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK"/>
+        <Text fx:id="unitPanelText" layoutX="168.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text"/>
+        <Circle layoutX="168.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Circle layoutX="168.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Circle layoutX="230.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
+        <Circle layoutX="230.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE"/>
     </AnchorPane>
 </AnchorPane>

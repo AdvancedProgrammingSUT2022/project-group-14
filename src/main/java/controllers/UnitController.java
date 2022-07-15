@@ -379,6 +379,6 @@ public class UnitController {
     }
 
     public static Image getActionImage(String name) {
-        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions" + name + ".png")).toString());
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions/" + name + ".png")).toString());
     }
 }
