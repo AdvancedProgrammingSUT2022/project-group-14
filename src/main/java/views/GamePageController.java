@@ -2,6 +2,7 @@ package views;
 
 import application.App;
 import controllers.MapController;
+import controllers.UnitController;
 import controllers.WorldController;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
@@ -124,54 +125,17 @@ public class GamePageController {
     }
 
     private void initUnitAbilities(Unit unit) {
-        if (unitPanelPane.getChildren().size() > 7)
-            unitPanelPane.getChildren().subList(7, unitPanelPane.getChildren().size()).clear();
-        ArrayList<Button> buttons = new ArrayList<>();
-        Button sleepWake = new Button("Sleep/Wake");
-        sleepWake.setLayoutX(134);
-        sleepWake.setLayoutY(72);
-        sleepWake.setStyle("-fx-pref-width: 145");
-        Button delete = new Button("Delete");
-        delete.setLayoutX(162);
-        delete.setLayoutY(122);
-        delete.setStyle("-fx-pref-width: 90");
-        buttons.add(sleepWake);
-        buttons.add(delete);
+        if (unitPanelPane.getChildren().size() > 5)
+            unitPanelPane.getChildren().subList(5, unitPanelPane.getChildren().size()).clear();
+        Circle sleep = new Circle(25, new ImagePattern(UnitController.getActionImage("sleep")));
         if (unit instanceof CombatUnit) {
-            Button alert = new Button("Alert");
-            Button fortify = new Button("Fortify");
-            Button fortifyTillHealed = new Button("FortifyTillHealed");
-            Button garrison = new Button("Garrison");
-            buttons.add(alert);
-            buttons.add(fortify);
-            buttons.add(fortifyTillHealed);
-            buttons.add(garrison);
             if (unit instanceof Ranged) {
-                Button setupRanged = new Button("SetupRanged");
             }
         } else if (unit.getUnitType() == UnitTypes.WORKER) {
-            ((Button) unitPanelPane.getChildren().get(7)).setText("BuildRoad");
-            ((Button) unitPanelPane.getChildren().get(8)).setText("BuildRailRoad");
-            ((Button) unitPanelPane.getChildren().get(9)).setText("BuildImprovement");
-            ((Button) unitPanelPane.getChildren().get(10)).setText("RemoveRoute");
-            ((Button) unitPanelPane.getChildren().get(11)).setText("Repair");
+
         } else {
-            ((Button) unitPanelPane.getChildren().get(7)).setText("FoundCity");
+
         }
-        for (int i = 2; i < buttons.size(); i++) {
-            buttons.get(i).setLayoutX(buttons.get(i - 2).getLayoutX() + buttons.get(i - 2).getPrefWidth() + 4);
-            buttons.get(i).setLayoutY(buttons.get(i - 2).getLayoutY());
-            if (buttons.get(i).getText().length() * 15 <= 90) {
-                buttons.get(i).setStyle("-fx-pref-width: 90");
-            } else if (buttons.get(i).getText().length() * 15 <= 120) {
-                buttons.get(i).setStyle("-fx-pref-width: 120");
-            } else if (buttons.get(i).getText().length() * 15 <= 180) {
-                buttons.get(i).setStyle("-fx-pref-width: 180");
-            }  else if (buttons.get(i).getText().length() * 15 <= 255) {
-                buttons.get(i).setStyle("-fx-pref-width: 255");
-            }
-        }
-        unitPanelPane.getChildren().addAll(buttons);
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {

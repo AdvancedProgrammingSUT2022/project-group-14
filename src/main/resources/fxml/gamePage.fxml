@@ -25,18 +25,19 @@
     <Button layoutX="1106.0" layoutY="22.0" text="Menu" />
     <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0" />
     <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145" />
-    <AnchorPane fx:id="unitPanelPane" layoutY="523.0" prefHeight="200.0" prefWidth="731.0" style="-fx-background-color: transparent">
+    <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="404.0" style="-fx-background-color: transparent">
         <Rectangle fill="cadetblue" height="28.0" layoutX="90.0" layoutY="36.0" stroke="BLACK" width="193.0" />
-        <Rectangle height="135.0" layoutY="64.0" stroke="BLACK" width="731.0" />
+        <Rectangle height="162.0" layoutY="64.0" stroke="BLACK" width="404.0" />
         <Circle fill="cadetblue" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK" />
         <Circle fx:id="unitPanelCircle" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK" />
         <Text fx:id="unitPanelText" layoutX="168.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
-<!--        <Button layoutX="134.0" layoutY="72.0" style="-fx-pref-width: 145;" text="Sleep/Wake" />-->
-<!--        <Button layoutX="162.0" layoutY="122.0" style="-fx-pref-width: 90;" text="Delete" />-->
-<!--        <Button layoutX="283.0" layoutY="72.0" style="-fx-pref-width: 145;" />-->
-<!--        <Button layoutX="283.0" layoutY="122.0" style="-fx-pref-width: 145;" />-->
-<!--        <Button layoutX="432.0" layoutY="72.0" style="-fx-pref-width: 145;" />-->
-<!--        <Button layoutX="432.0" layoutY="122.0" style="-fx-pref-width: 145;" />-->
-<!--        <Button layoutX="581.0" layoutY="72.0" style="-fx-pref-width: 145;" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="168.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="230.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="292.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="168.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="230.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="292.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="354.0" layoutY="100.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
+<!--      <Circle fill="DODGERBLUE" layoutX="354.0" layoutY="157.0" radius="25.0" stroke="BLACK" strokeType="INSIDE" />-->
     </AnchorPane>
 </AnchorPane>

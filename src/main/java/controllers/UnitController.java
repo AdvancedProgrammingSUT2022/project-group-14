@@ -1,5 +1,6 @@
 package controllers;
 
+import application.App;
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
 import enums.units.UnitTypes;
@@ -7,6 +8,7 @@ import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
@@ -15,6 +17,7 @@ import models.tiles.Tile;
 import models.units.*;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class UnitController {
 
@@ -373,5 +376,9 @@ public class UnitController {
         group.getChildren().add(imageView);
         group.setCursor(Cursor.HAND);
         return group;
+    }
+
+    public static Image getActionImage(String name) {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions" + name + ".png")).toString());
     }
 }
