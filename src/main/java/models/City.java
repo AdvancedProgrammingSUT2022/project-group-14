@@ -58,9 +58,12 @@ public class City {
     public void finishCityProduction() {
         this.currentProductionRemainingCost = 0;
         if (currentBuilding != null) {
+            if (currentBuilding.getBuildingType().equals(BuildingTypes.HOSPITAL)) {
+                this.growthFoodLimit /= 2;
+            }
             addBuildingToCity();
             this.defenseStrength += currentBuilding.getBuildingType().getDefense();
-        } else
+        } else if (currentUnit != null)
             addUnitToCity();
 
     }
@@ -114,6 +117,21 @@ public class City {
             if (!cityHasBuilding) return false;
         }
         return true;
+    }
+
+    public boolean cityHasBuilding(String buildingName) {
+        for (Building building : this.buildings) {
+            if (building.getName().equals(buildingName)) return true;
+        }
+        return false;
+    }
+
+    public int numberOfWorkingCitizens() {
+        int output = 0;
+        for (Citizen citizen : this.citizens) {
+            if (citizen.isWorking()) output++;
+        }
+        return output;
     }
 
     public void addGarrisonedUnits() {
