@@ -110,16 +110,18 @@ public class CityController {
             city.setFood(0);
             city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
             city.setGrowthFoodLimit(city.getGrowthFoodLimit() * 2);
-            if (!city.cityHasBuilding("courthouse"))
-                WorldController.getWorld().getCivilizationByName(MapController.getTileByCoordinates(city.getCenterOfCity().getX(),
-                    city.getCenterOfCity().getY()).getCivilizationName()).addHappiness(-0.5);
+            if (!city.cityHasBuilding("courthouse")){
+                Civilization civilization = WorldController.getWorld().getCivilizationByName(
+                    MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName());
+                civilization.setHappiness(civilization.getHappiness() - 0.5);
+            }
         }
     }
 
     public static String lockCitizenToTile(City city, int id, int x, int y) {
         boolean isValid = false;
         for (Tile tile : city.getTerritory()) {
-            if (tile.getX() == x && tile.getY() == y){
+            if (tile.getX() == x && tile.getY() == y) {
                 isValid = true;
                 break;
             }

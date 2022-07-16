@@ -2,6 +2,8 @@ package enums.resources;
 
 import enums.Improvements;
 
+import java.util.HashMap;
+
 public enum LuxuryResourceTypes implements ResourceTypes {
     COTTON("cotton", 0, 0, 2, Improvements.FARM),//panbeh
     COLOR("color", 0, 0, 2, Improvements.FARM),
@@ -52,6 +54,13 @@ public enum LuxuryResourceTypes implements ResourceTypes {
     @Override
     public String getName() {
         return this.name;
+    }
+
+    public static HashMap<String, Integer> getAllResources() {
+        HashMap<String, Integer> allResources = new HashMap<>();
+        for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values())
+            allResources.put(luxuryResource.getName(), 0);
+        return allResources;
     }
 
 }

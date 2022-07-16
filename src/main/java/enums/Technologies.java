@@ -83,8 +83,11 @@ public enum Technologies {
         return this.requiredTechnologies;
     }
 
-    public static Technologies getTechnologyByName(String name) {
-        return Technologies.valueOf(name.toUpperCase(Locale.ROOT));
+    public static HashMap<Technologies, Integer> getAllTechnologies() {
+        HashMap<Technologies, Integer> allTechs = new HashMap<>();
+        for (Technologies technology : Technologies.values())
+            allTechs.put(technology, technology.getCost());
+        return allTechs;
     }
 
     public static Technologies generateRandom() {

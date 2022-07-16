@@ -3,6 +3,7 @@ package controllers;
 
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
+import enums.units.UnitStates;
 import enums.units.UnitTypes;
 import models.City;
 import models.Civilization;
@@ -93,22 +94,21 @@ public class UnitControllerTest {
     public void sleepUnitTest() {
         when(unit.getCivilizationName()).thenReturn("ali");
         UnitController.sleepUnit(unit);
-        verify(unit).putToSleep();
+        verify(unit).setUnitState(UnitStates.SLEEP);
     }
 
     @Test
     public void wakeUpTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
         UnitController.wakeUp(melee);
-        verify(melee).wakeUp();
-        verify(melee).wakeUpFromAlert();
+        verify(melee).setUnitState(UnitStates.WAKE);
     }
 
     @Test
     public void alertUnitTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
         UnitController.alertUnit(melee);
-        verify(melee).alertUnit();
+        verify(melee).setUnitState(UnitStates.ALERT);
     }
 
     @Test
@@ -122,7 +122,7 @@ public class UnitControllerTest {
     public void fortifyUnitUntilHealedTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
         UnitController.fortifyUnitUntilHealed(melee);
-        verify(melee).fortifyUnitTillHealed();
+        verify(melee).setUnitState(UnitStates.FORTIFY_TILL_HEALED);
         verify(melee).healUnit(5);
     }
 
@@ -139,7 +139,7 @@ public class UnitControllerTest {
         when(melee.getCivilizationName()).thenReturn("ali");
         MapController.getTileByCoordinates(melee.getCurrentX(), melee.getCurrentY()).setCity(new City("ali1", melee.getCurrentX(), melee.getCurrentY()));
         UnitController.garrisonCity(melee);
-        verify(melee).garrisonUnit();
+        verify(melee).setUnitState(UnitStates.GARRISON);
         Assertions.assertTrue(MapController.getTileByCoordinates(melee.getCurrentX(), melee.getCurrentY()).getCity().getNumberOfGarrisonedUnit() > 0);
     }
 
