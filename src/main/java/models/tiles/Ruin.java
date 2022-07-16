@@ -1,17 +1,16 @@
-package models;
+package models.tiles;
 
 import enums.Technologies;
 import enums.units.UnitTypes;
-import models.tiles.Coordination;
 import models.units.NonCombatUnit;
 
 import java.util.Random;
 
 public class Ruin {
-    private Technologies freeTechnology;
-    private boolean provideCitizen;
-    private double gold;
-    private NonCombatUnit nonCombatUnit;
+    private final Technologies freeTechnology;
+    private final boolean provideCitizen;
+    private final double gold;
+    private final NonCombatUnit nonCombatUnit;
     private Coordination coordination;
 
     public Ruin(Technologies freeTechnology, boolean provideCitizen, double gold, NonCombatUnit nonCombatUnit, Coordination coordination) {

@@ -1,6 +1,7 @@
 package controllers;
 
 import models.*;
+import models.tiles.Ruin;
 import models.tiles.Tile;
 import models.units.Unit;
 
@@ -121,7 +122,7 @@ public class CivilizationController {
                     ruin.getNonCombatUnit().setCivilizationName(civilization.getName());
                     tile.setNonCombatUnit(ruin.getNonCombatUnit());
                 }
-                civilization.addGold(ruin.getGold());
+                civilization.setGold(civilization.getGold() + ruin.getGold());
                 tile.setRuin(null);
             }
 

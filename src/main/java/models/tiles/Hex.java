@@ -20,6 +20,8 @@ import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
+import java.util.Map;
+
 public class Hex {
     private final Polygon polygon;
     private final Group group;
@@ -42,7 +44,7 @@ public class Hex {
         this.height = 100 * Math.sqrt(3);
         this.polygon = new Polygon(setX(5), setY(0), setX(15), setY(0), setX(20), setY(5 * Math.sqrt(3)),
                 setX(15), setY(10 * Math.sqrt(3)), setX(5), setY(10 * Math.sqrt(3)), setX(0), setY(5 * Math.sqrt(3)));
-        this.coordinationText = new Text(tile.getX() + "," + tile.getY());
+        this.coordinationText = new Text(String.valueOf(tile.getX() + 1) + "," + String.valueOf(tile.getY() + 1));
         this.coordinationText.setLayoutX(this.getCenterX() - 7 * this.coordinationText.getBoundsInLocal().getWidth() / 10);
         this.coordinationText.setLayoutY(this.getCenterY() - 10);
         setCityEventHandlers();
@@ -83,7 +85,8 @@ public class Hex {
         });
     }
 
-    public void updateHexOfGivenTile(Tile tile) {
+    public void updateHex() {
+        Tile tile = MapController.getTileByCoordinates(this.coordination);
         if (tile.getFeature() != TileFeatureTypes.NULL) {
             this.polygon.setFill(new ImagePattern(tile.getFeature().getImage()));
         } else {
@@ -104,16 +107,16 @@ public class Hex {
 
     private void addUnitToGroup(Unit unit) {
         Group unitGroup = UnitController.getUnitGroup(unit);
-        System.out.println(unitGroup.getLayoutX() + " * " + unitGroup.getLayoutY());
-        setUnitGroupEventHandlers(unitGroup, unit);
         unitGroup.setTranslateY(this.getCenterY() + 50);
         unitGroup.setTranslateX(this.getCenterX() + 82 + 20 * (unit instanceof NonCombatUnit ? 1 : -1));
+        setUnitGroupEventHandlers(unitGroup, unit);
         this.group.getChildren().add(unitGroup);
     }
 
     public void setUnitGroupEventHandlers(Group group, Unit unit) {
         group.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY
+                    && unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
                 if (unit instanceof CombatUnit) {
                     if (WorldController.getSelectedCombatUnit() != null && WorldController.getSelectedCombatUnit().equals(unit)) {
                         WorldController.setSelectedCombatUnit(null);
