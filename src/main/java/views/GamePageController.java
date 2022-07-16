@@ -5,6 +5,7 @@ import controllers.MapController;
 import controllers.MoveController;
 import controllers.UnitController;
 import controllers.WorldController;
+import enums.units.CombatType;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -27,9 +28,7 @@ import javafx.util.Duration;
 import models.Civilization;
 import models.tiles.Hex;
 import models.tiles.Tile;
-import models.units.CombatUnit;
-import models.units.Ranged;
-import models.units.Unit;
+import models.units.*;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -111,20 +110,18 @@ public class GamePageController {
 
     public void checkUnitPanelUpdate() {
         if (WorldController.getSelectedCombatUnit() != null) {
-            if (!unitPanelPane.isVisible()) {
+            if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() == CombatType.NON_COMBAT) {
                 unitPanelPane.setVisible(true);
                 setUnitPanelInfo(WorldController.getSelectedCombatUnit());
             } else {
-                unitPanelMPText.setText("MP : " + WorldController.getSelectedCombatUnit().getMovementPoint());
-                setUnitPanelInfo(WorldController.getSelectedCombatUnit());
+                setUnitPanelTexts(WorldController.getSelectedCombatUnit());
             }
         } else if (WorldController.getSelectedNonCombatUnit() != null) {
-            if (!unitPanelPane.isVisible()) {
+            if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() != CombatType.NON_COMBAT) {
                 unitPanelPane.setVisible(true);
                 setUnitPanelInfo(WorldController.getSelectedNonCombatUnit());
             } else {
-                unitPanelMPText.setText("MP : " + WorldController.getSelectedNonCombatUnit().getMovementPoint());
-                setUnitPanelInfo(WorldController.getSelectedNonCombatUnit());
+                setUnitPanelTexts(WorldController.getSelectedNonCombatUnit());
             }
         } else if (WorldController.unitIsNotSelected()) {
             unitPanelPane.setVisible(false);
@@ -155,29 +152,16 @@ public class GamePageController {
             unitPanelPane.getChildren().subList(11, unitPanelPane.getChildren().size()).clear();
         initCommonActions(unit);
         if (unit instanceof CombatUnit) {
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("alert"))));
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("fortify"))));
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("fortifyTillHealed"))));
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("garrison"))));
-            if (unit instanceof Ranged) {
-                unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged"))));
-            }
-        } else if (unit.getUnitType() == UnitTypes.WORKER) {
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("working"))));
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("buildRoad"))));
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("repair"))));
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("remove"))));
+            initCombatUnitActions((CombatUnit) unit);
         } else {
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("foundCity"))));
+            initNonCombatUnitActions((NonCombatUnit) unit);
         }
         for (int i = 11; i < unitPanelPane.getChildren().size(); i++) {
             unitPanelPane.getChildren().get(i).setLayoutX(unitPanelPane.getChildren().get(i - 2).getLayoutX() + 62);
             unitPanelPane.getChildren().get(i).setLayoutY(unitPanelPane.getChildren().get(i - 2).getLayoutY());
+            unitPanelPane.getChildren().get(i).setCursor(Cursor.HAND);
         }
-        unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
-        unitPanelNameText.setText(unit.getName());
-        unitPanelMPText.setText("MP : " + unit.getMovementPoint());
-        unitPanelCSText.setText("CS : ");
+        setUnitPanelTexts(unit);
     }
 
     public void initCommonActions(Unit unit) {
@@ -202,6 +186,68 @@ public class GamePageController {
             UnitController.wakeUp(unit);
         });
         unitPanelPane.getChildren().get(10).setCursor(Cursor.HAND);
+    }
+
+    public void initCombatUnitActions(CombatUnit unit) {
+        Circle alert = new Circle(25, new ImagePattern(UnitController.getActionImage("alert")));
+        alert.setOnMouseClicked(mouseEvent -> UnitController.alertUnit(unit));
+        Circle fortify = new Circle(25, new ImagePattern(UnitController.getActionImage("fortify")));
+        fortify.setOnMouseClicked(mouseEvent -> UnitController.fortifyUnit(unit));
+        Circle fortifyTillHealed = new Circle(25, new ImagePattern(UnitController.getActionImage("fortifyTillHealed")));
+        fortifyTillHealed.setOnMouseClicked(mouseEvent -> UnitController.fortifyUnitUntilHealed(unit));
+        Circle garrison = new Circle(25, new ImagePattern(UnitController.getActionImage("garrison")));
+        garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
+        if (unit instanceof Ranged) {
+            Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
+            setupRanged.setOnMouseClicked(mouseEvent -> UnitController.setupRangedUnit(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
+            unitPanelPane.getChildren().add(setupRanged);
+        }
+        unitPanelPane.getChildren().add(alert);
+        unitPanelPane.getChildren().add(fortify);
+        unitPanelPane.getChildren().add(fortifyTillHealed);
+        unitPanelPane.getChildren().add(garrison);
+    }
+
+    public void initNonCombatUnitActions(NonCombatUnit unit) {
+        if (unit.getUnitType() == UnitTypes.WORKER) {
+            Circle working = new Circle(25, new ImagePattern(UnitController.getActionImage("working")));
+            working.setOnMouseClicked(mouseEvent -> {
+
+            });
+            Circle buildRoad = new Circle(25, new ImagePattern(UnitController.getActionImage("buildRoad")));
+            working.setOnMouseClicked(mouseEvent -> {
+
+            });
+            Circle repair = new Circle(25, new ImagePattern(UnitController.getActionImage("repair")));
+            working.setOnMouseClicked(mouseEvent -> {
+                UnitController.repairTile((Worker) unit);
+            });
+            Circle remove = new Circle(25, new ImagePattern(UnitController.getActionImage("remove")));
+            working.setOnMouseClicked(mouseEvent -> {
+
+            });
+            unitPanelPane.getChildren().add(working);
+            unitPanelPane.getChildren().add(buildRoad);
+            unitPanelPane.getChildren().add(repair);
+            unitPanelPane.getChildren().add(remove);
+        } else {
+            Circle foundCity = new Circle(25, new ImagePattern(UnitController.getActionImage("foundCity")));
+            foundCity.setOnMouseClicked(mouseEvent -> {
+                UnitController.foundCity((Settler) unit);
+                System.out.println("yoo");
+            });
+            unitPanelPane.getChildren().add(foundCity);
+        }
+    }
+
+    public void setUnitPanelTexts(Unit unit) {
+        String type = (unit instanceof CombatUnit ? "combatUnit" : "nonCombatUnit");
+        ((Text) MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).getHex()
+                .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
+        unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
+        unitPanelNameText.setText(unit.getName());
+        unitPanelMPText.setText("MP : " + unit.getMovementPoint());
+        unitPanelCSText.setText("CS : ");
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {

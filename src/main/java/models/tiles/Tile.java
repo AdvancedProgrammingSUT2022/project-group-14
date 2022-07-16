@@ -35,7 +35,7 @@ public class Tile {
     private Resource resource;
 
     private Improvements improvement;
-    private int improvementTurnsLeftToBuild; // 9999 -> has not been started to build | 0 -> has been build
+    private int improvementTurnsLeftToBuild; // 9999 -> has not been started yet | 0 -> has been build
 
     private final boolean[] isRiver;
     private int roadState; // 9999 -> has not been started to build | 0 -> has been build
@@ -69,7 +69,6 @@ public class Tile {
         this.ruin = ruin;
     }
 
-    //randomTile generation
     public static TileFeatureTypes generateRandomFeature(TileBaseTypes type) {
         int featuresNumber = type.getPossibleFeatures().size();
         TileFeatureTypes[] possibleFeatures = type.getPossibleFeatures().toArray(new TileFeatureTypes[featuresNumber]);
@@ -85,7 +84,7 @@ public class Tile {
         TileBaseTypes baseType = TileBaseTypes.generateRandom();
         TileFeatureTypes featureType = generateRandomFeature(baseType);
         Ruin ruin = Ruin.generateRandomRuin(new Coordination(x, y));
-        if (x == 0 || x == MapController.getHeight()-1 || (y == 0 && x % 2 == 0) || (y == MapController.getWidth()-1 && x % 2 == 1)){
+        if (x == 0 || x == MapController.getHeight() - 1 || (y == 0 && x % 2 == 0) || (y == MapController.getWidth() - 1 && x % 2 == 1)) {
             baseType = TileBaseTypes.OCEAN;
             featureType = TileFeatureTypes.NULL;
         }
@@ -127,37 +126,22 @@ public class Tile {
         }
     }
 
-    public boolean hasRiver(){
-        for (int i = 0; i < this.isRiver.length; i++) {
-            if (this.isRiver[i]) return true;
-        }
+    public boolean hasRiver() {
+        for (boolean b : this.isRiver)
+            if (b) return true;
         return false;
     }
 
-
-    // setters and getters
     public int getX() {
         return this.coordination.getX();
-    }
-
-    public void setX(int x) {
-        this.coordination.setX(x);
     }
 
     public int getY() {
         return this.coordination.getY();
     }
 
-    public void setY(int y) {
-        this.coordination.setY(y);
-    }
-
     public TileBaseTypes getType() {
         return this.type;
-    }
-
-    public void setType(TileBaseTypes type) {
-        this.type = type;
     }
 
     public double getFood() {
@@ -188,16 +172,8 @@ public class Tile {
         return this.combatImpact;
     }
 
-    public void setMilitaryImpact(int militaryImpact) {
-        this.combatImpact = militaryImpact;
-    }
-
     public int getMovingPoint() {
         return this.movingPoint;
-    }
-
-    public void setMovingPoint(int movingPoint) {
-        this.movingPoint = movingPoint;
     }
 
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
@@ -230,6 +206,7 @@ public class Tile {
             this.combatImpact -= this.feature.getCombatImpact();
         }
         this.feature = feature;
+        hex.updateHex();
     }
 
     public Resource getResource() {
@@ -238,6 +215,7 @@ public class Tile {
 
     public void setResource(Resource resource) {
         this.resource = resource;
+        hex.updateHex();
     }
 
     public boolean[] getIsRiver() {
@@ -250,19 +228,22 @@ public class Tile {
 
     public void setRoadState(int roadState) {
         this.roadState = roadState;
-        if (this.roadState == 0 && this.movingPoint != 9999)
+        if (this.roadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 2 / 3;
+            hex.updateHex();
+        }
     }
 
     public int getRailRoadState() {
         return railRoadState;
-
     }
 
     public void setRailRoadState(int railRoadState) {
         this.railRoadState = railRoadState;
-        if (this.railRoadState == 0 && this.movingPoint != 9999)
+        if (this.railRoadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 1 / 2;
+            hex.updateHex();
+        }
     }
 
     public Improvements getImprovement() {
@@ -271,6 +252,7 @@ public class Tile {
 
     public void setImprovement(Improvements improvement) {
         this.improvement = improvement;
+        hex.updateHex();
     }
 
     public int getImprovementTurnsLeftToBuild() {
@@ -306,6 +288,7 @@ public class Tile {
 
     public void setCombatUnit(CombatUnit combatUnit) {
         this.combatUnit = combatUnit;
+        hex.updateHex();
     }
 
     public NonCombatUnit getNonCombatUnit() {
@@ -314,6 +297,7 @@ public class Tile {
 
     public void setNonCombatUnit(NonCombatUnit nonCombatUnit) {
         this.nonCombatUnit = nonCombatUnit;
+        hex.updateHex();
     }
 
     public City getCity() {
@@ -322,6 +306,8 @@ public class Tile {
 
     public void setCity(City city) {
         this.city = city;
+        hex.updateHex();
+        System.out.println("hello");
     }
 
     public String getCivilizationName() {
@@ -330,6 +316,7 @@ public class Tile {
 
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
+        hex.updateHex();
     }
 
     public Hex getHex() {

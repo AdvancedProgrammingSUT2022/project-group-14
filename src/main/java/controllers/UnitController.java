@@ -5,16 +5,10 @@ import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import models.*;
 import models.tiles.Tile;
@@ -374,7 +368,11 @@ public class UnitController {
         imageView.setFitHeight(50);
         imageView.setLayoutX(4 - 2 * imageView.getImage().getWidth() / 3);
         imageView.setLayoutY(12);
+        Text text = new Text(unit.getUnitState().getName());
+        text.setLayoutX(5 - 2 * imageView.getImage().getWidth() / 3);
+        text.setLayoutY(2);
         group.getChildren().add(imageView);
+        group.getChildren().add(text);
         group.setCursor(Cursor.HAND);
         return group;
     }

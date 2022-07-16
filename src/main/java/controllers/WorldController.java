@@ -42,7 +42,6 @@ public class WorldController {
 
     public static void nextTurn() {
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
-        //TODO buildings
         TileController.updateBuildingProgress(currentCivilization);
         CivilizationController.updateScience(currentCivilization);
         CivilizationController.updateTechnology(currentCivilization);
