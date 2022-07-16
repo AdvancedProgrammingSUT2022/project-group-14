@@ -93,12 +93,10 @@ public class MapController {
         }
 
         for (Unit unit : allUnitsInGame) {
-            if (unit instanceof CombatUnit) {
+            if (unit instanceof CombatUnit)
                 tilesMap[unit.getCurrentX()][unit.getCurrentY()].setCombatUnit((CombatUnit) unit);
-            }
-            if (unit instanceof NonCombatUnit) {
+            if (unit instanceof NonCombatUnit)
                 tilesMap[unit.getCurrentX()][unit.getCurrentY()].setNonCombatUnit((NonCombatUnit) unit);
-            }
         }
         for (Tile[] tiles : tilesMap) {
             for (Tile tile : tiles) {
@@ -108,6 +106,7 @@ public class MapController {
                 if (tile.getNonCombatUnit() != null && (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setNonCombatUnit(null);
                 }
+                tile.getHex().updateHex();
             }
         }
     }

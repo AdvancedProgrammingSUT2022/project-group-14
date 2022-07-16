@@ -20,6 +20,8 @@ import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
+import java.util.Map;
+
 public class Hex {
     private final Polygon polygon;
     private final Group group;
@@ -83,7 +85,8 @@ public class Hex {
         });
     }
 
-    public void updateHexOfGivenTile(Tile tile) {
+    public void updateHex() {
+        Tile tile = MapController.getTileByCoordinates(this.coordination);
         if (tile.getFeature() != TileFeatureTypes.NULL) {
             this.polygon.setFill(new ImagePattern(tile.getFeature().getImage()));
         } else {
@@ -104,16 +107,16 @@ public class Hex {
 
     private void addUnitToGroup(Unit unit) {
         Group unitGroup = UnitController.getUnitGroup(unit);
-        System.out.println(unitGroup.getLayoutX() + " * " + unitGroup.getLayoutY());
-        setUnitGroupEventHandlers(unitGroup, unit);
         unitGroup.setTranslateY(this.getCenterY() + 50);
         unitGroup.setTranslateX(this.getCenterX() + 82 + 20 * (unit instanceof NonCombatUnit ? 1 : -1));
+        setUnitGroupEventHandlers(unitGroup, unit);
         this.group.getChildren().add(unitGroup);
     }
 
     public void setUnitGroupEventHandlers(Group group, Unit unit) {
         group.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY
+                    && unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
                 if (unit instanceof CombatUnit) {
                     if (WorldController.getSelectedCombatUnit() != null && WorldController.getSelectedCombatUnit().equals(unit)) {
                         WorldController.setSelectedCombatUnit(null);
