@@ -1,6 +1,7 @@
 package enums;
 
 import application.App;
+import enums.tiles.TileBaseTypes;
 import javafx.scene.image.Image;
 
 import java.util.*;
@@ -87,5 +88,10 @@ public enum Technologies {
         for (Technologies technology : Technologies.values())
             allTechs.put(technology, technology.getCost());
         return allTechs;
+    }
+
+    public static Technologies generateRandom() {
+        Random rand = new Random();
+        return Technologies.values()[rand.nextInt(Technologies.values().length)];
     }
 }
