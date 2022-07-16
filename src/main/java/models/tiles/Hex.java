@@ -5,8 +5,10 @@ import controllers.*;
 import enums.tiles.TileFeatureTypes;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
+import javafx.scene.effect.Effect;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -34,15 +36,15 @@ public class Hex {
     public Hex(Tile tile) {
         this.group = new Group();
         this.coordination = new Coordination(tile.getX(), tile.getY());
-        this.verticalSpacing = tile.getY() * 70 + 5;
-        this.horizontalSpacing = 5 * Math.sqrt(3) * tile.getX() * 7 + 5;
-        this.width = 140;
-        this.height = 70 * Math.sqrt(3);
+        this.verticalSpacing = tile.getY() * 100 + 5;
+        this.horizontalSpacing = 5 * Math.sqrt(3) * tile.getX() * 10 + 5;
+        this.width = 200;
+        this.height = 100 * Math.sqrt(3);
         this.polygon = new Polygon(setX(5), setY(0), setX(15), setY(0), setX(20), setY(5 * Math.sqrt(3)),
                 setX(15), setY(10 * Math.sqrt(3)), setX(5), setY(10 * Math.sqrt(3)), setX(0), setY(5 * Math.sqrt(3)));
         this.coordinationText = new Text(tile.getX() + "," + tile.getY());
-        this.coordinationText.setLayoutX(this.getCenterX() - this.coordinationText.getBoundsInLocal().getWidth() / 2);
-        this.coordinationText.setLayoutY(this.getCenterY());
+        this.coordinationText.setLayoutX(this.getCenterX() - 7 * this.coordinationText.getBoundsInLocal().getWidth() / 10);
+        this.coordinationText.setLayoutY(this.getCenterY() - 10);
         setCityEventHandlers();
         this.group.setEffect(this.colorAdjust);
         setGroupEventHandlers();
@@ -52,10 +54,12 @@ public class Hex {
         this.group.setCursor(Cursor.HAND);
         this.group.setOnMouseEntered(mouseEvent -> {
             Hex.this.group.toFront();
-            Hex.this.colorAdjust.setInput(new DropShadow(25, Color.BLACK));
+            if (Hex.this.colorAdjust.getInput() == null)
+                Hex.this.colorAdjust.setInput(new DropShadow(25, Color.BLACK));
         });
         this.group.setOnMouseExited(mouseEvent -> {
-            Hex.this.colorAdjust.setInput(null);
+            if (!(Hex.this.colorAdjust.getInput() instanceof Bloom))
+                Hex.this.colorAdjust.setInput(null);
             popup.getContent().clear();
             popup.hide();
         });
@@ -64,8 +68,12 @@ public class Hex {
                 if (WorldController.getSelectedTile() != null
                         && WorldController.getSelectedTile().equals(MapController.getTileByCoordinates(Hex.this.coordination))) {
                     WorldController.setSelectedTile(null);
+                    Hex.this.colorAdjust.setInput(null);
                 } else {
+                    if (WorldController.getSelectedTile() != null)
+                        WorldController.getSelectedTile().getHex().setColorAdjust(null);
                     WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
+                    Hex.this.colorAdjust.setInput(new Bloom());
                 }
                 popup.getContent().add(TileController.getInfoPopup(coordination));
                 popup.setX(mouseEvent.getSceneX() + 30);
@@ -98,7 +106,7 @@ public class Hex {
         Group unitGroup = UnitController.getUnitGroup(unit);
         System.out.println(unitGroup.getLayoutX() + " * " + unitGroup.getLayoutY());
         setUnitGroupEventHandlers(unitGroup, unit);
-        unitGroup.setTranslateY(this.getCenterY());
+        unitGroup.setTranslateY(this.getCenterY() + 50);
         unitGroup.setTranslateX(this.getCenterX() + 82 + 20 * (unit instanceof NonCombatUnit ? 1 : -1));
         this.group.getChildren().add(unitGroup);
     }
@@ -127,7 +135,7 @@ public class Hex {
         this.cityImage.setFitWidth(55);
         this.cityImage.setFitHeight(55);
         this.cityImage.setLayoutX(this.getCenterX() - cityImage.getFitWidth() / 2);
-        this.cityImage.setLayoutY(this.getCenterY() - 40);
+        this.cityImage.setLayoutY(this.getCenterY());
         this.cityImage.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 WorldController.setSelectedCity(MapController.getTileByCoordinates(Hex.this.coordination).getCity());
@@ -136,11 +144,11 @@ public class Hex {
     }
 
     private double setX(double x) {
-        return x * 7 + width * this.coordination.getY() + verticalSpacing + (this.coordination.getX() % 2 == 0 ? 0 : 105);
+        return x * 10 + width * this.coordination.getY() + verticalSpacing + (this.coordination.getX() % 2 == 0 ? 0 : 150);
     }
 
     private double setY(double y) {
-        return y * 7 + height * this.coordination.getX() - horizontalSpacing;
+        return y * 10 + height * this.coordination.getX() - horizontalSpacing;
     }
 
     public Polygon getPolygon() {
@@ -160,7 +168,7 @@ public class Hex {
     }
 
     public double getCenterX() {
-        return 70 + this.setX(0);
+        return 100 + this.setX(0);
     }
 
     public double getCenterY() {
@@ -181,6 +189,10 @@ public class Hex {
 
     public double getHorizontalSpacing() {
         return this.horizontalSpacing;
+    }
+
+    public void setColorAdjust(Effect effect) {
+        this.colorAdjust.setInput(effect);
     }
 
 }

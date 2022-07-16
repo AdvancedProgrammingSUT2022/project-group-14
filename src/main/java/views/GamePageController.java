@@ -32,7 +32,6 @@ import models.units.Unit;
 
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.RandomAccess;
 
 public class GamePageController {
     @FXML
@@ -66,7 +65,7 @@ public class GamePageController {
     public void initialize() {
         initNavBar();
         initHexes();
-        initPanelsTimeLine();
+        initTimeLine();
     }
 
     private void initNavBar() {
@@ -92,48 +91,51 @@ public class GamePageController {
         }
     }
 
-    public void initPanelsTimeLine() {
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+    public void initTimeLine() {
         unitPanelPane.setVisible(false);
         techCircle.setVisible(false);
         techText.setText("");
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
-            if (WorldController.getSelectedCombatUnit() != null && !unitPanelPane.isVisible()) {
-                unitPanelPane.setVisible(true);
-                setUnitPanelInfo(WorldController.getSelectedCombatUnit());
-            } else if (WorldController.getSelectedNonCombatUnit() != null && !unitPanelPane.isVisible()) {
-                unitPanelPane.setVisible(true);
-                setUnitPanelInfo(WorldController.getSelectedNonCombatUnit());
-            } else if (WorldController.unitIsNotSelected()) {
-                unitPanelPane.setVisible(false);
-            }
-
-            if (WorldController.getSelectedCity() != null) {
-                //TODO show city banner
-            } else {
-                //TODO hide city banner
-            }
-
-            if (currentCivilization.getCurrentTechnology() != null) {
-                techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
-                techText.setText(currentCivilization.getCurrentTechnology().getName());
-            } else {
-                techCircle.setVisible(false);
-                techText.setText("");
-            }
+            checkUnitPanelUpdate();
+            checkCityPanelUpdate();
+            checkTechnologyPanelUpdate();
         }));
         timeline.setCycleCount(-1);
         timeline.play();
     }
 
-    public void setUnitPanelInfo(Unit unit) {
-        initUnitActions(unit);
-        unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
-        unitPanelText.setText(unit.getName());
+    public void checkUnitPanelUpdate() {
+        if (WorldController.getSelectedCombatUnit() != null && !unitPanelPane.isVisible()) {
+            unitPanelPane.setVisible(true);
+            setUnitPanelInfo(WorldController.getSelectedCombatUnit());
+        } else if (WorldController.getSelectedNonCombatUnit() != null && !unitPanelPane.isVisible()) {
+            unitPanelPane.setVisible(true);
+            setUnitPanelInfo(WorldController.getSelectedNonCombatUnit());
+        } else if (WorldController.unitIsNotSelected()) {
+            unitPanelPane.setVisible(false);
+        }
     }
 
-    public void initUnitActions(Unit unit) {
-        System.out.println(unitPanelPane.getChildren().size());
+    public void checkCityPanelUpdate() {
+        if (WorldController.getSelectedCity() != null) {
+            //TODO show city banner
+        } else {
+            //TODO hide city banner
+        }
+    }
+
+    public void checkTechnologyPanelUpdate(){
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        if (currentCivilization.getCurrentTechnology() != null) {
+            techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
+            techText.setText(currentCivilization.getCurrentTechnology().getName());
+        } else {
+            techCircle.setVisible(false);
+            techText.setText("");
+        }
+    }
+
+    public void setUnitPanelInfo(Unit unit) {
         if (unitPanelPane.getChildren().size() > 9)
             unitPanelPane.getChildren().subList(9, unitPanelPane.getChildren().size()).clear();
         initCommonActions(unit);
@@ -146,7 +148,7 @@ public class GamePageController {
                 unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged"))));
             }
         } else if (unit.getUnitType() == UnitTypes.WORKER) {
-            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("buildImprovement"))));
+            unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("working"))));
             unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("buildRoad"))));
             unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("repair"))));
             unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("remove"))));
@@ -157,16 +159,15 @@ public class GamePageController {
             unitPanelPane.getChildren().get(i).setLayoutX(unitPanelPane.getChildren().get(i - 2).getLayoutX() + 62);
             unitPanelPane.getChildren().get(i).setLayoutY(unitPanelPane.getChildren().get(i - 2).getLayoutY());
         }
+        unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
+        unitPanelText.setText(unit.getName());
     }
 
     public void initCommonActions(Unit unit) {
         ((Circle) unitPanelPane.getChildren().get(5)).setFill(new ImagePattern(UnitController.getActionImage("move")));
         unitPanelPane.getChildren().get(5).setCursor(Cursor.HAND);
-        unitPanelPane.getChildren().get(5).setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
+        unitPanelPane.getChildren().get(5).setOnMouseClicked(mouseEvent -> {
 
-            }
         });
         ((Circle) unitPanelPane.getChildren().get(6)).setFill(new ImagePattern(UnitController.getActionImage("delete")));
         unitPanelPane.getChildren().get(6).setOnMouseClicked(mouseEvent -> UnitController.delete(unit));
