@@ -42,7 +42,6 @@ public class WorldController {
 
     public static void nextTurn() {
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
-        //TODO buildings
         TileController.updateBuildingProgress(currentCivilization);
         CivilizationController.updateScience(currentCivilization);
         CivilizationController.updateTechnology(currentCivilization);
@@ -150,5 +149,9 @@ public class WorldController {
 
     public static boolean unitIsNotSelected() {
         return selectedCombatUnit == null && selectedNonCombatUnit == null;
+    }
+
+    public static void addNotification(String notification, String civilizationName) {
+        world.getCivilizationByName(civilizationName).addNotification(notification);
     }
 }

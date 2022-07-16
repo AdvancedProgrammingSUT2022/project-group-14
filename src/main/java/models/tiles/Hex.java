@@ -20,7 +20,8 @@ import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Hex {
     private final Polygon polygon;
@@ -31,6 +32,7 @@ public class Hex {
     private final double verticalSpacing;
     private final double horizontalSpacing;
     private final ImageView cityImage = new ImageView(CityController.getImage());
+    private HashMap<String, Group> unitGroups = new HashMap<>();
     private final Text coordinationText;
     private final ColorAdjust colorAdjust = new ColorAdjust();
     private final Popup popup = new Popup();
@@ -94,6 +96,7 @@ public class Hex {
         }
 
         this.group.getChildren().clear();
+        this.unitGroups.clear();
         this.group.getChildren().add(this.polygon);
         if (tile.getCity() != null)
             this.group.getChildren().add(this.cityImage);
@@ -111,6 +114,11 @@ public class Hex {
         unitGroup.setTranslateX(this.getCenterX() + 82 + 20 * (unit instanceof NonCombatUnit ? 1 : -1));
         setUnitGroupEventHandlers(unitGroup, unit);
         this.group.getChildren().add(unitGroup);
+        if (unit instanceof CombatUnit) {
+            this.unitGroups.put("combatUnit", unitGroup);
+        } else {
+            this.unitGroups.put("nonCombatUnit", unitGroup);
+        }
     }
 
     public void setUnitGroupEventHandlers(Group group, Unit unit) {
@@ -154,20 +162,12 @@ public class Hex {
         return y * 10 + height * this.coordination.getX() - horizontalSpacing;
     }
 
-    public Polygon getPolygon() {
-        return this.polygon;
-    }
-
     public Group getGroup() {
         return this.group;
     }
 
-    public int getXOfTile() {
-        return this.coordination.getX();
-    }
-
-    public int getYOfTile() {
-        return this.coordination.getY();
+    public HashMap<String, Group> getUnitGroups() {
+        return this.unitGroups;
     }
 
     public double getCenterX() {
@@ -176,22 +176,6 @@ public class Hex {
 
     public double getCenterY() {
         return 25 * Math.sqrt(3) + this.setY(0);
-    }
-
-    public double getWidth() {
-        return this.width;
-    }
-
-    public double getHeight() {
-        return this.height;
-    }
-
-    public double getVerticalSpacing() {
-        return this.verticalSpacing;
-    }
-
-    public double getHorizontalSpacing() {
-        return this.horizontalSpacing;
     }
 
     public void setColorAdjust(Effect effect) {
