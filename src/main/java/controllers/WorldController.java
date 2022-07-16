@@ -150,4 +150,8 @@ public class WorldController {
     public static boolean unitIsNotSelected() {
         return selectedCombatUnit == null && selectedNonCombatUnit == null;
     }
+
+    public static void addNotification(String notification, String civilizationName) {
+        world.getCivilizationByName(civilizationName).addNotification(notification);
+    }
 }

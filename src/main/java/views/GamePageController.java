@@ -6,6 +6,7 @@ import controllers.MoveController;
 import controllers.UnitController;
 import controllers.WorldController;
 import enums.units.CombatType;
+import enums.units.UnitStates;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -177,24 +178,20 @@ public class GamePageController {
         unitPanelPane.getChildren().get(8).setOnMouseClicked(mouseEvent -> UnitController.delete(unit));
         unitPanelPane.getChildren().get(8).setCursor(Cursor.HAND);
         ((Circle) unitPanelPane.getChildren().get(9)).setFill(new ImagePattern(UnitController.getActionImage("sleep")));
-        unitPanelPane.getChildren().get(9).setOnMouseClicked(mouseEvent -> {
-            UnitController.sleepUnit(unit);
-        });
+        unitPanelPane.getChildren().get(9).setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.SLEEP));
         unitPanelPane.getChildren().get(9).setCursor(Cursor.HAND);
         ((Circle) unitPanelPane.getChildren().get(10)).setFill(new ImagePattern(UnitController.getActionImage("wake")));
-        unitPanelPane.getChildren().get(10).setOnMouseClicked(mouseEvent -> {
-            UnitController.wakeUp(unit);
-        });
+        unitPanelPane.getChildren().get(10).setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.WAKE));
         unitPanelPane.getChildren().get(10).setCursor(Cursor.HAND);
     }
 
     public void initCombatUnitActions(CombatUnit unit) {
         Circle alert = new Circle(25, new ImagePattern(UnitController.getActionImage("alert")));
-        alert.setOnMouseClicked(mouseEvent -> UnitController.alertUnit(unit));
+        alert.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.ALERT));
         Circle fortify = new Circle(25, new ImagePattern(UnitController.getActionImage("fortify")));
-        fortify.setOnMouseClicked(mouseEvent -> UnitController.fortifyUnit(unit));
+        fortify.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY));
         Circle fortifyTillHealed = new Circle(25, new ImagePattern(UnitController.getActionImage("fortifyTillHealed")));
-        fortifyTillHealed.setOnMouseClicked(mouseEvent -> UnitController.fortifyUnitUntilHealed(unit));
+        fortifyTillHealed.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY_TILL_HEALED));
         Circle garrison = new Circle(25, new ImagePattern(UnitController.getActionImage("garrison")));
         garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
         if (unit instanceof Ranged) {
