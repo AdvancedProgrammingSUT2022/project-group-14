@@ -42,7 +42,7 @@ public class Hex {
         this.height = 100 * Math.sqrt(3);
         this.polygon = new Polygon(setX(5), setY(0), setX(15), setY(0), setX(20), setY(5 * Math.sqrt(3)),
                 setX(15), setY(10 * Math.sqrt(3)), setX(5), setY(10 * Math.sqrt(3)), setX(0), setY(5 * Math.sqrt(3)));
-        this.coordinationText = new Text(tile.getX() + "," + tile.getY());
+        this.coordinationText = new Text(String.valueOf(tile.getX() + 1) + "," + String.valueOf(tile.getY() + 1));
         this.coordinationText.setLayoutX(this.getCenterX() - 7 * this.coordinationText.getBoundsInLocal().getWidth() / 10);
         this.coordinationText.setLayoutY(this.getCenterY() - 10);
         setCityEventHandlers();

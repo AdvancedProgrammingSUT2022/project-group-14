@@ -47,24 +47,26 @@ public class CityController {
         }
         for (Building building : city.getBuildings()) {
             addedFood += building.getBuildingType().getFood();
-            currentCivilization.addHappiness(building.getBuildingType().getHappiness());
+            currentCivilization.setHappiness(currentCivilization.getHappiness() + building.getBuildingType().getHappiness());
             addedGold += addedGold * building.getBuildingType().getPercentOfGold() / 100;
             addedProduction += addedProduction * building.getBuildingType().getPercentOfProduction() / 100;
 
             if (building.getName().equals("library")) {
-                currentCivilization.addScience(city.getCitizens().size() / 2);
+                currentCivilization.setScience(currentCivilization.getScience() + city.getCitizens().size() / 2);
             }
             if (building.getName().equals("university")) {
                 for (Tile tile : city.getTerritory()) {
                     if (tile.getFeature().equals(TileFeatureTypes.JUNGLE)) {
-                        currentCivilization.addScience(2);
+                        currentCivilization.setScience(currentCivilization.getScience() + 2);
                     }
                 }
             }
         }
 
-        if (city.cityHasBuilding("university")) currentCivilization.addScience(50);
-        if (city.cityHasBuilding("public_school")) currentCivilization.addScience(50);
+        if (city.cityHasBuilding("university"))
+            currentCivilization.setScience(currentCivilization.getScience() + 50);
+        if (city.cityHasBuilding("public_school"))
+            currentCivilization.setScience(currentCivilization.getScience() + 50);
 
 
         double cityFood = city.getFood() + addedFood;
@@ -110,9 +112,9 @@ public class CityController {
             city.setFood(0);
             city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
             city.setGrowthFoodLimit(city.getGrowthFoodLimit() * 2);
-            if (!city.cityHasBuilding("courthouse")){
+            if (!city.cityHasBuilding("courthouse")) {
                 Civilization civilization = WorldController.getWorld().getCivilizationByName(
-                    MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName());
+                        MapController.getTileByCoordinates(city.getCenterOfCity().getX(), city.getCenterOfCity().getY()).getCivilizationName());
                 civilization.setHappiness(civilization.getHappiness() - 0.5);
             }
         }
@@ -240,7 +242,7 @@ public class CityController {
         if (wantedCity.cityHasBuilding("stable") && unit.getCombatType().equals(CombatType.MOUNTED))
             wantedCity.setCurrentProductionRemainingCost((unitEnum.getCost() * 3) / 4);
 
-        if (wantedCity.cityHasBuilding("forge")){
+        if (wantedCity.cityHasBuilding("forge")) {
             wantedCity.setCurrentProductionRemainingCost((unitEnum.getCost() * 15) / 100);
         }
         if (wantedCity.cityHasBuilding("forge")) {
@@ -276,26 +278,26 @@ public class CityController {
         return "couldn't build building";
     }
 
-    public static boolean cityCanProduceBuilding(City city, Building building){
+    public static boolean cityCanProduceBuilding(City city, Building building) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         if (building.getBuildingType().equals(BuildingTypes.WINDMILL) && city.getCenterOfCity().getType().equals(TileBaseTypes.HILL)) {
             return false;
         }
-        if (building.getBuildingType().isRequiresRiver() && !city.getCenterOfCity().hasRiver()){
+        if (building.getBuildingType().isRequiresRiver() && !city.getCenterOfCity().hasRiver()) {
             return false;
         }
         if (building.getBuildingType().getRequiredTechnology() != null &&
-                currentCivilization.getTechnologies().get(building.getBuildingType().getRequiredTechnology()) > 0){
+                currentCivilization.getTechnologies().get(building.getBuildingType().getRequiredTechnology()) > 0) {
             return false;
         }
         if (building.getBuildingType().getRequiredBuildings() != null &&
-            !city.cityHasRequiredBuildings(building.getBuildingType().getRequiredBuildings())){
+                !city.cityHasRequiredBuildings(building.getBuildingType().getRequiredBuildings())) {
             return false;
         }
-        if (building.getBuildingType().getRequiredResource() != null){
+        if (building.getBuildingType().getRequiredResource() != null) {
             for (int i = 0; i < city.getTerritory().size(); i++) {
-                if (building.getBuildingType().getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())){
-                    if (currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) > 0){
+                if (building.getBuildingType().getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())) {
+                    if (currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) > 0) {
                         currentCivilization.getStrategicResources().put(building.getBuildingType().getRequiredResource().getName(), currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) - 1);
                         return true;
                     }

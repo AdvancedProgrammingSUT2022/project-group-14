@@ -10,7 +10,6 @@ import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
 import models.City;
 import models.Civilization;
-import models.Ruin;
 import models.resources.Resource;
 import models.resources.StrategicResource;
 import models.units.CombatUnit;
