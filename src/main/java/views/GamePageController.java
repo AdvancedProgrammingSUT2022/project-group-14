@@ -2,6 +2,7 @@ package views;
 
 import application.App;
 import controllers.MapController;
+import controllers.MoveController;
 import controllers.UnitController;
 import controllers.WorldController;
 import enums.units.UnitTypes;
@@ -10,6 +11,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -106,6 +108,12 @@ public class GamePageController {
                 unitPanelPane.setVisible(false);
             }
 
+            if (WorldController.getSelectedCity() != null) {
+                //TODO show city banner
+            } else {
+                //TODO hide city banner
+            }
+
             if (currentCivilization.getCurrentTechnology() != null) {
                 techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
                 techText.setText(currentCivilization.getCurrentTechnology().getName());
@@ -124,14 +132,11 @@ public class GamePageController {
         unitPanelText.setText(unit.getName());
     }
 
-    private void initUnitActions(Unit unit) {
+    public void initUnitActions(Unit unit) {
         System.out.println(unitPanelPane.getChildren().size());
         if (unitPanelPane.getChildren().size() > 9)
             unitPanelPane.getChildren().subList(9, unitPanelPane.getChildren().size()).clear();
-        ((Circle) unitPanelPane.getChildren().get(5)).setFill(new ImagePattern(UnitController.getActionImage("move")));
-        ((Circle) unitPanelPane.getChildren().get(6)).setFill(new ImagePattern(UnitController.getActionImage("delete")));
-        ((Circle) unitPanelPane.getChildren().get(7)).setFill(new ImagePattern(UnitController.getActionImage("sleep")));
-        ((Circle) unitPanelPane.getChildren().get(8)).setFill(new ImagePattern(UnitController.getActionImage("wake")));
+        initCommonActions(unit);
         if (unit instanceof CombatUnit) {
             unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("alert"))));
             unitPanelPane.getChildren().add(new Circle(25, new ImagePattern(UnitController.getActionImage("fortify"))));
@@ -152,6 +157,30 @@ public class GamePageController {
             unitPanelPane.getChildren().get(i).setLayoutX(unitPanelPane.getChildren().get(i - 2).getLayoutX() + 62);
             unitPanelPane.getChildren().get(i).setLayoutY(unitPanelPane.getChildren().get(i - 2).getLayoutY());
         }
+    }
+
+    public void initCommonActions(Unit unit) {
+        ((Circle) unitPanelPane.getChildren().get(5)).setFill(new ImagePattern(UnitController.getActionImage("move")));
+        unitPanelPane.getChildren().get(5).setCursor(Cursor.HAND);
+        unitPanelPane.getChildren().get(5).setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+
+            }
+        });
+        ((Circle) unitPanelPane.getChildren().get(6)).setFill(new ImagePattern(UnitController.getActionImage("delete")));
+        unitPanelPane.getChildren().get(6).setOnMouseClicked(mouseEvent -> UnitController.delete(unit));
+        unitPanelPane.getChildren().get(6).setCursor(Cursor.HAND);
+        ((Circle) unitPanelPane.getChildren().get(7)).setFill(new ImagePattern(UnitController.getActionImage("sleep")));
+        unitPanelPane.getChildren().get(7).setOnMouseClicked(mouseEvent -> {
+            UnitController.sleepUnit(unit);
+        });
+        unitPanelPane.getChildren().get(7).setCursor(Cursor.HAND);
+        ((Circle) unitPanelPane.getChildren().get(8)).setFill(new ImagePattern(UnitController.getActionImage("wake")));
+        unitPanelPane.getChildren().get(7).setOnMouseClicked(mouseEvent -> {
+            UnitController.wakeUp(unit);
+        });
+        unitPanelPane.getChildren().get(8).setCursor(Cursor.HAND);
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {

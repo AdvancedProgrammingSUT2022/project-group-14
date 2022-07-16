@@ -369,9 +369,9 @@ public class UnitController {
     public static Group getUnitGroup(Unit unit) {
         Group group = new Group();
         ImageView imageView = new ImageView(unit.getUnitType().getImage());
-        imageView.setFitWidth(60);
-        imageView.setFitHeight(60);
-        imageView.setLayoutX(9 - imageView.getImage().getWidth() / 2);
+        imageView.setFitWidth(30);
+        imageView.setFitHeight(50);
+        imageView.setLayoutX(4 - 2 * imageView.getImage().getWidth() / 3);
         imageView.setLayoutY(12);
         group.getChildren().add(imageView);
         group.setCursor(Cursor.HAND);
