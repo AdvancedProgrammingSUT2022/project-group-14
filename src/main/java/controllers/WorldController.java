@@ -1,6 +1,7 @@
 package controllers;
 
 import enums.Technologies;
+import enums.units.UnitStates;
 import models.City;
 import models.Civilization;
 import models.tiles.Tile;
@@ -49,7 +50,9 @@ public class WorldController {
         CivilizationController.updateCitiesGoods(currentCivilization);
         CivilizationController.payRequiredPriceForKeepingRoadsAndRailroads(currentCivilization);
         CivilizationController.payRequiredPriceForKeepingUnits(currentCivilization);
+        CivilizationController.payRequiredPriceForKeepingBuildings(currentCivilization);
         CivilizationController.updateCitiesProductions(currentCivilization);
+        CivilizationController.updateRuins(currentCivilization);
         for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
         }
@@ -76,7 +79,7 @@ public class WorldController {
     public static void addAllHeals() {
         Civilization currentCivilization = world.getCivilizationByName(world.getCurrentCivilizationName());
         for (Unit unit : currentCivilization.getAllUnits()) {
-            if (unit instanceof CombatUnit && ((CombatUnit) unit).isFortifiedTillHealed())
+            if (unit instanceof CombatUnit && unit.getUnitState() == UnitStates.FORTIFY_TILL_HEALED)
                 ((CombatUnit) unit).healUnit(5);
         }
     }
@@ -95,7 +98,7 @@ public class WorldController {
         } else {
             for (Unit unit : currentCivilization.getAllUnits()) {
                 int x = unit.getCurrentX() + 1, y = unit.getCurrentY() + 1;
-                if ((unit.getMovementPoint() > 0) && (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && !unit.isSleep())) {
+                if ((unit.getMovementPoint() > 0) && (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && unit.getUnitState() != UnitStates.SLEEP)) {
                     return unit.getName() + " in ( " + x + " , " + y + " ) coordinates needs to be moved";
                 }
             }

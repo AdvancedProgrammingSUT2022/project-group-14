@@ -25,49 +25,40 @@ public class Civilization {
 
     private final ArrayList<City> cities = new ArrayList<>();
     private final ArrayList<String> citiesNames = new ArrayList<>();
-    private final HashMap<String, Integer> strategicResources = new HashMap<>();
-    private final HashMap<String, Integer> luxuryResources = new HashMap<>();
+    private final HashMap<String, Integer> strategicResources;
+    private final HashMap<String, Integer> luxuryResources;
     private City firstCapital;
     private City currentCapital;
 
-    private final HashMap<Technologies, Integer> technologies = new HashMap<>();
+    private final HashMap<Technologies, Integer> technologies;
     private Technologies currentTechnology;
     private final ArrayList<Researches> researches = new ArrayList<>();
 
     private double gold, happiness, science;
 
-    ArrayList<String> notifications = new ArrayList<>();
+    private final ArrayList<String> notifications = new ArrayList<>();
 
     public Civilization(String name) {
-        Random random = new Random();
+        this.name = name;
         int randomX, randomY;
         do {
-            randomX = random.nextInt(2, MapController.width-2);
-            randomY = random.nextInt(2, MapController.height-2);
+            randomX = new Random().nextInt(2, MapController.width - 2);
+            randomY = new Random().nextInt(2, MapController.height - 2);
         } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
-        Melee melee = new Melee(UnitTypes.WARRIOR, randomX, randomY, name);
-        Settler settler = new Settler(UnitTypes.SETTLER, randomX, randomY, name);
-        addMeleeUnit(melee);
-        addSettler(settler);
-        this.name = name;
+        addMeleeUnit(new Melee(UnitTypes.WARRIOR, randomX, randomY, name));
+        addSettler(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
         this.happiness = 10;
-        citiesNames.add(name + "1"); citiesNames.add(name + "2"); citiesNames.add(name + "3");
+        citiesNames.add(name + "1");
+        citiesNames.add(name + "2");
+        citiesNames.add(name + "3");
 
-        for (Technologies technology : Technologies.values()) {
-            technologies.put(technology, technology.getCost());
-        }
-
-        for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values()) {
-            strategicResources.put(strategicResource.getName(), 0);
-        }
-
-        for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values()) {
-            luxuryResources.put(luxuryResource.getName(), 0);
-        }
+        technologies = Technologies.getAllTechnologies();
+        strategicResources = StrategicResourceTypes.getAllResources();
+        luxuryResources = LuxuryResourceTypes.getAllResources();
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public int[][] getVisionStatesOfMap() {
@@ -112,10 +103,10 @@ public class Civilization {
 
     public ArrayList<Unit> getAllUnits() {
         ArrayList<Unit> allUnits = new ArrayList<>();
-        allUnits.addAll(melees);
-        allUnits.addAll(ranges);
-        allUnits.addAll(workers);
-        allUnits.addAll(settlers);
+        allUnits.addAll(this.melees);
+        allUnits.addAll(this.ranges);
+        allUnits.addAll(this.workers);
+        allUnits.addAll(this.settlers);
         return allUnits;
     }
 
@@ -135,51 +126,40 @@ public class Civilization {
         return settlers;
     }
 
-    public double getFood() {
-        double food = 0;
-        for (City city : cities) {
-            food += city.getFood();
-        }
-        return food;
-    }
-
-    public double getProduction() {
-        double production = 0;
-        for (City city : cities) {
-            production += city.getProduction();
-        }
-        return production;
-    }
-
-    public double getGold() {
-        return gold;
-    }
     public ArrayList<City> getCities() {
-        return cities;
+        return this.cities;
+    }
+
+    public City getCurrentCapital() {
+        return currentCapital;
+    }
+
+    public City getFirstCapital() {
+        return firstCapital;
     }
 
     public void addCity(City city) {
-        if(cities.size() == 0 && firstCapital == null) {
-            firstCapital = city;
-            currentCapital = city;
+        if (this.cities.size() == 0 && this.firstCapital == null) {
+            this.firstCapital = city;
+            this.currentCapital = city;
         }
-        cities.add(city);
-        happiness -= 2;
+        this.cities.add(city);
+        this.happiness -= 2;
     }
 
     public void removeCity(City city) {
-        if (cities.size() == 1) {
+        if (this.cities.size() == 1) {
             WorldController.getWorld().removeCivilization(this);
         } else {
-            cities.remove(city);
-            currentCapital = cities.get(0);
-            happiness += 2;
+            this.cities.remove(city);
+            this.currentCapital = this.cities.get(0);
+            this.happiness += 2;
         }
     }
 
     public String getCityName() {
-        String name = citiesNames.get(0);
-        citiesNames.remove(0);
+        String name = this.citiesNames.get(0);
+        this.citiesNames.remove(0);
         return name;
     }
 
@@ -195,10 +175,6 @@ public class Civilization {
         return technologies;
     }
 
-    public City getCurrentCapital() {
-        return currentCapital;
-    }
-
     public Technologies getCurrentTechnology() {
         return currentTechnology;
     }
@@ -207,44 +183,36 @@ public class Civilization {
         this.currentTechnology = wantedTechnology;
     }
 
-    public void addGold(double amount) {
-        gold += amount;
+    public double getGold() {
+        return this.gold;
     }
 
-    public void addScience(double amount) {
-        this.science += amount;
-    }
-
-    public void setHappiness(double happiness) {
-        this.happiness = happiness;
-    }
-
-    public void setScience(double science) {
-        this.science = science;
-    }
-
-    public void addHappiness(double  amount) {
-        this.happiness += amount;
-    }
-
-    public double getHappiness() {
-        return happiness;
+    public void setGold(double gold) {
+        this.gold = gold;
     }
 
     public double getScience() {
         return science;
     }
 
-    public City getFirstCapital() {
-        return firstCapital;
+    public void setScience(double science) {
+        this.science = science;
     }
 
-    public void addNotification(String notification) {
-        notifications.add(notification);
+    public double getHappiness() {
+        return happiness;
+    }
+
+    public void setHappiness(double happiness) {
+        this.happiness = happiness;
     }
 
     public ArrayList<String> getNotifications() {
         return notifications;
+    }
+
+    public void addNotification(String notification) {
+        notifications.add(notification);
     }
 
     public String getInfo() {
@@ -256,7 +224,6 @@ public class Civilization {
             if (value <= 0)
                 totalTechnologiesAcquired++;
         }
-
         return "Total tiles in map : " + totalTiles + "\n" +
                 "Gold : " + gold + "\n" +
                 "Happiness : " + happiness + "\n" +
@@ -265,9 +232,4 @@ public class Civilization {
                 "Total number of cities : " + cities.size() + "\n" +
                 "Total Technologies Acquired : " + totalTechnologiesAcquired + "\n";
     }
-
-    public void setGold(double gold) {
-        this.gold = gold;
-    }
-
 }

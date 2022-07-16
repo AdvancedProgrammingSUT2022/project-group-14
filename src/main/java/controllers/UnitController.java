@@ -3,6 +3,7 @@ package controllers;
 import application.App;
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
+import enums.units.UnitStates;
 import enums.units.UnitTypes;
 import javafx.event.EventHandler;
 import javafx.scene.Cursor;
@@ -12,6 +13,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import models.*;
 import models.tiles.Tile;
 import models.units.*;
@@ -59,7 +63,7 @@ public class UnitController {
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else {
-            unit.putToSleep();
+            unit.setUnitState(UnitStates.SLEEP);
         }
         return null;
     }
@@ -68,10 +72,7 @@ public class UnitController {
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "unit is not under your control";
         } else {
-            unit.wakeUp();
-            if (unit instanceof CombatUnit) {
-                ((CombatUnit) unit).wakeUpFromAlert();
-            }
+            unit.setUnitState(UnitStates.WAKE);
         }
         return null;
     }
@@ -79,7 +80,7 @@ public class UnitController {
     public static String alertUnit(CombatUnit unit) {
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName()))
             return "unit is not under your control";
-        unit.alertUnit();
+        unit.setUnitState(UnitStates.ALERT);
         return null;
     }
 
@@ -93,7 +94,7 @@ public class UnitController {
     public static String fortifyUnitUntilHealed(CombatUnit unit) {
         if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName()))
             return "unit is not under your control";
-        unit.fortifyUnitTillHealed();
+        unit.setUnitState(UnitStates.FORTIFY_TILL_HEALED);
         unit.healUnit(5);
         return null;
     }
@@ -116,7 +117,7 @@ public class UnitController {
         } else if (currentTile.getCity() == null) {
             return "you should be in a city to garrison";
         } else {
-            combatUnit.garrisonUnit();
+            combatUnit.setUnitState(UnitStates.GARRISON);
             currentTile.getCity().addGarrisonedUnits();
         }
         return null;

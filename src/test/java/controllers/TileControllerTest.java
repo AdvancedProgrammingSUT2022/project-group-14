@@ -3,6 +3,7 @@ package controllers;
 import enums.Improvements;
 import enums.Technologies;
 import enums.resources.StrategicResourceTypes;
+import enums.units.UnitStates;
 import models.Civilization;
 import models.tiles.Tile;
 import models.resources.Resource;
@@ -68,7 +69,7 @@ public class TileControllerTest {
         units.add(combatUnit);
 
         when(civilization.getAllUnits()).thenReturn(units);
-        when(worker.isWorking()).thenReturn(true);
+        when(worker.getUnitState() == UnitStates.WORKING).thenReturn(true);
         when(worker.getCurrentX()).thenReturn(10);
         when(worker.getCurrentY()).thenReturn(10);
 

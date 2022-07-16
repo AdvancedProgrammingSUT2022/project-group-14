@@ -3,6 +3,8 @@ package enums.resources;
 import enums.Improvements;
 import enums.Technologies;
 
+import java.util.HashMap;
+
 public enum StrategicResourceTypes implements ResourceTypes {
     COAL("coal", 0, 1, 0, Improvements.MINE, Technologies.SCIENTIFIC_THEORY),
     HORSE("horse", 0, 1, 0, Improvements.AGRICULTURE, Technologies.ANIMAL_HUSBANDRY),
@@ -52,6 +54,13 @@ public enum StrategicResourceTypes implements ResourceTypes {
 
     public Technologies getRequiredTechnology() {
         return this.requiredTechnology;
+    }
+
+    public static HashMap<String, Integer> getAllResources() {
+        HashMap<String, Integer> allResources = new HashMap<>();
+        for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values())
+            allResources.put(strategicResource.getName(), 0);
+        return allResources;
     }
 
 }

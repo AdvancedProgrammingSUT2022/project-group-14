@@ -1,7 +1,7 @@
 package controllers;
 
-import models.City;
-import models.Civilization;
+import models.*;
+import models.tiles.Ruin;
 import models.tiles.Tile;
 import models.units.Unit;
 
@@ -93,6 +93,39 @@ public class CivilizationController {
         for (int i = 0; i < civilization.getAllUnits().size(); i++) {
             if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
             else civilization.setScience(civilization.getScience() - 1);
+        }
+    }
+
+    public static void payRequiredPriceForKeepingBuildings(Civilization civilization){
+        for (City city : civilization.getCities()) {
+            for (Building building : city.getBuildings()) {
+                if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - building.getMaintenance());
+                else civilization.setScience(civilization.getScience() - building.getMaintenance());
+            }
+        }
+    }
+
+    public static void updateRuins(Civilization civilization) {
+        for (Unit unit : civilization.getAllUnits()) {
+            Tile tile = MapController.getMap()[unit.getCurrentX()][unit.getCurrentY()];
+            Ruin ruin = tile.getRuin();
+            if (ruin != null) {
+                if (ruin.getFreeTechnology() != null) {
+                    civilization.getTechnologies().put(ruin.getFreeTechnology(), 0);
+                }
+                if (ruin.isProvideCitizen()) {
+                    for (City city : civilization.getCities()) {
+                        city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
+                    }
+                }
+                if (tile.getNonCombatUnit() == null && ruin.getNonCombatUnit() != null) {
+                    ruin.getNonCombatUnit().setCivilizationName(civilization.getName());
+                    tile.setNonCombatUnit(ruin.getNonCombatUnit());
+                }
+                civilization.setGold(civilization.getGold() + ruin.getGold());
+                tile.setRuin(null);
+            }
+
         }
     }
 }
