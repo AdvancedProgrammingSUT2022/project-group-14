@@ -57,7 +57,7 @@ public class CityControllerTest {
         citizens.get(0).setIsWorking(true);
         citizens.get(0).setXOfWorkingTile(10);
         citizens.get(0).setYOfWorkingTile(10);
-        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
+        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10, null);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         when(city.getCitizens()).thenReturn(citizens);
@@ -73,7 +73,7 @@ public class CityControllerTest {
         ArrayList<Citizen> citizens = new ArrayList<>();
         citizens.add(new Citizen(1));
         citizens.add(new Citizen(2));
-        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
+        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10, null);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         when(city.getCitizens()).thenReturn(citizens);
@@ -90,7 +90,7 @@ public class CityControllerTest {
         citizens.get(0).setIsWorking(true);
         citizens.get(0).setXOfWorkingTile(10);
         citizens.get(0).setYOfWorkingTile(10);
-        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
+        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10, null);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         when(city.getCitizens()).thenReturn(citizens);
@@ -101,7 +101,7 @@ public class CityControllerTest {
 
     @Test
     public void lockCitizenToTileTest() {
-        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
+        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10, null);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -120,7 +120,7 @@ public class CityControllerTest {
 
     @Test
     public void unlockCitizenFromTileTest() {
-        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
+        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10, null);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         ArrayList<Tile> tiles = new ArrayList<>();
@@ -201,7 +201,7 @@ public class CityControllerTest {
     public void producingBuildingTest() {
         WorldController.setSelectedCity(city);
         Building building = new Building(BuildingTypes.ARMORY);
-        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10);
+        Tile tile = new Tile(TileFeatureTypes.OASIS, TileBaseTypes.PLAIN, 10 ,10, null);
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         when(city.getCenterOfCity()).thenReturn(tile);
