@@ -1,6 +1,7 @@
 package controllers;
 
 
+import enums.units.UnitStates;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -25,8 +26,8 @@ public class TileController {
         ArrayList<Unit> units = civilization.getAllUnits();
         for (Unit unit : units) {
             if (unit instanceof Worker) {
-                if (((Worker) unit).isWorking()) {
-                    ((Worker) unit).work();
+                if (unit.getUnitState() == UnitStates.WORKING) {
+                    ((Worker) unit).doWork();
                     Tile tile = MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY());
                     if (tile.getPillageState() != 0 && tile.getPillageState() != 9999) {
                         tile.setPillageState(tile.getPillageState() - 1);

@@ -1,11 +1,6 @@
 package models;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-
-import controllers.MapController;
-import enums.tiles.TileBaseTypes;
 import models.units.Unit;
 
 public class World {
@@ -16,16 +11,14 @@ public class World {
     private int turn, actualTurn;
 
     public World(ArrayList<String> players) {
-        for (String player : players) {
-            civilizations.add(new Civilization(player));
-        }
+        for (String player : players)
+            this.civilizations.add(new Civilization(player));
         year = -3000;
         evolutionSpeed = 10;
-        turn = 0; actualTurn = 0;
     }
 
     public String getCurrentCivilizationName() {
-        return civilizations.get(turn).getName();
+        return this.civilizations.get(turn).getName();
     }
 
     public Civilization getCivilizationByName(String name) {
@@ -37,7 +30,7 @@ public class World {
     }
 
     public ArrayList<Civilization> getAllCivilizations() {
-        return civilizations;
+        return this.civilizations;
     }
 
     public void removeCivilization(Civilization civilization) {

@@ -1,5 +1,6 @@
 package controllers;
 
+import enums.units.UnitStates;
 import models.City;
 import models.Civilization;
 import models.tiles.Tile;
@@ -17,12 +18,11 @@ public class WarController {
             return "unit is not under your control";
         } else if (!TileController.selectedTileIsValid(x, y)) {
             return "wanted tile is invalid";
-        } else if (attackingUnit instanceof Ranged && ((Ranged) attackingUnit).isSiegeUnit() && !((Ranged) attackingUnit).isUnitIsReadyForRangedBattle()) {
+        } else if (attackingUnit instanceof Ranged && ((Ranged) attackingUnit).isSiegeUnit() && attackingUnit.getUnitState() != UnitStates.SETUP_RANGED) {
             return "siege unit isn't ready for attack";
         } else {
             Tile attackingTile = MapController.getTileByCoordinates(x, y);
-            attackingUnit.setAttackingTileX(x);
-            attackingUnit.setAttackingTileY(y);
+            attackingUnit.setAttackingCoordination(x, y);
             attackingUnit.setDestinationCoordinates(x, y);
             if (attackingTile.getCity() != null) {
                 attackCity(attackingUnit, attackingTile.getCity());
@@ -64,7 +64,7 @@ public class WarController {
                         city.getCenterOfCity().getNonCombatUnit().setCivilizationName(combatUnit.getCivilizationName());
                     }
                     WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
-                    combatUnit.setAttackingTileY(-1); combatUnit.setAttackingTileX(-1);
+                    combatUnit.setAttackingCoordination(-1, -1);
                     //GamePlay.conquerCity(city, combatUnit);
                 } else {
                     city.setHealthPoint(5);

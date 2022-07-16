@@ -1,12 +1,12 @@
 package models.units;
 
 
+import enums.units.UnitStates;
 import enums.units.UnitTypes;
 
 public class Ranged extends CombatUnit{
     private final double rangedCombatStrength;
     private final boolean isSiegeUnit;
-    private boolean unitIsReadyForRangedBattle;
 
     public Ranged(UnitTypes unitInfo, int x, int y, String civilization) {
         super(unitInfo, x, y, civilization);
@@ -15,19 +15,15 @@ public class Ranged extends CombatUnit{
     }
 
     public boolean isSiegeUnit() {
-        return isSiegeUnit;
+        return this.isSiegeUnit;
     }
 
     public double getRangedCombatStrength() {
-        return rangedCombatStrength;
-    }
-
-    public boolean isUnitIsReadyForRangedBattle() {
-        return unitIsReadyForRangedBattle;
+        return this.rangedCombatStrength;
     }
 
     public void setCoordinatesToSetup(int x, int y) {
         this.setDestinationCoordinates(x, y);
-        this.unitIsReadyForRangedBattle =  true;
+        this.setUnitState(UnitStates.SETUP_RANGED);
     }
 }
