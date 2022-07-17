@@ -70,8 +70,8 @@ public class UnitController {
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(settler.getCivilizationName());
             City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY());
-            currentTile.setCity(city);
             currentCivilization.addCity(city);
+            currentTile.setCity(city);
             CivilizationController.updateMapVision(currentCivilization);
             CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                             + " you found the city " + city.getName() + " in ( " + String.valueOf(settler.getCurrentX() + 1)

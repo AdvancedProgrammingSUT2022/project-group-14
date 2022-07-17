@@ -11,11 +11,7 @@ public class WarController {
 
     public static String combatUnitAttacksTile(int x, int y) {
         CombatUnit attackingUnit = WorldController.getSelectedCombatUnit();
-        if (!attackingUnit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (!TileController.selectedTileIsValid(x, y)) {
-            return "wanted tile is invalid";
-        } else if (attackingUnit instanceof Ranged && ((Ranged) attackingUnit).isSiegeUnit() && attackingUnit.getUnitState() != UnitStates.SETUP_RANGED) {
+        if (attackingUnit instanceof Ranged && ((Ranged) attackingUnit).isSiegeUnit() && attackingUnit.getUnitState() != UnitStates.SETUP_RANGED) {
             return "siege unit isn't ready for attack";
         } else {
             Tile attackingTile = MapController.getTileByCoordinates(x, y);
@@ -28,10 +24,11 @@ public class WarController {
                     attackCombatUnit(attackingUnit, attackingTile.getCombatUnit());
                 } else if (attackingTile.getNonCombatUnit() != null) {
                     attackNonCombatUnit(attackingUnit, attackingTile.getNonCombatUnit());
-                } else return "there is no unit or city in the destination";
+                } else {
+                    return "there is no unit or city in the destination";
+                }
             }
         }
-
         return null;
     }
 
@@ -42,7 +39,7 @@ public class WarController {
             defendingUnitAttackDamage = defendingUnit.getAttackStrength();
             if (attackingUnit.getCombatType().hasDefenseBonuses())
                 defendingUnitAttackDamage -= attackingUnit.getDefenseStrength() * (100 + attackingUnitTile.getMilitaryImpact()) / 100;
-            attackingUnitAttackDamage = attackingUnit.getAttackStrength() + attackingUnit.getCombatType().getBonusAgainstCities() - defendingUnit.getDefenseStrength();
+            attackingUnitAttackDamage = attackingUnit.getAttackStrength() - defendingUnit.getDefenseStrength();
             if (attackingUnit instanceof Ranged)
                 attackingUnitAttackDamage -= attackingUnit.getAttackStrength() - ((Ranged) attackingUnit).getRangedCombatStrength();
             defendingUnitAttackDamage = Math.max(0, defendingUnitAttackDamage);
@@ -53,46 +50,43 @@ public class WarController {
             if (defendingUnit.getHealthPoint() <= 0) {
                 Civilization defendingCivilization = WorldController.getWorld().getCivilizationByName(defendingUnit.getCivilizationName());
                 Tile defendingUnitTile = MapController.getTileByCoordinates(defendingUnit.getCurrentX(), defendingUnit.getCurrentY());
-                if (defendingUnit instanceof Melee){
-                    defendingCivilization.removeMeleeUnit((Melee) defendingUnit);
-                    if (defendingUnitTile.getNonCombatUnit() != null) {
+                if (defendingUnit instanceof Melee) {
+                    defendingCivilization.getMelees().remove((Melee) defendingUnit);
+                    if (defendingUnitTile.getNonCombatUnit() != null)
                         attackNonCombatUnit(attackingUnit, defendingUnitTile.getNonCombatUnit());
-                    }
                 } else {
-                    defendingCivilization.removeRangedUnit((Ranged) defendingUnit);
+                    defendingCivilization.getRanges().remove((Ranged) defendingUnit);
                 }
                 defendingUnitTile.setCombatUnit(null);
-                attackingUnit.setAttackingTileX(-1);
-                attackingUnit.setAttackingTileY(-1);
-                if (attackingUnit instanceof Ranged) {
+                attackingUnit.setAttackingCoordination(-1, -1);
+                if (attackingUnit instanceof Ranged)
                     attackingUnit.setDestinationCoordinates(-1, -1);
-                }
             } else if (attackingUnit.getHealthPoint() <= 0) {
                 Civilization attackingCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
-                if (attackingUnit instanceof Melee){
-                    attackingCivilization.removeMeleeUnit((Melee) attackingUnit);
+                if (attackingUnit instanceof Melee) {
+                    attackingCivilization.getMelees().remove((Melee) attackingUnit);
                     attackingUnitTile.setCombatUnit(null);
                 } else {
-                    attackingCivilization.removeRangedUnit((Ranged) attackingUnit);
+                    attackingCivilization.getRanges().remove((Ranged) attackingUnit);
                     attackingUnitTile.setCombatUnit(null);
                 }
             }
         }
     }
+
     public static void attackNonCombatUnit(CombatUnit attackingUnit, NonCombatUnit nonCombatUnit) {
         if (TileController.coordinatesAreInRange(attackingUnit.getCurrentX(), attackingUnit.getCurrentY(), nonCombatUnit.getCurrentX(), nonCombatUnit.getCurrentY(), attackingUnit.getRange())) {
             Civilization attackingCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
             Civilization defendingCivilization = WorldController.getWorld().getCivilizationByName(nonCombatUnit.getCivilizationName());
             nonCombatUnit.setCivilizationName(attackingUnit.getCivilizationName());
             if (nonCombatUnit instanceof Worker) {
-                defendingCivilization.removeWorker((Worker) nonCombatUnit);
-                attackingCivilization.addWorker((Worker) nonCombatUnit);
+                defendingCivilization.getWorkers().remove((Worker) nonCombatUnit);
+                attackingCivilization.getWorkers().add((Worker) nonCombatUnit);
             } else {
-                defendingCivilization.removeSettler((Settler) nonCombatUnit);
-                attackingCivilization.addSettler((Settler) nonCombatUnit);
+                defendingCivilization.getSettlers().remove((Settler) nonCombatUnit);
+                attackingCivilization.getSettlers().add((Settler) nonCombatUnit);
             }
-            attackingUnit.setAttackingTileX(-1);
-            attackingUnit.setAttackingTileY(-1);
+            attackingUnit.setAttackingCoordination(-1, -1);
         }
     }
 
@@ -130,8 +124,8 @@ public class WarController {
                 }
             } else if (combatUnit.getHealthPoint() <= 0) {
                 Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(combatUnit.getCivilizationName());
-                String notification = "In turn " + WorldController.getWorld().getActualTurn() + " " + combatUnit.getName() + " died in order to conquer a city :(";
-                currentCivilization.addNotification(notification);
+                currentCivilization.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " "
+                        + combatUnit.getName() + " died in order to conquer a city :(");
                 unitTile.setCombatUnit(null);
                 if (combatUnit instanceof Melee)
                     currentCivilization.getMelees().remove((Melee) combatUnit);

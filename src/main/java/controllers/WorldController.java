@@ -69,13 +69,18 @@ public class WorldController {
 
     public static void applyAttacks() {
         for (Unit unit : world.getCivilizationByName(world.getCurrentCivilizationName()).getAllUnits()) {
-            if (unit instanceof CombatUnit)
-                if (((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1)
-                    if (MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity() != null) {
-                        WarController.attackCity((CombatUnit) unit, MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity());
-                    } else {
-                        //TODO attacking unit vs unit
+            if ((unit instanceof CombatUnit) && ((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1) {
+                Tile attackingTile = MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY());
+                if (attackingTile.getCity() != null) {
+                    WarController.attackCity((CombatUnit) unit, MapController.getTileByCoordinates(((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY()).getCity());
+                } else {
+                    if (attackingTile.getCombatUnit() != null) {
+                        WarController.attackCombatUnit((CombatUnit) unit, attackingTile.getCombatUnit());
+                    } else if (attackingTile.getNonCombatUnit() != null) {
+                        WarController.attackNonCombatUnit((CombatUnit) unit, attackingTile.getNonCombatUnit());
                     }
+                }
+            }
         }
     }
 

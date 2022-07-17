@@ -16,6 +16,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import models.City;
+import models.Civilization;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
@@ -31,8 +33,7 @@ public class Hex {
     private final double height;
     private final double verticalSpacing;
     private final double horizontalSpacing;
-    private ImageView cityImage = new ImageView(CityController.getCenterImage());
-    private boolean isTerritory;
+    private final ImageView cityImage = new ImageView(CityController.getCenterImage());
     private final HashMap<String, Group> unitGroups = new HashMap<>();
     private final Text coordinationText;
     private final ColorAdjust colorAdjust = new ColorAdjust();
@@ -99,12 +100,14 @@ public class Hex {
         this.group.getChildren().clear();
         this.unitGroups.clear();
         this.group.getChildren().add(this.polygon);
-        if (isTerritory) {
+        if (isTerritory()) {
             this.cityImage.setImage(CityController.getDistrictImage());
             this.group.getChildren().add(this.cityImage);
         }
-        if (tile.getCity() != null)
-            this.addCityToGroup(tile);
+        if (tile.getCity() != null) {
+            this.cityImage.setImage(CityController.getCenterImage());
+            this.group.getChildren().add(this.cityImage);
+        }
         if (tile.getCombatUnit() != null)
             this.addUnitToGroup(tile.getCombatUnit());
         if (tile.getNonCombatUnit() != null)
@@ -113,14 +116,14 @@ public class Hex {
         this.group.getChildren().add(this.coordinationText);
     }
 
-    public void addCityToGroup(Tile tile) {
-        this.group.getChildren().add(this.cityImage);
-        for (Tile territory : tile.getCity().getTerritory()) {
-            if (!territory.equals(tile)) {
-                territory.getHex().setTerritory(true);
-                territory.getHex().updateHex();
+    public boolean isTerritory() {
+        for (City city : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCities()) {
+            for (Tile tile : city.getTerritory()) {
+                if (MapController.getTileByCoordinates(this.coordination).equals(tile) && tile.getCity() == null)
+                    return true;
             }
         }
+        return false;
     }
 
     public void addUnitToGroup(Unit unit) {
@@ -191,10 +194,6 @@ public class Hex {
 
     public double getCenterY() {
         return 25 * Math.sqrt(3) + this.setY(0);
-    }
-
-    public void setTerritory(boolean territory) {
-        isTerritory = territory;
     }
 
     public void setColorAdjust(Effect effect) {

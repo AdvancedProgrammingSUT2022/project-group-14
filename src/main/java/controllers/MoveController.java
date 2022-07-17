@@ -26,26 +26,25 @@ public class MoveController {
         if ((unit == null) || (unit.getDestinationX() == -1 && unit.getDestinationY() == -1))
             return;
 
-        Tile nextTileToMove; String error;
+        Tile nextTileToMove;
+        String error;
         while (unit.getMovementPoint() > 0 && unit.getDestinationX() != -1 && unit.getDestinationY() != -1) {
-            if (unit instanceof CombatUnit && ((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1) {
-                if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), ((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY(), ((CombatUnit) unit).getRange())) {
-                    break;
-                }
+            if (unit instanceof CombatUnit && ((CombatUnit) unit).getAttackingTileX() != -1 && ((CombatUnit) unit).getAttackingTileY() != -1
+                    && TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(),
+                    ((CombatUnit) unit).getAttackingTileX(), ((CombatUnit) unit).getAttackingTileY(), ((CombatUnit) unit).getRange())) {
+                break;
             }
             nextTileToMove = bestNextTileToMove(MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()),
                     MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()));
-            if ((error = impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit)) != null &&
-                    error.equals("there is not any space left on the tile to move")) {
-                if (unit.getMovementPoint() - (nextTileToMove.getMovingPoint()) <= 0) {
-                    unit.cancelMission();
-                    break;
-                }
+            if (nextTileToMove == null || ((error = impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit)) != null
+                    && error.equals("there is not any space left on the tile to move")
+                    && unit.getMovementPoint() - (nextTileToMove.getMovingPoint()) <= 0)) {
+                unit.cancelMission();
+                break;
             }
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
             unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
                     nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));
-            System.out.println(nextTileToMove.getX() + " " + nextTileToMove.getY());
             if ((unit.getMovementPoint() < 0) || (nextTileToMove.getCivilizationName() != null && !nextTileToMove.getCivilizationName().equals(unit.getCivilizationName())))
                 unit.setMovementPoint(0);
             MapController.updateUnitPositions();
@@ -95,6 +94,8 @@ public class MoveController {
         //getting back to the tile that the unit should move to
         Tile nextTile = finishingTile;
         while (true) {
+            if (previousTile[nextTile.getX()][nextTile.getY()] == null)
+                return null;
             if (previousTile[nextTile.getX()][nextTile.getY()].equals(startingTile)) {
                 return nextTile;
             }

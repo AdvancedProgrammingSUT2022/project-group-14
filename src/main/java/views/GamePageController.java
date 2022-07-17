@@ -283,7 +283,10 @@ public class GamePageController {
     }
 
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
-        //WorldController.nextTurn();
+        if (WorldController.nextTurnImpossible() == null) {
+            WorldController.nextTurn();
+            unitPanelPane.setVisible(false);
+        }
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {

@@ -177,17 +177,17 @@ public class Tile {
     }
 
     public int getMovingPointFromSide(int x, int y, int movingPoints) {
-        if (x == -1 && y == 0 && isRiver[0]) {
+        if (x == -2 && y == 0 && isRiver[0]) {
             return movingPoints;
-        } else if ((this.coordination.getY() % 2 == 0 && x == -1 && y == 1 && isRiver[1]) || (this.coordination.getY() % 2 == 1 && x == 0 && y == 1 && isRiver[1])) {
+        } else if (x == -1 && y == (this.coordination.getX() % 2 == 1 ? 1 : 0) && isRiver[1]) {
             return movingPoints;
-        } else if ((this.coordination.getY() % 2 == 0 && x == 0 && y == 1 && isRiver[2]) || (this.coordination.getY() % 2 == 1 && x == 1 && y == 1 && isRiver[2])) {
+        } else if (x == 1 && y == (this.coordination.getX() % 2 == 1 ? 1 : 0) && isRiver[2]) {
             return movingPoints;
-        } else if (x == 1 && y == 0 && isRiver[3]) {
+        } else if (x == 2 && isRiver[3]) {
             return movingPoints;
-        } else if ((this.coordination.getY() % 2 == 0 && x == 0 && y == -1 && isRiver[4]) || (this.coordination.getY() % 2 == 1 && x == 1 && y == -1 && isRiver[4])) {
+        } else if (x == 1 && y == (this.coordination.getX() % 2 == 1 ? 0 : -1) && isRiver[4]) {
             return movingPoints;
-        } else if ((this.coordination.getY() % 2 == 0 && x == -1 && y == -1 && isRiver[5]) || (this.coordination.getY() % 2 == 1 && x == 0 && y == -1 && isRiver[5])) {
+        } else if (x == -1 && y == (this.coordination.getX() % 2 == 1 ? 0 : -1) && isRiver[5]) {
             return movingPoints;
         }
         return this.movingPoint;
@@ -306,8 +306,9 @@ public class Tile {
 
     public void setCity(City city) {
         this.city = city;
-        hex.updateHex();
-        System.out.println("hello");
+        for (Tile tile : city.getTerritory()) {
+            tile.getHex().updateHex();
+        }
     }
 
     public String getCivilizationName() {
