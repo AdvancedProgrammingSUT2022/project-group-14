@@ -45,8 +45,9 @@ public class Civilization {
             randomX = new Random().nextInt(2, MapController.width - 2);
             randomY = new Random().nextInt(2, MapController.height - 2);
         } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
-        addMeleeUnit(new Melee(UnitTypes.WARRIOR, randomX, randomY, name));
-        addSettler(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
+        melees.add(new Melee(UnitTypes.WARRIOR, randomX, randomY, name));
+//        settlers.add(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
+        workers.add(new Worker(UnitTypes.WORKER, randomX, randomY, name));
         this.happiness = 10;
         citiesNames.add(name + "1");
         citiesNames.add(name + "2");
@@ -69,37 +70,6 @@ public class Civilization {
         return this.revealedTiles;
     }
 
-    public void addMeleeUnit(Melee unit) {
-        melees.add(unit);
-    }
-
-    public void addRangedUnit(Ranged unit) {
-        ranges.add(unit);
-    }
-
-    public void addSettler(Settler unit) {
-        settlers.add(unit);
-    }
-
-    public void addWorker(Worker unit) {
-        workers.add(unit);
-    }
-
-    public void removeMeleeUnit(Melee unit) {
-        melees.remove(unit);
-    }
-
-    public void removeRangedUnit(Ranged unit) {
-        ranges.remove(unit);
-    }
-
-    public void removeWorker(Worker unit) {
-        workers.remove(unit);
-    }
-
-    public void removeSettler(Settler unit) {
-        settlers.remove(unit);
-    }
 
     public ArrayList<Unit> getAllUnits() {
         ArrayList<Unit> allUnits = new ArrayList<>();

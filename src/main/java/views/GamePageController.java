@@ -1,10 +1,8 @@
 package views;
 
 import application.App;
-import controllers.MapController;
-import controllers.MoveController;
-import controllers.UnitController;
-import controllers.WorldController;
+import controllers.*;
+import enums.Improvements;
 import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
@@ -16,6 +14,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.MenuButton;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -158,8 +158,10 @@ public class GamePageController {
             initNonCombatUnitActions((NonCombatUnit) unit);
         }
         for (int i = 11; i < unitPanelPane.getChildren().size(); i++) {
-            unitPanelPane.getChildren().get(i).setLayoutX(unitPanelPane.getChildren().get(i - 2).getLayoutX() + 62);
-            unitPanelPane.getChildren().get(i).setLayoutY(unitPanelPane.getChildren().get(i - 2).getLayoutY());
+            if (!(unitPanelPane.getChildren().get(i) instanceof ChoiceBox<?>)) {
+                unitPanelPane.getChildren().get(i).setLayoutX(unitPanelPane.getChildren().get(i - 2).getLayoutX() + 62);
+                unitPanelPane.getChildren().get(i).setLayoutY(unitPanelPane.getChildren().get(i - 2).getLayoutY());
+            }
             unitPanelPane.getChildren().get(i).setCursor(Cursor.HAND);
         }
         setUnitPanelTexts(unit);
@@ -194,6 +196,8 @@ public class GamePageController {
         fortifyTillHealed.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY_TILL_HEALED));
         Circle garrison = new Circle(25, new ImagePattern(UnitController.getActionImage("garrison")));
         garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
+        Circle pillage = new Circle(25, new ImagePattern(UnitController.getActionImage("pillage")));
+        pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
             setupRanged.setOnMouseClicked(mouseEvent -> UnitController.setupRangedUnit(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
@@ -203,35 +207,61 @@ public class GamePageController {
         unitPanelPane.getChildren().add(fortify);
         unitPanelPane.getChildren().add(fortifyTillHealed);
         unitPanelPane.getChildren().add(garrison);
+        unitPanelPane.getChildren().add(pillage);
     }
 
     public void initNonCombatUnitActions(NonCombatUnit unit) {
         if (unit.getUnitType() == UnitTypes.WORKER) {
-            Circle working = new Circle(25, new ImagePattern(UnitController.getActionImage("working")));
-            working.setOnMouseClicked(mouseEvent -> {
-
+            ChoiceBox<String> buildChoiceBox = new ChoiceBox<>();
+            buildChoiceBox.setValue("Build");
+            buildChoiceBox.getItems().addAll(TileController.getAvailableImprovements((Worker) unit));
+            buildChoiceBox.setLayoutX(265);
+            buildChoiceBox.setLayoutY(145);
+            buildChoiceBox.setPrefWidth(74);
+            Circle build = new Circle(25, new ImagePattern(UnitController.getActionImage("working")));
+            build.setOnMouseClicked(mouseEvent -> {
+                switch (buildChoiceBox.getValue()) {
+                    case "road":
+                        UnitController.buildRoad((Worker) unit);
+                        break;
+                    case "railRoad":
+                        UnitController.buildRailRoad((Worker) unit);
+                        break;
+                    case "Build":
+                        break;
+                    default:
+                        UnitController.buildImprovement((Worker) unit, Improvements.getImprovementByName(buildChoiceBox.getValue()));
+                        break;
+                }
             });
-            Circle buildRoad = new Circle(25, new ImagePattern(UnitController.getActionImage("buildRoad")));
-            working.setOnMouseClicked(mouseEvent -> {
-
+            ChoiceBox<String> removeChoiceBox = new ChoiceBox<>();
+            removeChoiceBox.setValue("Remove");
+            removeChoiceBox.getItems().addAll(TileController.getRemovableFeatures((Worker) unit));
+            removeChoiceBox.setLayoutX(350);
+            removeChoiceBox.setLayoutY(145);
+            removeChoiceBox.setPrefWidth(74);
+            Circle remove = new Circle(25, new ImagePattern(UnitController.getActionImage("remove")));
+            remove.setOnMouseClicked(mouseEvent -> {
+                switch (removeChoiceBox.getValue()) {
+                    case "Routes" -> UnitController.removeRouteFromTile((Worker) unit);
+                    case "Jungle" -> UnitController.removeJungleFromTile((Worker) unit);
+                    case "Forest" -> UnitController.removeForestFromTile((Worker) unit);
+                    case "Marsh" -> UnitController.removeMarshFromTile((Worker) unit);
+                }
             });
             Circle repair = new Circle(25, new ImagePattern(UnitController.getActionImage("repair")));
-            working.setOnMouseClicked(mouseEvent -> {
+            repair.setOnMouseClicked(mouseEvent -> {
                 UnitController.repairTile((Worker) unit);
             });
-            Circle remove = new Circle(25, new ImagePattern(UnitController.getActionImage("remove")));
-            working.setOnMouseClicked(mouseEvent -> {
-
-            });
-            unitPanelPane.getChildren().add(working);
-            unitPanelPane.getChildren().add(buildRoad);
-            unitPanelPane.getChildren().add(repair);
+            unitPanelPane.getChildren().add(build);
+            unitPanelPane.getChildren().add(buildChoiceBox);
             unitPanelPane.getChildren().add(remove);
+            unitPanelPane.getChildren().add(removeChoiceBox);
+            unitPanelPane.getChildren().add(repair);
         } else {
             Circle foundCity = new Circle(25, new ImagePattern(UnitController.getActionImage("foundCity")));
             foundCity.setOnMouseClicked(mouseEvent -> {
                 UnitController.foundCity((Settler) unit);
-                System.out.println("yoo");
             });
             unitPanelPane.getChildren().add(foundCity);
         }

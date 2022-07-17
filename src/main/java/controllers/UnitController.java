@@ -2,7 +2,6 @@ package controllers;
 
 import application.App;
 import enums.Improvements;
-import enums.tiles.TileFeatureTypes;
 import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
@@ -82,111 +81,70 @@ public class UnitController {
         return null;
     }
 
-    public static String buildRoad(Worker worker) {
+    public static void buildRoad(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getRoadState() == 0) {
-            return "there is already road on this tile";
-        } else {
-            currentTile.setRoadState(3);
-            worker.putToWork(3);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                    + " you built a road on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
-                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setRoadState(3);
+        worker.putToWork(3);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you built a road on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String buildRailRoad(Worker worker) {
+    public static void buildRailRoad(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getRailRoadState() == 0) {
-            return "there is already railRoad on this tile";
-        } else {
-            currentTile.setRailRoadState(3);
-            worker.putToWork(3);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                    + " you built a railRoad on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
-                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setRailRoadState(3);
+        worker.putToWork(3);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you built a railRoad on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeRouteFromTile(Worker worker) {
+    public static void removeRouteFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getRoadState() != 0 && currentTile.getRailRoadState() != 0) {
-            return "there is not any roads or railRoads on this tile";
-        } else {
-            currentTile.setRoadState(9999);
-            currentTile.setRailRoadState(9999);
-            worker.putToWork(3);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                    + " you removed routes from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
-                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setRoadState(9999);
+        currentTile.setRailRoadState(9999);
+        worker.putToWork(3);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed routes from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String buildImprovement(Worker worker, Improvements improvement) {
+    public static void buildImprovement(Worker worker, Improvements improvement) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getImprovement() != null && currentTile.getImprovement().equals(improvement)) {
-            return "there is already this kind of improvement on this tile";
-        } else if (WorldController.getWorld().getCivilizationByName(worker.getCivilizationName())
-                .getTechnologies().get(improvement.getRequiredTechnology()) > 0) {
-            return "you don't have the required technology";
-        } else if (!improvement.getPossibleTiles().contains(currentTile.getType()) &&
-                !improvement.getPossibleTiles().contains(currentTile.getFeature())) {
-            return "can't build on these kinds of tiles";
-        } else {
-            currentTile.setImprovement(improvement);
-            currentTile.setImprovementTurnsLeftToBuild(6);
-            worker.putToWork(6);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you built the " +
-                    improvement.name().toLowerCase(Locale.ROOT) + " improvement on ( "
-                    + String.valueOf(worker.getCurrentX() + 1) + " , " + String.valueOf(worker.getCurrentY() + 1)
-                    + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setImprovement(improvement);
+        currentTile.setImprovementTurnsLeftToBuild(6);
+        worker.putToWork(6);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you built the " +
+                improvement.name().toLowerCase(Locale.ROOT) + " improvement on ( "
+                + String.valueOf(worker.getCurrentX() + 1) + " , " + String.valueOf(worker.getCurrentY() + 1)
+                + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeJungleFromTile(Worker worker) {
+    public static void removeJungleFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getFeature() != TileFeatureTypes.JUNGLE) {
-            return "there is not a jungle on this tile";
-        } else {
-            currentTile.setFeature(null);
-            worker.putToWork(3);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                    + " you removed jungle from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
-                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setFeature(null);
+        worker.putToWork(3);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed jungle from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeForestFromTile(Worker worker) {
+    public static void removeForestFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getFeature() != TileFeatureTypes.FOREST) {
-            return "there is not a forest on this tile";
-        } else {
-            currentTile.setFeature(null);
-            worker.putToWork(3);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                    + " you removed forest from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
-                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setFeature(null);
+        worker.putToWork(3);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed forest from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeMarshFromTile(Worker worker) {
+    public static void removeMarshFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (currentTile.getFeature() != TileFeatureTypes.SWAMP) {
-            return "there is not a marsh on this tile";
-        } else {
-            currentTile.setFeature(null);
-            worker.putToWork(3);
-            WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                    + " you removed marsh from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
-                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
-        }
-        return null;
+        currentTile.setFeature(null);
+        worker.putToWork(3);
+        WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed marsh from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
     public static String repairTile(Worker worker) {
@@ -216,20 +174,19 @@ public class UnitController {
         return null;
     }
 
-    public static String delete(Unit unit) {
+    public static void delete(Unit unit) {
         Civilization wantedCivilization = WorldController.getWorld().getCivilizationByName(unit.getCivilizationName());
         if (unit instanceof Ranged) {
-            wantedCivilization.removeRangedUnit((Ranged) unit);
+            wantedCivilization.getRanges().remove((Ranged) unit);
         } else if (unit instanceof Melee) {
-            wantedCivilization.removeMeleeUnit((Melee) unit);
+            wantedCivilization.getMelees().remove((Melee) unit);
         } else if (unit instanceof Worker) {
-            wantedCivilization.removeWorker((Worker) unit);
+            wantedCivilization.getWorkers().remove((Worker) unit);
         } else if (unit instanceof Settler) {
-            wantedCivilization.removeSettler((Settler) unit);
+            wantedCivilization.getSettlers().remove((Settler) unit);
         }
         WorldController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you deleted the " +
                 unit.getName() + " unit", unit.getCivilizationName());
-        return null;
     }
 
     public static String upgradeUnit(UnitTypes unitEnum) {
@@ -271,12 +228,13 @@ public class UnitController {
     public static Group getUnitGroup(Unit unit) {
         Group group = new Group();
         ImageView imageView = new ImageView(unit.getUnitType().getImage());
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(50);
-        imageView.setLayoutX(4 - 2 * imageView.getImage().getWidth() / 3);
+        imageView.setFitWidth(imageView.getImage().getWidth() / 5);
+        imageView.setFitHeight(imageView.getImage().getHeight() / 5);
+        imageView.setLayoutX(-100);
         imageView.setLayoutY(12);
         Text text = new Text(unit.getUnitState().getName());
-        text.setLayoutX(5 - 2 * imageView.getImage().getWidth() / 3);
+        text.setWrappingWidth(50);
+        text.setLayoutX(-100);
         text.setLayoutY(2);
         group.getChildren().add(imageView);
         group.getChildren().add(text);

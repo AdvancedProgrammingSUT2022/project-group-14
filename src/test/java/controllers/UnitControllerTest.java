@@ -74,7 +74,6 @@ public class UnitControllerTest {
     @Test
     public void resetMovingPointsTest() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("ali");
-        currentCivilization.addMeleeUnit(melee);
         when(melee.getName()).thenReturn("warrior");
         UnitController.resetMovingPoints(currentCivilization);
         verify(melee).setMovementPoint(2);
@@ -254,7 +253,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest() {
         when(settler.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(settler);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -263,7 +261,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest2() {
         when(worker.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(worker);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -272,7 +269,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest3() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(melee);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -281,7 +277,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest4() {
         when(ranged.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(ranged);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());

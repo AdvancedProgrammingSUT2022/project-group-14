@@ -86,18 +86,18 @@ public class City {
             if (MapController.getTileByCoordinates(centerCoordination).getCombatUnit() == null) {
                 MapController.getTileByCoordinates(centerCoordination).setCombatUnit((models.units.CombatUnit) currentUnit);
                 if (currentUnit instanceof Melee)
-                    WorldController.getWorld().getCivilizationByName(civilizationName).addMeleeUnit((Melee) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).getMelees().add((Melee) currentUnit);
                 else
-                    WorldController.getWorld().getCivilizationByName(civilizationName).addRangedUnit((Ranged) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).getRanges().add((Ranged) currentUnit);
                 currentUnit = null;
             }
         } else {
             if (MapController.getTileByCoordinates(centerCoordination).getNonCombatUnit() == null) {
                 MapController.getTileByCoordinates(centerCoordination).setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
                 if (currentUnit instanceof Settler)
-                    WorldController.getWorld().getCivilizationByName(civilizationName).addSettler((Settler) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).getSettlers().add((Settler) currentUnit);
                 else
-                    WorldController.getWorld().getCivilizationByName(civilizationName).addWorker((Worker) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(civilizationName).getWorkers().add((Worker) currentUnit);
                 currentUnit = null;
             }
         }

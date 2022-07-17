@@ -56,33 +56,18 @@ public class MapController {
     }
 
     private static Tile getTileByRiver(int x, int y, int riverSide) {
-        if (y % 2 == 1) {
-            if (riverSide == 0 && x - 1 >= 0)
-                return tilesMap[x - 1][y];
-            else if (riverSide == 1 && y + 1 < height)
-                return tilesMap[x][y + 1];
-            else if (riverSide == 2 && x + 1 < width && y + 1 < height)
-                return tilesMap[x + 1][y + 1];
-            else if (riverSide == 3 && x + 1 < width)
-                return tilesMap[x + 1][y];
-            else if (riverSide == 4 && x + 1 < width)
-                return tilesMap[x + 1][y - 1];
-            else if (riverSide == 5)
-                return tilesMap[x][y - 1];
-        } else if (y % 2 == 0) {
-            if (riverSide == 0 && x - 1 >= 0)
-                return tilesMap[x - 1][y];
-            if (riverSide == 1 && x - 1 >= 0 && y + 1 < height)
-                return tilesMap[x - 1][y + 1];
-            if (riverSide == 2 && y + 1 < height)
-                return tilesMap[x][y + 1];
-            if (riverSide == 3 && x + 1 < width)
-                return tilesMap[x + 1][y];
-            if (riverSide == 4 && y - 1 >= 0)
-                return tilesMap[x][y - 1];
-            if (riverSide == 5 && x - 1 >= 0 && y - 1 >= 0)
-                return tilesMap[x - 1][y - 1];
-        }
+        if (riverSide == 0 && x - 2 >= 0)
+            return tilesMap[x - 2][y];
+        else if (riverSide == 1 && y + 1 < height && x - 1 >= 0)
+            return tilesMap[x - 1][y + 1];
+        else if (riverSide == 2 && x + 1 < width && y + 1 < height)
+            return tilesMap[x + 1][y + 1];
+        else if (riverSide == 3 && x + 2 < width)
+            return tilesMap[x + 2][y];
+        else if (riverSide == 4 && x + 1 < width)
+            return tilesMap[x + 1][y];
+        else if (riverSide == 5 && x - 1 >= 0)
+            return tilesMap[x - 1][y];
         return null;
     }
 
