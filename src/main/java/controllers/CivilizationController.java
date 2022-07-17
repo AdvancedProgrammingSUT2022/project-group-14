@@ -1,5 +1,6 @@
 package controllers;
 
+import enums.Technologies;
 import models.*;
 import models.tiles.Ruin;
 import models.tiles.Tile;
@@ -11,12 +12,12 @@ public class CivilizationController {
         int[][] visionState = civilization.getVisionStatesOfMap();
         for (int i = 0; i < MapController.width; i++) {
             for (int j = 0; j < MapController.height; j++) {
-                if (visionState[i][j] == 0 && tileIsInRange(i, j, civilization)) {
+                if (visionState[i][j] == 0 && hasVisionOnTile(i, j, civilization)) {
                     visionState[i][j] = 2;
-                } else if (visionState[i][j] == 1 && tileIsInRange(i, j, civilization)) {
+                } else if (visionState[i][j] == 1 && hasVisionOnTile(i, j, civilization)) {
                     visionState[i][j] = 2;
                     civilization.getRevealedTiles()[i][j] = null;
-                } else if (visionState[i][j] == 2 && !tileIsInRange(i, j, civilization)) {
+                } else if (visionState[i][j] == 2 && !hasVisionOnTile(i, j, civilization)) {
                     visionState[i][j] = 1;
                     civilization.getRevealedTiles()[i][j] = MapController.getTileByCoordinates(i, j);
                 }
@@ -24,7 +25,7 @@ public class CivilizationController {
         }
     }
 
-    public static boolean tileIsInRange(int x, int y, Civilization civilization) {
+    public static boolean hasVisionOnTile(int x, int y, Civilization civilization) {
         for (Unit unit : civilization.getAllUnits()) {
             if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), x, y, 2))
                 return true;
@@ -38,6 +39,10 @@ public class CivilizationController {
         }
 
         return false;
+    }
+
+    public static boolean civilizationHasTechnology(Technologies technology) {
+        return WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(technology) <= 0;
     }
 
     public static void updateTechnology(Civilization civilization) {
@@ -127,5 +132,9 @@ public class CivilizationController {
             }
 
         }
+    }
+
+    public static void addNotification(String notification, String civilizationName) {
+        WorldController.getWorld().getCivilizationByName(civilizationName).addNotification(notification);
     }
 }

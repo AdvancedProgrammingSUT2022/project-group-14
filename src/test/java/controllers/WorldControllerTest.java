@@ -31,12 +31,6 @@ public class WorldControllerTest {
     }
 
     @Test
-    public void resetWorldTest() {
-        WorldController.resetWorld();
-        Assertions.assertNull(WorldController.getWorld());
-    }
-
-    @Test
     public void nextTurnTest() {
         WorldController.nextTurn();
         Assertions.assertNotEquals(0, WorldController.getWorld().getTurn());

@@ -54,7 +54,11 @@ public class GamePageController {
     @FXML
     private Text yearText;
     @FXML
+    private Circle settingsCircle;
+    @FXML
     private Text techText;
+    @FXML
+    private Button nextTurnButton;
     @FXML
     private AnchorPane unitPanelPane;
     @FXML
@@ -83,6 +87,7 @@ public class GamePageController {
         happinessText.setFill(Color.rgb(17, 140, 33));
         scienceText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getScience());
         scienceText.setFill(Color.rgb(7, 146, 169));
+        settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
     }
 
     public void initHexes() {
@@ -274,7 +279,11 @@ public class GamePageController {
         unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
         unitPanelNameText.setText(unit.getName());
         unitPanelMPText.setText("MP : " + unit.getMovementPoint());
-        unitPanelCSText.setText("CS : ");
+        unitPanelCSText.setText("CS : " + String.valueOf(unit.getUnitType().getCombatStrength() + unit.getUnitType().getRangedCombatStrength()));
+    }
+
+    public void nextTurnButtonClicked(MouseEvent mouseEvent) {
+        //WorldController.nextTurn();
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {
