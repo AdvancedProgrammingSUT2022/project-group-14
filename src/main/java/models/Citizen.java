@@ -7,7 +7,7 @@ public class Citizen {
     private boolean isWorking;
     private final Coordination workingCoordination;
 
-    public Citizen(int id){
+    public Citizen(int id) {
         this.id = id;
         this.workingCoordination = new Coordination(-1, -1);
     }
@@ -20,16 +20,16 @@ public class Citizen {
         return this.isWorking;
     }
 
+    public void setIsWorking(boolean isWorking) {
+        this.isWorking = isWorking;
+    }
+
     public int getXOfWorkingTile() {
         return this.workingCoordination.getX();
     }
 
     public int getYOfWorkingTile() {
         return this.workingCoordination.getY();
-    }
-
-    public void setIsWorking(boolean isWorking) {
-        this.isWorking = isWorking;
     }
 
     public void setXOfWorkingTile(int xOfWorkingTile) {

@@ -22,9 +22,12 @@
     <Button layoutX="577.5" layoutY="23.0" prefHeight="36.0" prefWidth="127.0" style="-fx-pref-width: 125;" text="Research" />
     <Button layoutX="716.0" layoutY="23.0" onMouseClicked="#goToCitiesPage" style="-fx-pref-width: 85;" text="Cities" />
     <Text fx:id="yearText" fill="white" layoutX="994.0" layoutY="48.0" text="4000 BC" wrappingWidth="112" />
-    <Button layoutX="1106.0" layoutY="22.0" text="Menu" />
+    <Circle fill="WHITE" layoutX="1124.0" layoutY="41.0" radius="18.0" />
+    <Circle fx:id="settingsCircle" layoutX="1124.0" layoutY="41.0" radius="18.0" stroke="black" />
+    <Button layoutX="1160.0" layoutY="23.0" style="-fx-pref-width: 80;" text="Menu" />
     <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0" />
     <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145" />
+    <Button fx:id="nextTurnButton" layoutX="1090.0" layoutY="600.0" text="Next Turn" onMouseClicked="#nextTurnButtonClicked"/>
     <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="450.0" style="-fx-background-color: transparent">
         <Rectangle fill="cadetblue" height="28.0" layoutX="90.0" layoutY="36.0" stroke="BLACK" width="193.0" />
         <Rectangle height="163.0" layoutY="64.0" stroke="BLACK" width="450.0" />

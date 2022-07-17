@@ -27,22 +27,20 @@ public class TileController {
     public static void updateBuildingProgress(Civilization civilization) {
         ArrayList<Unit> units = civilization.getAllUnits();
         for (Unit unit : units) {
-            if (unit instanceof Worker) {
-                if (unit.getUnitState() == UnitStates.WORKING) {
-                    ((Worker) unit).doWork();
-                    Tile tile = MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY());
-                    if (tile.getPillageState() != 0 && tile.getPillageState() != 9999) {
-                        tile.setPillageState(tile.getPillageState() - 1);
-                    } else if (tile.getRoadState() != 0 && tile.getRoadState() != 9999) {
-                        tile.setRoadState(tile.getRoadState() - 1);
-                    } else if (tile.getRailRoadState() != 0 && tile.getRailRoadState() != 9999) {
-                        tile.setRailRoadState(tile.getRailRoadState() - 1);
-                    } else if (tile.getImprovementTurnsLeftToBuild() != 0 && tile.getImprovementTurnsLeftToBuild() != 9999) {
-                        tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() - 1);
-                    }
-                    if (tile.getImprovementTurnsLeftToBuild() == 0) {
-                        tile.addAvailableResourcesToCivilizationAndTile();
-                    }
+            if (unit.getUnitState() == UnitStates.WORKING) {
+                ((Worker) unit).doWork();
+                Tile tile = MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY());
+                if (tile.getPillageState() != 0 && tile.getPillageState() != 9999) {
+                    tile.setPillageState(tile.getPillageState() - 1);
+                } else if (tile.getRoadState() != 0 && tile.getRoadState() != 9999) {
+                    tile.setRoadState(tile.getRoadState() - 1);
+                } else if (tile.getRailRoadState() != 0 && tile.getRailRoadState() != 9999) {
+                    tile.setRailRoadState(tile.getRailRoadState() - 1);
+                } else if (tile.getImprovementTurnsLeftToBuild() != 0 && tile.getImprovementTurnsLeftToBuild() != 9999) {
+                    tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() - 1);
+                }
+                if (tile.getImprovementTurnsLeftToBuild() == 0) {
+                    tile.addAvailableResourcesToCivilizationAndTile();
                 }
             }
         }
@@ -51,11 +49,13 @@ public class TileController {
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
         if (selectedTileIsValid(x - 2, y)) neighbours.add(MapController.getTileByCoordinates(x - 2, y));
-        if (selectedTileIsValid(x - 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y + 1));
-        if (selectedTileIsValid(x + 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y + 1));
+        if (selectedTileIsValid(x - 1, y + (x % 2 == 1 ? 1 : -1)))
+            neighbours.add(MapController.getTileByCoordinates(x - 1, y + (x % 2 == 1 ? 1 : -1)));
+        if (selectedTileIsValid(x + 1, y + (x % 2 == 1 ? 1 : -1)))
+            neighbours.add(MapController.getTileByCoordinates(x + 1, y + (x % 2 == 1 ? 1 : -1)));
         if (selectedTileIsValid(x + 2, y)) neighbours.add(MapController.getTileByCoordinates(x + 2, y));
-        if (selectedTileIsValid(x + 1, y)) neighbours.add(MapController.getTileByCoordinates(x + 1, y));
         if (selectedTileIsValid(x - 1, y)) neighbours.add(MapController.getTileByCoordinates(x - 1, y));
+        if (selectedTileIsValid(x + 1, y)) neighbours.add(MapController.getTileByCoordinates(x + 1, y));
         return neighbours;
     }
 
@@ -122,7 +122,7 @@ public class TileController {
     public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile) {
         if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0) {
             return !(resource instanceof StrategicResource) ||
-                    WorldController.currentCivilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology());
+                    CivilizationController.civilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology());
         }
         return false;
     }
