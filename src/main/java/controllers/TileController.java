@@ -38,6 +38,8 @@ public class TileController {
                     tile.setRailRoadState(tile.getRailRoadState() - 1);
                 } else if (tile.getImprovementTurnsLeftToBuild() != 0 && tile.getImprovementTurnsLeftToBuild() != 9999) {
                     tile.setImprovementTurnsLeftToBuild(tile.getImprovementTurnsLeftToBuild() - 1);
+                } else if (unit.getUnitState() == UnitStates.WAKE){
+                    tile.setFeature(TileFeatureTypes.NULL);
                 }
                 if (tile.getImprovementTurnsLeftToBuild() == 0) {
                     tile.addAvailableResourcesToCivilizationAndTile();

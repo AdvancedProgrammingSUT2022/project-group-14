@@ -198,7 +198,7 @@ public class Tile {
     }
 
     public void setFeature(TileFeatureTypes feature) {
-        if (feature == null) {
+        if (feature == TileFeatureTypes.NULL) {
             this.food -= this.feature.getFood();
             this.production -= this.feature.getProduction();
             this.gold -= this.feature.getGold();
