@@ -45,7 +45,7 @@ public class MoveController {
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
             unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
                     nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));
-
+            System.out.println(nextTileToMove.getX() + " " + nextTileToMove.getY());
             if ((unit.getMovementPoint() < 0) || (nextTileToMove.getCivilizationName() != null && !nextTileToMove.getCivilizationName().equals(unit.getCivilizationName())))
                 unit.setMovementPoint(0);
             MapController.updateUnitPositions();
@@ -54,14 +54,14 @@ public class MoveController {
     }
 
     public static Tile bestNextTileToMove(Tile startingTile, Tile finishingTile) {
-        int width = MapController.getWidth(), length = MapController.getHeight(), INFINITE = 9999;
-        boolean[][] visitedTiles = new boolean[width][length];
-        int[][] distanceFromStartingTile = new int[width][length];
-        Tile[][] previousTile = new Tile[width][length];
+        int width = MapController.getWidth(), height = MapController.getHeight(), INFINITE = 9999;
+        boolean[][] visitedTiles = new boolean[width][height];
+        int[][] distanceFromStartingTile = new int[width][height];
+        Tile[][] previousTile = new Tile[width][height];
 
         //initializing the arrays
         for (int i = 0; i < width; i++) {
-            for (int j = 0; j < length; j++) {
+            for (int j = 0; j < height; j++) {
                 visitedTiles[i][j] = false;
                 distanceFromStartingTile[i][j] = INFINITE;
             }
@@ -69,13 +69,13 @@ public class MoveController {
         distanceFromStartingTile[startingTile.getX()][startingTile.getY()] = 0;
 
         //main Dijkstra part
-        for (int i = 0; i < width * length; i++) {
+        for (int i = 0; i < width * height; i++) {
             Tile tempPreviousTile = null;
             int minDistance = INFINITE;
             ArrayList<Tile> neighbourTiles;
 
             for (int k = 0; k < width; k++) {
-                for (int z = 0; z < length; z++) {
+                for (int z = 0; z < height; z++) {
                     if (!visitedTiles[k][z] && distanceFromStartingTile[k][z] <= minDistance) {
                         minDistance = distanceFromStartingTile[k][z];
                         tempPreviousTile = MapController.getTileByCoordinates(k, z);

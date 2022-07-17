@@ -56,8 +56,6 @@ public class WorldControllerTest {
             WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().put(value, 1);
         }
         WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).setCurrentTechnology(Technologies.HORSEBACK_RIDING);
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addMeleeUnit(unit1);
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(unit2);
         WorldController.nextTurnImpossible();
     }
 

@@ -56,9 +56,9 @@ public class WarController {
                 if (combatUnit instanceof Melee) {
                     if (city.getCenterOfCity().getCombatUnit() != null) {
                         if (city.getCenterOfCity().getCombatUnit() instanceof Melee)
-                            WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeMeleeUnit((Melee) city.getCenterOfCity().getCombatUnit());
+                            WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getMelees().remove((Melee) city.getCenterOfCity().getCombatUnit());
                         else
-                            WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeRangedUnit((Ranged) city.getCenterOfCity().getCombatUnit());
+                            WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getRanges().remove((Ranged) city.getCenterOfCity().getCombatUnit());
                     }
                     if (city.getCenterOfCity().getNonCombatUnit() != null) {
                         city.getCenterOfCity().getNonCombatUnit().setCivilizationName(combatUnit.getCivilizationName());
@@ -75,9 +75,9 @@ public class WarController {
                 currentCivilization.addNotification(notification);
                 unitTile.setCombatUnit(null);
                 if (combatUnit instanceof Melee)
-                    currentCivilization.removeMeleeUnit((Melee) combatUnit);
+                    currentCivilization.getMelees().remove((Melee) combatUnit);
                 else if (combatUnit instanceof Ranged)
-                    currentCivilization.removeRangedUnit((Ranged) combatUnit);
+                    currentCivilization.getRanges().remove((Ranged) combatUnit);
 
             }
         }

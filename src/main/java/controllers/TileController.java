@@ -1,6 +1,8 @@
 package controllers;
 
 
+import enums.Improvements;
+import enums.tiles.TileFeatureTypes;
 import enums.units.UnitStates;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
@@ -48,20 +50,12 @@ public class TileController {
 
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
-        if (y % 2 == 0) {
-            if (selectedTileIsValid(x - 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y + 1));
-            if (selectedTileIsValid(x, y + 1)) neighbours.add(MapController.getTileByCoordinates(x, y + 1));
-            if (selectedTileIsValid(x, y - 1)) neighbours.add(MapController.getTileByCoordinates(x, y - 1));
-            if (selectedTileIsValid(x - 1, y - 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y - 1));
-        } else {
-            if (selectedTileIsValid(x, y + 1)) neighbours.add(MapController.getTileByCoordinates(x, y + 1));
-            if (selectedTileIsValid(x + 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y + 1));
-            if (selectedTileIsValid(x + 1, y - 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y - 1));
-            if (selectedTileIsValid(x, y - 1)) neighbours.add(MapController.getTileByCoordinates(x, y - 1));
-        }
-        if (selectedTileIsValid(x - 1, y)) neighbours.add(MapController.getTileByCoordinates(x - 1, y));
+        if (selectedTileIsValid(x - 2, y)) neighbours.add(MapController.getTileByCoordinates(x - 2, y));
+        if (selectedTileIsValid(x - 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y + 1));
+        if (selectedTileIsValid(x + 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y + 1));
+        if (selectedTileIsValid(x + 2, y)) neighbours.add(MapController.getTileByCoordinates(x + 2, y));
         if (selectedTileIsValid(x + 1, y)) neighbours.add(MapController.getTileByCoordinates(x + 1, y));
-
+        if (selectedTileIsValid(x - 1, y)) neighbours.add(MapController.getTileByCoordinates(x - 1, y));
         return neighbours;
     }
 
@@ -92,6 +86,39 @@ public class TileController {
         return neighbors[x1][y1] > 0;
     }
 
+    public static ArrayList<String> getAvailableImprovements(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        ArrayList<String> availableImprovements = new ArrayList<>();
+        for (Improvements value : Improvements.values()) {
+            if (!(currentTile.getImprovement() != null && currentTile.getImprovement().equals(value))
+                    && !(WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).getTechnologies().get(value.getRequiredTechnology()) > 0)
+                    && !(!value.getPossibleTiles().contains(currentTile.getType()) && !value.getPossibleTiles().contains(currentTile.getFeature()))) {
+                availableImprovements.add(value.getName());
+            }
+        }
+        if (currentTile.getRailRoadState() != 0)
+            availableImprovements.add("railRoad");
+        if (currentTile.getRoadState() != 0)
+            availableImprovements.add("road");
+
+        return availableImprovements;
+    }
+
+    public static ArrayList<String> getRemovableFeatures(Worker worker) {
+        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
+        ArrayList<String> removableFeatures = new ArrayList<>();
+        if (currentTile.getRoadState() == 0 || currentTile.getRailRoadState() == 0)
+            removableFeatures.add("Routes");
+        if (currentTile.getFeature() == TileFeatureTypes.JUNGLE) {
+            removableFeatures.add("Jungle");
+        } else if (currentTile.getFeature() == TileFeatureTypes.FOREST) {
+            removableFeatures.add("Forest");
+        } else if (currentTile.getFeature() == TileFeatureTypes.SWAMP) {
+            removableFeatures.add("Marsh");
+        }
+        return removableFeatures;
+    }
+
     public static boolean resourceIsAvailableToBeUsed(Resource resource, Tile tile) {
         if (resource.getRequiredImprovement() == tile.getImprovement() && tile.getImprovementTurnsLeftToBuild() == 0) {
             return !(resource instanceof StrategicResource) ||
@@ -100,7 +127,7 @@ public class TileController {
         return false;
     }
 
-    public static Group getInfoPopup(Coordination coordination){
+    public static Group getInfoPopup(Coordination coordination) {
         Group group = new Group();
         Text text = new Text(MapController.getTileByCoordinates(coordination).getInfo());
         Rectangle rectangle = new Rectangle(text.getBoundsInLocal().getWidth() + 10, text.getBoundsInLocal().getHeight() - 5, Color.WHITE);

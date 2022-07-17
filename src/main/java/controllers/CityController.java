@@ -372,7 +372,11 @@ public class CityController {
         WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
     }
 
-    public static Image getImage() {
+    public static Image getCenterImage() {
         return new Image(Objects.requireNonNull(App.class.getResource("/images/cities/cityCenter.png")).toString());
+    }
+
+    public static Image getDistrictImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/cities/cityDistrict.png")).toString());
     }
 }
