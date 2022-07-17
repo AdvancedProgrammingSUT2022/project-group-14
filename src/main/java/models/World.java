@@ -59,4 +59,7 @@ public class World {
         evolutionSpeed += amount;
     }
 
+    public int getYear() {
+        return year;
+    }
 }

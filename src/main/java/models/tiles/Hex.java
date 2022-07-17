@@ -17,13 +17,12 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
 import models.City;
-import models.Civilization;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class Hex {
     private final Polygon polygon;
@@ -100,6 +99,21 @@ public class Hex {
         this.group.getChildren().clear();
         this.unitGroups.clear();
         this.group.getChildren().add(this.polygon);
+        if (tile.getRoadState() == 0) {
+            ImageView roadImage = new ImageView(Objects.requireNonNull(App.class.getResource("/images/resources/road.png")).toString());
+            roadImage.setFitWidth(30);
+            roadImage.setFitHeight(30);
+            roadImage.setLayoutX(this.getCenterX() - 60);
+            roadImage.setLayoutY(this.getCenterY() - 10);
+            this.group.getChildren().add(roadImage);
+        } else if (tile.getRailRoadState() == 0) {
+            ImageView railRoadImage = new ImageView(Objects.requireNonNull(App.class.getResource("/images/resources/railRoad.png")).toString());
+            railRoadImage.setFitWidth(30);
+            railRoadImage.setFitHeight(30);
+            railRoadImage.setLayoutX(this.getCenterX() - 60);
+            railRoadImage.setLayoutY(this.getCenterY() - 10);
+            this.group.getChildren().add(railRoadImage);
+        }
         if (isTerritory()) {
             this.cityImage.setImage(CityController.getDistrictImage());
             this.group.getChildren().add(this.cityImage);

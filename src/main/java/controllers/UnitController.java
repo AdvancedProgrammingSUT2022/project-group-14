@@ -2,6 +2,7 @@ package controllers;
 
 import application.App;
 import enums.Improvements;
+import enums.tiles.TileFeatureTypes;
 import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
@@ -121,8 +122,6 @@ public class UnitController {
     }
 
     public static void removeJungleFromTile(Worker worker) {
-        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        currentTile.setFeature(null);
         worker.putToWork(3);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                 + " you removed jungle from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
@@ -130,8 +129,6 @@ public class UnitController {
     }
 
     public static void removeForestFromTile(Worker worker) {
-        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        currentTile.setFeature(null);
         worker.putToWork(3);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                 + " you removed forest from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
@@ -139,8 +136,6 @@ public class UnitController {
     }
 
     public static void removeMarshFromTile(Worker worker) {
-        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        currentTile.setFeature(null);
         worker.putToWork(3);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                 + " you removed marsh from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
@@ -231,11 +226,10 @@ public class UnitController {
         imageView.setFitWidth(imageView.getImage().getWidth() / 5);
         imageView.setFitHeight(imageView.getImage().getHeight() / 5);
         imageView.setLayoutX(-100);
-        imageView.setLayoutY(12);
+        imageView.setLayoutY(20);
         Text text = new Text(unit.getUnitState().getName());
-        text.setWrappingWidth(50);
         text.setLayoutX(-100);
-        text.setLayoutY(2);
+        text.setLayoutY(15);
         group.getChildren().add(imageView);
         group.getChildren().add(text);
         group.setCursor(Cursor.HAND);

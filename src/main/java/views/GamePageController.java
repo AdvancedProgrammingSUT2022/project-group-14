@@ -9,21 +9,20 @@ import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.MenuButton;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.Civilization;
@@ -31,10 +30,10 @@ import models.tiles.Hex;
 import models.tiles.Tile;
 import models.units.*;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class GamePageController {
+    public static String infoPanelName;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -52,13 +51,13 @@ public class GamePageController {
     @FXML
     private Text scienceText;
     @FXML
+    private MenuButton infoPanelsMenuButton;
+    @FXML
     private Text yearText;
     @FXML
     private Circle settingsCircle;
     @FXML
     private Text techText;
-    @FXML
-    private Button nextTurnButton;
     @FXML
     private AnchorPane unitPanelPane;
     @FXML
@@ -73,8 +72,8 @@ public class GamePageController {
 
     public void initialize() {
         initNavBar();
-        initHexes();
         initTimeLine();
+        initHexes();
     }
 
     private void initNavBar() {
@@ -87,6 +86,18 @@ public class GamePageController {
         happinessText.setFill(Color.rgb(17, 140, 33));
         scienceText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getScience());
         scienceText.setFill(Color.rgb(7, 146, 169));
+        infoPanelsMenuButton.getItems().add(new MenuItem("UnitPanel"));
+        infoPanelsMenuButton.getItems().add(new MenuItem("CityPanel"));
+        infoPanelsMenuButton.getItems().add(new MenuItem("DemographicPanel"));
+        infoPanelsMenuButton.getItems().add(new MenuItem("NotificationsPanel"));
+        infoPanelsMenuButton.getItems().add(new MenuItem("MilitaryPanel"));
+        infoPanelsMenuButton.getItems().add(new MenuItem("EconomicStatusPanel"));
+        for (MenuItem item : infoPanelsMenuButton.getItems()) {
+            item.setOnAction(actionEvent -> {
+                infoPanelName = item.getText();
+                App.changeScene("infoPanelPage");
+            });
+        }
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
     }
 
@@ -202,7 +213,7 @@ public class GamePageController {
         Circle garrison = new Circle(25, new ImagePattern(UnitController.getActionImage("garrison")));
         garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
         Circle pillage = new Circle(25, new ImagePattern(UnitController.getActionImage("pillage")));
-        pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
+        pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY()));
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
             setupRanged.setOnMouseClicked(mouseEvent -> UnitController.setupRangedUnit(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
@@ -285,6 +296,7 @@ public class GamePageController {
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
         if (WorldController.nextTurnImpossible() == null) {
             WorldController.nextTurn();
+            yearText.setText(String.valueOf(WorldController.getWorld().getYear()));
             unitPanelPane.setVisible(false);
         }
     }
