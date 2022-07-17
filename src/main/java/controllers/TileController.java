@@ -51,11 +51,11 @@ public class TileController {
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
         if (selectedTileIsValid(x - 2, y)) neighbours.add(MapController.getTileByCoordinates(x - 2, y));
-        if (selectedTileIsValid(x - 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x - 1, y + 1));
-        if (selectedTileIsValid(x + 1, y + 1)) neighbours.add(MapController.getTileByCoordinates(x + 1, y + 1));
+        if (selectedTileIsValid(x - 1, y + (x % 2 == 1 ? 1 : -1))) neighbours.add(MapController.getTileByCoordinates(x - 1, y + (x % 2 == 1 ? 1 : -1)));
+        if (selectedTileIsValid(x + 1, y + (x % 2 == 1 ? 1 : -1))) neighbours.add(MapController.getTileByCoordinates(x + 1, y + (x % 2 == 1 ? 1 : -1)));
         if (selectedTileIsValid(x + 2, y)) neighbours.add(MapController.getTileByCoordinates(x + 2, y));
-        if (selectedTileIsValid(x + 1, y)) neighbours.add(MapController.getTileByCoordinates(x + 1, y));
         if (selectedTileIsValid(x - 1, y)) neighbours.add(MapController.getTileByCoordinates(x - 1, y));
+        if (selectedTileIsValid(x + 1, y)) neighbours.add(MapController.getTileByCoordinates(x + 1, y));
         return neighbours;
     }
 
