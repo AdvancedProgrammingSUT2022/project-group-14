@@ -98,23 +98,18 @@ public class CityController {
     }
 
     public static String lockCitizenToTile(City city, int id, int x, int y) {
-        for (int i = 0; i < city.getTerritory().size(); i++) {
+        for (int i = 0; i < city.getTerritory().size(); i++)
             if (i == city.getTerritory().size() - 1 && (city.getTerritory().get(i).getX() != x || city.getTerritory().get(i).getY() != y))
                 return "you should select a tile in city";
-        }
         for (Citizen citizen : city.getCitizens()) {
             if (id == citizen.getId()) {
-                if (citizen.isWorking())
-                    return "the citizen is currently working";
-                else {
-                    citizen.setXOfWorkingTile(x);
-                    citizen.setYOfWorkingTile(y);
-                    citizen.setIsWorking(true);
-                    CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                            + " you locked " + citizen.getId() + " to ( " + String.valueOf(x + 1) + " , "
-                            + String.valueOf(y + 1) + " ) coordinates", city.getCenterOfCity().getCivilizationName());
-                    return "citizen locked to tile successfully";
-                }
+                citizen.setXOfWorkingTile(x);
+                citizen.setYOfWorkingTile(y);
+                citizen.setIsWorking(true);
+                CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                        + " you locked " + citizen.getId() + " to ( " + String.valueOf(x + 1) + " , "
+                        + String.valueOf(y + 1) + " ) coordinates", city.getCenterOfCity().getCivilizationName());
+                return "citizen locked to tile successfully";
             }
         }
         return "no citizen exists in the city with the given id";
@@ -123,18 +118,14 @@ public class CityController {
     public static String unlockCitizenFromTile(City city, int id) {
         for (Citizen citizen : city.getCitizens()) {
             if (id == citizen.getId()) {
-                if (!citizen.isWorking())
-                    return "the citizen with the given id isn't currently locked to any tile";
-                else {
-                    citizen.setYOfWorkingTile(-1);
-                    citizen.setXOfWorkingTile(-1);
-                    citizen.setIsWorking(false);
-                    CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
-                                    + " you unlocked " + citizen.getId() + " from ( " + String.valueOf(citizen.getXOfWorkingTile() + 1) + " , "
-                                    + String.valueOf(citizen.getYOfWorkingTile() + 1) + " ) coordinates",
-                            city.getCenterOfCity().getCivilizationName());
-                    return "citizen unlocked successfully";
-                }
+                citizen.setYOfWorkingTile(-1);
+                citizen.setXOfWorkingTile(-1);
+                citizen.setIsWorking(false);
+                CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                                + " you unlocked " + citizen.getId() + " from ( " + String.valueOf(citizen.getXOfWorkingTile() + 1) + " , "
+                                + String.valueOf(citizen.getYOfWorkingTile() + 1) + " ) coordinates",
+                        city.getCenterOfCity().getCivilizationName());
+                return "citizen unlocked successfully";
             }
         }
         return "no citizen exists in the city with the given id";
@@ -171,23 +162,11 @@ public class CityController {
         return null;
     }
 
-    public static String producingUnit(UnitTypes unitEnum, String payment) {
+    public static void producingUnit(UnitTypes unitEnum, String payment) {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         City wantedCity = WorldController.getSelectedCity();
         Unit unit;
-        if (unitEnum.getRequiredTechnology() != null &&
-                currentCivilization.getTechnologies().get(unitEnum.getRequiredTechnology()) > 0)
-            return "technology" + unitEnum.getRequiredTechnology().getName() + " is required for producing this unit. you should study it first";
-        if (unitEnum.getRequiredResource() != null &&
-                currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().getName()) < 1)
-            return "resource" + unitEnum.getRequiredResource().getName() + " is required for producing this unit. you should gain it first";
-
         if (unitEnum.getName().equals("settler")) {
-            if (wantedCity.getCitizens().size() < 2) {
-                return "can't produce settler in a city with less than 2 citizens";
-            } else if (currentCivilization.getHappiness() < 0) {
-                return "can't produce settlers in an unhappy civilization";
-            }
             unit = new Settler(unitEnum, wantedCity.getCenterOfCity().getX(), wantedCity.getCenterOfCity().getY(), currentCivilization.getName());
         } else if (unitEnum.getName().equals("worker")) {
             unit = new Worker(unitEnum,
@@ -215,44 +194,50 @@ public class CityController {
         currentCivilization.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you started producing "
                 + unit.getName() + " in ( " + String.valueOf(WorldController.getSelectedCity().getCenterOfCity().getX() + 1)
                 + " , " + String.valueOf(WorldController.getSelectedCity().getCenterOfCity().getY() + 1) + " ) coordinates");
-        return null;
     }
 
-    public static String producingBuilding(Building building, String payment) {
+    public static Boolean canProduceUnit(UnitTypes unitEnum) {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         City wantedCity = WorldController.getSelectedCity();
-        if (cityCanProduceBuilding(wantedCity, building)) {
-            wantedCity.setCurrentBuilding(building);
-            wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
-
-            if (wantedCity.cityHasBuilding("workshop")) {
-                wantedCity.setCurrentProductionRemainingCost(building.getCost() * 4 / 5);
-            } else {
-                wantedCity.setCurrentProductionRemainingCost(building.getCost());
-            }
-            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you started producing "
-                            + "building" + " in ( " + String.valueOf(WorldController.getSelectedCity().getCenterOfCity().getX() + 1)
-                            + " , " + String.valueOf(WorldController.getSelectedCity().getCenterOfCity().getY() + 1) + " ) coordinates",
-                    WorldController.getWorld().getCurrentCivilizationName());
-            return null;
-        }
-        return "couldn't build building";
+        return (unitEnum.getRequiredTechnology() == null ||
+                currentCivilization.getTechnologies().get(unitEnum.getRequiredTechnology()) <= 0)
+                && (unitEnum.getRequiredResource() == null ||
+                currentCivilization.getStrategicResources().get(unitEnum.getRequiredResource().getName()) >= 1)
+                && (!unitEnum.getName().equals("settler") || (wantedCity.getCitizens().size() >= 2 && !(currentCivilization.getHappiness() < 0)));
     }
 
-    public static boolean cityCanProduceBuilding(City city, Building building) {
+    public static void producingBuilding(BuildingTypes buildingType, String payment) {
+        City wantedCity = WorldController.getSelectedCity();
+        Building building = new Building(buildingType);
+        wantedCity.setCurrentBuilding(building);
+        wantedCity.setPayingGoldForCityProduction(payment.equals("gold"));
+        if (wantedCity.cityHasBuilding("workshop")) {
+            wantedCity.setCurrentProductionRemainingCost(buildingType.getCost() * 4 / 5);
+        } else {
+            wantedCity.setCurrentProductionRemainingCost(buildingType.getCost());
+        }
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you started producing "
+                        + buildingType.getName() + " in ( " + String.valueOf(WorldController.getSelectedCity().getCenterOfCity().getX() + 1)
+                        + " , " + String.valueOf(WorldController.getSelectedCity().getCenterOfCity().getY() + 1) + " ) coordinates",
+                WorldController.getWorld().getCurrentCivilizationName());
+    }
+
+    public static boolean canProduceBuilding(BuildingTypes building) {
+        City city = WorldController.getSelectedCity();
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName());
-        if ((building.getBuildingType().equals(BuildingTypes.WINDMILL) && city.getCenterOfCity().getType().equals(TileBaseTypes.HILL))
-                || (building.getBuildingType().isRequiresRiver() && !city.getCenterOfCity().hasRiver())
-                || (building.getBuildingType().getRequiredTechnology() != null &&
-                currentCivilization.getTechnologies().get(building.getBuildingType().getRequiredTechnology()) > 0)
-                || (building.getBuildingType().getRequiredBuildings() != null &&
-                !city.cityHasRequiredBuildings(building.getBuildingType().getRequiredBuildings()))) {
+        if ((building.equals(BuildingTypes.WINDMILL) && city.getCenterOfCity().getType().equals(TileBaseTypes.HILL))
+                || (building.isRequiresRiver() && !city.getCenterOfCity().hasRiver())
+                || (building.getRequiredTechnology() != null &&
+                currentCivilization.getTechnologies().get(building.getRequiredTechnology()) > 0)
+                || (building.getRequiredBuildings() != null &&
+                !city.cityHasRequiredBuildings(building.getRequiredBuildings()))) {
             return false;
         }
-        if (building.getBuildingType().getRequiredResource() != null) {
+        if (building.getRequiredResource() != null) {
             for (int i = 0; i < city.getTerritory().size(); i++) {
-                if (building.getBuildingType().getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())) {
-                    if (currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) > 0) {
-                        currentCivilization.getStrategicResources().put(building.getBuildingType().getRequiredResource().getName(), currentCivilization.getStrategicResources().get(building.getBuildingType().getRequiredResource().getName()) - 1);
+                if (building.getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())) {
+                    if (currentCivilization.getStrategicResources().get(building.getRequiredResource().getName()) > 0) {
+                        currentCivilization.getStrategicResources().put(building.getRequiredResource().getName(), currentCivilization.getStrategicResources().get(building.getRequiredResource().getName()) - 1);
                         return true;
                     }
                 }
@@ -264,12 +249,22 @@ public class CityController {
     public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY) {
         if (civilization.getGold() < 100)
             return "you don't have enough gold for buying this tile";
-        civilization.setGold(civilization.getGold() - 100);
-        Tile tile = MapController.getMap()[tileX][tileY];
-        tile.setCivilization(civilization.getName());
-        city.getTerritory().add(tile);
-        CivilizationController.updateMapVision(civilization);
-        return "tile was bought successfully";
+        ArrayList<Tile> tiles = new ArrayList<>();
+        for (Tile tile : city.getTerritory())
+            tiles.addAll(TileController.getAvailableNeighbourTiles(tile.getX(), tile.getY()));
+        for (Tile tile : tiles) {
+            if (tile.getX() == tileX && tile.getY() == tileY) {
+                if (tile.getCivilizationName().equals(city.getCenterOfCity().getCivilizationName()))
+                    return "you already have this tile";
+                civilization.setGold(civilization.getGold() - 100);
+                Tile bought = MapController.getMap()[tileX][tileY];
+                bought.setCivilization(civilization.getName());
+                city.getTerritory().add(bought);
+                CivilizationController.updateMapVision(civilization);
+                return "tile was bought successfully";
+            }
+        }
+        return "can't buy this tile";
     }
 
     public static String unemployedCitizensData(City city) {

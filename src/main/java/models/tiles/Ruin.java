@@ -23,7 +23,7 @@ public class Ruin {
 
     public static Ruin generateRandomRuin(Coordination coordination) {
         Random random = new Random();
-        if (random.nextInt(10) % 10 == 0) {
+        if (random.nextInt(20) % 20 == 0) {
             Technologies technology = Technologies.generateRandom();
             double gold = random.nextInt(10, 1000);
             boolean provideCitizen = false;

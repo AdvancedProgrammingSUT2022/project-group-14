@@ -48,6 +48,14 @@ public class TileController {
         }
     }
 
+    public static void updateAllHexes() {
+        for (Tile[] tiles : MapController.getMap()) {
+            for (Tile tile : tiles) {
+                tile.getHex().updateHex();
+            }
+        }
+    }
+
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
         ArrayList<Tile> neighbours = new ArrayList<>();
         if (selectedTileIsValid(x - 2, y)) neighbours.add(MapController.getTileByCoordinates(x - 2, y));

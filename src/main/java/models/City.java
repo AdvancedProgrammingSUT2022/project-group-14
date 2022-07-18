@@ -15,7 +15,6 @@ import models.units.*;
 
 public class City {
     private final String name;
-    private final String civilizationName;
     private final Coordination centerCoordination;
 
     private double food;
@@ -41,7 +40,6 @@ public class City {
 
     public City(String name, int x, int y) {
         this.name = name;
-        this.civilizationName = MapController.getTileByCoordinates(x, y).getCivilizationName();
         this.centerCoordination = new Coordination(x, y);
         citizens.add(new Citizen(1));
         this.territory.add(MapController.getTileByCoordinates(x, y));
@@ -86,30 +84,29 @@ public class City {
             if (MapController.getTileByCoordinates(centerCoordination).getCombatUnit() == null) {
                 MapController.getTileByCoordinates(centerCoordination).setCombatUnit((models.units.CombatUnit) currentUnit);
                 if (currentUnit instanceof Melee)
-                    WorldController.getWorld().getCivilizationByName(civilizationName).getMelees().add((Melee) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(getCenterOfCity().getCivilizationName()).getMelees().add((Melee) currentUnit);
                 else
-                    WorldController.getWorld().getCivilizationByName(civilizationName).getRanges().add((Ranged) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(getCenterOfCity().getCivilizationName()).getRanges().add((Ranged) currentUnit);
                 currentUnit = null;
             }
         } else {
             if (MapController.getTileByCoordinates(centerCoordination).getNonCombatUnit() == null) {
                 MapController.getTileByCoordinates(centerCoordination).setNonCombatUnit((models.units.NonCombatUnit) currentUnit);
                 if (currentUnit instanceof Settler)
-                    WorldController.getWorld().getCivilizationByName(civilizationName).getSettlers().add((Settler) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(getCenterOfCity().getCivilizationName()).getSettlers().add((Settler) currentUnit);
                 else
-                    WorldController.getWorld().getCivilizationByName(civilizationName).getWorkers().add((Worker) currentUnit);
+                    WorldController.getWorld().getCivilizationByName(getCenterOfCity().getCivilizationName()).getWorkers().add((Worker) currentUnit);
                 currentUnit = null;
             }
         }
     }
 
     public boolean cityHasRequiredBuildings(HashSet<String> buildings) {
-        Iterator<String> iterator = buildings.iterator();
-        while (iterator.hasNext()) {
-            BuildingTypes buildingTypes = BuildingTypes.getBuildingByName(iterator.next());
+        for (String building : buildings) {
+            BuildingTypes buildingTypes = BuildingTypes.getBuildingByName(building);
             boolean cityHasBuilding = false;
-            for (int i = 0; i < this.buildings.size(); i++) {
-                if (this.buildings.get(i).getBuildingType().equals(buildingTypes)) {
+            for (Building value : this.buildings) {
+                if (value.getBuildingType().equals(buildingTypes)) {
                     cityHasBuilding = true;
                     break;
                 }

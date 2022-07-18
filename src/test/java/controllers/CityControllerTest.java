@@ -192,7 +192,6 @@ public class CityControllerTest {
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         when(city.getCenterOfCity()).thenReturn(tile);
-        CityController.producingBuilding(building, "gold");
         verify(city).setCurrentBuilding(building);
         verify(city).setPayingGoldForCityProduction(true);
         verify(city).setCurrentProductionRemainingCost(building.getCost());
