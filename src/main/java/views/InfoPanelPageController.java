@@ -160,6 +160,10 @@ public class InfoPanelPageController {
             Text info = new Text(city.getName());
             info.setFill(Color.WHITE);
             Button button = new Button(city.getName() + " Panel");
+            button.setOnMouseClicked(mouseEvent -> {
+                WorldController.setSelectedCity(city);
+                App.changeScene("cityPanelPage");
+            });
             HBox hBox = new HBox(name, info, button);
             hBox.setSpacing(10);
             hBox.setAlignment(Pos.CENTER);

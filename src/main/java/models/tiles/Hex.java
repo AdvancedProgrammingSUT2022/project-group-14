@@ -213,6 +213,7 @@ public class Hex {
         this.cityImage.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 WorldController.setSelectedCity(MapController.getTileByCoordinates(Hex.this.coordination).getCity());
+                App.changeScene("cityPanelPage");
             }
         });
     }

@@ -132,7 +132,6 @@ public class GamePageController {
         techText.setText("");
         Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
             checkUnitPanelUpdate();
-            checkCityPanelUpdate();
             checkTechnologyPanelUpdate();
         }));
         timeline.setCycleCount(-1);
@@ -156,14 +155,6 @@ public class GamePageController {
             }
         } else if (WorldController.unitIsNotSelected()) {
             unitPanelPane.setVisible(false);
-        }
-    }
-
-    public void checkCityPanelUpdate() {
-        if (WorldController.getSelectedCity() != null) {
-            //TODO show city banner
-        } else {
-            //TODO hide city banner
         }
     }
 
