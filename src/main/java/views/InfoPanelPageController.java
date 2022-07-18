@@ -79,11 +79,9 @@ public class InfoPanelPageController {
                 totalCombatUnits++;
             }
         }
-        Text valuation = new Text("You have " + currentCivilization.getCities().size() + " citie(s) in total and "
-                + totalCombatUnits + " combat units \nwith total value of " + totalValueOfCombatUnits
-                + " and your combat units are : ");
-        valuation.setFill(Color.WHITE);
-        vBox.getChildren().add(valuation);
+        Text cities = new Text("You have " + currentCivilization.getCities().size() + " city(ies) in total");
+        cities.setFill(Color.WHITE);
+        vBox.getChildren().add(cities);
         int counter = 1;
         for (City city : currentCivilization.getCities()) {
             Text name = new Text(counter + "");
@@ -96,6 +94,10 @@ public class InfoPanelPageController {
             hBox.setAlignment(Pos.CENTER);
             vBox.getChildren().add(hBox);
         }
+        Text valuation = new Text("And you have " + totalCombatUnits + " combat units \nwith total valuation of "
+                + totalValueOfCombatUnits + " golds and your combat units are : ");
+        valuation.setFill(Color.WHITE);
+        vBox.getChildren().add(valuation);
         counter = 1;
         for (Unit unit : currentCivilization.getAllUnits()) {
             if (unit instanceof CombatUnit) {

@@ -2,8 +2,8 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.MenuButton?>
-<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.shape.Rectangle?>
@@ -11,7 +11,7 @@
 
 <AnchorPane prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18"
             xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.GamePageController">
-    <ScrollPane hbarPolicy="ALWAYS" layoutX="-11" layoutY="80" prefHeight="607" prefWidth="1280"
+    <ScrollPane fx:id="scrollPane" hbarPolicy="ALWAYS" layoutX="-11" layoutY="80" prefHeight="607" prefWidth="1280"
                 style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
         <AnchorPane fx:id="hexPane"/>
     </ScrollPane>
@@ -25,16 +25,20 @@
     <Text fx:id="happinessText" layoutX="194.0" layoutY="33.0" text="1000" wrappingWidth="70"/>
     <Button layoutX="388.0" layoutY="23.0" prefHeight="36.0" prefWidth="127.0" style="-fx-pref-width: 125;"
             text="Research"/>
-    <MenuButton fx:id="infoPanelsMenuButton" layoutX="578.0" layoutY="23.0" mnemonicParsing="false" prefHeight="36.0" prefWidth="125.0"
-                text="InfoPanels"/>
+    <MenuButton fx:id="infoPanelsMenuButton" layoutX="578.0" layoutY="23.0" mnemonicParsing="false" prefHeight="36.0"
+                prefWidth="125.0" text="InfoPanels"/>
     <Text fx:id="yearText" fill="white" layoutX="994.0" layoutY="48.0" text="4000 BC" wrappingWidth="112"/>
     <Circle fill="WHITE" layoutX="1124.0" layoutY="41.0" radius="18.0"/>
     <Circle fx:id="settingsCircle" layoutX="1124.0" layoutY="41.0" radius="18.0" stroke="black"/>
     <Button layoutX="1160.0" layoutY="23.0" style="-fx-pref-width: 80;" text="Menu"/>
     <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0"/>
     <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145"/>
+    <Text fx:id="cheatCodeText" layoutX="994.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Your CheatCode :"/>
+    <TextArea fx:id="cheatCodeArea" layoutX="990.0" layoutY="110.0" onKeyPressed="#cheatCodeAreaTyped"
+              prefHeight="150.0" prefWidth="250.0"/>
     <Button layoutX="1090.0" layoutY="600.0" onMouseClicked="#nextTurnButtonClicked" text="Next Turn"/>
-    <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="450.0" style="-fx-background-color: transparent">
+    <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="450.0"
+                style="-fx-background-color: transparent">
         <Rectangle fill="cadetblue" height="28.0" layoutX="90.0" layoutY="36.0" stroke="BLACK" width="193.0"/>
         <Rectangle height="163.0" layoutY="64.0" stroke="BLACK" width="450.0"/>
         <Circle fill="cadetblue" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK"/>

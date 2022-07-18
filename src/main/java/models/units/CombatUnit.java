@@ -6,7 +6,7 @@ import models.tiles.Coordination;
 public class CombatUnit extends Unit {
     private final double defenseStrength;
     private final double attackStrength;
-    private final int range;
+    private int range;
     private Coordination attackingCoordination;
 
     public CombatUnit(UnitTypes unitInfo, int x, int y, String civilization) {
@@ -19,6 +19,10 @@ public class CombatUnit extends Unit {
 
     public int getRange() {
         return this.range;
+    }
+
+    public void setRange(int amount) {
+        this.range = amount;
     }
 
     public void healUnit(double amount) {

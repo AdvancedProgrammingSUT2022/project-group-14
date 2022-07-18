@@ -46,7 +46,8 @@ public class Civilization {
             randomY = new Random().nextInt(2, MapController.height - 2);
         } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
         melees.add(new Melee(UnitTypes.WARRIOR, randomX, randomY, name));
-        settlers.add(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
+//        settlers.add(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
+        workers.add(new Worker(UnitTypes.WORKER, randomX, randomY, name));
         this.happiness = 10;
         citiesNames.add(name + "1");
         citiesNames.add(name + "2");
