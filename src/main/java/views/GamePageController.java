@@ -8,16 +8,16 @@ import enums.units.UnitStates;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.Node;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -34,6 +34,8 @@ import java.util.Objects;
 
 public class GamePageController {
     public static String infoPanelName;
+    @FXML
+    private ScrollPane scrollPane;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -59,6 +61,10 @@ public class GamePageController {
     @FXML
     private Text techText;
     @FXML
+    private Text cheatCodeText;
+    @FXML
+    private TextArea cheatCodeArea;
+    @FXML
     private AnchorPane unitPanelPane;
     @FXML
     private Circle unitPanelCircle;
@@ -74,6 +80,12 @@ public class GamePageController {
         initNavBar();
         initTimeLine();
         initHexes();
+        scrollPane.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
+                cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
+                cheatCodeText.setVisible(!cheatCodeText.isVisible());
+            }
+        });
     }
 
     private void initNavBar() {
@@ -99,6 +111,8 @@ public class GamePageController {
             });
         }
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
+        cheatCodeArea.setVisible(false);
+        cheatCodeText.setVisible(false);
     }
 
     public void initHexes() {
@@ -290,7 +304,12 @@ public class GamePageController {
         unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
         unitPanelNameText.setText(unit.getName());
         unitPanelMPText.setText("MP : " + unit.getMovementPoint());
-        unitPanelCSText.setText("CS : " + String.valueOf(unit.getUnitType().getCombatStrength() + unit.getUnitType().getRangedCombatStrength()));
+        if (unit instanceof CombatUnit) {
+            unitPanelCSText.setText("CS : " + String.valueOf(unit.getUnitType().getCombatStrength() + unit.getUnitType().getRangedCombatStrength()));
+        } else if (unit instanceof Worker) {
+            unitPanelCSText.setText("TLW : " + ((Worker) unit).getTurnsLeftToWork());
+        }
+
     }
 
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
@@ -301,15 +320,20 @@ public class GamePageController {
         }
     }
 
+    public void cheatCodeAreaTyped(KeyEvent keyEvent) {
+        if (keyEvent.getCode().getName().equals("Enter")) {
+            String text = cheatCodeArea.getText().substring(0, cheatCodeArea.getText().length() - 1);
+            String command = cheatCodeArea.getText().substring(text.lastIndexOf("\n") + 1, cheatCodeArea.getText().length() - 1);
+            if (command.equals("clear")) {
+                cheatCodeArea.clear();
+            } else {
+                GameCommandsValidation.checkCommands(command);
+            }
+        }
+    }
+
     public void backButtonClicked(MouseEvent mouseEvent) {
         App.changeScene("startGameMenuPage");
     }
 
-    public void goToUnitsPanel(MouseEvent mouseEvent) {
-        App.changeScene("unitsPanel");
-    }
-
-    public void goToCitiesPage(MouseEvent mouseEvent) {
-        App.changeScene("citiesPage");
-    }
 }

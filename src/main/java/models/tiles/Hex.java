@@ -5,6 +5,8 @@ import controllers.*;
 import enums.tiles.TileFeatureTypes;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
+import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
@@ -16,6 +18,8 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Text;
 import javafx.stage.Popup;
+import javafx.util.Duration;
+import models.Building;
 import models.City;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
@@ -126,7 +130,6 @@ public class Hex {
             this.addUnitToGroup(tile.getCombatUnit());
         if (tile.getNonCombatUnit() != null)
             this.addUnitToGroup(tile.getNonCombatUnit());
-
         this.group.getChildren().add(this.coordinationText);
     }
 
