@@ -45,6 +45,7 @@ public class WorldController {
         applyAttacks();
         addAllHeals();
         world.nextTurn();
+        TileController.updateAllHexes();
         resetSelection();
     }
 

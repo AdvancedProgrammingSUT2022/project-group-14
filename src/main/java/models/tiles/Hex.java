@@ -11,6 +11,7 @@ import javafx.scene.effect.Bloom;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.effect.Effect;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -95,14 +96,26 @@ public class Hex {
 
     public void updateHex() {
         Tile tile = MapController.getTileByCoordinates(this.coordination);
+        this.group.getChildren().clear();
+        this.colorAdjust.setBrightness(0);
+        int[][] visionState = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getVisionStatesOfMap();
+        this.unitGroups.clear();
+        if (visionState[coordination.getX()][coordination.getY()] == 0) {
+            this.colorAdjust.setBrightness(-1);
+            this.polygon.setFill(Color.BLACK);
+            this.group.getChildren().add(polygon);
+            return;
+        } else if (visionState[coordination.getX()][coordination.getY()] == 1) {
+            tile = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getRevealedTiles()[coordination.getX()][coordination.getY()];
+            this.colorAdjust.setBrightness(-0.5);
+        }
+
         if (tile.getFeature() != TileFeatureTypes.NULL) {
             this.polygon.setFill(new ImagePattern(tile.getFeature().getImage()));
         } else {
             this.polygon.setFill(new ImagePattern(tile.getType().getImage()));
         }
 
-        this.group.getChildren().clear();
-        this.unitGroups.clear();
         this.group.getChildren().add(this.polygon);
         if (tile.getRoadState() == 0) {
             ImageView roadImage = new ImageView(Objects.requireNonNull(App.class.getResource("/images/resources/road.png")).toString());
