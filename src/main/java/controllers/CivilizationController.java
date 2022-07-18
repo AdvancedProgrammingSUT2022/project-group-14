@@ -1,10 +1,13 @@
 package controllers;
 
 import enums.Technologies;
+import javafx.scene.paint.Color;
 import models.*;
 import models.tiles.Ruin;
 import models.tiles.Tile;
+import models.units.Settler;
 import models.units.Unit;
+import models.units.Worker;
 
 public class CivilizationController {
 
@@ -32,7 +35,7 @@ public class CivilizationController {
         }
         for (City city : civilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.coordinatesAreInRange(tile.getX(), tile.getY(), x, y, 1)){
+                if (TileController.coordinatesAreInRange(tile.getX(), tile.getY(), x, y, 1)) {
                     return true;
                 }
             }
@@ -69,13 +72,13 @@ public class CivilizationController {
         }
     }
 
-    public static void updateCitiesProductions(Civilization civilization){
+    public static void updateCitiesProductions(Civilization civilization) {
         for (City city : civilization.getCities()) {
             CityController.updateCityProduction(city);
         }
     }
 
-    public static void updateScience(Civilization civilization){
+    public static void updateScience(Civilization civilization) {
         double addedScience = 3;
         for (City city : civilization.getCities()) {
             addedScience += city.getCitizens().size();
@@ -83,10 +86,10 @@ public class CivilizationController {
         civilization.setScience(civilization.getScience() + addedScience);
     }
 
-    public static void payRequiredPriceForKeepingRoadsAndRailroads(Civilization civilization){
+    public static void payRequiredPriceForKeepingRoadsAndRailroads(Civilization civilization) {
         for (City city : civilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (tile.getRoadState() == 0 || tile.getRailRoadState() == 0){
+                if (tile.getRoadState() == 0 || tile.getRailRoadState() == 0) {
                     if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
                     else civilization.setScience(civilization.getScience() - 1);
                 }
@@ -94,17 +97,18 @@ public class CivilizationController {
         }
     }
 
-    public static void payRequiredPriceForKeepingUnits(Civilization civilization){
+    public static void payRequiredPriceForKeepingUnits(Civilization civilization) {
         for (int i = 0; i < civilization.getAllUnits().size(); i++) {
             if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
             else civilization.setScience(civilization.getScience() - 1);
         }
     }
 
-    public static void payRequiredPriceForKeepingBuildings(Civilization civilization){
+    public static void payRequiredPriceForKeepingBuildings(Civilization civilization) {
         for (City city : civilization.getCities()) {
             for (Building building : city.getBuildings()) {
-                if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - building.getMaintenance());
+                if (civilization.getGold() > 0)
+                    civilization.setGold(civilization.getGold() - building.getMaintenance());
                 else civilization.setScience(civilization.getScience() - building.getMaintenance());
             }
         }
@@ -115,22 +119,33 @@ public class CivilizationController {
             Tile tile = MapController.getMap()[unit.getCurrentX()][unit.getCurrentY()];
             Ruin ruin = tile.getRuin();
             if (ruin != null) {
+                String found = "Found ruin! : ";
                 if (ruin.getFreeTechnology() != null) {
                     civilization.getTechnologies().put(ruin.getFreeTechnology(), 0);
+                    found += "FreeTech + ";
                 }
                 if (ruin.isProvideCitizen()) {
-                    for (City city : civilization.getCities()) {
+                    found += "Provided citizens + ";
+                    for (City city : civilization.getCities())
                         city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
-                    }
                 }
                 if (tile.getNonCombatUnit() == null && ruin.getNonCombatUnit() != null) {
                     ruin.getNonCombatUnit().setCivilizationName(civilization.getName());
+                    if (ruin.getNonCombatUnit() instanceof Worker) {
+                        civilization.getWorkers().add((Worker) ruin.getNonCombatUnit());
+                    } else {
+                        civilization.getSettlers().add((Settler) ruin.getNonCombatUnit());
+                    }
                     tile.setNonCombatUnit(ruin.getNonCombatUnit());
+                    found += "FreeNonCombatUnit  + ";
                 }
                 civilization.setGold(civilization.getGold() + ruin.getGold());
+                found += ruin.getGold() + "Golds";
+                tile.getHex().setInfoText("Found ruin!", Color.GREEN);
                 tile.setRuin(null);
+                civilization.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                        + " you've found a ruin with these benefits : \n" + found);
             }
-
         }
     }
 

@@ -169,6 +169,9 @@ public class GamePageController {
 
     public void checkTechnologyPanelUpdate() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        happinessText.setText(currentCivilization.getHappiness() + "");
+        goldText.setText(currentCivilization.getGold() + "");
+        scienceText.setText(currentCivilization.getScience() + "");
         if (currentCivilization.getCurrentTechnology() != null) {
             techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
             techText.setText(currentCivilization.getCurrentTechnology().getName());

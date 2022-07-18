@@ -1,11 +1,16 @@
 package controllers;
 
+import javafx.scene.Group;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MoveController {
 
@@ -39,6 +44,7 @@ public class MoveController {
             if (nextTileToMove == null || ((error = impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit)) != null
                     && error.equals("there is not any space left on the tile to move")
                     && unit.getMovementPoint() - (nextTileToMove.getMovingPoint()) <= 0)) {
+                MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()).getHex().setInfoText("Can't move!", Color.RED);
                 unit.cancelMission();
                 break;
             }
@@ -48,6 +54,7 @@ public class MoveController {
             if ((unit.getMovementPoint() < 0) || (nextTileToMove.getCivilizationName() != null && !nextTileToMove.getCivilizationName().equals(unit.getCivilizationName())))
                 unit.setMovementPoint(0);
             MapController.updateUnitPositions();
+            CivilizationController.updateRuins(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()));
             CivilizationController.updateMapVision(WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()));
         }
     }

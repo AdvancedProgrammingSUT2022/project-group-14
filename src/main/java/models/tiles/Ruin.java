@@ -3,6 +3,8 @@ package models.tiles;
 import enums.Technologies;
 import enums.units.UnitTypes;
 import models.units.NonCombatUnit;
+import models.units.Settler;
+import models.units.Worker;
 
 import java.util.Random;
 
@@ -11,14 +13,12 @@ public class Ruin {
     private final boolean provideCitizen;
     private final double gold;
     private final NonCombatUnit nonCombatUnit;
-    private Coordination coordination;
 
-    public Ruin(Technologies freeTechnology, boolean provideCitizen, double gold, NonCombatUnit nonCombatUnit, Coordination coordination) {
+    public Ruin(Technologies freeTechnology, boolean provideCitizen, double gold, NonCombatUnit nonCombatUnit) {
         this.freeTechnology = freeTechnology;
         this.provideCitizen = provideCitizen;
         this.gold = gold;
         this.nonCombatUnit = nonCombatUnit;
-        this.coordination = coordination;
     }
 
     public static Ruin generateRandomRuin(Coordination coordination) {
@@ -27,16 +27,19 @@ public class Ruin {
             Technologies technology = Technologies.generateRandom();
             double gold = random.nextInt(10, 1000);
             boolean provideCitizen = false;
-            NonCombatUnit nonCombatUnit;
+            NonCombatUnit nonCombatUnit = null;
             int randomNumber = random.nextInt(15);
-            if (randomNumber % 3 == 0) nonCombatUnit = new NonCombatUnit(UnitTypes.WORKER, coordination.getX(), coordination.getY(), null);
-            else if (randomNumber % 3 == 1) nonCombatUnit = new NonCombatUnit(UnitTypes.SETTLER, coordination.getX(), coordination.getY(), null);
-            else nonCombatUnit = null;
-
-            if (randomNumber % 5 == 0) provideCitizen = true;
-
-            return new Ruin(technology, provideCitizen, gold, nonCombatUnit, coordination);
-        } else return null;
+            if (randomNumber % 3 == 0)
+                nonCombatUnit = new Worker(UnitTypes.WORKER, coordination.getX(), coordination.getY(), null);
+            else if (randomNumber % 3 == 1)
+                nonCombatUnit = new Settler(UnitTypes.SETTLER, coordination.getX(), coordination.getY(), null);
+            if (randomNumber % 5 == 0)
+                provideCitizen = true;
+            System.out.println(coordination.getX() + " " + coordination.getY());
+            return new Ruin(technology, provideCitizen, gold, nonCombatUnit);
+        } else {
+            return null;
+        }
     }
 
     public Technologies getFreeTechnology() {
