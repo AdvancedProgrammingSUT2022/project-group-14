@@ -82,6 +82,8 @@ public class Tile {
 
     public static Tile generateRandomTile(int x, int y) {
         TileBaseTypes baseType = TileBaseTypes.generateRandom();
+        if (baseType == TileBaseTypes.OCEAN)
+            baseType = TileBaseTypes.generateRandom();
         TileFeatureTypes featureType = generateRandomFeature(baseType);
         Ruin ruin = Ruin.generateRandomRuin(new Coordination(x, y));
         if (x == 0 || x == MapController.getHeight() - 1 || (y == 0 && x % 2 == 0) || (y == MapController.getWidth() - 1 && x % 2 == 1)) {

@@ -10,6 +10,7 @@ import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.*;
 import models.tiles.Tile;
@@ -23,6 +24,7 @@ public class UnitController {
     public static String setUnitDestinationCoordinates(Unit unit, int x, int y) {
         String reason;
         if ((reason = MoveController.impossibleToMoveToTile(x, y, unit)) != null) {
+            MapController.getTileByCoordinates(x, y).getHex().setInfoText("Can't move!", Color.RED);
             return reason;
         } else {
             unit.setDestinationCoordinates(x, y);

@@ -39,6 +39,7 @@ public class Hex {
     private final ImageView cityImage = new ImageView(CityController.getCenterImage());
     private final HashMap<String, Group> unitGroups = new HashMap<>();
     private final Text coordinationText;
+    private final Text infoText;
     private final ColorAdjust colorAdjust = new ColorAdjust();
     private final Popup popup = new Popup();
 
@@ -53,7 +54,9 @@ public class Hex {
                 setX(15), setY(10 * Math.sqrt(3)), setX(5), setY(10 * Math.sqrt(3)), setX(0), setY(5 * Math.sqrt(3)));
         this.coordinationText = new Text(String.valueOf(tile.getX() + 1) + "," + String.valueOf(tile.getY() + 1));
         this.coordinationText.setLayoutX(this.getCenterX() - 7 * this.coordinationText.getBoundsInLocal().getWidth() / 10);
-        this.coordinationText.setLayoutY(this.getCenterY() - 10);
+        this.coordinationText.setLayoutY(this.getCenterY() - 8);
+        this.infoText = new Text();
+        this.infoText.setLayoutY(this.getCenterY() - 23);
         setCityEventHandlers();
         this.group.setEffect(this.colorAdjust);
         setGroupEventHandlers();
@@ -69,6 +72,7 @@ public class Hex {
         this.group.setOnMouseExited(mouseEvent -> {
             if (!(Hex.this.colorAdjust.getInput() instanceof Bloom))
                 Hex.this.colorAdjust.setInput(null);
+            this.infoText.setText("");
             popup.getContent().clear();
             popup.hide();
         });
@@ -84,10 +88,7 @@ public class Hex {
                     WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
                     Hex.this.colorAdjust.setInput(new Bloom());
                 }
-                popup.getContent().add(TileController.getInfoPopup(coordination));
-                popup.setX(mouseEvent.getSceneX() + 30);
-                popup.setY(mouseEvent.getSceneY() + 15);
-                App.showPopUp(popup);
+                setPopup(TileController.getInfoPopup(coordination), mouseEvent.getSceneX() + 30, mouseEvent.getSceneY() + 15);
             }
         });
     }
@@ -131,6 +132,20 @@ public class Hex {
         if (tile.getNonCombatUnit() != null)
             this.addUnitToGroup(tile.getNonCombatUnit());
         this.group.getChildren().add(this.coordinationText);
+        this.group.getChildren().add(this.infoText);
+    }
+
+    public void setPopup(Group group, double x, double y) {
+        popup.getContent().add(group);
+        popup.setX(x);
+        popup.setY(y);
+        App.showPopUp(popup);
+    }
+
+    public void setInfoText(String info, Color color) {
+        infoText.setText(info);
+        infoText.setFill(color);
+        this.infoText.setLayoutX(this.getCenterX() - 5 * this.infoText.getBoundsInLocal().getWidth() / 10);
     }
 
     public boolean isTerritory() {
