@@ -123,6 +123,10 @@ public class MapController {
         return tilesMap;
     }
 
+    public static void setMap(Tile[][] map) {
+        tilesMap = map;
+    }
+
     public static Tile getTileByCoordinates(int x, int y) {
         return tilesMap[x][y];
     }

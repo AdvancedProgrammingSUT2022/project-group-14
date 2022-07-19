@@ -1,9 +1,12 @@
 package controllers;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import enums.Technologies;
 import enums.units.UnitStates;
 import models.City;
 import models.Civilization;
+import models.User;
 import models.tiles.Coordination;
 import models.tiles.Tile;
 import models.World;
@@ -11,7 +14,12 @@ import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WorldController {
     private static World world;
@@ -153,5 +161,24 @@ public class WorldController {
 
     public static Coordination getCheatCoordination() {
         return cheatCoordination;
+    }
+
+    public static void loadGame(String name) throws IOException {
+        String worldJson = new String(Files.readAllBytes(Paths.get("./src/main/resources/mapSaves/" + name + ".json")));
+        String mapJson = new String(Files.readAllBytes(Paths.get("./src/main/resources/worldSaves/" + name + ".json")));
+        world = new Gson().fromJson(worldJson, new TypeToken<World>() {
+        }.getType());
+        MapController.setMap(new Gson().fromJson(mapJson, new TypeToken<Tile[][]>() {
+        }.getType()));
+    }
+
+    public static void saveGame(String name) throws IOException {
+        FileWriter worldWriter = new FileWriter("./src/main/resources/worldSaves/" + name + ".json");
+//        FileWriter mapWriter = new FileWriter("./src/main/resources/mapSaves/" + name + ".json");
+        worldWriter.write(new Gson().toJson(world));
+        worldWriter.close();
+
+//        mapWriter.write(new Gson().toJson(MapController.getMap()));
+//        mapWriter.close();
     }
 }

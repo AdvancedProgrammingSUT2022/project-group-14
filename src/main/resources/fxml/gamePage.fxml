@@ -14,9 +14,9 @@
     <ScrollPane hbarPolicy="ALWAYS" layoutX="-11" layoutY="80" prefHeight="607" prefWidth="1280" style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
         <AnchorPane fx:id="hexPane" />
     </ScrollPane>
-    <ScrollPane hbarPolicy="NEVER" layoutX="-1.0" layoutY="79.0" prefHeight="641.0" prefWidth="285.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
+    <ScrollPane fx:id="researchPanelScrollPane" hbarPolicy="NEVER" layoutX="-1.0" layoutY="79.0" prefHeight="641.0" prefWidth="285.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER">
         <AnchorPane fx:id="researchPanelPane">
-            <Button fx:id="techTreeButton" layoutX="115.0" layoutY="10.0" style="-fx-pref-width: 130;" text="Tech Tree" onMouseClicked="#techTreeButtonClicked"/>
+            <Button layoutX="115.0" layoutY="10.0" style="-fx-pref-width: 130;" text="Tech Tree" onMouseClicked="#techTreeButtonClicked"/>
          </AnchorPane>
     </ScrollPane>
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="black" height="80.0" stroke="BLACK" width="1280.0" />

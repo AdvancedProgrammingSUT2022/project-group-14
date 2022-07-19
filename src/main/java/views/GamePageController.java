@@ -62,9 +62,9 @@ public class GamePageController {
     @FXML
     private TextArea cheatCodeArea;
     @FXML
-    public AnchorPane researchPanelPane;
+    public ScrollPane researchPanelScrollPane;
     @FXML
-    private Button techTreeButton;
+    public AnchorPane researchPanelPane;
     @FXML
     private AnchorPane unitPanelPane;
     @FXML
@@ -131,7 +131,7 @@ public class GamePageController {
     }
 
     public void initResearchPanel() {
-        researchPanelPane.setVisible(false);
+        researchPanelScrollPane.setVisible(false);
         researchPanelPane.getChildren().remove(1, researchPanelPane.getChildren().size());
         int i = 1;
         for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
@@ -183,7 +183,7 @@ public class GamePageController {
             techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
             techText.setText(currentCivilization.getCurrentTechnology().getName());
             initResearchPanel();
-        } else if (currentCivilization.getCurrentTechnology() == null && techCircle.isVisible()){
+        } else if (currentCivilization.getCurrentTechnology() == null && techCircle.isVisible()) {
             techCircle.setVisible(false);
             techText.setText("");
         }
@@ -239,6 +239,14 @@ public class GamePageController {
         garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
         Circle pillage = new Circle(25, new ImagePattern(UnitController.getActionImage("pillage")));
         pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY()));
+        Circle attack = new Circle(25, new ImagePattern(UnitController.getActionImage("attack")));
+        attack.setOnMouseClicked(mouseEvent -> {
+            if (WorldController.getSelectedTile() != null
+                    && (MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName() == null
+                    || !MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName().equals(unit.getCivilizationName()))) {
+                WarController.combatUnitAttacksTile(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY());
+            }
+        });
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
             setupRanged.setOnMouseClicked(mouseEvent -> UnitController.setupRangedUnit(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
@@ -249,6 +257,7 @@ public class GamePageController {
         unitPanelPane.getChildren().add(fortifyTillHealed);
         unitPanelPane.getChildren().add(garrison);
         unitPanelPane.getChildren().add(pillage);
+        unitPanelPane.getChildren().add(attack);
     }
 
     public void initNonCombatUnitActions(NonCombatUnit unit) {
@@ -349,7 +358,7 @@ public class GamePageController {
     }
 
     public void showResearchPanel(MouseEvent mouseEvent) {
-        researchPanelPane.setVisible(!researchPanelPane.isVisible());
+        researchPanelScrollPane.setVisible(!researchPanelScrollPane.isVisible());
     }
 
     public void techTreeButtonClicked(MouseEvent mouseEvent) {

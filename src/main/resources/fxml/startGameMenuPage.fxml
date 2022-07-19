@@ -5,6 +5,7 @@
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
@@ -24,15 +25,19 @@
     <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
     <Button layoutX="614.0" layoutY="236.0" text="Load Game"/>
     <Button layoutX="614.0" layoutY="285.0" onMouseClicked="#startGameButtonClicked" text="Start Game"/>
-    <Button fx:id="continueButton" layoutX="614.0" layoutY="334.0" onMouseClicked="#continueButtonClicked" text="Continue"/>
+    <Button fx:id="continueButton" layoutX="614.0" layoutY="334.0" onMouseClicked="#continueButtonClicked"
+            text="Continue"/>
     <Text fill="ORANGE" layoutX="1045.0" layoutY="231.0" text="number of players " textAlignment="CENTER"/>
     <Spinner fx:id="numberOfPlayersSpinner" layoutX="1054.0" layoutY="239.0"/>
     <Text fill="ORANGE" layoutX="1045.0" layoutY="316.0" text="map height" textAlignment="CENTER"/>
     <Text fill="ORANGE" layoutX="1045.0" layoutY="401.0" text="map width" textAlignment="CENTER"/>
     <Spinner fx:id="mapHeightSpinner" layoutX="1054.0" layoutY="324.0"/>
     <Spinner fx:id="mapWidthSpinner" layoutX="1054.0" layoutY="409.0"/>
-    <TextArea fx:id="cheatCodeArea" layoutX="1009.0" layoutY="490.0" prefHeight="200.0" prefWidth="200.0" onKeyPressed="#cheatCodeAreaTyped"/>
+    <TextArea fx:id="cheatCodeArea" layoutX="1009.0" layoutY="490.0" onKeyPressed="#cheatCodeAreaTyped"
+              prefHeight="200.0" prefWidth="200.0"/>
     <Text fx:id="cheatCodeText" fill="WHITE" layoutX="1009.0" layoutY="480.0" text="Enter your cheatCode : "/>
+    <TextField fx:id="saveNameTextField" layoutX="607.0" layoutY="528.0" promptText="Write the name of your save" style="-fx-pref-width: 165;"/>
+    <Button fx:id="saveGameButton" layoutX="615.0" layoutY="572.0" text="Save Game" onMouseClicked="#saveGameButtonClicked"/>
 
 
 </AnchorPane>

@@ -5,7 +5,6 @@ import models.City;
 import models.Civilization;
 import models.tiles.Tile;
 import models.units.*;
-import views.GamePlay;
 
 public class WarController {
 

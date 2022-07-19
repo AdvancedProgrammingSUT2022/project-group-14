@@ -58,7 +58,7 @@ public class CivilizationController {
 
         int civilizationScience = (int) civilization.getScience();
         civilization.getTechnologies().put(civilization.getCurrentTechnology(),
-                civilization.getTechnologies().get(civilization.getCurrentTechnology()) - civilizationScience);
+                Math.max(civilization.getTechnologies().get(civilization.getCurrentTechnology()) - civilizationScience, 0));
         civilization.setScience(0);
         if (civilization.getTechnologies().get(civilization.getCurrentTechnology()) <= 0) {
             for (City city : civilization.getCities()) {
@@ -167,7 +167,7 @@ public class CivilizationController {
             }
         }
         return availableTechnologies;
-        }
+    }
 
     public static void addNotification(String notification, String civilizationName) {
         WorldController.getWorld().getCivilizationByName(civilizationName).addNotification(notification);
