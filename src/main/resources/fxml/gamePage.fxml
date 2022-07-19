@@ -10,10 +10,11 @@
                 style="-fx-background-color: transparent;" vbarPolicy="ALWAYS">
         <AnchorPane fx:id="hexPane"/>
     </ScrollPane>
-    <ScrollPane fx:id="researchPanel" hbarPolicy="NEVER" layoutX="-1.0" layoutY="79.0" prefHeight="641.0"
-                prefWidth="285.0" vbarPolicy="NEVER">
-        <AnchorPane fx:id="researchPanelPane" layoutX="-1.0" layoutY="-1.0" minHeight="0.0" minWidth="0.0" prefHeight="641.0" prefWidth="285.0">
-            <Rectangle height="641.0" stroke="BLACK" width="285.0"/>
+    <ScrollPane hbarPolicy="NEVER" layoutX="-1.0" layoutY="79.0" prefHeight="641.0"
+                prefWidth="285.0" vbarPolicy="NEVER" style="-fx-background-color: transparent;">
+        <AnchorPane fx:id="researchPanelPane" layoutX="-1.0" layoutY="-1.0" minHeight="0.0" minWidth="0.0"
+                    prefHeight="641.0" prefWidth="285.0">
+            <!--            <Rectangle height="641.0" stroke="BLACK" width="285.0"/>-->
         </AnchorPane>
     </ScrollPane>
     <Rectangle arcHeight="5.0" arcWidth="5.0" fill="black" height="80.0" stroke="BLACK" strokeType="INSIDE"

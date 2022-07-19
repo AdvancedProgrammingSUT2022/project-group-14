@@ -1,9 +1,16 @@
 package controllers;
 
-import models.*;
+import enums.Technologies;
+import models.Building;
+import models.Citizen;
+import models.City;
+import models.Civilization;
 import models.tiles.Ruin;
 import models.tiles.Tile;
 import models.units.Unit;
+
+import java.util.HashSet;
+import java.util.Locale;
 
 public class CivilizationController {
 
@@ -31,7 +38,7 @@ public class CivilizationController {
         }
         for (City city : civilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (TileController.coordinatesAreInRange(tile.getX(), tile.getY(), x, y, 1)){
+                if (TileController.coordinatesAreInRange(tile.getX(), tile.getY(), x, y, 1)) {
                     return true;
                 }
             }
@@ -64,13 +71,13 @@ public class CivilizationController {
         }
     }
 
-    public static void updateCitiesProductions(Civilization civilization){
+    public static void updateCitiesProductions(Civilization civilization) {
         for (City city : civilization.getCities()) {
             CityController.updateCityProduction(city);
         }
     }
 
-    public static void updateScience(Civilization civilization){
+    public static void updateScience(Civilization civilization) {
         double addedScience = 3;
         for (City city : civilization.getCities()) {
             addedScience += city.getCitizens().size();
@@ -78,10 +85,10 @@ public class CivilizationController {
         civilization.setScience(civilization.getScience() + addedScience);
     }
 
-    public static void payRequiredPriceForKeepingRoadsAndRailroads(Civilization civilization){
+    public static void payRequiredPriceForKeepingRoadsAndRailroads(Civilization civilization) {
         for (City city : civilization.getCities()) {
             for (Tile tile : city.getTerritory()) {
-                if (tile.getRoadState() == 0 || tile.getRailRoadState() == 0){
+                if (tile.getRoadState() == 0 || tile.getRailRoadState() == 0) {
                     if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
                     else civilization.setScience(civilization.getScience() - 1);
                 }
@@ -89,17 +96,18 @@ public class CivilizationController {
         }
     }
 
-    public static void payRequiredPriceForKeepingUnits(Civilization civilization){
+    public static void payRequiredPriceForKeepingUnits(Civilization civilization) {
         for (int i = 0; i < civilization.getAllUnits().size(); i++) {
             if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - 1);
             else civilization.setScience(civilization.getScience() - 1);
         }
     }
 
-    public static void payRequiredPriceForKeepingBuildings(Civilization civilization){
+    public static void payRequiredPriceForKeepingBuildings(Civilization civilization) {
         for (City city : civilization.getCities()) {
             for (Building building : city.getBuildings()) {
-                if (civilization.getGold() > 0) civilization.setGold(civilization.getGold() - building.getMaintenance());
+                if (civilization.getGold() > 0)
+                    civilization.setGold(civilization.getGold() - building.getMaintenance());
                 else civilization.setScience(civilization.getScience() - building.getMaintenance());
             }
         }
@@ -127,5 +135,20 @@ public class CivilizationController {
             }
 
         }
+    }
+
+    public static HashSet<Technologies> getAvailableTechnologies(Civilization civilization) {
+        HashSet<Technologies> availableTechnologies = new HashSet<>();
+        int sum = 0;
+        for (Technologies value : Technologies.values()) {
+            sum = 0;
+            for (String requiredTechnology : value.getRequiredTechnologies()) {
+                sum += civilization.getTechnologies().get(Technologies.valueOf(requiredTechnology.toUpperCase(Locale.ROOT)));
+            }
+            if (sum <= 0) {
+                availableTechnologies.add(value);
+            }
+        }
+        return availableTechnologies;
     }
 }
