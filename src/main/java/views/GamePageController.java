@@ -1,17 +1,13 @@
 package views;
 
 import application.App;
-import controllers.MapController;
-import controllers.MoveController;
-import controllers.UnitController;
-import controllers.WorldController;
+import controllers.*;
 import enums.Technologies;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -31,8 +27,6 @@ import models.units.Unit;
 import java.util.Objects;
 
 public class GamePageController {
-    @FXML
-    public ScrollPane researchPanel;
     @FXML
     public AnchorPane researchPanelPane;
     @FXML
@@ -98,10 +92,12 @@ public class GamePageController {
     }
 
     public void initResearchPanel() {
-        researchPanel.setVisible(false); // this isn't related to timeline
-        Technology technology = new Technology(Technologies.IRON_WORKING , 50 , 90);
-        researchPanelPane.getChildren().add(technology.getGroup());
-
+        researchPanelPane.setVisible(false);
+        int i = 1;
+        for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
+            researchPanelPane.getChildren().add(new Technology(availableTechnology, 50, i * 90).getGroup());
+            i++;
+        }
     }
 
     public void initTimeLine() {
@@ -225,6 +221,6 @@ public class GamePageController {
     }
 
     public void showResearchPanel(MouseEvent mouseEvent) {
-        researchPanel.setVisible(!researchPanel.isVisible());
+        researchPanelPane.setVisible(!researchPanelPane.isVisible());
     }
 }

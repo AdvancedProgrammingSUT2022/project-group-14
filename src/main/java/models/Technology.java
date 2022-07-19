@@ -35,7 +35,7 @@ public class Technology {
         this.turnsRectangle.setLayoutX(x);
         this.turnsRectangle.setLayoutY(y);
         this.turnsRectangle.setFill(Color.rgb(238, 128, 0));
-        this.nameText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2 - 40, nameRectangle.getLayoutY() + nameRectangle.getHeight() - 10, "technology.getName()");
+        this.nameText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2 - 25, nameRectangle.getLayoutY() + nameRectangle.getHeight() - 7, technology.getName().replaceAll("_", " "));
         this.nameText.setFill(Color.WHITE);
         this.turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(technology));
         this.turnsText.setFill(Color.WHITE);
@@ -64,4 +64,5 @@ public class Technology {
     public Group getGroup() {
         return group;
     }
+
 }
