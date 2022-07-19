@@ -35,10 +35,13 @@ public class StartGameMenuController {
     private TextArea cheatCodeArea;
     @FXML
     private Text cheatCodeText;
+    @FXML
+    private Button continueButton;
 
     public void initialize() {
         initPanes();
         initInvitations();
+        continueButton.setVisible(WorldController.getWorld() != null);
         cheatCodeText.setVisible(false);
         cheatCodeArea.setVisible(false);
         anchorPane.setOnKeyReleased(keyEvent -> {
@@ -137,6 +140,10 @@ public class StartGameMenuController {
         }
         System.out.println(UserController.getLoggedInUser().getPeopleInLobby() + " * " + mapWidthSpinner.getValue() + " " + mapHeightSpinner.getValue());
         WorldController.newWorld(UserController.getLoggedInUser().getPeopleInLobby(), mapWidthSpinner.getValue(), mapHeightSpinner.getValue());
+        App.changeScene("gamePage");
+    }
+
+    public void continueButtonClicked(MouseEvent mouseEvent) {
         App.changeScene("gamePage");
     }
 }

@@ -74,6 +74,7 @@ public class GamePageController {
     private Text unitPanelMPText;
     @FXML
     private Text unitPanelCSText;
+    private Timeline timeline;
 
 
     public void initialize() {
@@ -86,6 +87,7 @@ public class GamePageController {
                 cheatCodeText.setVisible(!cheatCodeText.isVisible());
             }
         });
+        timeline.play();
     }
 
     private void initNavBar() {
@@ -130,12 +132,11 @@ public class GamePageController {
         unitPanelPane.setVisible(false);
         techCircle.setVisible(false);
         techText.setText("");
-        Timeline timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
             checkUnitPanelUpdate();
             checkTechnologyPanelUpdate();
         }));
         timeline.setCycleCount(-1);
-        timeline.play();
     }
 
     public void checkUnitPanelUpdate() {
@@ -326,8 +327,8 @@ public class GamePageController {
         }
     }
 
-    public void backButtonClicked(MouseEvent mouseEvent) {
+    public void menuButtonCLicked(MouseEvent mouseEvent) {
+        timeline.stop();
         App.changeScene("startGameMenuPage");
     }
-
 }

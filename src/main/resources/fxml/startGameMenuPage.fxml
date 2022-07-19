@@ -24,6 +24,7 @@
     <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
     <Button layoutX="614.0" layoutY="236.0" text="Load Game"/>
     <Button layoutX="614.0" layoutY="285.0" onMouseClicked="#startGameButtonClicked" text="Start Game"/>
+    <Button fx:id="continueButton" layoutX="614.0" layoutY="334.0" onMouseClicked="#continueButtonClicked" text="Continue"/>
     <Text fill="ORANGE" layoutX="1045.0" layoutY="231.0" text="number of players " textAlignment="CENTER"/>
     <Spinner fx:id="numberOfPlayersSpinner" layoutX="1054.0" layoutY="239.0"/>
     <Text fill="ORANGE" layoutX="1045.0" layoutY="316.0" text="map height" textAlignment="CENTER"/>

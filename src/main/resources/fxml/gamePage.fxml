@@ -30,7 +30,7 @@
     <Text fx:id="yearText" fill="white" layoutX="994.0" layoutY="48.0" text="4000 BC" wrappingWidth="112"/>
     <Circle fill="WHITE" layoutX="1124.0" layoutY="41.0" radius="18.0"/>
     <Circle fx:id="settingsCircle" layoutX="1124.0" layoutY="41.0" radius="18.0" stroke="black"/>
-    <Button layoutX="1160.0" layoutY="23.0" style="-fx-pref-width: 80;" text="Menu"/>
+    <Button layoutX="1160.0" layoutY="23.0" style="-fx-pref-width: 80;" text="Menu" onMouseClicked="#menuButtonCLicked"/>
     <Circle fx:id="techCircle" fill="WHITE" layoutX="51.0" layoutY="90.0" radius="37.0"/>
     <Text fx:id="techText" fill="white" layoutX="88.0" layoutY="71.5" text="Technology" wrappingWidth="145"/>
     <Text fx:id="cheatCodeText" layoutX="994.0" layoutY="105.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Enter Your CheatCode :"/>
