@@ -4,18 +4,14 @@ import application.App;
 import controllers.*;
 
 import enums.Improvements;
+import enums.Technologies;
 import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -27,7 +23,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.Civilization;
-import models.Technology;
 import models.tiles.Hex;
 import models.tiles.Tile;
 import models.units.*;
@@ -37,9 +32,7 @@ import java.util.Objects;
 public class GamePageController {
     public static String infoPanelName;
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    public AnchorPane researchPanelPane;
+    private AnchorPane mainPane;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -69,6 +62,8 @@ public class GamePageController {
     @FXML
     private TextArea cheatCodeArea;
     @FXML
+    public AnchorPane researchPanelPane;
+    @FXML
     private AnchorPane unitPanelPane;
     @FXML
     private Circle unitPanelCircle;
@@ -83,10 +78,10 @@ public class GamePageController {
 
     public void initialize() {
         initNavBar();
-        initResearchPanel();
         initTimeLine();
+        initResearchPanel();
         initHexes();
-        scrollPane.setOnKeyReleased(keyEvent -> {
+        mainPane.setOnKeyReleased(keyEvent -> {
             if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
                 cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
                 cheatCodeText.setVisible(!cheatCodeText.isVisible());
@@ -137,7 +132,7 @@ public class GamePageController {
         researchPanelPane.setVisible(false);
         int i = 1;
         for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
-            researchPanelPane.getChildren().add(new Technology(availableTechnology, 50, i * 90).getGroup());
+            researchPanelPane.getChildren().add(Technologies.getTechnologyGroup(availableTechnology, 50, i * 90));
             i++;
         }
     }
