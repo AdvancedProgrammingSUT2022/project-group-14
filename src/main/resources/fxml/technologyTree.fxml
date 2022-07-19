@@ -4,6 +4,6 @@
 <?import javafx.scene.layout.HBox?>
 
 
-<AnchorPane fx:id="mainPane" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TechnologyTreeController">
-      <HBox prefHeight="720.0" prefWidth="1280.0" />
+<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TechnologyTreeController">
+      <HBox fx:id="hBox" prefHeight="720.0" prefWidth="1280.0" />
 </AnchorPane>

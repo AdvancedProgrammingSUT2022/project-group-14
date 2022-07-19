@@ -3,6 +3,7 @@ package views;
 import enums.Technologies;
 import javafx.fxml.FXML;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.util.ArrayList;
@@ -12,7 +13,7 @@ import java.util.List;
 
 public class TechnologyTreeController {
     @FXML
-    public AnchorPane mainPane;
+    public HBox hBox;
 
     public void initialize() {
         initTechnologies();
@@ -25,6 +26,7 @@ public class TechnologyTreeController {
         ArrayList<Technologies> downLayer = new ArrayList<>();
         VBox vbox = new VBox();
         vbox.getChildren().add(Technologies.getTechnologyGroup(Technologies.AGRICULTURE,0,0));
+        hBox.getChildren().add(vbox);
 
 
     }
