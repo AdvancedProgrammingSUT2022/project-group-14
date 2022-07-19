@@ -175,12 +175,16 @@ public class UnitController {
         Civilization wantedCivilization = WorldController.getWorld().getCivilizationByName(unit.getCivilizationName());
         if (unit instanceof Ranged) {
             wantedCivilization.getRanges().remove((Ranged) unit);
+            MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(null);
         } else if (unit instanceof Melee) {
             wantedCivilization.getMelees().remove((Melee) unit);
+            MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setCombatUnit(null);
         } else if (unit instanceof Worker) {
             wantedCivilization.getWorkers().remove((Worker) unit);
+            MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(null);
         } else if (unit instanceof Settler) {
             wantedCivilization.getSettlers().remove((Settler) unit);
+            MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).setNonCombatUnit(null);
         }
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you deleted the " +
                 unit.getName() + " unit", unit.getCivilizationName());

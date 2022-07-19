@@ -4,18 +4,14 @@ import application.App;
 import controllers.*;
 
 import enums.Improvements;
+import enums.Technologies;
 import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.application.Platform;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
@@ -27,7 +23,6 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.Civilization;
-import models.Technology;
 import models.tiles.Hex;
 import models.tiles.Tile;
 import models.units.*;
@@ -37,9 +32,7 @@ import java.util.Objects;
 public class GamePageController {
     public static String infoPanelName;
     @FXML
-    private ScrollPane scrollPane;
-    @FXML
-    public AnchorPane researchPanelPane;
+    private AnchorPane mainPane;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -69,6 +62,10 @@ public class GamePageController {
     @FXML
     private TextArea cheatCodeArea;
     @FXML
+    public ScrollPane researchPanelScrollPane;
+    @FXML
+    public AnchorPane researchPanelPane;
+    @FXML
     private AnchorPane unitPanelPane;
     @FXML
     private Circle unitPanelCircle;
@@ -83,10 +80,10 @@ public class GamePageController {
 
     public void initialize() {
         initNavBar();
-        initResearchPanel();
         initTimeLine();
+        initResearchPanel();
         initHexes();
-        scrollPane.setOnKeyReleased(keyEvent -> {
+        mainPane.setOnKeyReleased(keyEvent -> {
             if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
                 cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
                 cheatCodeText.setVisible(!cheatCodeText.isVisible());
@@ -134,11 +131,14 @@ public class GamePageController {
     }
 
     public void initResearchPanel() {
-        researchPanelPane.setVisible(false);
+        researchPanelScrollPane.setVisible(false);
+        researchPanelPane.getChildren().remove(1, researchPanelPane.getChildren().size());
         int i = 1;
         for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
-            researchPanelPane.getChildren().add(new Technology(availableTechnology, 50, i * 90).getGroup());
-            i++;
+            if (WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCurrentTechnology() != availableTechnology) {
+                researchPanelPane.getChildren().add(availableTechnology.getTechnologyGroup(50, i * 90));
+                i++;
+            }
         }
     }
 
@@ -178,10 +178,12 @@ public class GamePageController {
         happinessText.setText(currentCivilization.getHappiness() + "");
         goldText.setText(currentCivilization.getGold() + "");
         scienceText.setText(currentCivilization.getScience() + "");
-        if (currentCivilization.getCurrentTechnology() != null) {
+        if (currentCivilization.getCurrentTechnology() != null && !techCircle.isVisible()) {
+            techCircle.setVisible(true);
             techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
             techText.setText(currentCivilization.getCurrentTechnology().getName());
-        } else {
+            initResearchPanel();
+        } else if (currentCivilization.getCurrentTechnology() == null && techCircle.isVisible()) {
             techCircle.setVisible(false);
             techText.setText("");
         }
@@ -237,6 +239,14 @@ public class GamePageController {
         garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
         Circle pillage = new Circle(25, new ImagePattern(UnitController.getActionImage("pillage")));
         pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY()));
+        Circle attack = new Circle(25, new ImagePattern(UnitController.getActionImage("attack")));
+        attack.setOnMouseClicked(mouseEvent -> {
+            if (WorldController.getSelectedTile() != null
+                    && (MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName() == null
+                    || !MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName().equals(unit.getCivilizationName()))) {
+                WarController.combatUnitAttacksTile(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY());
+            }
+        });
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
             setupRanged.setOnMouseClicked(mouseEvent -> UnitController.setupRangedUnit(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
@@ -247,6 +257,7 @@ public class GamePageController {
         unitPanelPane.getChildren().add(fortifyTillHealed);
         unitPanelPane.getChildren().add(garrison);
         unitPanelPane.getChildren().add(pillage);
+        unitPanelPane.getChildren().add(attack);
     }
 
     public void initNonCombatUnitActions(NonCombatUnit unit) {
@@ -347,6 +358,11 @@ public class GamePageController {
     }
 
     public void showResearchPanel(MouseEvent mouseEvent) {
-        researchPanelPane.setVisible(!researchPanelPane.isVisible());
+        researchPanelScrollPane.setVisible(!researchPanelScrollPane.isVisible());
+    }
+
+    public void techTreeButtonClicked(MouseEvent mouseEvent) {
+        System.out.println("hello");
+        //TODO goto techTree fxml
     }
 }

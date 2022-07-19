@@ -16,6 +16,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import models.User;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class StartGameMenuController {
@@ -37,11 +38,17 @@ public class StartGameMenuController {
     private Text cheatCodeText;
     @FXML
     private Button continueButton;
+    @FXML
+    private Button saveGameButton;
+    @FXML
+    private TextField saveNameTextField;
 
     public void initialize() {
         initPanes();
         initInvitations();
         continueButton.setVisible(WorldController.getWorld() != null);
+        saveGameButton.setVisible(WorldController.getWorld() != null);
+        saveNameTextField.setVisible(WorldController.getWorld() != null);
         cheatCodeText.setVisible(false);
         cheatCodeArea.setVisible(false);
         anchorPane.setOnKeyReleased(keyEvent -> {
@@ -145,5 +152,9 @@ public class StartGameMenuController {
 
     public void continueButtonClicked(MouseEvent mouseEvent) {
         App.changeScene("gamePage");
+    }
+
+    public void saveGameButtonClicked(MouseEvent mouseEvent) throws IOException {
+//        WorldController.saveGame(saveNameTextField.getText());
     }
 }
