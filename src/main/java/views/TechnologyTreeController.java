@@ -16,5 +16,6 @@ public class TechnologyTreeController {
 
     public void initTechnologies() {
         HashSet<Technologies> upLayers, currentLayer, DownLayer;
+
     }
 }
