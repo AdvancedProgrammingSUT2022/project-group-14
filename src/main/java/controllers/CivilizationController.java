@@ -171,6 +171,5 @@ public class CivilizationController {
 
     public static void addNotification(String notification, String civilizationName) {
         WorldController.getWorld().getCivilizationByName(civilizationName).addNotification(notification);
-
     }
 }

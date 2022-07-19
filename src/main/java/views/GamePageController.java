@@ -64,6 +64,8 @@ public class GamePageController {
     @FXML
     public AnchorPane researchPanelPane;
     @FXML
+    private Button techTreeButton;
+    @FXML
     private AnchorPane unitPanelPane;
     @FXML
     private Circle unitPanelCircle;
@@ -130,10 +132,13 @@ public class GamePageController {
 
     public void initResearchPanel() {
         researchPanelPane.setVisible(false);
+        researchPanelPane.getChildren().remove(1, researchPanelPane.getChildren().size());
         int i = 1;
         for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
-            researchPanelPane.getChildren().add(Technologies.getTechnologyGroup(availableTechnology, 50, i * 90));
-            i++;
+            if (WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCurrentTechnology() != availableTechnology) {
+                researchPanelPane.getChildren().add(availableTechnology.getTechnologyGroup(50, i * 90));
+                i++;
+            }
         }
     }
 
@@ -173,10 +178,12 @@ public class GamePageController {
         happinessText.setText(currentCivilization.getHappiness() + "");
         goldText.setText(currentCivilization.getGold() + "");
         scienceText.setText(currentCivilization.getScience() + "");
-        if (currentCivilization.getCurrentTechnology() != null) {
+        if (currentCivilization.getCurrentTechnology() != null && !techCircle.isVisible()) {
+            techCircle.setVisible(true);
             techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
             techText.setText(currentCivilization.getCurrentTechnology().getName());
-        } else {
+            initResearchPanel();
+        } else if (currentCivilization.getCurrentTechnology() == null && techCircle.isVisible()){
             techCircle.setVisible(false);
             techText.setText("");
         }
@@ -343,5 +350,10 @@ public class GamePageController {
 
     public void showResearchPanel(MouseEvent mouseEvent) {
         researchPanelPane.setVisible(!researchPanelPane.isVisible());
+    }
+
+    public void techTreeButtonClicked(MouseEvent mouseEvent) {
+        System.out.println("hello");
+        //TODO goto techTree fxml
     }
 }
