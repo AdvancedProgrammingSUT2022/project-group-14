@@ -79,6 +79,12 @@ public class City {
         this.currentBuilding = currentBuilding;
     }
 
+    public void cancelProduction() {
+        this.currentUnit = null;
+        this.currentBuilding = null;
+        this.currentProductionRemainingCost = 0;
+    }
+
     public void addUnitToCity() {
         if (currentUnit instanceof CombatUnit) {
             if (MapController.getTileByCoordinates(centerCoordination).getCombatUnit() == null) {

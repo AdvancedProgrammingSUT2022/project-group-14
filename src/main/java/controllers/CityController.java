@@ -98,9 +98,12 @@ public class CityController {
     }
 
     public static String lockCitizenToTile(City city, int id, int x, int y) {
-        for (int i = 0; i < city.getTerritory().size(); i++)
+        for (int i = 0; i < city.getTerritory().size(); i++) {
+            if (city.getTerritory().get(i).getX() == x && city.getTerritory().get(i).getY() == y)
+                break;
             if (i == city.getTerritory().size() - 1 && (city.getTerritory().get(i).getX() != x || city.getTerritory().get(i).getY() != y))
                 return "you should select a tile in city";
+        }
         for (Citizen citizen : city.getCitizens()) {
             if (id == citizen.getId()) {
                 citizen.setXOfWorkingTile(x);
@@ -254,7 +257,7 @@ public class CityController {
             tiles.addAll(TileController.getAvailableNeighbourTiles(tile.getX(), tile.getY()));
         for (Tile tile : tiles) {
             if (tile.getX() == tileX && tile.getY() == tileY) {
-                if (tile.getCivilizationName().equals(city.getCenterOfCity().getCivilizationName()))
+                if (tile.getCivilizationName() != null && tile.getCivilizationName().equals(city.getCenterOfCity().getCivilizationName()))
                     return "you already have this tile";
                 civilization.setGold(civilization.getGold() - 100);
                 Tile bought = MapController.getMap()[tileX][tileY];

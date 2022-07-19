@@ -340,6 +340,7 @@ public class Tile {
                 "Gold : " + gold + "\n" +
                 "CombatImpact : " + combatImpact + "\n" +
                 "MovementPoint : " + (movingPoint != 9999 ? movingPoint : "N/A") + "\n" +
+                "Resource : " + (resource != null ? resource.getName() : "N/A") + "\n" +
                 "BaseType : " + type.getName() + "\n" +
                 "Feature : " + (feature != null ? feature.getName() : "N/A") + "\n" +
                 "Owner : " + (civilizationName != null ? civilizationName : "N/A") + "\n" +
