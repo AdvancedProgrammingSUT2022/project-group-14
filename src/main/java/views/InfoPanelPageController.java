@@ -159,7 +159,7 @@ public class InfoPanelPageController {
             name.setFill(Color.rgb(238, 128, 0));
             Text info = new Text(city.getName());
             info.setFill(Color.WHITE);
-            Button button = new Button(city.getName() + " Panel");
+            Button button = new Button("Panel");
             button.setOnMouseClicked(mouseEvent -> {
                 WorldController.setSelectedCity(city);
                 App.changeScene("cityPanelPage");

@@ -102,7 +102,11 @@ public class CityPanelPageController {
                 buildingsBox.getItems().add(value.getName());
         buildingsBox.setOnMouseClicked(mouseEvent -> {
             unitsBox.setValue("Units");
+            if (!buildingsBox.getValue().equals("Buildings")) {
+                infoText.setText(BuildingTypes.valueOf(buildingsBox.getValue().toUpperCase()).getInfo());
+            }
         });
+        buildingsBox.getItems().add(BuildingTypes.WINDMILL.getName());
         unemployedCitizensBox.setValue("UnemployedCitizens");
         employedCitizensBox.setValue("EmployedCitizens");
         unemployedCitizensBox.getItems().clear();
@@ -173,9 +177,9 @@ public class CityPanelPageController {
     }
 
     public void lockButtonClicked(MouseEvent mouseEvent) {
-        if (!employedCitizensBox.getValue().equals("UnemployedCitizens")) {
+        if (!unemployedCitizensBox.getValue().equals("UnemployedCitizens")) {
             infoText.setText(CityController.lockCitizenToTile(city, Integer.parseInt(unemployedCitizensBox.getValue()),
-                    xCitizenSpinner.getValue(), yCitizenSpinner.getValue()));
+                    xCitizenSpinner.getValue() - 1, yCitizenSpinner.getValue() - 1));
             citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
         }
         initChoiceBoxes();
@@ -183,5 +187,12 @@ public class CityPanelPageController {
 
     public void backButtonClicked(MouseEvent mouseEvent) {
         App.changeScene("gamePage");
+    }
+
+    public void cancelButtonClicked(MouseEvent mouseEvent) {
+        if (!productionName.getText().equals("")) {
+            city.cancelProduction();
+            initProduction();
+        }
     }
 }

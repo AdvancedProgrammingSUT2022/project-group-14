@@ -1,11 +1,14 @@
 package models.resources;
 
+import application.App;
 import enums.Improvements;
 import enums.resources.ResourceTypes;
 import enums.tiles.TileBaseTypes;
 import enums.tiles.TileFeatureTypes;
+import javafx.scene.image.Image;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Random;
 
 public class Resource {
@@ -61,5 +64,9 @@ public class Resource {
 
     public void setHasBeenUsed(boolean hasBeenUsed) {
         this.hasBeenUsed = hasBeenUsed;
+    }
+
+    public Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("images/resources/" + type.getName() + ".png")).toString());
     }
 }
