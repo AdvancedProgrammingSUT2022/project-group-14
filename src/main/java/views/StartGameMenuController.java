@@ -5,8 +5,11 @@ import controllers.UserController;
 import controllers.WorldController;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -17,6 +20,8 @@ import java.util.Objects;
 
 public class StartGameMenuController {
     @FXML
+    private AnchorPane anchorPane;
+    @FXML
     private Spinner<Integer> numberOfPlayersSpinner;
     @FXML
     private Spinner<Integer> mapHeightSpinner;
@@ -26,10 +31,22 @@ public class StartGameMenuController {
     private VBox invitationsVBox;
     @FXML
     private MenuButton usernamesMenuButton;
+    @FXML
+    private TextArea cheatCodeArea;
+    @FXML
+    private Text cheatCodeText;
 
     public void initialize() {
         initPanes();
         initInvitations();
+        cheatCodeText.setVisible(false);
+        cheatCodeArea.setVisible(false);
+        anchorPane.setOnKeyReleased(keyEvent -> {
+            if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
+                cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
+                cheatCodeText.setVisible(!cheatCodeText.isVisible());
+            }
+        });
     }
 
     public void initPanes() {
@@ -40,10 +57,10 @@ public class StartGameMenuController {
         }
         numberOfPlayersSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(2, 10, 1));
         mapHeightSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 100, 10, 1));
-        mapWidthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 100, 10,1));
+        mapWidthSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(10, 100, 10, 1));
     }
 
-    public void initInvitations(){
+    public void initInvitations() {
         invitationsVBox.getChildren().clear();
         for (String invitation : UserController.getLoggedInUser().getInvitations()) {
             invitationsVBox.getChildren().add(makeInvitationBox(invitation));
@@ -85,6 +102,18 @@ public class StartGameMenuController {
         HBox hBox = new HBox(text, accept, decline);
         hBox.setSpacing(5);
         return hBox;
+    }
+
+    public void cheatCodeAreaTyped(KeyEvent keyEvent) {
+        if (keyEvent.getCode().getName().equals("Enter")) {
+            String command = cheatCodeArea.getText().substring(cheatCodeArea.getText().substring(0, cheatCodeArea.getText().length() - 1)
+                    .lastIndexOf("\n") + 1, cheatCodeArea.getText().length() - 1);
+            if (command.equals("clear")) {
+                cheatCodeArea.clear();
+            } else {
+                GameCommandsValidation.checkCommands(command);
+            }
+        }
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {

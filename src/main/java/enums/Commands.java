@@ -66,8 +66,8 @@ public enum Commands {
     BUY_TILE_FREE("buy tile for free (?<x>\\d+) (?<y>\\d+)"),
     INCREASE_RANGE("increase range of units by (?<amount>\\d+)"),
     GET_ALL_TECHS("get all technologies"),
-    SEE_WHOLE_MAP("see whole map");
-
+    SEE_WHOLE_MAP("see whole map"),
+    SET_SPAWN_LOCATION("set spawn (?<x>\\d+) (?<y>\\d+)");
 
 
     private final String regex;
@@ -84,11 +84,7 @@ public enum Commands {
         return null;
     }
 
-    public static boolean startsWith(String input, Commands commands){
-        return input.startsWith(commands.regex);
-    }
-
-    public static Matcher matcherFindsRegex(String input, Commands commands){
+    public static Matcher matcherFindsRegex(String input, Commands commands) {
         Matcher matcher = Pattern.compile(commands.regex).matcher(input);
 
         if (matcher.find())
