@@ -3,11 +3,15 @@ package controllers;
 import enums.Technologies;
 import javafx.scene.paint.Color;
 import models.*;
+
 import models.tiles.Ruin;
 import models.tiles.Tile;
 import models.units.Settler;
 import models.units.Unit;
 import models.units.Worker;
+
+import java.util.HashSet;
+import java.util.Locale;
 
 public class CivilizationController {
 
@@ -149,7 +153,24 @@ public class CivilizationController {
         }
     }
 
+
+    public static HashSet<Technologies> getAvailableTechnologies(Civilization civilization) {
+        HashSet<Technologies> availableTechnologies = new HashSet<>();
+        int sum = 0;
+        for (Technologies value : Technologies.values()) {
+            sum = 0;
+            for (String requiredTechnology : value.getRequiredTechnologies()) {
+                sum += civilization.getTechnologies().get(Technologies.valueOf(requiredTechnology.toUpperCase(Locale.ROOT)));
+            }
+            if (sum <= 0) {
+                availableTechnologies.add(value);
+            }
+        }
+        return availableTechnologies;
+        }
+
     public static void addNotification(String notification, String civilizationName) {
         WorldController.getWorld().getCivilizationByName(civilizationName).addNotification(notification);
+
     }
 }

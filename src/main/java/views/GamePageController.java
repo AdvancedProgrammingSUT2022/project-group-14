@@ -2,6 +2,7 @@ package views;
 
 import application.App;
 import controllers.*;
+
 import enums.Improvements;
 import enums.units.CombatType;
 import enums.units.UnitStates;
@@ -26,6 +27,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.Civilization;
+import models.Technology;
 import models.tiles.Hex;
 import models.tiles.Tile;
 import models.units.*;
@@ -36,6 +38,8 @@ public class GamePageController {
     public static String infoPanelName;
     @FXML
     private ScrollPane scrollPane;
+    @FXML
+    public AnchorPane researchPanelPane;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -79,6 +83,7 @@ public class GamePageController {
 
     public void initialize() {
         initNavBar();
+        initResearchPanel();
         initTimeLine();
         initHexes();
         scrollPane.setOnKeyReleased(keyEvent -> {
@@ -125,6 +130,15 @@ public class GamePageController {
                 hexPane.getChildren().add(hex.getGroup());
                 hex.updateHex();
             }
+        }
+    }
+
+    public void initResearchPanel() {
+        researchPanelPane.setVisible(false);
+        int i = 1;
+        for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
+            researchPanelPane.getChildren().add(new Technology(availableTechnology, 50, i * 90).getGroup());
+            i++;
         }
     }
 
@@ -330,5 +344,9 @@ public class GamePageController {
     public void menuButtonCLicked(MouseEvent mouseEvent) {
         timeline.stop();
         App.changeScene("startGameMenuPage");
+    }
+
+    public void showResearchPanel(MouseEvent mouseEvent) {
+        researchPanelPane.setVisible(!researchPanelPane.isVisible());
     }
 }
