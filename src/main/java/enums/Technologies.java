@@ -98,6 +98,8 @@ public enum Technologies {
         return allTechs;
     }
 
+
+
     public static Technologies generateRandom() {
         Random rand = new Random();
         return Technologies.values()[rand.nextInt(Technologies.values().length)];
