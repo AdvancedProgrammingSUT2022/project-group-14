@@ -12,16 +12,13 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
-import javafx.scene.shape.MoveTo;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.Civilization;
@@ -31,10 +28,11 @@ import models.units.CombatUnit;
 import models.units.Ranged;
 import models.units.Unit;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class GamePageController {
+    @FXML
+    public ScrollPane researchPanel;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -70,6 +68,7 @@ public class GamePageController {
     public void initialize() {
         initNavBar();
         initHexes();
+        initResearchPanel();
         initTimeLine();
     }
 
@@ -95,7 +94,10 @@ public class GamePageController {
             }
         }
     }
+    public void initResearchPanel(){
+        researchPanel.setVisible(false); // this isn't related to timeline
 
+    }
     public void initTimeLine() {
         unitPanelPane.setVisible(false);
         techCircle.setVisible(false);
@@ -214,5 +216,9 @@ public class GamePageController {
 
     public void goToCitiesPage(MouseEvent mouseEvent) {
         App.changeScene("citiesPage");
+    }
+
+    public void showResearchPanel(MouseEvent mouseEvent) {
+        researchPanel.setVisible(!researchPanel.isVisible());
     }
 }
