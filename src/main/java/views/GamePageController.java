@@ -5,11 +5,10 @@ import controllers.MapController;
 import controllers.MoveController;
 import controllers.UnitController;
 import controllers.WorldController;
+import enums.Technologies;
 import enums.units.UnitTypes;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.ScrollPane;
@@ -22,6 +21,7 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import models.Civilization;
+import models.Technology;
 import models.tiles.Hex;
 import models.tiles.Tile;
 import models.units.CombatUnit;
@@ -33,6 +33,8 @@ import java.util.Objects;
 public class GamePageController {
     @FXML
     public ScrollPane researchPanel;
+    @FXML
+    public AnchorPane researchPanelPane;
     @FXML
     private AnchorPane hexPane;
     @FXML
@@ -94,10 +96,14 @@ public class GamePageController {
             }
         }
     }
-    public void initResearchPanel(){
+
+    public void initResearchPanel() {
         researchPanel.setVisible(false); // this isn't related to timeline
+        Technology technology = new Technology(Technologies.IRON_WORKING , 50 , 90);
+        researchPanelPane.getChildren().add(technology.getGroup());
 
     }
+
     public void initTimeLine() {
         unitPanelPane.setVisible(false);
         techCircle.setVisible(false);
