@@ -58,8 +58,8 @@ public class Hex {
         this.coordinationText.setLayoutY(this.getCenterY() - 8);
         this.infoText = new Text();
         this.infoText.setLayoutY(this.getCenterY() - 23);
-        if (tile.getResource() != null)
-            this.group.getChildren().add(new ImageView(tile.getResource().getImage()));
+//        if (tile.getResource() != null)
+//            this.group.getChildren().add(new ImageView(tile.getResource().getImage()));
         setCityEventHandlers();
         this.group.setEffect(this.colorAdjust);
         setGroupEventHandlers();

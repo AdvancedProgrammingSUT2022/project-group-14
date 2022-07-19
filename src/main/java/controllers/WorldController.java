@@ -4,6 +4,7 @@ import enums.Technologies;
 import enums.units.UnitStates;
 import models.City;
 import models.Civilization;
+import models.tiles.Coordination;
 import models.tiles.Tile;
 import models.World;
 import models.units.CombatUnit;
@@ -18,6 +19,7 @@ public class WorldController {
     private static City selectedCity;
     private static CombatUnit selectedCombatUnit;
     private static NonCombatUnit selectedNonCombatUnit;
+    private static Coordination cheatCoordination;
 
     public static void newWorld(ArrayList<String> usernames, int width, int height) {
         MapController.generateMap(width, height);
@@ -145,4 +147,11 @@ public class WorldController {
         selectedNonCombatUnit = null;
     }
 
+    public static void setCheatCoordination(int x, int y) {
+        cheatCoordination = new Coordination(x, y);
+    }
+
+    public static Coordination getCheatCoordination() {
+        return cheatCoordination;
+    }
 }
