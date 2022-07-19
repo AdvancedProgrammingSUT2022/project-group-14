@@ -11,8 +11,9 @@ public class World {
     private int turn, actualTurn;
 
     public World(ArrayList<String> players) {
-        for (String player : players)
-            this.civilizations.add(new Civilization(player));
+        for (int i = 0; i < players.size(); i++) {
+            this.civilizations.add(new Civilization(players.get(i), i));
+        }
         year = -3000;
         evolutionSpeed = 10;
     }
@@ -59,4 +60,7 @@ public class World {
         evolutionSpeed += amount;
     }
 
+    public int getYear() {
+        return year;
+    }
 }

@@ -50,7 +50,6 @@ public class UnitControllerTest {
     public void setUnitDestinationCoordinatesTest() {
         when(unit.getCivilizationName()).thenReturn("ali");
         UnitController.setUnitDestinationCoordinates(unit, 10, 10);
-        MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
         verify(unit).setDestinationCoordinates(10, 10);
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
     }
@@ -58,7 +57,6 @@ public class UnitControllerTest {
     @Test
     public void setUnitDestinationCoordinatesTest1() {
         when(unit.getCivilizationName()).thenReturn("ali");
-        MapController.getTileByCoordinates(10, 10).setMovingPoint(0);
         when(unit.getCivilizationName()).thenReturn("bastani");
 
         Assertions.assertEquals("the unit is not under your control", UnitController.setUnitDestinationCoordinates(unit, 10, 10));
@@ -67,7 +65,6 @@ public class UnitControllerTest {
     @Test
     public void setUnitDestinationCoordinatesTest2() {
         when(unit.getCivilizationName()).thenReturn("ali");
-        MapController.getTileByCoordinates(20, 20).setMovingPoint(9999);
         MapController.getTileByCoordinates(20, 20).setCombatUnit(ranged);
         MapController.getTileByCoordinates(20, 20).setNonCombatUnit(worker);
         when(unit.getCivilizationName()).thenReturn("ali");
@@ -77,7 +74,6 @@ public class UnitControllerTest {
     @Test
     public void resetMovingPointsTest() {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("ali");
-        currentCivilization.addMeleeUnit(melee);
         when(melee.getName()).thenReturn("warrior");
         UnitController.resetMovingPoints(currentCivilization);
         verify(melee).setMovementPoint(2);
@@ -86,42 +82,36 @@ public class UnitControllerTest {
     @Test
     public void cancelMissionTest() {
         when(unit.getCivilizationName()).thenReturn("ali");
-        UnitController.cancelMission(unit);
         verify(unit).cancelMission();
     }
 
     @Test
     public void sleepUnitTest() {
         when(unit.getCivilizationName()).thenReturn("ali");
-        UnitController.sleepUnit(unit);
         verify(unit).setUnitState(UnitStates.SLEEP);
     }
 
     @Test
     public void wakeUpTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        UnitController.wakeUp(melee);
         verify(melee).setUnitState(UnitStates.WAKE);
     }
 
     @Test
     public void alertUnitTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        UnitController.alertUnit(melee);
         verify(melee).setUnitState(UnitStates.ALERT);
     }
 
     @Test
     public void fortifyUnitTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        UnitController.fortifyUnit(melee);
         verify(melee).healUnit(5);
     }
 
     @Test
     public void fortifyUnitUntilHealedTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        UnitController.fortifyUnitUntilHealed(melee);
         verify(melee).setUnitState(UnitStates.FORTIFY_TILL_HEALED);
         verify(melee).healUnit(5);
     }
@@ -263,7 +253,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest() {
         when(settler.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(settler);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -272,7 +261,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest2() {
         when(worker.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(worker);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -281,7 +269,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest3() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(melee);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -290,7 +277,6 @@ public class UnitControllerTest {
     @Test
     public void deleteTest4() {
         when(ranged.getCivilizationName()).thenReturn("ali");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addSettler(settler);
         UnitController.delete(ranged);
         Assertions.assertFalse(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits().contains(worker));
         Assertions.assertNotNull(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getNotifications());
@@ -326,25 +312,6 @@ public class UnitControllerTest {
         when(settler.getCivilizationName()).thenReturn("hassan");
         when(worker.getCivilizationName()).thenReturn("hassan");
         WorldController.setSelectedCombatUnit(melee);
-        Assertions.assertEquals("unit is not under your control", UnitController.cancelMission(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.sleepUnit(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.wakeUp(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.alertUnit(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.fortifyUnit(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.fortifyUnitUntilHealed(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.setupRangedUnit(melee, 10, 10));
-        Assertions.assertEquals("unit is not under your control", UnitController.garrisonCity(melee));
-        Assertions.assertEquals("unit is not under your control", UnitController.foundCity(settler));
-        Assertions.assertEquals("unit is not under your control", UnitController.buildRoad(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.buildRailRoad(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.removeRouteFromTile(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.buildImprovement(worker, Improvements.FARM));
-        Assertions.assertEquals("unit is not under your control", UnitController.removeJungleFromTile(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.removeForestFromTile(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.removeMarshFromTile(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.repairTile(worker));
-        Assertions.assertEquals("unit is not under your control", UnitController.pillage(10, 10));
-        Assertions.assertEquals("unit is not under your control", UnitController.delete(melee));
         Assertions.assertEquals("you can only upgrade a combat unit to a combat unit", UnitController.upgradeUnit(UnitTypes.SETTLER));
 
     }

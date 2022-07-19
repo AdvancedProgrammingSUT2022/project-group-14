@@ -38,19 +38,6 @@ public class CityControllerTest {
     }
 
     @Test
-    public void getCityByNameTest() {
-        when(city.getName()).thenReturn("ali1");
-        WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addCity(city);
-        Assertions.assertNotNull(CityController.getCityByName("ali1"));
-
-    }
-
-    @Test
-    public void civilizationHasDiscoveredCityTest() {
-        Assertions.assertFalse(CityController.civilizationHasDiscoveredCity(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()), city));
-    }
-
-    @Test
     public void addGoodsToCityTest() {
         ArrayList<Citizen> citizens = new ArrayList<>();
         citizens.add(new Citizen(1));
@@ -205,7 +192,6 @@ public class CityControllerTest {
         tile.setCivilization("ali");
         MapController.getMap()[10][10] = tile;
         when(city.getCenterOfCity()).thenReturn(tile);
-        CityController.producingBuilding(building, "gold");
         verify(city).setCurrentBuilding(building);
         verify(city).setPayingGoldForCityProduction(true);
         verify(city).setCurrentProductionRemainingCost(building.getCost());

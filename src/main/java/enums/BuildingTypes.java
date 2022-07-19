@@ -126,4 +126,18 @@ public enum BuildingTypes {
     public static BuildingTypes getBuildingByName(String name) {
         return BuildingTypes.valueOf(name.toUpperCase(Locale.ROOT));
     }
+
+    public String getInfo() {
+        return "Name : " + name + "\n" +
+                "Cost : " + cost + "\n" +
+                "Maintenance : " + maintenance + "\n" +
+                "RequiredTechnology : " + (requiredTechnology != null ? requiredTechnology.getName() : "nothing") + "\n" +
+                "RequiredResource : " + (requiredResource != null ? requiredResource.getName() : "nothing") + "\n" +
+                "Defense : " + defense + "\n" +
+                "Food : " + food + "\n" +
+                "Happiness : " + happiness + "\n" +
+                "RequiresRiver : " + requiresRiver + "\n" +
+                "PercentOfProduction : " + percentOfProduction + "\n" +
+                "PercentOfGold : " + percentOfGold;
+    }
 }

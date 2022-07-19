@@ -3,18 +3,14 @@ package controllers;
 import application.App;
 import enums.Improvements;
 import enums.tiles.TileFeatureTypes;
+import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;
-import javafx.event.EventHandler;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import models.*;
 import models.tiles.Tile;
@@ -27,18 +23,15 @@ public class UnitController {
 
     public static String setUnitDestinationCoordinates(Unit unit, int x, int y) {
         String reason;
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "the unit is not under your control";
-        } else if ((reason = MoveController.impossibleToMoveToTile(x, y, unit)) != null) {
+        if ((reason = MoveController.impossibleToMoveToTile(x, y, unit)) != null) {
+            MapController.getTileByCoordinates(x, y).getHex().setInfoText("Can't move!", Color.RED);
             return reason;
         } else {
             unit.setDestinationCoordinates(x, y);
             MoveController.moveUnitToDestination(unit);
-            x++;
-            y++;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you moved " +
-                    unit.getName() + " to ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addNotification(notification);
+            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() +
+                            " you moved " + unit.getName() + " to ( " + String.valueOf(x + 1) + " , " + String.valueOf(y + 1) + " ) coordinates",
+                    unit.getCivilizationName());
         }
         return null;
     }
@@ -50,59 +43,8 @@ public class UnitController {
         }
     }
 
-    public static String cancelMission(Unit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else {
-            unit.cancelMission();
-        }
-        return null;
-    }
-
-    public static String sleepUnit(Unit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else {
-            unit.setUnitState(UnitStates.SLEEP);
-        }
-        return null;
-    }
-
-    public static String wakeUp(Unit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else {
-            unit.setUnitState(UnitStates.WAKE);
-        }
-        return null;
-    }
-
-    public static String alertUnit(CombatUnit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName()))
-            return "unit is not under your control";
-        unit.setUnitState(UnitStates.ALERT);
-        return null;
-    }
-
-    public static String fortifyUnit(CombatUnit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName()))
-            return "unit is not under your control";
-        unit.healUnit(5);
-        return null;
-    }
-
-    public static String fortifyUnitUntilHealed(CombatUnit unit) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName()))
-            return "unit is not under your control";
-        unit.setUnitState(UnitStates.FORTIFY_TILL_HEALED);
-        unit.healUnit(5);
-        return null;
-    }
-
     public static String setupRangedUnit(Unit unit, int x, int y) {
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (unit instanceof Ranged && ((Ranged) unit).isSiegeUnit()) {
+        if (unit instanceof Ranged && ((Ranged) unit).isSiegeUnit()) {
             ((Ranged) unit).setCoordinatesToSetup(x, y);
         } else {
             return "this unit doesn't have the ability to setup";
@@ -112,9 +54,7 @@ public class UnitController {
 
     public static String garrisonCity(CombatUnit combatUnit) {
         Tile currentTile = MapController.getTileByCoordinates(combatUnit.getCurrentX(), combatUnit.getCurrentY());
-        if (!combatUnit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getCity() == null) {
+        if (currentTile.getCity() == null) {
             return "you should be in a city to garrison";
         } else {
             combatUnit.setUnitState(UnitStates.GARRISON);
@@ -125,9 +65,7 @@ public class UnitController {
 
     public static String foundCity(Settler settler) {
         Tile currentTile = MapController.getTileByCoordinates(settler.getCurrentX(), settler.getCurrentY());
-        if (!settler.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getCity() != null) {
+        if (currentTile.getCity() != null) {
             return "can not found a city over another city";
         } else if (currentTile.getCivilizationName() != null
                 && !currentTile.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
@@ -135,204 +73,123 @@ public class UnitController {
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(settler.getCivilizationName());
             City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY());
-            currentTile.setCity(city);
             currentCivilization.addCity(city);
+            currentTile.setCity(city);
             CivilizationController.updateMapVision(currentCivilization);
-            int x = settler.getCurrentX() + 1, y = settler.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you found the city " +
-                    city.getName() + " in ( " + x + " , " + y + " ) coordinates";
-            currentCivilization.addNotification(notification);
+            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                            + " you found the city " + city.getName() + " in ( " + String.valueOf(settler.getCurrentX() + 1)
+                            + " , " + String.valueOf(settler.getCurrentY() + 1) + " ) coordinates",
+                    currentCivilization.getName());
         }
         return null;
     }
 
-    public static String buildRoad(Worker worker) {
+    public static void buildRoad(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getRoadState() == 0) {
-            return "there is already road on this tile";
-        } else {
-            currentTile.setRoadState(3);
-            worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you built a road on" +
-                    " ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+        currentTile.setRoadState(3);
+        worker.putToWork(3);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you built a road on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String buildRailRoad(Worker worker) {
+    public static void buildRailRoad(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getRailRoadState() == 0) {
-            return "there is already railRoad on this tile";
-        } else {
-            currentTile.setRailRoadState(3);
-            worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you built a railRoad on" +
-                    " ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+        currentTile.setRailRoadState(3);
+        worker.putToWork(3);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you built a railRoad on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeRouteFromTile(Worker worker) {
+    public static void removeRouteFromTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getRoadState() != 0 && currentTile.getRailRoadState() != 0) {
-            return "there is not any roads or railRoads on this tile";
-        } else {
-            currentTile.setRoadState(9999);
-            currentTile.setRailRoadState(9999);
-            worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed a routes from" +
-                    " a tile in ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+        currentTile.setRoadState(9999);
+        currentTile.setRailRoadState(9999);
+        worker.putToWork(3);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed routes from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String buildImprovement(Worker worker, Improvements improvement) {
+    public static void buildImprovement(Worker worker, Improvements improvement) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getImprovement() != null && currentTile.getImprovement().equals(improvement)) {
-            return "there is already this kind of improvement on this tile";
-        } else if (WorldController.getWorld().getCivilizationByName(worker.getCivilizationName())
-                .getTechnologies().get(improvement.getRequiredTechnology()) > 0) {
-            return "you don't have the required technology";
-        } else if (!improvement.getPossibleTiles().contains(currentTile.getType()) &&
-                !improvement.getPossibleTiles().contains(currentTile.getFeature())) {
-            return "can't build on these kinds of tiles";
-        } else {
-            currentTile.setImprovement(improvement);
-            currentTile.setImprovementTurnsLeftToBuild(6);
-            worker.putToWork(6);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you built the " +
-                    improvement.name().toLowerCase(Locale.ROOT) + " improvement on ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+        currentTile.setImprovement(improvement);
+        currentTile.setImprovementTurnsLeftToBuild(6);
+        worker.putToWork(6);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you built the " +
+                improvement.name().toLowerCase(Locale.ROOT) + " improvement on ( "
+                + String.valueOf(worker.getCurrentX() + 1) + " , " + String.valueOf(worker.getCurrentY() + 1)
+                + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeJungleFromTile(Worker worker) {
-        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getFeature() != TileFeatureTypes.JUNGLE) {
-            return "there is not a jungle on this tile";
-        } else {
-            currentTile.setFeature(null);
-            worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed jungle from " +
-                    "the tile on ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+    public static void removeJungleFromTile(Worker worker) {
+        worker.putToWork(3);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed jungle from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeForestFromTile(Worker worker) {
-        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getFeature() != TileFeatureTypes.FOREST) {
-            return "there is not a forest on this tile";
-        } else {
-            currentTile.setFeature(null);
-            worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed forest from " +
-                    "the tile on ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+    public static void removeForestFromTile(Worker worker) {
+        worker.putToWork(3);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed forest from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
-    public static String removeMarshFromTile(Worker worker) {
-        Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getFeature() != TileFeatureTypes.SWAMP) {
-            return "there is not a marsh on this tile";
-        } else {
-            currentTile.setFeature(null);
-            worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you removed marsh from " +
-                    "the tile on ( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
-        }
-        return null;
+    public static void removeMarshFromTile(Worker worker) {
+        worker.putToWork(3);
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                + " you removed marsh from the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
     }
 
     public static String repairTile(Worker worker) {
         Tile currentTile = MapController.getTileByCoordinates(worker.getCurrentX(), worker.getCurrentY());
-        if (!worker.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getPillageState() == 0) {
+        if (currentTile.getPillageState() == 0) {
             return "this tile has not been pillaged";
         } else {
             currentTile.setPillageState(3);
             worker.putToWork(3);
-            int x = worker.getCurrentX() + 1, y = worker.getCurrentY() + 1;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you repaired the tile on " +
-                    "( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(worker.getCivilizationName()).addNotification(notification);
+            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                    + " you started to repair the tile on" + " ( " + String.valueOf(worker.getCurrentX() + 1) + " , "
+                    + String.valueOf(worker.getCurrentY() + 1) + " ) coordinates", worker.getCivilizationName());
         }
         return null;
     }
 
     public static String pillage(int x, int y) {
         Tile currentTile = MapController.getTileByCoordinates(x, y);
-        if (!WorldController.getSelectedCombatUnit().getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else if (currentTile.getPillageState() == 9999) {
+        if (currentTile.getPillageState() == 9999) {
             return "this tile has been pillaged before";
         } else {
             currentTile.setPillageState(9999);
-            x++;
-            y++;
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you pillaged the tile on " +
-                    "( " + x + " , " + y + " ) coordinates";
-            WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).addNotification(notification);
+            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                    + " you removed jungle from the tile on" + " ( " + String.valueOf(x + 1) + " , "
+                    + String.valueOf(y + 1) + " ) coordinates", WorldController.getWorld().getCurrentCivilizationName());
         }
         return null;
     }
 
-    public static String delete(Unit unit) {
+    public static void delete(Unit unit) {
         Civilization wantedCivilization = WorldController.getWorld().getCivilizationByName(unit.getCivilizationName());
-        if (!unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-            return "unit is not under your control";
-        } else {
-            if (unit instanceof Ranged) {
-                wantedCivilization.removeRangedUnit((Ranged) unit);
-            } else if (unit instanceof Melee) {
-                wantedCivilization.removeMeleeUnit((Melee) unit);
-            } else if (unit instanceof Worker) {
-                wantedCivilization.removeWorker((Worker) unit);
-            } else if (unit instanceof Settler) {
-                wantedCivilization.removeSettler((Settler) unit);
-            }
-            String notification = "In turn " + WorldController.getWorld().getActualTurn() + " you deleted the " +
-                    unit.getName() + " unit";
-            wantedCivilization.addNotification(notification);
-
+        if (unit instanceof Ranged) {
+            wantedCivilization.getRanges().remove((Ranged) unit);
+        } else if (unit instanceof Melee) {
+            wantedCivilization.getMelees().remove((Melee) unit);
+        } else if (unit instanceof Worker) {
+            wantedCivilization.getWorkers().remove((Worker) unit);
+        } else if (unit instanceof Settler) {
+            wantedCivilization.getSettlers().remove((Settler) unit);
         }
-        return null;
+        CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " you deleted the " +
+                unit.getName() + " unit", unit.getCivilizationName());
     }
 
     public static String upgradeUnit(UnitTypes unitEnum) {
         if (WorldController.getSelectedCombatUnit() == null) {
             return "you should select a combat unit first";
-        } else if (unitEnum.getCombatStrength() == 0) {
+        } else if (unitEnum.getCombatType() == CombatType.NON_COMBAT) {
             return "you can only upgrade a combat unit to a combat unit";
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
@@ -348,7 +205,6 @@ public class UnitController {
                         currentCivilization.getName());
                 currentCivilization.getRanges().add(newUnit);
                 currentCivilization.getRanges().remove(WorldController.getSelectedCombatUnit());
-                WorldController.setSelectedCombatUnit(newUnit);
                 MapController.getMap()[newUnit.getCurrentX()][newUnit.getCurrentY()].setCombatUnit(newUnit);
             } else {
                 if (unitEnum.getRangedCombatStrength() != 0)
@@ -360,7 +216,6 @@ public class UnitController {
                         currentCivilization.getName());
                 currentCivilization.getMelees().add(newUnit);
                 currentCivilization.getMelees().remove(WorldController.getSelectedCombatUnit());
-                WorldController.setSelectedCombatUnit(newUnit);
                 MapController.getMap()[newUnit.getCurrentX()][newUnit.getCurrentY()].setCombatUnit(newUnit);
             }
             return null;
@@ -370,11 +225,15 @@ public class UnitController {
     public static Group getUnitGroup(Unit unit) {
         Group group = new Group();
         ImageView imageView = new ImageView(unit.getUnitType().getImage());
-        imageView.setFitWidth(30);
-        imageView.setFitHeight(50);
-        imageView.setLayoutX(4 - 2 * imageView.getImage().getWidth() / 3);
-        imageView.setLayoutY(12);
+        imageView.setFitWidth(imageView.getImage().getWidth() / 5);
+        imageView.setFitHeight(imageView.getImage().getHeight() / 5);
+        imageView.setLayoutX(-100);
+        imageView.setLayoutY(20);
+        Text text = new Text(unit.getUnitState().getName());
+        text.setLayoutX(-100);
+        text.setLayoutY(15);
         group.getChildren().add(imageView);
+        group.getChildren().add(text);
         group.setCursor(Cursor.HAND);
         return group;
     }

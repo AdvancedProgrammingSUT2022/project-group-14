@@ -1,13 +1,14 @@
 package controllers;
 
 import enums.Technologies;
-import models.Building;
-import models.Citizen;
-import models.City;
-import models.Civilization;
+import javafx.scene.paint.Color;
+import models.*;
+
 import models.tiles.Ruin;
 import models.tiles.Tile;
+import models.units.Settler;
 import models.units.Unit;
+import models.units.Worker;
 
 import java.util.HashSet;
 import java.util.Locale;
@@ -18,12 +19,12 @@ public class CivilizationController {
         int[][] visionState = civilization.getVisionStatesOfMap();
         for (int i = 0; i < MapController.width; i++) {
             for (int j = 0; j < MapController.height; j++) {
-                if (visionState[i][j] == 0 && tileIsInRange(i, j, civilization)) {
+                if (visionState[i][j] == 0 && hasVisionOnTile(i, j, civilization)) {
                     visionState[i][j] = 2;
-                } else if (visionState[i][j] == 1 && tileIsInRange(i, j, civilization)) {
+                } else if (visionState[i][j] == 1 && hasVisionOnTile(i, j, civilization)) {
                     visionState[i][j] = 2;
                     civilization.getRevealedTiles()[i][j] = null;
-                } else if (visionState[i][j] == 2 && !tileIsInRange(i, j, civilization)) {
+                } else if (visionState[i][j] == 2 && !hasVisionOnTile(i, j, civilization)) {
                     visionState[i][j] = 1;
                     civilization.getRevealedTiles()[i][j] = MapController.getTileByCoordinates(i, j);
                 }
@@ -31,7 +32,7 @@ public class CivilizationController {
         }
     }
 
-    public static boolean tileIsInRange(int x, int y, Civilization civilization) {
+    public static boolean hasVisionOnTile(int x, int y, Civilization civilization) {
         for (Unit unit : civilization.getAllUnits()) {
             if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), x, y, 2))
                 return true;
@@ -45,6 +46,10 @@ public class CivilizationController {
         }
 
         return false;
+    }
+
+    public static boolean civilizationHasTechnology(Technologies technology) {
+        return WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(technology) <= 0;
     }
 
     public static void updateTechnology(Civilization civilization) {
@@ -118,24 +123,36 @@ public class CivilizationController {
             Tile tile = MapController.getMap()[unit.getCurrentX()][unit.getCurrentY()];
             Ruin ruin = tile.getRuin();
             if (ruin != null) {
+                String found = "Found ruin! : ";
                 if (ruin.getFreeTechnology() != null) {
                     civilization.getTechnologies().put(ruin.getFreeTechnology(), 0);
+                    found += "FreeTech + ";
                 }
                 if (ruin.isProvideCitizen()) {
-                    for (City city : civilization.getCities()) {
+                    found += "Provided citizens + ";
+                    for (City city : civilization.getCities())
                         city.getCitizens().add(new Citizen(city.getCitizens().size() + 1));
-                    }
                 }
                 if (tile.getNonCombatUnit() == null && ruin.getNonCombatUnit() != null) {
                     ruin.getNonCombatUnit().setCivilizationName(civilization.getName());
+                    if (ruin.getNonCombatUnit() instanceof Worker) {
+                        civilization.getWorkers().add((Worker) ruin.getNonCombatUnit());
+                    } else {
+                        civilization.getSettlers().add((Settler) ruin.getNonCombatUnit());
+                    }
                     tile.setNonCombatUnit(ruin.getNonCombatUnit());
+                    found += "FreeNonCombatUnit  + ";
                 }
                 civilization.setGold(civilization.getGold() + ruin.getGold());
+                found += ruin.getGold() + "Golds";
+                tile.getHex().setInfoText("Found ruin!", Color.GREEN);
                 tile.setRuin(null);
+                civilization.addNotification("In turn " + WorldController.getWorld().getActualTurn()
+                        + " you've found a ruin with these benefits : \n" + found);
             }
-
         }
     }
+
 
     public static HashSet<Technologies> getAvailableTechnologies(Civilization civilization) {
         HashSet<Technologies> availableTechnologies = new HashSet<>();
@@ -150,5 +167,10 @@ public class CivilizationController {
             }
         }
         return availableTechnologies;
+        }
+
+    public static void addNotification(String notification, String civilizationName) {
+        WorldController.getWorld().getCivilizationByName(civilizationName).addNotification(notification);
+
     }
 }

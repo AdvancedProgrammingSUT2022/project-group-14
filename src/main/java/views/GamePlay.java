@@ -20,13 +20,13 @@ public class GamePlay {
     public static Scanner scanner;
 
     public static void run(Scanner sc) {
-        System.out.println("WELCOME TO CIVILIZATION");
-        String input;
-        scanner = sc;
-        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
-        do {
-            input = scanner.nextLine();
-        } while (gameCommandsValidation.checkCommands(input));
+//        System.out.println("WELCOME TO CIVILIZATION");
+//        String input;
+//        scanner = sc;
+//        GameCommandsValidation gameCommandsValidation = new GameCommandsValidation();
+//        do {
+//            input = scanner.nextLine();
+//        } while (gameCommandsValidation.checkCommands(input));
     }
 
     // selecting methods
