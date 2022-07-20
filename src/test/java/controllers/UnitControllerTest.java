@@ -127,7 +127,7 @@ public class UnitControllerTest {
     @Test
     public void garrisonCityTest() {
         when(melee.getCivilizationName()).thenReturn("ali");
-        MapController.getTileByCoordinates(melee.getCurrentX(), melee.getCurrentY()).setCity(new City("ali1", melee.getCurrentX(), melee.getCurrentY()));
+        MapController.getTileByCoordinates(melee.getCurrentX(), melee.getCurrentY()).setCity(new City("ali1", melee.getCurrentX(), melee.getCurrentY(), "ali"));
         UnitController.garrisonCity(melee);
         verify(melee).setUnitState(UnitStates.GARRISON);
         Assertions.assertTrue(MapController.getTileByCoordinates(melee.getCurrentX(), melee.getCurrentY()).getCity().getNumberOfGarrisonedUnit() > 0);

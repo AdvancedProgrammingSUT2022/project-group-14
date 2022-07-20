@@ -49,7 +49,7 @@ public class CivilizationControllerTest
     @Test
     public void updateCitiesGoodsTest(){
         Civilization civilization1 = new Civilization("nikan", 0);
-        City city1 = new City("Hey You" , 10 ,20);
+        City city1 = new City("Hey You" , 10 ,20, "nikan");
         civilization1.addCity(city1);
 
         CivilizationController.updateCitiesGoods(civilization1);
@@ -58,7 +58,7 @@ public class CivilizationControllerTest
     @Test
     public void updateCitiesProductionsTest(){
         Civilization civilization1 = new Civilization("nikan", 0);
-        City city1 = new City("Hey You" , 10 ,20);
+        City city1 = new City("Hey You" , 10 ,20, "nikan");
         civilization1.addCity(city1);
 
         CivilizationController.updateCitiesProductions(civilization1);
@@ -67,7 +67,7 @@ public class CivilizationControllerTest
     @Test
     public void updateSienceTest(){
         Civilization civilization1 = new Civilization("nikan", 0);
-        City city1 = new City("Hey You" , 10 ,20);
+        City city1 = new City("Hey You" , 10 ,20, "nikan");
         civilization1.addCity(city1);
 
         CivilizationController.updateScience(civilization1);

@@ -16,6 +16,7 @@ import models.units.*;
 public class City {
     private final String name;
     private final Coordination centerCoordination;
+    private String civilizationName;
 
     private double food;
     private double gold;
@@ -38,9 +39,10 @@ public class City {
     private int numberOfGarrisonedUnit;
 
 
-    public City(String name, int x, int y) {
+    public City(String name, int x, int y, String civilizationName) {
         this.name = name;
         this.centerCoordination = new Coordination(x, y);
+        this.civilizationName = civilizationName;
         citizens.add(new Citizen(1));
         this.territory.add(MapController.getTileByCoordinates(x, y));
         territory.addAll(TileController.getAvailableNeighbourTiles(x, y));
@@ -271,4 +273,7 @@ public class City {
                 "HealthPoint : " + healthPoint + "\n";
     }
 
+    public String getCivilizationName() {
+        return civilizationName;
+    }
 }

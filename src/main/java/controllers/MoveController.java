@@ -15,14 +15,17 @@ import java.util.Map;
 public class MoveController {
 
     public static String impossibleToMoveToTile(int x, int y, Unit unit) {
-        if (MapController.getTileByCoordinates(x, y).getCivilizationName() != null &&
-                !MapController.getTileByCoordinates(x, y).getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+        if (MapController.getTileByCoordinates(x, y).getCity() != null &&
+                !MapController.getTileByCoordinates(x, y).getCity().getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
             return "chosen tile is in the enemy territory";
         } else if (MapController.getTileByCoordinates(x, y).getMovingPoint() == 9999) {
             return "can not move to those kind of tiles";
         } else if ((MapController.getTileByCoordinates(x, y).getCombatUnit() != null && unit instanceof CombatUnit) ||
                 (MapController.getTileByCoordinates(x, y).getNonCombatUnit() != null && unit instanceof NonCombatUnit)) {
             return "there is not any space left on the tile to move";
+        } else if ((MapController.getTileByCoordinates(x, y).getNonCombatUnit() != null && !MapController.getTileByCoordinates(x, y).getNonCombatUnit().getCivilizationName().equals(unit.getCivilizationName()))
+            || (MapController.getTileByCoordinates(x, y).getCombatUnit() != null && !MapController.getTileByCoordinates(x, y).getCombatUnit().getCivilizationName().equals(unit.getCivilizationName()))) {
+            return "there is an enemy's unit in this tile";
         }
         return null;
     }
