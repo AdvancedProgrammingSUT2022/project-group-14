@@ -244,7 +244,7 @@ public class GamePageController {
             if (WorldController.getSelectedTile() != null
                     && (MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName() == null
                     || !MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName().equals(unit.getCivilizationName()))) {
-                WarController.combatUnitAttacksTile(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
+                WarController.combatUnitAttacksTile(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY(), WorldController.getSelectedCombatUnit());
             }
         });
         if (unit instanceof Ranged) {

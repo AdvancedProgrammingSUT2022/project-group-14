@@ -46,14 +46,14 @@ public class WarControllerTest {
     @Test
     public void testCombatUnitNotUnderUserControl(){
         when(combatUnit.getCivilizationName()).thenReturn("hassan");
-        String output = WarController.combatUnitAttacksTile(11, 10);
+        String output = WarController.combatUnitAttacksTile(11, 10, combatUnit);
         Assertions.assertEquals("unit is not under your control", output);
     }
 
     @Test
     public void testDestinationTileIsInvalid(){
         when(combatUnit.getCivilizationName()).thenReturn("ali");
-        String output = WarController.combatUnitAttacksTile(-1, 0);
+        String output = WarController.combatUnitAttacksTile(-1, 0, combatUnit);
         Assertions.assertEquals("wanted tile is invalid", output);
     }
 
@@ -71,7 +71,7 @@ public class WarControllerTest {
         currentCivilization.addCity(city);
         currentCivilization.addCity(city2);
         MapController.getTileByCoordinates(11,10).setCity(city);
-        WarController.combatUnitAttacksTile(11, 10);
+        WarController.combatUnitAttacksTile(11, 10, combatUnit);
     }
 
     @Test
@@ -88,7 +88,7 @@ public class WarControllerTest {
         currentCivilization.addCity(city);
         currentCivilization.addCity(city2);
         MapController.getTileByCoordinates(11,10).setCity(city);
-        WarController.combatUnitAttacksTile(11, 10);
+        WarController.combatUnitAttacksTile(11, 10, combatUnit);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class WarControllerTest {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("hassan");
         currentCivilization.addCity(city);
         MapController.getTileByCoordinates(11,10).setCity(city);
-        String output = WarController.combatUnitAttacksTile(11, 10);
+        String output = WarController.combatUnitAttacksTile(11, 10, combatUnit);
         Assertions.assertEquals("", outputStreamCaptor.toString().trim());
     }
 
@@ -121,7 +121,7 @@ public class WarControllerTest {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName("hassan");
         currentCivilization.addCity(city);
         MapController.getTileByCoordinates(11,10).setCity(city);
-        String output = WarController.combatUnitAttacksTile(11, 10);
+        String output = WarController.combatUnitAttacksTile(11, 10, combatUnit);
         Assertions.assertEquals("", outputStreamCaptor.toString().trim());
     }
 

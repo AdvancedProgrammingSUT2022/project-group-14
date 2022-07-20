@@ -49,8 +49,10 @@ public class WorldController {
         CivilizationController.payRequiredPriceForKeepingBuildings(currentCivilization);
         CivilizationController.updateCitiesProductions(currentCivilization);
         CivilizationController.updateRuins(currentCivilization);
-        for (Unit unit : currentCivilization.getAllUnits())
+        for (Unit unit : currentCivilization.getAllUnits()) {
             MoveController.moveUnitToDestination(unit);
+            WarController.updateUnitsAttack(unit);
+        }
         UnitController.resetMovingPoints(currentCivilization);
         applyAttacks();
         addAllHeals();
