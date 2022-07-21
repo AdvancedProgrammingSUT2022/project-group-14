@@ -25,7 +25,8 @@ public class UserController {
     public static void readAllUsers() throws IOException {
         String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/usersData.json")));
         users = new Gson().fromJson(json,
-                new TypeToken<List<User>>(){}.getType());
+                new TypeToken<List<User>>() {
+                }.getType());
         if (users == null)
             users = new ArrayList<>();
     }
@@ -40,7 +41,7 @@ public class UserController {
         users.add(new User(username, password, nickname));
     }
 
-    public static User getUserByUsername(String username){
+    public static User getUserByUsername(String username) {
         for (User user : users) {
             if (user.getUsername().equals(username))
                 return user;
@@ -48,7 +49,7 @@ public class UserController {
         return null;
     }
 
-    public static User getUserByNickname(String nickname){
+    public static User getUserByNickname(String nickname) {
         for (User user : users) {
             if (user.getNickname().equals(nickname))
                 return user;
@@ -56,13 +57,13 @@ public class UserController {
         return null;
     }
 
-    public static boolean playerNumberIsCorrect(Matcher matcher, int numberOfPlayersSoFar){
+    public static boolean playerNumberIsCorrect(Matcher matcher, int numberOfPlayersSoFar) {
         if (Integer.parseInt(matcher.group("playerNumber")) == numberOfPlayersSoFar)
             return true;
         return false;
     }
 
-    public static boolean usernameExistsInArraylist(String username, ArrayList<String> usernames){
+    public static boolean usernameExistsInArraylist(String username, ArrayList<String> usernames) {
         for (String playerUsername : usernames) {
             if (playerUsername.equals(username))
                 return true;
@@ -72,33 +73,33 @@ public class UserController {
 
     //this function checks if current player format is correct and exists in users and not repetitive and returns the error
     // and returns "" if everything is ok and add the players username to usernames
-    public static String checkPlayerValidation(Matcher matcher, ArrayList<String> usernames, int numberOfPlayersSoFar){
-        if (!playerNumberIsCorrect(matcher, numberOfPlayersSoFar)){
+    public static String checkPlayerValidation(Matcher matcher, ArrayList<String> usernames, int numberOfPlayersSoFar) {
+        if (!playerNumberIsCorrect(matcher, numberOfPlayersSoFar)) {
             return "invalid command";
         }
-        if (getUserByUsername(matcher.group("username")) == null){
+        if (getUserByUsername(matcher.group("username")) == null) {
             return "one of the usernames doesn't exist";
         }
-        if (usernameExistsInArraylist(matcher.group("username"), usernames)){
+        if (usernameExistsInArraylist(matcher.group("username"), usernames)) {
             return "one of the usernames is repetitive";
         }
         usernames.add(matcher.group("username"));
         return "";
     }
 
-    public static void sortUsers(){
+    public static void sortUsers() {
         users.sort((o1, o2) -> {
             if (o1.getScore() == o2.getScore()) {
-                if ((o1.getDateOfLastWin() == null && o2.getDateOfLastWin() == null) || o1.getDateOfLastWin().equals(o2.getDateOfLastWin())){
+                if ((o1.getDateOfLastWin() == null && o2.getDateOfLastWin() == null) || o1.getDateOfLastWin().equals(o2.getDateOfLastWin())) {
                     return o1.getUsername().compareTo(o2.getUsername());
                 } else {
-                    if (o1.getDateOfLastWin() == null || o2.getDateOfLastWin() == null){
-                        return o1.getDateOfLastWin() == null?-1:1;
+                    if (o1.getDateOfLastWin() == null || o2.getDateOfLastWin() == null) {
+                        return o1.getDateOfLastWin() == null ? -1 : 1;
                     }
-                    return o1.getDateOfLastWin().before(o2.getDateOfLastWin())?1:-1;
+                    return o1.getDateOfLastWin().before(o2.getDateOfLastWin()) ? 1 : -1;
                 }
             } else {
-                return o1.getScore() > o2.getScore()?1:-1;
+                return o1.getScore() < o2.getScore() ? 1 : -1;
             }
         });
     }

@@ -13,6 +13,7 @@ import models.World;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
+import views.EndGamePageController;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -35,6 +36,12 @@ public class WorldController {
         MapController.updateUnitPositions();
         for (Civilization civilization : world.getAllCivilizations())
             CivilizationController.updateMapVision(civilization);
+    }
+
+    public static void endGame() {
+        EndGamePageController.setWinnerCivilization(world.getCurrentCivilizationName());
+        world = null;
+        resetSelection();
     }
 
     public static void nextTurn() {

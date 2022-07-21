@@ -1,7 +1,11 @@
 package models;
 
 import java.util.ArrayList;
+
+import application.App;
+import controllers.WorldController;
 import models.units.Unit;
+import views.GamePageController;
 
 public class World {
     private final ArrayList<Civilization> civilizations = new ArrayList<>();
@@ -39,6 +43,12 @@ public class World {
             unit = null;
         }
         civilizations.remove(civilization);
+        turn %= civilizations.size();
+        if (civilizations.size() == 1) {
+            GamePageController.stopTimeline = true;
+            WorldController.endGame();
+            App.changeScene("endGamePage");
+        }
     }
 
     public int getTurn() {
