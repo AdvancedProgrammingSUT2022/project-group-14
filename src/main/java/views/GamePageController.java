@@ -22,6 +22,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
+import models.City;
 import models.Civilization;
 import models.tiles.Hex;
 import models.tiles.Tile;
@@ -30,7 +31,11 @@ import models.units.*;
 import java.util.Objects;
 
 public class GamePageController {
+    public static boolean stopTimeline;
     public static String infoPanelName;
+    public static boolean showCityOptions;
+    public static City city;
+    public static CombatUnit combatUnit;
     @FXML
     private AnchorPane mainPane;
     @FXML
@@ -50,7 +55,7 @@ public class GamePageController {
     @FXML
     private Text scienceText;
     @FXML
-    private MenuButton infoPanelsMenuButton;
+    private ChoiceBox<String> infoPanelsBox;
     @FXML
     private Text yearText;
     @FXML
@@ -75,10 +80,12 @@ public class GamePageController {
     private Text unitPanelMPText;
     @FXML
     private Text unitPanelCSText;
+    @FXML
+    private AnchorPane cityOptionsPane;
     private Timeline timeline;
 
-
     public void initialize() {
+        cityOptionsPane.setVisible(false);
         initNavBar();
         initTimeLine();
         initResearchPanel();
@@ -92,6 +99,7 @@ public class GamePageController {
         timeline.play();
     }
 
+
     private void initNavBar() {
         goldCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/goldLogo.png")).toString())));
         happinessCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/happinessLogo.png")).toString())));
@@ -102,18 +110,8 @@ public class GamePageController {
         happinessText.setFill(Color.rgb(17, 140, 33));
         scienceText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getScience());
         scienceText.setFill(Color.rgb(7, 146, 169));
-        infoPanelsMenuButton.getItems().add(new MenuItem("UnitPanel"));
-        infoPanelsMenuButton.getItems().add(new MenuItem("CityPanel"));
-        infoPanelsMenuButton.getItems().add(new MenuItem("DemographicPanel"));
-        infoPanelsMenuButton.getItems().add(new MenuItem("NotificationsPanel"));
-        infoPanelsMenuButton.getItems().add(new MenuItem("MilitaryPanel"));
-        infoPanelsMenuButton.getItems().add(new MenuItem("EconomicStatusPanel"));
-        for (MenuItem item : infoPanelsMenuButton.getItems()) {
-            item.setOnAction(actionEvent -> {
-                infoPanelName = item.getText();
-                App.changeScene("infoPanelPage");
-            });
-        }
+        infoPanelsBox.setValue("InfoPanels");
+        infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel");
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
         cheatCodeArea.setVisible(false);
         cheatCodeText.setVisible(false);
@@ -147,8 +145,14 @@ public class GamePageController {
         techCircle.setVisible(false);
         techText.setText("");
         timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
+            if (stopTimeline) timeline.stop();
             checkUnitPanelUpdate();
             checkTechnologyPanelUpdate();
+            if (showCityOptions && !cityOptionsPane.isVisible()) {
+                cityOptionsPane.setVisible(true);
+            } else if (!showCityOptions && cityOptionsPane.isVisible()) {
+                cityOptionsPane.setVisible(false);
+            }
         }));
         timeline.setCycleCount(-1);
     }
@@ -241,11 +245,8 @@ public class GamePageController {
         pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY()));
         Circle attack = new Circle(25, new ImagePattern(UnitController.getActionImage("attack")));
         attack.setOnMouseClicked(mouseEvent -> {
-            if (WorldController.getSelectedTile() != null
-                    && (MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName() == null
-                    || !MapController.getTileByCoordinates(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()).getCivilizationName().equals(unit.getCivilizationName()))) {
+            if (WorldController.getSelectedTile() != null)
                 WarController.combatUnitAttacksTile(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY(), WorldController.getSelectedCombatUnit());
-            }
         });
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
@@ -364,5 +365,28 @@ public class GamePageController {
     public void techTreeButtonClicked(MouseEvent mouseEvent) {
         System.out.println("hello");
         //TODO goto techTree fxml
+    }
+
+    public void gotoPanelButtonClicked(MouseEvent mouseEvent) {
+        if (!infoPanelsBox.getValue().equals("InfoPanels")) {
+            infoPanelName = infoPanelsBox.getValue();
+            App.changeScene("infoPanelPage");
+        }
+    }
+
+    public static void setCityOptions(City city, CombatUnit combatUnit) {
+        showCityOptions = true;
+        GamePageController.city = city;
+        GamePageController.combatUnit = combatUnit;
+    }
+
+    public void conquerButtonClicked(MouseEvent mouseEvent) {
+        CityController.conquerCity(city, combatUnit);
+        showCityOptions = false;
+    }
+
+    public void destroyButtonClicked(MouseEvent mouseEvent) {
+        CityController.destroyCity(city, combatUnit);
+        showCityOptions = false;
     }
 }

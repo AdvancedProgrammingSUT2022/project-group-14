@@ -22,6 +22,7 @@ import javafx.stage.Popup;
 import javafx.util.Duration;
 import models.Building;
 import models.City;
+import models.World;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
@@ -80,7 +81,9 @@ public class Hex {
             popup.hide();
         });
         this.group.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+            if (mouseEvent.getButton() == MouseButton.SECONDARY
+                    && WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName())
+                    .getVisionStatesOfMap()[coordination.getX()][coordination.getY()] > 0) {
                 if (WorldController.getSelectedTile() != null
                         && WorldController.getSelectedTile().equals(MapController.getTileByCoordinates(Hex.this.coordination))) {
                     WorldController.setSelectedTile(null);
@@ -214,8 +217,10 @@ public class Hex {
         this.cityImage.setLayoutY(this.getCenterY());
         this.cityImage.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                WorldController.setSelectedCity(MapController.getTileByCoordinates(Hex.this.coordination).getCity());
-                App.changeScene("cityPanelPage");
+                if (WorldController.getWorld().getCurrentCivilizationName().equals(MapController.getTileByCoordinates(Hex.this.coordination).getCity().getCenterOfCity().getCivilizationName())) {
+                    WorldController.setSelectedCity(MapController.getTileByCoordinates(Hex.this.coordination).getCity());
+                    App.changeScene("cityPanelPage");
+                }
             }
         });
     }

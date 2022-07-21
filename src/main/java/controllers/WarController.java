@@ -3,9 +3,9 @@ package controllers;
 import enums.units.UnitStates;
 import models.City;
 import models.Civilization;
-import models.World;
 import models.tiles.Tile;
 import models.units.*;
+import views.GamePageController;
 
 public class WarController {
 
@@ -63,6 +63,8 @@ public class WarController {
             System.out.println("your combat unit received " + defendingUnitAttackDamage + "and your enemy received " + attackingUnitAttackDamage + "damage");
             if (defendingUnit.getHealthPoint() <= 0) {
                 System.out.println("you destroyed a combat unit");
+                CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " Your combat unit died :(", defendingUnit.getCivilizationName());
+                CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " You destroyed a combat unit :)", attackingUnit.getCivilizationName());
                 Civilization defendingCivilization = WorldController.getWorld().getCivilizationByName(defendingUnit.getCivilizationName());
                 Tile defendingUnitTile = MapController.getTileByCoordinates(defendingUnit.getCurrentX(), defendingUnit.getCurrentY());
                 if (defendingUnit instanceof Melee) {
@@ -79,6 +81,8 @@ public class WarController {
                 else MoveController.moveUnitToDestination(attackingUnit);
             } else if (attackingUnit.getHealthPoint() <= 0) {
                 System.out.println("your combat unit died");
+                CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " Your combat unit died :(", attackingUnit.getCivilizationName());
+                CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " You destroyed a combat unit :)", defendingUnit.getCivilizationName());
                 WorldController.setSelectedCombatUnit(null);
                 Civilization attackingCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
                 if (attackingUnit instanceof Melee) {
@@ -105,6 +109,8 @@ public class WarController {
                 attackingCivilization.getSettlers().add((Settler) nonCombatUnit);
             }
             attackingUnit.setAttackingCoordination(-1, -1);
+            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " You've captured a nonCombat unit :)", attackingUnit.getCivilizationName());
+            CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " You've lost a nonCombat unit :(", nonCombatUnit.getCivilizationName());
             System.out.println("you got a non combat unit");
         }
         MoveController.moveUnitToDestination(attackingUnit);
@@ -122,7 +128,7 @@ public class WarController {
                 unitAttackDamage -= combatUnit.getAttackStrength() - ((Ranged) combatUnit).getRangedCombatStrength();
             cityAttackDamage = Math.max(0, cityAttackDamage);
             unitAttackDamage = Math.max(0, unitAttackDamage);
-
+            unitAttackDamage = 500;
             city.receiveDamage(unitAttackDamage);
             combatUnit.receiveDamage(cityAttackDamage);
             if (city.getHealthPoint() <= 0) {
@@ -148,7 +154,7 @@ public class WarController {
                     }
                     WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).removeCity(city);
                     combatUnit.setAttackingCoordination(-1, -1);
-                    //GamePlay.conquerCity(city, combatUnit);
+                    chooseCityOptions(city, combatUnit);
                     MoveController.moveUnitToDestination(combatUnit);
                 } else {
                     city.setHealthPoint(5);
@@ -166,5 +172,20 @@ public class WarController {
 
             }
         } else MoveController.moveUnitToDestination(combatUnit);
+    }
+
+    public static void chooseCityOptions(City city, CombatUnit combatUnit) {
+        if (WorldController.getWorld() == null)
+            return;
+        if (WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()) == null ||
+                WorldController.getWorld().getCivilizationByName(city.getCenterOfCity().getCivilizationName()).getFirstCapital() == city) {
+            CivilizationController.addNotification(
+                    "In turn " + WorldController.getWorld().getActualTurn()
+                            + " Congrats! you attached the first capital of the enemy to your civilization",
+                    combatUnit.getCivilizationName());
+            CityController.conquerCity(city, combatUnit);
+        } else {
+            GamePageController.setCityOptions(city, combatUnit);
+        }
     }
 }
