@@ -1,20 +1,6 @@
 package views;
 
-import controllers.*;
-import enums.Colors;
-import enums.Improvements;
-import enums.Technologies;
-import models.Building;
-import models.City;
-import models.Civilization;
-import models.tiles.Tile;
-import models.units.CombatUnit;
-import models.units.Settler;
-import models.units.Unit;
-import models.units.Worker;
-
 import java.util.*;
-import java.util.regex.Matcher;
 
 public class GamePlay {
     public static Scanner scanner;

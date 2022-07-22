@@ -3,9 +3,7 @@ package views;
 import application.App;
 import controllers.UserController;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 

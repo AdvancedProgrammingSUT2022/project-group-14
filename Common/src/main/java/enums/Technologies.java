@@ -2,7 +2,6 @@ package enums;
 
 import application.App;
 import controllers.WorldController;
-import enums.tiles.TileBaseTypes;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -12,7 +11,6 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import models.World;
 
 import java.util.*;
 

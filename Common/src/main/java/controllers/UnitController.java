@@ -2,7 +2,6 @@ package controllers;
 
 import application.App;
 import enums.Improvements;
-import enums.tiles.TileFeatureTypes;
 import enums.units.CombatType;
 import enums.units.UnitStates;
 import enums.units.UnitTypes;

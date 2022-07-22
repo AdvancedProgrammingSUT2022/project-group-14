@@ -23,7 +23,7 @@ public class UserController {
     }
 
     public static void readAllUsers() throws IOException {
-        String json = new String(Files.readAllBytes(Paths.get("./src/main/resources/usersData.json")));
+        String json = new String(Files.readAllBytes(Paths.get("./Common/src/main/resources/usersData.json")));
         users = new Gson().fromJson(json,
                 new TypeToken<List<User>>() {
                 }.getType());
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     public static void saveAllUsers() throws IOException {
-        FileWriter fileWriter = new FileWriter("./src/main/resources/usersData.json");
+        FileWriter fileWriter = new FileWriter("./Common/src/main/resources/usersData.json");
         fileWriter.write(new Gson().toJson(users));
         fileWriter.close();
     }

@@ -1,16 +1,12 @@
 package controllers;
 
-import javafx.scene.Group;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 import models.tiles.Tile;
 import models.units.CombatUnit;
 import models.units.NonCombatUnit;
 import models.units.Unit;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class MoveController {
 

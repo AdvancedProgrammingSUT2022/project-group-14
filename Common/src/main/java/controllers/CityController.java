@@ -13,7 +13,6 @@ import models.tiles.Tile;
 import models.units.*;
 
 import java.util.ArrayList;
-import java.util.Map;
 import java.util.Objects;
 
 public class CityController {

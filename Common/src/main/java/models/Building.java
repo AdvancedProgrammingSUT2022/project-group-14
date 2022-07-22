@@ -3,8 +3,6 @@ package models;
 import enums.BuildingTypes;
 import enums.Technologies;
 
-import java.util.ArrayList;
-
 public class Building {
     private final BuildingTypes buildingType;
     public Building(BuildingTypes type) {
