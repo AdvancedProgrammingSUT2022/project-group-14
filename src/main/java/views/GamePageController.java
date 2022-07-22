@@ -158,6 +158,8 @@ public class GamePageController {
     }
 
     public void checkUnitPanelUpdate() {
+        if (stopTimeline)
+            return;
         if (WorldController.getSelectedCombatUnit() != null) {
             if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() == CombatType.NON_COMBAT) {
                 unitPanelPane.setVisible(true);
@@ -178,6 +180,8 @@ public class GamePageController {
     }
 
     public void checkTechnologyPanelUpdate() {
+        if (stopTimeline)
+            return;
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         happinessText.setText(currentCivilization.getHappiness() + "");
         goldText.setText(currentCivilization.getGold() + "");
@@ -336,7 +340,7 @@ public class GamePageController {
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
         if (WorldController.nextTurnImpossible() == null) {
             WorldController.nextTurn();
-            yearText.setText(String.valueOf(WorldController.getWorld().getYear()));
+            yearText.setText(WorldController.getWorld().getYear() < 0 ? String.valueOf(-WorldController.getWorld().getYear()) + " BC" : String.valueOf(WorldController.getWorld().getYear()));
             unitPanelPane.setVisible(false);
         }
     }

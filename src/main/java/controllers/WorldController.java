@@ -6,7 +6,6 @@ import enums.Technologies;
 import enums.units.UnitStates;
 import models.City;
 import models.Civilization;
-import models.User;
 import models.tiles.Coordination;
 import models.tiles.Tile;
 import models.World;
@@ -20,7 +19,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
 
 public class WorldController {
     private static World world;
@@ -38,8 +36,8 @@ public class WorldController {
             CivilizationController.updateMapVision(civilization);
     }
 
-    public static void endGame() {
-        EndGamePageController.setWinnerCivilization(world.getCurrentCivilizationName());
+    public static void endGame(String winnerCivilization) {
+        EndGamePageController.setWinnerCivilization(winnerCivilization);
         world = null;
         resetSelection();
     }
