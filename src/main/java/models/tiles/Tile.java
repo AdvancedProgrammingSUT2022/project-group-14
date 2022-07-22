@@ -308,8 +308,12 @@ public class Tile {
 
     public void setCity(City city) {
         this.city = city;
-        for (Tile tile : city.getTerritory()) {
-            tile.getHex().updateHex();
+        if (city != null) {
+            for (Tile tile : city.getTerritory()) {
+                tile.getHex().updateHex();
+            }
+        } else {
+            hex.updateHex();
         }
     }
 
@@ -352,12 +356,12 @@ public class Tile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tile tile = (Tile) o;
-        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && hex.equals(tile.hex) && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(city, tile.city) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
+        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && hex.equals(tile.hex) && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(hex, coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, city, combatUnit, nonCombatUnit);
+        int result = Objects.hash(hex, coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, combatUnit, nonCombatUnit);
         result = 31 * result + Arrays.hashCode(isRiver);
         return result;
     }

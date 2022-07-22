@@ -48,11 +48,14 @@ public class WarController {
     public static void attackCombatUnit(CombatUnit attackingUnit, CombatUnit defendingUnit) {
         double defendingUnitAttackDamage, attackingUnitAttackDamage;
         Tile attackingUnitTile = MapController.getTileByCoordinates(attackingUnit.getCurrentX(), attackingUnit.getCurrentY());
+        Tile defendingUnitTile = MapController.getTileByCoordinates(defendingUnit.getCurrentX(), defendingUnit.getCurrentY());
         if (TileController.coordinatesAreInRange(attackingUnit.getCurrentX(), attackingUnit.getCurrentY(), defendingUnit.getCurrentX(), defendingUnit.getCurrentY(), attackingUnit.getRange())) {
             defendingUnitAttackDamage = defendingUnit.getAttackStrength();
             if (attackingUnit.getCombatType().hasDefenseBonuses())
-                defendingUnitAttackDamage -= attackingUnit.getDefenseStrength() * (100 + attackingUnitTile.getMilitaryImpact()) / 100;
-            attackingUnitAttackDamage = attackingUnit.getAttackStrength() - defendingUnit.getDefenseStrength();
+                defendingUnitAttackDamage -= attackingUnit.getDefenseStrength() / 2;
+            attackingUnitAttackDamage = attackingUnit.getAttackStrength();
+            if (defendingUnit.getCombatType().hasDefenseBonuses())
+                attackingUnitAttackDamage -= defendingUnit.getDefenseStrength() * (100 + defendingUnitTile.getMilitaryImpact()) / 100;
             if (attackingUnit instanceof Ranged)
                 attackingUnitAttackDamage -= attackingUnit.getAttackStrength() - ((Ranged) attackingUnit).getRangedCombatStrength();
             defendingUnitAttackDamage = Math.max(0, defendingUnitAttackDamage);
@@ -66,7 +69,6 @@ public class WarController {
                 CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " Your combat unit died :(", defendingUnit.getCivilizationName());
                 CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn() + " You destroyed a combat unit :)", attackingUnit.getCivilizationName());
                 Civilization defendingCivilization = WorldController.getWorld().getCivilizationByName(defendingUnit.getCivilizationName());
-                Tile defendingUnitTile = MapController.getTileByCoordinates(defendingUnit.getCurrentX(), defendingUnit.getCurrentY());
                 if (defendingUnit instanceof Melee) {
                     defendingCivilization.getMelees().remove((Melee) defendingUnit);
                 } else {
@@ -128,7 +130,7 @@ public class WarController {
                 unitAttackDamage -= combatUnit.getAttackStrength() - ((Ranged) combatUnit).getRangedCombatStrength();
             cityAttackDamage = Math.max(0, cityAttackDamage);
             unitAttackDamage = Math.max(0, unitAttackDamage);
-            unitAttackDamage = 500;
+            unitAttackDamage = 10000;
             city.receiveDamage(unitAttackDamage);
             combatUnit.receiveDamage(cityAttackDamage);
             if (city.getHealthPoint() <= 0) {

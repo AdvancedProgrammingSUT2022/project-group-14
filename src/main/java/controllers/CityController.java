@@ -13,6 +13,7 @@ import models.tiles.Tile;
 import models.units.*;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Objects;
 
 public class CityController {
@@ -315,7 +316,7 @@ public class CityController {
     public static void destroyCity(City city, CombatUnit unit) {
         for (Tile tile : city.getTerritory())
             tile.setCivilization(null);
-        WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
+        MapController.getMap()[city.getCenterOfCity().getX()][city.getCenterOfCity().getY()].setCity(null);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                 + " you destroyed the " + city.getName() + "city", unit.getCivilizationName());
     }

@@ -172,4 +172,25 @@ public class CivilizationController {
     public static void addNotification(String notification, String civilizationName) {
         WorldController.getWorld().getCivilizationByName(civilizationName).addNotification(notification);
     }
+
+    public static String getBestCivilization() {
+        int maximumPoints = 0;
+        String winnerCivilizationName = "";
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            if (maximumPoints < getPoints(civilization)) {
+                maximumPoints = getPoints(civilization);
+                winnerCivilizationName = civilization.getName();
+            }
+        }
+        return winnerCivilizationName;
+    }
+
+    public static int getPoints(Civilization civilization) {
+        int points = 0;
+        points += civilization.getGold();
+        points += civilization.getAllUnits().size() * 50;
+        points += civilization.getCities().size() * 150;
+        points += civilization.getHappiness() * 5;
+        return points;
+    }
 }

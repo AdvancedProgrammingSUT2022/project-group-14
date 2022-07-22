@@ -3,6 +3,7 @@ package models;
 import java.util.ArrayList;
 
 import application.App;
+import controllers.CivilizationController;
 import controllers.WorldController;
 import models.units.Unit;
 import views.GamePageController;
@@ -19,7 +20,7 @@ public class World {
             this.civilizations.add(new Civilization(players.get(i), i));
         }
         year = -3000;
-        evolutionSpeed = 10;
+        evolutionSpeed = 100;
     }
 
     public String getCurrentCivilizationName() {
@@ -46,7 +47,7 @@ public class World {
         turn %= civilizations.size();
         if (civilizations.size() == 1) {
             GamePageController.stopTimeline = true;
-            WorldController.endGame();
+            WorldController.endGame(civilizations.get(0).getName());
             App.changeScene("endGamePage");
         }
     }
@@ -55,7 +56,7 @@ public class World {
         return this.turn;
     }
 
-    public int getActualTurn(){
+    public int getActualTurn() {
         return this.actualTurn;
     }
 
@@ -64,10 +65,16 @@ public class World {
         turn++;
         turn %= civilizations.size();
         year += evolutionSpeed;
+        if (actualTurn % 10 == 0 && evolutionSpeed > 10)
+            decreaseEvolutionSpeed(4);
+        if (year == 2050) {
+            WorldController.endGame(CivilizationController.getBestCivilization());
+            App.changeScene("endGamePage");
+        }
     }
 
-    public void increaseEvolutionSpeed(int amount) {
-        evolutionSpeed += amount;
+    public void decreaseEvolutionSpeed(int amount) {
+        evolutionSpeed -= amount;
     }
 
     public int getYear() {
