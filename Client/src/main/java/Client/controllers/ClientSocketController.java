@@ -17,7 +17,6 @@ public class ClientSocketController {
             Socket socket = new Socket("localhost", serverPort);
             inputStream = new DataInputStream(socket.getInputStream());
             outputStream = new DataOutputStream(socket.getOutputStream());
-
             System.out.println("You've successfully connected to the server.");
         } catch (IOException e) {
             System.err.print("Couldn't connect to the server!");
