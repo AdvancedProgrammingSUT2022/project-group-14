@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="gameMenuScene" fx:id="anchorPane" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Client.views.StartGameMenuController">
+    <ScrollPane hbarPolicy="NEVER" prefHeight="590.0" prefWidth="400.0" vbarPolicy="NEVER">
+        <AnchorPane prefHeight="720" prefWidth="520"/>
+        <VBox fx:id="invitationsVBox" alignment="CENTER" layoutX="25.0" layoutY="229.0" prefHeight="50.0"
+              prefWidth="472.0" spacing="3"/>
+    </ScrollPane>
+    <MenuButton fx:id="usernamesMenuButton" layoutX="884.0" layoutY="25.0" mnemonicParsing="false" prefHeight="35.0"
+                prefWidth="225.0" text="Usernames"/>
+    <Button layoutX="1116.0" layoutY="24.0" mnemonicParsing="false" onMouseClicked="#sendInvitations" prefHeight="36.0"
+            prefWidth="360.0" text="Invite"/>
+    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
+    <Button layoutX="614.0" layoutY="236.0" text="Load Game"/>
+    <Button layoutX="614.0" layoutY="285.0" onMouseClicked="#startGameButtonClicked" text="Start Game"/>
+    <Button fx:id="continueButton" layoutX="614.0" layoutY="334.0" onMouseClicked="#continueButtonClicked"
+            text="Continue"/>
+    <Text fill="ORANGE" layoutX="1045.0" layoutY="231.0" text="number of players " textAlignment="CENTER"/>
+    <Spinner fx:id="numberOfPlayersSpinner" layoutX="1054.0" layoutY="239.0"/>
+    <Text fill="ORANGE" layoutX="1045.0" layoutY="316.0" text="map height" textAlignment="CENTER"/>
+    <Text fill="ORANGE" layoutX="1045.0" layoutY="401.0" text="map width" textAlignment="CENTER"/>
+    <Spinner fx:id="mapHeightSpinner" layoutX="1054.0" layoutY="324.0"/>
+    <Spinner fx:id="mapWidthSpinner" layoutX="1054.0" layoutY="409.0"/>
+    <TextArea fx:id="cheatCodeArea" layoutX="1009.0" layoutY="490.0" onKeyPressed="#cheatCodeAreaTyped"
+              prefHeight="200.0" prefWidth="200.0"/>
+    <Text fx:id="cheatCodeText" fill="WHITE" layoutX="1009.0" layoutY="480.0" text="Enter your cheatCode : "/>
+    <TextField fx:id="saveNameTextField" layoutX="607.0" layoutY="528.0" promptText="Write the name of your save" style="-fx-pref-width: 165;"/>
+    <Button fx:id="saveGameButton" layoutX="615.0" layoutY="572.0" text="Save Game" onMouseClicked="#saveGameButtonClicked"/>
+
+
+</AnchorPane>

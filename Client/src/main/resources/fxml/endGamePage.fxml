@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css"
+            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="Client.views.EndGamePageController">
+    <Text fx:id="text" layoutY="300"/>
+
+    <Button layoutX="50" layoutY="600" onMouseClicked="#mainMenuButtonClicked" text="MainMenu"/>
+
+</AnchorPane>
