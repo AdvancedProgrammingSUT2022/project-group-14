@@ -1,29 +1,33 @@
 package Client.views;
 
+import Client.enums.Commands;
+
+import java.util.regex.Matcher;
+
 public class GameCommandsValidation {
 
-//    public static void checkCommands(String input) {
-//        Matcher matcher;
-//        if ((matcher = Commands.getMatcher(input, Commands.INCREASE_GOODS)) != null) {
+    public static void checkCommands(String input) {
+        Matcher matcher;
+        if ((matcher = Commands.getMatcher(input, Commands.INCREASE_GOODS)) != null) {
 //            checkIncreaseGoods(matcher);
-//        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_TURN)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_TURN)) != null) {
 //            checkIncreaseTurn(matcher);
-//        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_MP)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_MP)) != null) {
 //            checkIncreaseMP(matcher);
-//        } else if (Commands.getMatcher(input, Commands.SEE_WHOLE_MAP) != null) {
+        } else if (Commands.getMatcher(input, Commands.SEE_WHOLE_MAP) != null) {
 //            checkSeeWholeMap();
-//        } else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE_FREE)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.BUY_TILE_FREE)) != null) {
 //            checkBuyTileFree(matcher);
-//        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_RANGE)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.INCREASE_RANGE)) != null) {
 //            checkIncreaseRange(matcher);
-//        } else if (Commands.getMatcher(input, Commands.GET_ALL_TECHS) != null) {
+        } else if (Commands.getMatcher(input, Commands.GET_ALL_TECHS) != null) {
 //            checkGetAllTechs();
-//        } else if ((matcher = Commands.getMatcher(input, Commands.SET_SPAWN_LOCATION)) != null) {
+        } else if ((matcher = Commands.getMatcher(input, Commands.SET_SPAWN_LOCATION)) != null) {
 //            setSpawnLocations(matcher);
-//        } else {
-//            System.out.println("invalid command");
-//        }
-//    }
+        } else {
+            System.out.println("invalid command");
+        }
+    }
 //
 //    public static void checkIncreaseGoods(Matcher matcher) {
 //        int amount = Integer.parseInt(matcher.group("amount"));

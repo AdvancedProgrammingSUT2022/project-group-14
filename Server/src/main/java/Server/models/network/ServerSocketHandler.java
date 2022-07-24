@@ -89,6 +89,12 @@ public class ServerSocketHandler extends Thread {
                     put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                 }});
             }
+            case SORT_USERS -> UserController.sortUsers();
+            case GET_USERS -> {
+                return new Response(QueryResponses.OK, new HashMap<>(){{
+                    put("users", new Gson().toJson(UserController.getUsers()));
+                }});
+            }
         }
         return new Response(QueryResponses.OK, new HashMap<>());
     }
