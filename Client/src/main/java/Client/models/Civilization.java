@@ -1,16 +1,11 @@
 package Client.models;
 
 import Client.enums.Technologies;
+import Client.enums.resources.LuxuryResourceTypes;
+import Client.enums.resources.StrategicResourceTypes;
+import Client.enums.units.UnitTypes;
+import Client.models.tiles.Tile;
 import Client.models.units.*;
-import Server.controllers.MapController;
-import Server.controllers.TileController;
-import Server.controllers.WorldController;
-import Server.enums.Technologies;
-import Server.enums.resources.LuxuryResourceTypes;
-import Server.enums.resources.StrategicResourceTypes;
-import Server.enums.units.UnitTypes;
-import Server.models.tiles.Tile;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;

@@ -1,7 +1,7 @@
 package Client.enums.resources;
 
-import Server.enums.Improvements;
-import Server.enums.Technologies;
+import Client.enums.Improvements;
+import Client.enums.Technologies;
 
 import java.util.HashMap;
 

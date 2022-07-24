@@ -1,6 +1,6 @@
 package Client.enums.tiles;
 
-import Server.enums.resources.ResourceTypes;
+import Client.enums.resources.ResourceTypes;
 
 import java.util.HashSet;
 

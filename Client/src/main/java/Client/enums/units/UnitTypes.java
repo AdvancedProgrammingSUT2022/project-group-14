@@ -1,9 +1,8 @@
 package Client.enums.units;
 
-import Server.Main;
-import Server.enums.Technologies;
-import Server.enums.resources.ResourceTypes;
-import Server.enums.resources.StrategicResourceTypes;
+import Client.enums.Technologies;
+import Client.enums.resources.ResourceTypes;
+import Client.enums.resources.StrategicResourceTypes;
 import javafx.scene.image.Image;
 
 import java.util.Objects;

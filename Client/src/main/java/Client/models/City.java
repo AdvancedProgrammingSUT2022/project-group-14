@@ -1,15 +1,9 @@
 package Client.models;
 
-import Server.controllers.CityController;
-import Server.controllers.MapController;
-import Server.controllers.TileController;
-import Server.controllers.WorldController;
-import Server.enums.BuildingTypes;
-import Server.models.tiles.Coordination;
-import Server.models.tiles.Tile;
-import Server.models.units.CombatUnit;
-import Client.models.units.NonCombatUnit;
-import Client.models.units.Unit;
+import Client.enums.BuildingTypes;
+import Client.models.tiles.Coordination;
+import Client.models.tiles.Tile;
+import Client.models.units.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;

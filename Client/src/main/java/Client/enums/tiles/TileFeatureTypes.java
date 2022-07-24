@@ -1,9 +1,8 @@
 package Client.enums.tiles;
 
-import Server.Main;
-import Server.enums.resources.BonusResourceTypes;
-import Server.enums.resources.LuxuryResourceTypes;
-import Server.enums.resources.ResourceTypes;
+import Client.enums.resources.BonusResourceTypes;
+import Client.enums.resources.LuxuryResourceTypes;
+import Client.enums.resources.ResourceTypes;
 import javafx.scene.image.Image;
 
 import java.util.Arrays;

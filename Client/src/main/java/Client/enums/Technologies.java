@@ -1,7 +1,5 @@
 package Client.enums;
 
-import Server.Main;
-import Server.controllers.WorldController;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.image.Image;

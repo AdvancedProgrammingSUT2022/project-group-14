@@ -5,12 +5,6 @@ import Client.enums.Technologies;
 import Client.models.City;
 import Client.models.Civilization;
 import Client.models.units.Unit;
-import Common.models.units.Unit;
-import Common.enums.Commands;
-import Common.enums.Technologies;
-import Common.models.City;
-import Server.models.Civilization;
-import Common.models.units.Ranged;
 
 import java.util.regex.Matcher;
 

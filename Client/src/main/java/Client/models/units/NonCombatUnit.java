@@ -1,7 +1,8 @@
 package Client.models.units;
 
-import Server.enums.units.UnitStates;
-import Server.enums.units.UnitTypes;
+
+import Client.enums.units.UnitStates;
+import Client.enums.units.UnitTypes;
 
 public class NonCombatUnit extends Unit{
     private int turnsLeftToWork;

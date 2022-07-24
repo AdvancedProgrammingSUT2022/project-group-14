@@ -1,9 +1,8 @@
 package Client.models;
 
 
-import Server.controllers.UserController;
-import Server.enums.Avatars;
-import Server.models.chats.Chat;
+import Client.enums.Avatars;
+import Client.models.chats.Chat;
 import javafx.scene.image.Image;
 
 import java.util.*;
