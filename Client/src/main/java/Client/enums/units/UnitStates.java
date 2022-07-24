@@ -22,9 +22,9 @@ public enum UnitStates {
         this.name = name;
     }
 
-    public Image getImage(){
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/actions/" + this.name + ".png")).toString());
-    }
+//    public Image getImage(){
+//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/actions/" + this.name + ".png")).toString());
+//    }
 
     public String getName() {
         return this.name;

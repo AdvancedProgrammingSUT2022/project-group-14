@@ -1,11 +1,15 @@
 package Client.controllers;
 
+import Client.enums.QueryCommands;
+import Client.models.Request;
+import Client.models.Response;
 import com.google.gson.Gson;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class ClientSocketController {
@@ -24,17 +28,18 @@ public class ClientSocketController {
         }
     }
 
-//    public static Response sendRequestAndGetResponse(String action, Matcher matcher) {
-//        try {
-//            String requestString = new Gson().toJson(makeRequest(action, matcher));
-//            outputStream.writeUTF(requestString);
-//            outputStream.flush();
-//            String responseString = inputStream.readUTF();
-//            return new Gson().fromJson(responseString, Response.class);
-//        } catch (Exception ignored) {
-//            System.err.println("You've lost connection with the server");
-//            System.exit(0);
-//        }
-//        return null;
-//    }
+    public static Response sendRequestAndGetResponse(QueryCommands command, HashMap<String, Object> params) {
+        try {
+            Request request = new Request(command, params);
+            String requestString = new Gson().toJson(request);
+            outputStream.writeUTF(requestString);
+            outputStream.flush();
+            String responseString = inputStream.readUTF();
+            return new Gson().fromJson(responseString, Response.class);
+        } catch (Exception ignored) {
+            ignored.printStackTrace();
+        }
+        return null;
+    }
+
 }

@@ -81,9 +81,9 @@ public enum Technologies {
         return this.cost;
     }
 
-    public Image getImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/technologies/" + this.name + ".png")).toString());
-    }
+//    public Image getImage() {
+//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/technologies/" + this.name + ".png")).toString());
+//    }
 
     public HashSet<String> getRequiredTechnologies() {
         return this.requiredTechnologies;
@@ -111,26 +111,26 @@ public enum Technologies {
         turnsRectangle.setLayoutY(y);
         Text nameText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2 - 25, nameRectangle.getLayoutY() + nameRectangle.getHeight() - 7, this.getName().replaceAll("_", " "));
         nameText.setFill(Color.WHITE);
-        Text turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(this));
-        turnsText.setFill(Color.WHITE);
+//        Text turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(this));
+//        turnsText.setFill(Color.WHITE);
         Circle backgroundCircle = new Circle(40, Color.CADETBLUE);
         backgroundCircle.setLayoutX(x);
         backgroundCircle.setLayoutY(y);
-        Circle imageCircle = new Circle(40, new ImagePattern(this.getImage()));
-        imageCircle.setLayoutX(x);
-        imageCircle.setLayoutY(y);
+//        Circle imageCircle = new Circle(40, new ImagePattern(this.getImage()));
+//        imageCircle.setLayoutX(x);
+//        imageCircle.setLayoutY(y);
         group.getChildren().clear();
         group.getChildren().add(nameRectangle);
         group.getChildren().add(turnsRectangle);
         group.getChildren().add(nameText);
-        group.getChildren().add(turnsText);
+        //group.getChildren().add(turnsText);
         group.getChildren().add(backgroundCircle);
-        group.getChildren().add(imageCircle);
+        //group.getChildren().add(imageCircle);
         group.setCursor(Cursor.HAND);
         group.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                 if (mouseEvent.getClickCount() == 2) {
-                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).setCurrentTechnology(this);
+                    //WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).setCurrentTechnology(this);
                 }
             }
         });

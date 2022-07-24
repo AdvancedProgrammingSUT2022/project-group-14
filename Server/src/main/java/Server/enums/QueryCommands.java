@@ -1,4 +1,4 @@
-package Client.enums;
+package Server.enums;
 
 public enum QueryCommands {
     //city panel page
@@ -76,7 +76,7 @@ public enum QueryCommands {
     RESOURCE_IS_AVAILABLE_TO_BE_USED,
     //CITY
     GET_AVAILABLE_NEIGHBOR_TILES,
-    GET_CIVILIZATION_BY_NAME;
+    GET_CIVILIZATION_BY_NAME,
 
 
 }

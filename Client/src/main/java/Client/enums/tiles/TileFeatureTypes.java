@@ -38,9 +38,9 @@ public enum TileFeatureTypes implements TileTypes {
         this.possibleResources = possibleResources;
     }
 
-    public Image getImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/tiles/features/" + this.name + ".png")).toString());
-    }
+//    public Image getImage() {
+//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/tiles/features/" + this.name + ".png")).toString());
+//    }
 
     @Override
     public String getName() {

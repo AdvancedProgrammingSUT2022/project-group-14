@@ -59,13 +59,13 @@ public enum UnitTypes {
         this.requiredTechnology = requiredTechnology;
     }
 
-    public Image getImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/" + this.name + ".png")).toString());
-    }
-
-    public Image getLogoImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/logos/" + this.name + ".png")).toString());
-    }
+//    public Image getImage() {
+//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/" + this.name + ".png")).toString());
+//    }
+//
+//    public Image getLogoImage() {
+//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/logos/" + this.name + ".png")).toString());
+//    }
 
     public String getName() {
         return name;

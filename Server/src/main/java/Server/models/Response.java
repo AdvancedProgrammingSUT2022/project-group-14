@@ -1,4 +1,4 @@
-package Client.models;
+package Server.models;
 
 public class Response {
     private final String destinationSceneName;

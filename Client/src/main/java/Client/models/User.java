@@ -1,7 +1,9 @@
 package Client.models;
 
 
+import Client.controllers.ClientSocketController;
 import Client.enums.Avatars;
+import Client.enums.QueryCommands;
 import Client.models.chats.Chat;
 import javafx.scene.image.Image;
 
@@ -31,11 +33,12 @@ public class User {
         chats = new HashMap<>();
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add(this.username);
-        for (User user : UserController.getUsers()) {
+        ArrayList<User> users = (ArrayList<User>) ClientSocketController.sendRequestAndGetResponse(QueryCommands.GET_USERS, null).getReturnedValue();
+        for (User user : users) {
             usernames.add(user.getUsername());
         }
         chats.put("Public Chat", new Chat(usernames, "Public Chat"));
-        for (User user : UserController.getUsers()) {
+        for (User user : users) {
             user.getChats().get("Public Chat").addUsername(this.username);
         }
         invitations = new ArrayList<>();
@@ -137,8 +140,8 @@ public class User {
 
     public void resetPeopleInLobby() {
         for (String s : peopleInLobby) {
-            if (!s.equals(username))
-                Objects.requireNonNull(UserController.getUserByUsername(s)).removePersonFromLobby(username);
+//            if (!s.equals(username))
+                //Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryCommands.GET_USER_BY_USERNAME, new HashMap<>(){{put("username", s);}}).getReturnedValue()).removePersonFromLobby(username);
         }
         peopleInLobby.clear();
         peopleInLobby.add(username);
