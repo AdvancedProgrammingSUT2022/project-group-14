@@ -1,5 +1,6 @@
 package Client.enums.tiles;
 
+import Client.application.App;
 import Client.enums.resources.BonusResourceTypes;
 import Client.enums.resources.LuxuryResourceTypes;
 import Client.enums.resources.ResourceTypes;
@@ -38,9 +39,9 @@ public enum TileFeatureTypes implements TileTypes {
         this.possibleResources = possibleResources;
     }
 
-//    public Image getImage() {
-//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/tiles/features/" + this.name + ".png")).toString());
-//    }
+    public Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/tiles/features/" + this.name + ".png")).toString());
+    }
 
     @Override
     public String getName() {

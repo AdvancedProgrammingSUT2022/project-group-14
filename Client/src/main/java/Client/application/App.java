@@ -26,7 +26,6 @@ public class App extends javafx.application.Application {
     public void start(Stage stage) throws IOException {
         ClientSocketController.startConnecting(8000);
 
-//        UserController.readAllUsers();
         App.stage = stage;
         Parent root = loadFXML("loginPage");
         assert root != null;
@@ -42,11 +41,6 @@ public class App extends javafx.application.Application {
         stage.setWidth(1280);
         stage.setHeight(720);
         stage.show();
-    }
-
-    @Override
-    public void stop() throws IOException {
-//        UserController.saveAllUsers();
     }
 
     public static void changeScene(String address) {

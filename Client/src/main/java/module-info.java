@@ -5,7 +5,14 @@ module Client {
     requires com.google.gson;
     requires javafx.media;
 
-    opens Client.views to javafx.fxml;
+    opens Client.views to javafx.fxml, com.google.gson;
+    opens Client.enums to com.google.gson;
+    opens Client.models to com.google.gson;
+    opens Client.models.chats to com.google.gson;
+    opens Client.models.network to com.google.gson;
+    exports Client.models.network to com.google.gson;
+    exports Client.models;
+    exports Client.enums;
     exports Client.application to javafx.graphics;
-    exports Client.views to javafx.fxml;
+    exports Client.views to javafx.fxml, com.google.gson;
 }

@@ -1,23 +1,5 @@
 package Client.views;
 
-import Client.application.App;
-import Client.enums.units.UnitTypes;
-import Client.models.City;
-import Client.models.Civilization;
-import Client.models.units.CombatUnit;
-import Client.models.units.Unit;
-import javafx.fxml.FXML;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
-
-import java.util.Locale;
-
 public class InfoPanelPageController {
 
 //    @FXML

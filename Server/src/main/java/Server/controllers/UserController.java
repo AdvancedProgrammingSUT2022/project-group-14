@@ -17,7 +17,6 @@ public class UserController {
 
 
     public static void setLoggedInUser(User loggedInUser) {
-
         UserController.loggedInUser = loggedInUser;
         loggedInUser.setDateOfLastLogin(new Date());
     }

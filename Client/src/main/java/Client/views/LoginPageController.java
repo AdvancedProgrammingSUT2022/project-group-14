@@ -2,8 +2,11 @@ package Client.views;
 
 import Client.application.App;
 import Client.controllers.ClientSocketController;
-import Client.enums.QueryCommands;
+import Client.enums.QueryRequests;
+import Client.enums.QueryResponses;
 import Client.models.User;
+import Client.models.network.Response;
+import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -11,6 +14,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class LoginPageController {
     @FXML
@@ -31,20 +35,22 @@ public class LoginPageController {
     }
 
     public void loginButtonClicked(MouseEvent mouseEvent) {
-        //User user = UserController.getUserByUsername(usernameTextField.getText());
-        User user = (User) ClientSocketController.sendRequestAndGetResponse(QueryCommands.GET_USER_BY_USERNAME, new HashMap<String, Object>(){{put("username", usernameTextField.getText());}}).getReturnedValue();
-        if (user == null || !user.getPassword().equals(passwordTextField.getText())) {
-            usernameTextField.setStyle("-fx-border-color: #ff0022");
-            passwordTextField.setStyle("-fx-border-color: #ff0022");
-            loginButton.setDisable(true);
-            passwordTextField.setText("");
-            passwordTextField.setPromptText("Username and Password didn't match");
-        } else {
-            System.out.println(user.getUsername());
-            //UserController.setLoggedInUser(user);
-            ClientSocketController.sendRequestAndGetResponse(QueryCommands.SET_LOGGED_IN_USER, new HashMap<>(){{put("user", user);}});
-            //App.changeScene("mainMenuPage");
-            System.out.println("got in");
+        Response response = Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGIN_USER, new HashMap<>() {{
+            put("username", usernameTextField.getText());
+            put("password", passwordTextField.getText());
+        }}));
+        switch (response.getQueryResponse()) {
+            case OK -> {
+                MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+                App.changeScene("mainMenuPage");
+            }
+            case USER_NOT_EXIST, PASSWORD_INCORRECT -> {
+                usernameTextField.setStyle("-fx-border-color: #ff0022");
+                passwordTextField.setStyle("-fx-border-color: #ff0022");
+                loginButton.setDisable(true);
+                passwordTextField.setText("");
+                passwordTextField.setPromptText("Username and Password didn't match");
+            }
         }
     }
 
@@ -62,23 +68,29 @@ public class LoginPageController {
                 passwordTextField.setStyle("-fx-border-color: #ff0022");
                 passwordTextField.setPromptText("Complete this field!");
             }
-        } else if (ClientSocketController.sendRequestAndGetResponse(QueryCommands.GET_USER_BY_USERNAME, new HashMap<String, Object>(){{put("username", usernameTextField.getText());}}).getReturnedValue() != null) {
-            usernameTextField.setStyle("-fx-border-color: #ff0022");
-            usernameTextField.setText("");
-            usernameTextField.setPromptText("Username already exists!");
-        } else if (ClientSocketController.sendRequestAndGetResponse(QueryCommands.GET_USER_BY_NICKNAME, new HashMap<String, Object>(){{put("username", nicknameTextField.getText());}}).getReturnedValue() != null) {
-            nicknameTextField.setStyle("-fx-border-color: #ff0022");
-            nicknameTextField.setText("");
-            nicknameTextField.setPromptText("Nickname already exists!");
         } else {
-            //UserController.addUser(usernameTextField.getText(), passwordTextField.getText(), nicknameTextField.getText());
-            ClientSocketController.sendRequestAndGetResponse(QueryCommands.ADD_USER, new HashMap<>(){{
-                                                                                                        put("username", usernameTextField.getText());
-                                                                                                        put("password", passwordTextField.getText());
-                                                                                                        put("nickname", nicknameTextField.getText());}});
-            usernameTextField.setStyle("-fx-border-color: #11aa11");
-            nicknameTextField.setStyle("-fx-border-color: #11aa11");
-            passwordTextField.setStyle("-fx-border-color: #11aa11");
+            QueryResponses queryResponse = Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CREATE_USER, new HashMap<>() {{
+                put("username", usernameTextField.getText());
+                put("nickname", nicknameTextField.getText());
+                put("password", passwordTextField.getText());
+            }})).getQueryResponse();
+            switch (queryResponse) {
+                case OK -> {
+                    usernameTextField.setStyle("-fx-border-color: #11aa11");
+                    nicknameTextField.setStyle("-fx-border-color: #11aa11");
+                    passwordTextField.setStyle("-fx-border-color: #11aa11");
+                }
+                case USERNAME_EXIST -> {
+                    usernameTextField.setStyle("-fx-border-color: #ff0022");
+                    usernameTextField.setText("");
+                    usernameTextField.setPromptText("Username already exists!");
+                }
+                case NICKNAME_EXIST -> {
+                    nicknameTextField.setStyle("-fx-border-color: #ff0022");
+                    nicknameTextField.setText("");
+                    nicknameTextField.setPromptText("Nickname already exists!");
+                }
+            }
         }
     }
 

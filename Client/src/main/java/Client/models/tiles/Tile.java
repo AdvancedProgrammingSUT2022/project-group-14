@@ -1,21 +1,5 @@
 package Client.models.tiles;
 
-import Client.enums.Improvements;
-import Client.enums.resources.BonusResourceTypes;
-import Client.enums.resources.LuxuryResourceTypes;
-import Client.enums.tiles.TileBaseTypes;
-import Client.enums.tiles.TileFeatureTypes;
-import Client.models.City;
-import Client.models.Civilization;
-import Client.models.resources.Resource;
-import Client.models.resources.StrategicResource;
-import Client.models.units.CombatUnit;
-import Client.models.units.NonCombatUnit;
-
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.Random;
-
 public class Tile {
 //    private final Hex hex;
 //    private final Coordination coordination;

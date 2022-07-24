@@ -1,13 +1,5 @@
 package Client.views;
 
-import Client.enums.Commands;
-import Client.enums.Technologies;
-import Client.models.City;
-import Client.models.Civilization;
-import Client.models.units.Unit;
-
-import java.util.regex.Matcher;
-
 public class GameCommandsValidation {
 
 //    public static void checkCommands(String input) {

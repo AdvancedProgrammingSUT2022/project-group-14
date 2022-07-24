@@ -1,6 +1,7 @@
 package Client.enums.units;
 
 
+import Client.application.App;
 import javafx.scene.image.Image;
 
 import java.util.Objects;
@@ -22,9 +23,9 @@ public enum UnitStates {
         this.name = name;
     }
 
-//    public Image getImage(){
-//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/actions/" + this.name + ".png")).toString());
-//    }
+    public Image getImage(){
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions/" + this.name + ".png")).toString());
+    }
 
     public String getName() {
         return this.name;

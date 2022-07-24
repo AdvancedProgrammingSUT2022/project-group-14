@@ -1,5 +1,6 @@
 package Client.enums.units;
 
+import Client.application.App;
 import Client.enums.Technologies;
 import Client.enums.resources.ResourceTypes;
 import Client.enums.resources.StrategicResourceTypes;
@@ -59,13 +60,13 @@ public enum UnitTypes {
         this.requiredTechnology = requiredTechnology;
     }
 
-//    public Image getImage() {
-//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/" + this.name + ".png")).toString());
-//    }
-//
-//    public Image getLogoImage() {
-//        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/logos/" + this.name + ".png")).toString());
-//    }
+    public Image getImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/" + this.name + ".png")).toString());
+    }
+
+    public Image getLogoImage() {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/logos/" + this.name + ".png")).toString());
+    }
 
     public String getName() {
         return name;

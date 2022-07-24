@@ -1,32 +1,5 @@
 package Client.views;
 
-import Client.application.App;
-
-import Client.enums.Improvements;
-import Client.enums.Technologies;
-import Client.enums.units.CombatType;
-import Client.enums.units.UnitStates;
-import Client.enums.units.UnitTypes;
-import Client.models.City;
-import Client.models.Civilization;
-import Client.models.units.*;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.fxml.FXML;
-import javafx.scene.Cursor;
-import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-
-import java.util.Objects;
-
 public class GamePageController {
 //    public static boolean stopTimeline;
 //    public static String infoPanelName;
