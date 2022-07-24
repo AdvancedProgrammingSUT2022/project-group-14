@@ -16,8 +16,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import Server.models.tiles.Tile;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.concurrent.TimeoutException;
 
 public class UnitController {
 
@@ -72,7 +74,9 @@ public class UnitController {
             return "can not found a city in enemy territory";
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(settler.getCivilizationName());
-            City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY(), settler.getCivilizationName());
+            ArrayList<Tile> tiles = new ArrayList<>(TileController.getAvailableNeighbourTiles(settler.getCurrentX(), settler.getCurrentY()));
+            tiles.add(MapController.getTileByCoordinates(settler.getCurrentX(), settler.getCurrentY()));
+            City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY(), settler.getCivilizationName(), tiles);
             currentCivilization.addCity(city);
             currentTile.setCity(city);
             CivilizationController.updateMapVision(currentCivilization);

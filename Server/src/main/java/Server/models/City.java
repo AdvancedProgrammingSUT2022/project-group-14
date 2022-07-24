@@ -41,16 +41,14 @@ public class City {
     private int numberOfGarrisonedUnit;
 
 
-    public City(String name, int x, int y, String civilizationName) {
+    public City(String name, int x, int y, String civilizationName, ArrayList<Tile> tiles) {
         this.name = name;
         this.centerCoordination = new Coordination(x, y);
         this.civilizationName = civilizationName;
         citizens.add(new Citizen(1));
-        this.territory.add(MapController.getTileByCoordinates(x, y));
-        territory.addAll(TileController.getAvailableNeighbourTiles(x, y));
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        this.territory.addAll(tiles);
         for (Tile tile : this.territory) {
-            tile.setCivilization(currentCivilization.getName());
+            tile.setCivilization(civilizationName);
         }
         healthPoint = 20;
         defenseStrength = 10;
@@ -249,6 +247,40 @@ public class City {
         return name;
     }
 
+    public String unemployedCitizensData() {
+        ArrayList<Citizen> unemployedCitizens = new ArrayList<>();
+        for (Citizen citizen : this.getCitizens())
+            if (!citizen.isWorking())
+                unemployedCitizens.add(citizen);
+        if (unemployedCitizens.size() == 0)
+            return "there is no unemployed citizen in this city\n";
+        StringBuilder output = new StringBuilder("unemployed citizens:\n");
+        int counter = 1;
+        for (Citizen unemployedCitizen : unemployedCitizens) {
+            output.append(counter).append("- citizen with id ").append(unemployedCitizen.getId()).append('\n');
+            counter++;
+        }
+        return output.toString();
+    }
+
+    public String employedCitizensData() {
+        ArrayList<Citizen> employedCitizens = new ArrayList<>();
+        for (Citizen citizen : this.getCitizens())
+            if (citizen.isWorking())
+                employedCitizens.add(citizen);
+        if (employedCitizens.size() == 0)
+            return "there is no employed citizen in this city\n";
+        StringBuilder output = new StringBuilder("employed citizens:\n");
+        int counter = 1;
+        for (Citizen employedCitizen : employedCitizens) {
+            output.append(counter).append("- citizen with id ").append(employedCitizen.getId());
+            output.append(" is working on tile ").append(employedCitizen.getXOfWorkingTile() + 1).append(" and ");
+            output.append(employedCitizen.getYOfWorkingTile() + 1).append('\n');
+            counter++;
+        }
+        return output.toString();
+    }
+
     public String getInfo() {
         StringBuilder output = new StringBuilder("Name : " + name + "\n" +
                 "Food : " + food + "\n" +
@@ -259,7 +291,7 @@ public class City {
                 "NumberOFBuildings : " + buildings.size() + "\n" +
                 "NumberOfCitizens : " + citizens.size() + "\n" +
                 "Citizens info : \n");
-        output.append(CityController.employedCitizensData(this)).append(CityController.unemployedCitizensData(this));
+        output.append(this.employedCitizensData()).append(this.unemployedCitizensData());
 
         if (this.getCurrentUnit() != null)
             output.append("current production : ").append(getCurrentUnit().getName()).append("\n");

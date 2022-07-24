@@ -2,7 +2,7 @@ package Client.views;
 
 public class GamePageController {
 //    public static boolean stopTimeline;
-//    public static String infoPanelName;
+    public static String infoPanelName;
 //    public static boolean showCityOptions;
 //    public static City city;
 //    public static CombatUnit combatUnit;

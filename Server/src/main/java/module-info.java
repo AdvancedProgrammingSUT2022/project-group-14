@@ -11,4 +11,5 @@ module Server {
     exports Server.models.network to com.google.gson;
     exports Server.controllers;
     exports Server.models;
+    exports Server.models.tiles;
 }

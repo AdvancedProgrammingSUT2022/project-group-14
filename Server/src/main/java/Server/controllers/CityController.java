@@ -273,40 +273,6 @@ public class CityController {
         return "can't buy this tile";
     }
 
-    public static String unemployedCitizensData(City city) {
-        ArrayList<Citizen> unemployedCitizens = new ArrayList<>();
-        for (Citizen citizen : city.getCitizens())
-            if (!citizen.isWorking())
-                unemployedCitizens.add(citizen);
-        if (unemployedCitizens.size() == 0)
-            return "there is no unemployed citizen in this city\n";
-        StringBuilder output = new StringBuilder("unemployed citizens:\n");
-        int counter = 1;
-        for (Citizen unemployedCitizen : unemployedCitizens) {
-            output.append(counter).append("- citizen with id ").append(unemployedCitizen.getId()).append('\n');
-            counter++;
-        }
-        return output.toString();
-    }
-
-    public static String employedCitizensData(City city) {
-        ArrayList<Citizen> employedCitizens = new ArrayList<>();
-        for (Citizen citizen : city.getCitizens())
-            if (citizen.isWorking())
-                employedCitizens.add(citizen);
-        if (employedCitizens.size() == 0)
-            return "there is no employed citizen in this city\n";
-        StringBuilder output = new StringBuilder("employed citizens:\n");
-        int counter = 1;
-        for (Citizen employedCitizen : employedCitizens) {
-            output.append(counter).append("- citizen with id ").append(employedCitizen.getId());
-            output.append(" is working on tile ").append(employedCitizen.getXOfWorkingTile() + 1).append(" and ");
-            output.append(employedCitizen.getYOfWorkingTile() + 1).append('\n');
-            counter++;
-        }
-        return output.toString();
-    }
-
     public static void conquerCity(City city, CombatUnit unit) {
         for (Tile tile : city.getTerritory())
             tile.setCivilization(unit.getCivilizationName());

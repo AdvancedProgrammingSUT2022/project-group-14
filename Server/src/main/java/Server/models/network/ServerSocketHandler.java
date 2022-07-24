@@ -4,6 +4,7 @@ import Server.controllers.UserController;
 import Server.controllers.WorldController;
 import Server.enums.QueryResponses;
 import Server.enums.Technologies;
+import Server.models.Civilization;
 import Server.models.User;
 import com.google.gson.Gson;
 
@@ -37,6 +38,7 @@ public class ServerSocketHandler extends Thread {
 
     public Response handleRequest(Request request) {
         System.out.println(request.getQueryRequest() + " : " + request.getParams().toString());
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         switch (request.getQueryRequest()) {
             case LOGIN_USER -> {
                 if (UserController.getUserByUsername(request.getParams().get("username")) == null) {
@@ -94,6 +96,11 @@ public class ServerSocketHandler extends Thread {
                 return new Response(QueryResponses.OK, new HashMap<>(){{
                     put("users", new Gson().toJson(UserController.getUsers()));
                 }});
+            }
+            case SET_STRATEGIC_RESOURCE -> currentCivilization.getStrategicResources().put(request.getParams().get("name"), currentCivilization.getStrategicResources().get(request.getParams().get("name")) + 1);
+            case SET_LUXURY_RESOURCE -> {
+                currentCivilization.getStrategicResources().put(request.getParams().get("name"), currentCivilization.getStrategicResources().get(request.getParams().get("name")) + 1);
+                currentCivilization.setHappiness(currentCivilization.getHappiness() + 4);
             }
         }
         return new Response(QueryResponses.OK, new HashMap<>());

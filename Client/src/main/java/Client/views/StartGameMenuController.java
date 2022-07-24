@@ -157,7 +157,7 @@ public class StartGameMenuController {
 //        }
         System.out.println(MainMenuController.loggedInUser.getPeopleInLobby() + " * " + mapWidthSpinner.getValue() + " " + mapHeightSpinner.getValue());
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEW_WORLD, new HashMap<>(){{
-            //people in lobby
+            //put people in lobby
             put("width", String.valueOf(mapWidthSpinner.getValue()));
             put("height", String.valueOf(mapHeightSpinner.getValue()));
         }});
