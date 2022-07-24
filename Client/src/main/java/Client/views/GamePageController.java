@@ -2,6 +2,14 @@ package Client.views;
 
 import Client.application.App;
 
+import Client.enums.Improvements;
+import Client.enums.Technologies;
+import Client.enums.units.CombatType;
+import Client.enums.units.UnitStates;
+import Client.enums.units.UnitTypes;
+import Client.models.City;
+import Client.models.Civilization;
+import Client.models.units.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
@@ -162,6 +170,7 @@ public class GamePageController {
             } else {
                 setUnitPanelTexts(WorldController.getSelectedNonCombatUnit());
             }
+            //TODO WHAT'S THE POINT OF THIS IF AND THE FUNCTION UNIT IS NOT SELECTED??
         } else if (WorldController.unitIsNotSelected()) {
             unitPanelPane.setVisible(false);
         }

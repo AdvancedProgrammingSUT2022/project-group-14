@@ -1,8 +1,11 @@
 package Client.views;
 
 import Client.application.App;
-import Common.enums.BuildingTypes;
-import Common.enums.units.UnitTypes;
+import Client.enums.BuildingTypes;
+import Client.enums.units.UnitTypes;
+import Client.models.Building;
+import Client.models.Citizen;
+import Client.models.City;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
@@ -12,9 +15,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
-import Common.models.Building;
-import Common.models.Citizen;
-import Common.models.City;
 
 import java.util.Objects;
 
@@ -117,6 +117,7 @@ public class CityPanelPageController {
     }
 
     public void initSpinners() {
+        //TODO is this function ok?
         xTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getHeight(), 1, 1));
         yTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
         xCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));

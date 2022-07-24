@@ -1,12 +1,12 @@
 package Client.views;
 
 import Client.application.App;
+import Client.models.User;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import Common.models.User;
 
 public class LoginPageController {
     @FXML

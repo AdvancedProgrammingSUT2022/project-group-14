@@ -1,5 +1,10 @@
 package Client.views;
 
+import Client.enums.Commands;
+import Client.enums.Technologies;
+import Client.models.City;
+import Client.models.Civilization;
+import Client.models.units.Unit;
 import Common.models.units.Unit;
 import Common.enums.Commands;
 import Common.enums.Technologies;
