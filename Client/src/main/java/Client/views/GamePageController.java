@@ -470,6 +470,10 @@ public class GamePageController {
         showCityOptions = false;
     }
 
+    public static Image getActionImage(String name) {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions/" + name + ".png")).toString());
+    }
+
     public void declareWarButtonClicked(MouseEvent mouseEvent) {
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLARE_WAR, new HashMap<>(){{put("enemyName", GamePageController.enemyName);}});
         showDeclareWar = false;

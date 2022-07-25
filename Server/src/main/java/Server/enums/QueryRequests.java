@@ -117,5 +117,6 @@ public enum QueryRequests {
     ADD_MESSAGE,
     GET_USER_AVATAR,
     ADD_CHAT,
+    DECLARE_WAR,
     ADD_LISTENER
 }
