@@ -131,7 +131,9 @@ public class StartGameMenuController {
             if (command.equals("clear")) {
                 cheatCodeArea.clear();
             } else {
-                GameCommandsValidation.checkCommands(command);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.CHEAT_COMMAND, new HashMap<>(){{
+                    put("command", command);
+                }});
             }
         }
     }

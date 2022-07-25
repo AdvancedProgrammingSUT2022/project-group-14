@@ -1,5 +1,6 @@
 package Server.models.network;
 
+import Server.controllers.GameCommandsValidation;
 import Server.controllers.UserController;
 import Server.controllers.WorldController;
 import Server.enums.QueryResponses;
@@ -102,6 +103,7 @@ public class ServerSocketHandler extends Thread {
                 currentCivilization.getStrategicResources().put(request.getParams().get("name"), currentCivilization.getStrategicResources().get(request.getParams().get("name")) + 1);
                 currentCivilization.setHappiness(currentCivilization.getHappiness() + 4);
             }
+            case CHEAT_COMMAND -> GameCommandsValidation.checkCommands(request.getParams().get("command"));
         }
         return new Response(QueryResponses.OK, new HashMap<>());
     }
