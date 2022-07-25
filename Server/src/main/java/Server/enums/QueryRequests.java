@@ -81,5 +81,7 @@ public enum QueryRequests {
     SET_LUXURY_RESOURCE,
     GET_MAP_RANGES,
     SET_STRATEGIC_RESOURCE,
-    CHEAT_COMMAND
+    CHEAT_COMMAND,
+    //game page
+    DECLARE_WAR
 }

@@ -2,6 +2,7 @@ package Server.models.network;
 
 import Server.controllers.GameCommandsValidation;
 import Server.controllers.UserController;
+import Server.controllers.WarController;
 import Server.controllers.WorldController;
 import Server.enums.QueryResponses;
 import Server.enums.Technologies;
@@ -104,6 +105,7 @@ public class ServerSocketHandler extends Thread {
                 currentCivilization.setHappiness(currentCivilization.getHappiness() + 4);
             }
             case CHEAT_COMMAND -> GameCommandsValidation.checkCommands(request.getParams().get("command"));
+            case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));
         }
         return new Response(QueryResponses.OK, new HashMap<>());
     }
