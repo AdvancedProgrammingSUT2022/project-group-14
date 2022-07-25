@@ -23,7 +23,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
-//salam from other side
 public class StartGameMenuController {
     @FXML
     private AnchorPane anchorPane;
@@ -160,6 +159,7 @@ public class StartGameMenuController {
         System.out.println(MainMenuController.loggedInUser.getPeopleInLobby() + " * " + mapWidthSpinner.getValue() + " " + mapHeightSpinner.getValue());
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEW_WORLD, new HashMap<>(){{
             //put people in lobby
+            put("people", new Gson().toJson(MainMenuController.loggedInUser.getPeopleInLobby()));
             put("width", String.valueOf(mapWidthSpinner.getValue()));
             put("height", String.valueOf(mapHeightSpinner.getValue()));
         }});

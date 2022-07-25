@@ -26,7 +26,7 @@ public class UnitController {
     public static String setUnitDestinationCoordinates(Unit unit, int x, int y) {
         String reason;
         if ((reason = MoveController.impossibleToMoveToTile(x, y, unit)) != null) {
-            MapController.getTileByCoordinates(x, y).getHex().setInfoText("Can't move!", Color.RED);
+//            MapController.getTileByCoordinates(x, y).getHex().setInfoText("Can't move!", Color.RED);
             return reason;
         } else {
             unit.setDestinationCoordinates(x, y);
@@ -244,9 +244,5 @@ public class UnitController {
         group.getChildren().add(text);
         group.setCursor(Cursor.HAND);
         return group;
-    }
-
-    public static Image getActionImage(String name) {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/actions/" + name + ".png")).toString());
     }
 }
