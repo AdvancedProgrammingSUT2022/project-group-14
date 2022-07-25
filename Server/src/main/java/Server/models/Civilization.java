@@ -35,6 +35,7 @@ public class Civilization {
     private double gold, happiness, science;
 
     private final ArrayList<String> notifications = new ArrayList<>();
+    private ArrayList<String> enemies = new ArrayList<>();
 
     public Civilization(String name, int i) {
         this.name = name;
@@ -203,5 +204,21 @@ public class Civilization {
                 "Total number of units : " + getAllUnits().size() + "\n" +
                 "Total number of cities : " + cities.size() + "\n" +
                 "Total Technologies Acquired : " + totalTechnologiesAcquired + "\n";
+    }
+
+    public ArrayList<String> getEnemies() {
+        return enemies;
+    }
+
+    public void addEnemy(String enemyName) {
+        enemies.add(enemyName);
+    }
+
+    public void removeEnemy(String enemyName) {
+        try {
+            enemies.remove(enemyName);
+        } catch (Exception e) {
+            System.out.println("this civilization isn't your enemy");
+        }
     }
 }

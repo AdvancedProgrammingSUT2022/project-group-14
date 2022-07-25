@@ -19,24 +19,49 @@ public class WarController {
             return "siege unit isn't ready for attack";
         } else {
             Tile attackingTile = MapController.getTileByCoordinates(x, y);
-            attackingUnit.setAttackingCoordination(x, y);
-            attackingUnit.setDestinationCoordinates(x, y);
             if (attackingTile.getCity() != null) {
                 if (attackingTile.getCity().getCivilizationName().equals(attackingUnit.getCivilizationName()))
                     return "you have your own city in this tile";
-                else attackCity(attackingUnit, attackingTile.getCity());
+                else {
+                    Civilization unitCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
+                    if (unitCivilization.getEnemies().contains(attackingTile.getCity().getCivilizationName())) {
+                        attackingUnit.setAttackingCoordination(x, y);
+                        attackingUnit.setDestinationCoordinates(x, y);
+                        attackCity(attackingUnit, attackingTile.getCity());
+                    } else {
+                        //TODO calling GamePageController.setDeclareWarOptions
+                    }
+                }
             } else {
                 if (attackingTile.getCombatUnit() != null) {
                     if (attackingTile.getCombatUnit().getCivilizationName().equals(attackingUnit.getCivilizationName()))
                         return "there is already one of your units in this tile";
-                    else attackCombatUnit(attackingUnit, attackingTile.getCombatUnit());
+                    else {
+                        Civilization unitCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
+                        if (unitCivilization.getEnemies().contains(attackingTile.getCombatUnit().getCivilizationName())) {
+                            attackingUnit.setAttackingCoordination(x, y);
+                            attackingUnit.setDestinationCoordinates(x, y);
+                            attackCombatUnit(attackingUnit, attackingTile.getCombatUnit());
+                        } else {
+                            //TODO calling GamePageController.setDeclareWarOptions
+                        }
+
+                    }
                 } else if (attackingTile.getNonCombatUnit() != null) {
                     if (attackingTile.getNonCombatUnit().getCivilizationName().equals(attackingUnit.getCivilizationName()))
                         return "there is already one of your units in this tile";
-                    else attackNonCombatUnit(attackingUnit, attackingTile.getNonCombatUnit());
+                    else {
+                        Civilization unitCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
+                        if (unitCivilization.getEnemies().contains(attackingTile.getNonCombatUnit().getCivilizationName())) {
+                            attackingUnit.setAttackingCoordination(x, y);
+                            attackingUnit.setDestinationCoordinates(x, y);
+                            attackNonCombatUnit(attackingUnit, attackingTile.getNonCombatUnit());
+                        } else {
+                            //TODO calling GamePageController.setDeclareWarOptions
+                        }
+
+                    }
                 } else {
-                    attackingUnit.setDestinationCoordinates(-1, -1);
-                    attackingUnit.setAttackingCoordination(-1, -1);
                     return "there is no unit or city in the destination";
                 }
             }
@@ -188,5 +213,11 @@ public class WarController {
         } else {
 //            GamePageController.setCityOptions(city, combatUnit);
         }
+    }
+
+    public static void declareWar(String enemyName) {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.addEnemy(enemyName);
+
     }
 }

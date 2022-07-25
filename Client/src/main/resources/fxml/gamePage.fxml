@@ -68,4 +68,8 @@
         <Button layoutX="470" layoutY="342.5" text="Conquer" onMouseClicked="#conquerButtonClicked"/>
         <Button layoutX="660" layoutY="342.5" text="Destroy" onMouseClicked="#destroyButtonClicked"/>
     </AnchorPane>
+    <AnchorPane fx:id="declareWarOptionsPane" prefWidth="1280" prefHeight="720" style="-fx-background-color: transparent">
+        <Button layoutX="470" layoutY="342.5" text="Conquer" onMouseClicked="#declareWarButtonClicked"/>
+        <Button layoutX="660" layoutY="342.5" text="Destroy" onMouseClicked="#cancelButtonClicked"/>
+    </AnchorPane>
 </AnchorPane>

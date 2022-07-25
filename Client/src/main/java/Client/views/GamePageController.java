@@ -8,6 +8,7 @@ import Client.enums.QueryRequests;
 import Client.enums.QueryResponses;
 import Client.enums.Technologies;
 import Client.enums.units.CombatType;
+import Client.enums.units.UnitStates;
 import Client.enums.units.UnitTypes;
 import Client.models.City;
 import Client.models.network.Response;
@@ -38,8 +39,10 @@ public class GamePageController {
     public static boolean stopTimeline;
     public static String infoPanelName;
     public static boolean showCityOptions;
+    public static boolean showDeclareWar;
     public static City city;
     public static CombatUnit combatUnit;
+    public static String enemyName;
     @FXML
     private AnchorPane mainPane;
     @FXML
@@ -86,10 +89,13 @@ public class GamePageController {
     private Text unitPanelCSText;
     @FXML
     private AnchorPane cityOptionsPane;
+    @FXML
+    private AnchorPane declareWarOptionsPane;
     private Timeline timeline;
 
     public void initialize() {
         cityOptionsPane.setVisible(false);
+        declareWarOptionsPane.setVisible(false);
         initNavBar();
         initTimeLine();
         initResearchPanel();
@@ -155,6 +161,11 @@ public class GamePageController {
                 cityOptionsPane.setVisible(true);
             } else if (!showCityOptions && cityOptionsPane.isVisible()) {
                 cityOptionsPane.setVisible(false);
+            }
+            if (showDeclareWar && !declareWarOptionsPane.isVisible()) {
+                declareWarOptionsPane.setVisible(true);
+            } else if (!showDeclareWar && declareWarOptionsPane.isVisible()) {
+                declareWarOptionsPane.setVisible(false);
             }
         }));
         timeline.setCycleCount(-1);
@@ -444,6 +455,11 @@ public class GamePageController {
         GamePageController.combatUnit = combatUnit;
     }
 
+    public static void setDeclareWarOptions(String civilizationName) {
+        showDeclareWar = true;
+        GamePageController.enemyName = civilizationName;
+    }
+
     public void conquerButtonClicked(MouseEvent mouseEvent) {
 //        CityController.conquerCity(city, combatUnit);
         showCityOptions = false;
@@ -454,7 +470,12 @@ public class GamePageController {
         showCityOptions = false;
     }
 
-    public static Image getActionImage(String name) {
-        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions/" + name + ".png")).toString());
+    public void declareWarButtonClicked(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLARE_WAR, new HashMap<>(){{put("enemyName", GamePageController.enemyName);}});
+        showDeclareWar = false;
+    }
+
+    public void cancelButtonClicked(MouseEvent mouseEvent) {
+        showDeclareWar = false;
     }
 }
