@@ -49,10 +49,6 @@ public enum TileBaseTypes implements TileTypes {
         return TileBaseTypes.values()[rand.nextInt(TileBaseTypes.values().length)];
     }
 
-    public Image getImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/tiles/bases/" + this.name + ".png")).toString());
-    }
-
     @Override
     public String getName() {
         return this.name;

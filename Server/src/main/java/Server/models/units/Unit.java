@@ -114,7 +114,8 @@ public class Unit {
     public String getInfo() {
         int x = this.currentCoordination.getX() + 1, y = this.currentCoordination.getY() + 1,
                 destX = this.destinationCoordination.getX() + 1, destY = this.destinationCoordination.getY() + 1;
-        String output = "Current coordination : ( " + x + " , " + y + " )\n" +
+        String output = "Name : " + name + "\n" +
+                "Current coordination : ( " + x + " , " + y + " )\n" +
                 "Total MovementPoints : " + movementPoint + "\n" +
                 "Civilization's name : " + civilizationName + '\n' +
                 "HealthPoint : " + healthPoint + "\n" +

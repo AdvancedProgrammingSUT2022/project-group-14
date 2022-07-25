@@ -180,11 +180,11 @@ public class WorldController {
 
     public static void saveGame(String name) throws IOException {
         FileWriter worldWriter = new FileWriter("./src/main/resources/worldSaves/" + name + ".json");
-//        FileWriter mapWriter = new FileWriter("./src/main/resources/mapSaves/" + name + ".json");
+        FileWriter mapWriter = new FileWriter("./src/main/resources/mapSaves/" + name + ".json");
         worldWriter.write(new Gson().toJson(world));
         worldWriter.close();
 
-//        mapWriter.write(new Gson().toJson(MapController.getMap()));
-//        mapWriter.close();
+        mapWriter.write(new Gson().toJson(MapController.getMap()));
+        mapWriter.close();
     }
 }

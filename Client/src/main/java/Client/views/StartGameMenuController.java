@@ -2,6 +2,7 @@ package Client.views;
 
 import Client.application.App;
 import Client.controllers.ClientSocketController;
+import Client.controllers.HexController;
 import Client.enums.QueryRequests;
 import Client.models.User;
 import com.google.gson.Gson;
@@ -157,8 +158,8 @@ public class StartGameMenuController {
 //            return;
 //        }
         System.out.println(MainMenuController.loggedInUser.getPeopleInLobby() + " * " + mapWidthSpinner.getValue() + " " + mapHeightSpinner.getValue());
+        HexController.generateHexes(mapWidthSpinner.getValue(), mapHeightSpinner.getValue());
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEW_WORLD, new HashMap<>(){{
-            //put people in lobby
             put("people", new Gson().toJson(MainMenuController.loggedInUser.getPeopleInLobby()));
             put("width", String.valueOf(mapWidthSpinner.getValue()));
             put("height", String.valueOf(mapHeightSpinner.getValue()));

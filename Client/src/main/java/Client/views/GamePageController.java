@@ -8,7 +8,6 @@ import Client.enums.QueryRequests;
 import Client.enums.QueryResponses;
 import Client.enums.Technologies;
 import Client.enums.units.CombatType;
-import Client.enums.units.UnitStates;
 import Client.enums.units.UnitTypes;
 import Client.models.City;
 import Client.models.network.Response;
@@ -127,6 +126,7 @@ public class GamePageController {
             for (int j = 0; j < HexController.getHeight(); j++) {
                 Hex hex = HexController.getHexOfTheGivenCoordination(i, j);
                 hexPane.getChildren().add(hex.getGroup());
+                HexController.updateHex(i, j);
             }
         }
     }
@@ -135,7 +135,7 @@ public class GamePageController {
         researchPanelScrollPane.setVisible(false);
         researchPanelPane.getChildren().remove(1, researchPanelPane.getChildren().size());
         int i = 1;
-        ArrayList<Technologies> technologies = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_AVAILABLE_TECHNOLOGIES, new HashMap<>())).getParams().get("technologies"), new TypeToken<Set<Technologies>>() {
+        HashSet<Technologies> technologies = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_AVAILABLE_TECHNOLOGIES, new HashMap<>())).getParams().get("technologies"), new TypeToken<Set<Technologies>>() {
         }.getType());
         for (Technologies availableTechnology : technologies) {
             researchPanelPane.getChildren().add(availableTechnology.getTechnologyGroup(50, i * 90));
@@ -147,7 +147,7 @@ public class GamePageController {
         unitPanelPane.setVisible(false);
         techCircle.setVisible(false);
         techText.setText("");
-        timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(250), actionEvent -> {
             if (stopTimeline) timeline.stop();
             checkUnitPanelUpdate();
             checkTechnologyPanelUpdate();
@@ -169,16 +169,12 @@ public class GamePageController {
                 if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() == CombatType.NON_COMBAT) {
                     unitPanelPane.setVisible(true);
                     setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), CombatUnit.class));
-                } else {
-                    setUnitPanelTexts(new Gson().fromJson(response.getParams().get("unit"), CombatUnit.class));
                 }
             }
             case NONCOMBAT_UNIT_SELECTED -> {
                 if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() != CombatType.NON_COMBAT) {
                     unitPanelPane.setVisible(true);
                     setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), NonCombatUnit.class));
-                } else {
-                    setUnitPanelTexts(new Gson().fromJson(response.getParams().get("unit"), NonCombatUnit.class));
                 }
             }
             case UNIT_NOT_SELECTED -> unitPanelPane.setVisible(false);
@@ -191,7 +187,7 @@ public class GamePageController {
         happinessText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_HAPPINESS, new HashMap<>())).getParams().get("happiness"));
         goldText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_GOLD, new HashMap<>())).getParams().get("gold"));
         scienceText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_SCIENCE, new HashMap<>())).getParams().get("science"));
-        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.TECH_PANEL_UPDATE, new HashMap<>(){{
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.TECH_PANEL_UPDATE, new HashMap<>() {{
             put("boolean", String.valueOf(techCircle.isVisible()));
         }});
         switch (Objects.requireNonNull(response).getQueryResponse()) {
@@ -211,7 +207,7 @@ public class GamePageController {
     public void setUnitPanelInfo(Unit unit) {
         if (unitPanelPane.getChildren().size() > 11)
             unitPanelPane.getChildren().subList(11, unitPanelPane.getChildren().size()).clear();
-        initCommonActions(unit);
+        initCommonActions();
         if (unit instanceof CombatUnit) {
             initCombatUnitActions((CombatUnit) unit);
         } else {
@@ -227,53 +223,67 @@ public class GamePageController {
         setUnitPanelTexts(unit);
     }
 
-    public void initCommonActions(Unit unit) {
+    public void initCommonActions() {
         ((Circle) unitPanelPane.getChildren().get(7)).setFill(new ImagePattern(getActionImage("move")));
         unitPanelPane.getChildren().get(7).setCursor(Cursor.HAND);
-        unitPanelPane.getChildren().get(7).setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.MOVE_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        unitPanelPane.getChildren().get(7).setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.MOVE_ACTION, new HashMap<>());
+        });
         ((Circle) unitPanelPane.getChildren().get(8)).setFill(new ImagePattern(getActionImage("delete")));
-        unitPanelPane.getChildren().get(8).setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.DELETE_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        unitPanelPane.getChildren().get(8).setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.DELETE_ACTION, new HashMap<>()));
         unitPanelPane.getChildren().get(8).setCursor(Cursor.HAND);
         ((Circle) unitPanelPane.getChildren().get(9)).setFill(new ImagePattern(getActionImage("sleep")));
-        unitPanelPane.getChildren().get(9).setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.SLEEP_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        unitPanelPane.getChildren().get(9).setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.SLEEP_ACTION, new HashMap<>());
+        });
         unitPanelPane.getChildren().get(9).setCursor(Cursor.HAND);
         ((Circle) unitPanelPane.getChildren().get(10)).setFill(new ImagePattern(getActionImage("wake")));
-        unitPanelPane.getChildren().get(10).setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.WAKE_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        unitPanelPane.getChildren().get(10).setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.WAKE_ACTION, new HashMap<>());
+        });
         unitPanelPane.getChildren().get(10).setCursor(Cursor.HAND);
     }
 
     public void initCombatUnitActions(CombatUnit unit) {
         Circle alert = new Circle(25, new ImagePattern(getActionImage("alert")));
-        alert.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.ALERT));
+        alert.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.ALERT_ACTION, new HashMap<>());
+        });
         Circle fortify = new Circle(25, new ImagePattern(getActionImage("fortify")));
-        fortify.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY));
+        fortify.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.FORTIFY_ACTION, new HashMap<>());
+        });
         Circle fortifyTillHealed = new Circle(25, new ImagePattern(getActionImage("fortifyTillHealed")));
-        fortifyTillHealed.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY_TILL_HEALED));
+        fortifyTillHealed.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.FORTIFY_TILL_HEALED_ACTION, new HashMap<>());
+        });
         Circle garrison = new Circle(25, new ImagePattern(getActionImage("garrison")));
-        garrison.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.GARRISON_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        garrison.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.GARRISON_ACTION, new HashMap<>());
+        });
         Circle pillage = new Circle(25, new ImagePattern(getActionImage("pillage")));
-        pillage.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.PILLAGE_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        pillage.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.PILLAGE_ACTION, new HashMap<>());
+        });
         Circle attack = new Circle(25, new ImagePattern(getActionImage("attack")));
-        attack.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.ATTACK_ACTION, new HashMap<>(){{
-            put("unit", new Gson().toJson(unit));
-        }}));
+        attack.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.ATTACK_ACTION, new HashMap<>());
+        });
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(getActionImage("setupRanged")));
-            setupRanged.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.SETUP_RANGED_ACTION, new HashMap<>(){{
-                put("unit", new Gson().toJson(unit));
-            }}));
+            setupRanged.setOnMouseClicked(mouseEvent -> {
+                unitPanelPane.setVisible(false);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.SETUP_RANGED_ACTION, new HashMap<>());
+            });
             unitPanelPane.getChildren().add(setupRanged);
         }
         unitPanelPane.getChildren().add(alert);
@@ -288,9 +298,8 @@ public class GamePageController {
         if (unit.getUnitType() == UnitTypes.WORKER) {
             ChoiceBox<String> buildChoiceBox = new ChoiceBox<>();
             buildChoiceBox.setValue("Build");
-            ArrayList<String> availableImprovements = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_AVAILABLE_IMPROVEMENTS_FOR_WORKER, new HashMap<>() {{
-                put("worker", new Gson().toJson((Worker) unit));
-            }})).getParams().get("improvements"), new TypeToken<List<String>>() {
+            ArrayList<String> availableImprovements = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_AVAILABLE_IMPROVEMENTS_FOR_WORKER, new HashMap<>()))
+                    .getParams().get("improvements"), new TypeToken<List<String>>() {
             }.getType());
             buildChoiceBox.getItems().addAll(availableImprovements);
             buildChoiceBox.setLayoutX(265);
@@ -300,20 +309,18 @@ public class GamePageController {
             build.setOnMouseClicked(mouseEvent -> {
                 switch (buildChoiceBox.getValue()) {
                     case "road":
-                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.ROAD_BUILD, new HashMap<>(){{
-                            put("unit", new Gson().toJson((Worker) unit));
-                        }});
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.ROAD_BUILD, new HashMap<>());
                         break;
                     case "railRoad":
-                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.RAILROAD_BUILD, new HashMap<>(){{
-                            put("unit", new Gson().toJson((Worker) unit));
-                        }});
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.RAILROAD_BUILD, new HashMap<>());
                         break;
                     case "Build":
                         break;
                     default:
-                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.IMPROVEMENT_BUILD, new HashMap<>(){{
-                            put("unit", new Gson().toJson((Worker) unit));
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.IMPROVEMENT_BUILD, new HashMap<>() {{
                             put("improvement", new Gson().toJson(Improvements.getImprovementByName(buildChoiceBox.getValue())));
                         }});
                         break;
@@ -321,9 +328,8 @@ public class GamePageController {
             });
             ChoiceBox<String> removeChoiceBox = new ChoiceBox<>();
             removeChoiceBox.setValue("Remove");
-            ArrayList<String> removableFeatures = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_REMOVABLE_FEATURES, new HashMap<>() {{
-                put("worker", new Gson().toJson((Worker) unit));
-            }})).getParams().get("features"), new TypeToken<List<String>>() {
+            ArrayList<String> removableFeatures = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_REMOVABLE_FEATURES, new HashMap<>()))
+                    .getParams().get("features"), new TypeToken<List<String>>() {
             }.getType());
             removeChoiceBox.getItems().addAll(removableFeatures);
             removeChoiceBox.setLayoutX(350);
@@ -332,24 +338,29 @@ public class GamePageController {
             Circle remove = new Circle(25, new ImagePattern(getActionImage("remove")));
             remove.setOnMouseClicked(mouseEvent -> {
                 switch (removeChoiceBox.getValue()) {
-                    case "Routes" -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.ROUTES_REMOVE, new HashMap<>(){{
-                        put("unit", new Gson().toJson((Worker) unit));
-                    }});
-                    case "Jungle" -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.JUNGLE_REMOVE, new HashMap<>(){{
-                        put("unit", new Gson().toJson((Worker) unit));
-                    }});
-                    case "Forest" -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.FOREST_REMOVE, new HashMap<>(){{
-                        put("unit", new Gson().toJson((Worker) unit));
-                    }});
-                    case "Marsh" -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.MARSH_REMOVE, new HashMap<>(){{
-                        put("unit", new Gson().toJson((Worker) unit));
-                    }});
+                    case "Routes" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.ROUTES_REMOVE, new HashMap<>());
+                    }
+                    case "Jungle" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.JUNGLE_REMOVE, new HashMap<>());
+                    }
+                    case "Forest" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.FOREST_REMOVE, new HashMap<>());
+                    }
+                    case "Marsh" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.MARSH_REMOVE, new HashMap<>());
+                    }
                 }
             });
             Circle repair = new Circle(25, new ImagePattern(getActionImage("repair")));
-            repair.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.REPAIR_TILE, new HashMap<>(){{
-                put("unit", new Gson().toJson((Worker) unit));
-            }}));
+            repair.setOnMouseClicked(mouseEvent -> {
+                unitPanelPane.setVisible(false);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.REPAIR_TILE, new HashMap<>());
+            });
             unitPanelPane.getChildren().add(build);
             unitPanelPane.getChildren().add(buildChoiceBox);
             unitPanelPane.getChildren().add(remove);
@@ -357,17 +368,15 @@ public class GamePageController {
             unitPanelPane.getChildren().add(repair);
         } else {
             Circle foundCity = new Circle(25, new ImagePattern(getActionImage("foundCity")));
-            foundCity.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.FOUND_CITY, new HashMap<>(){{
-                put("unit", new Gson().toJson((Settler) unit));
-            }}));
+            foundCity.setOnMouseClicked(mouseEvent -> {
+                unitPanelPane.setVisible(false);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.FOUND_CITY, new HashMap<>());
+            });
             unitPanelPane.getChildren().add(foundCity);
         }
     }
 
     public void setUnitPanelTexts(Unit unit) {
-        String type = (unit instanceof CombatUnit ? "combatUnit" : "nonCombatUnit");
-        ((Text) HexController.getHexOfTheGivenCoordination(unit.getCurrentX(), unit.getCurrentY())
-                .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
         unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
         unitPanelNameText.setText(unit.getName());
         unitPanelMPText.setText("MP : " + unit.getMovementPoint());
@@ -375,8 +384,12 @@ public class GamePageController {
             unitPanelCSText.setText("CS : " + String.valueOf(unit.getUnitType().getCombatStrength() + unit.getUnitType().getRangedCombatStrength()));
         } else if (unit instanceof Worker) {
             unitPanelCSText.setText("TLW : " + ((Worker) unit).getTurnsLeftToWork());
+        } else {
+            unitPanelCSText.setText("");
         }
-
+        String type = (unit instanceof CombatUnit ? "combatUnit" : "nonCombatUnit");
+        ((Text) HexController.getHexOfTheGivenCoordination(unit.getCurrentX(), unit.getCurrentY())
+                .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
     }
 
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
@@ -399,6 +412,7 @@ public class GamePageController {
                 ClientSocketController.sendRequestAndGetResponse(QueryRequests.CHEAT_COMMAND, new HashMap<>() {{
                     put("command", command);
                 }});
+                unitPanelPane.setVisible(false);
             }
         }
     }

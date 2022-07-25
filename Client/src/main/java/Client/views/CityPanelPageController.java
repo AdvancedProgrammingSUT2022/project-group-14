@@ -1,6 +1,7 @@
 package Client.views;
 
 import Client.application.App;
+import Client.controllers.HexController;
 import Client.enums.BuildingTypes;
 import Client.enums.units.UnitTypes;
 import Client.models.Building;
@@ -59,14 +60,15 @@ public class CityPanelPageController {
 //    private Text infoText;
 //    @FXML
 //    private Text citizensText;
-//    private final City city = WorldController.getSelectedCity();
+//    private City city;
 //
 //    public void initialize() {
+//        city = WorldController.getSelectedCity();
 //        calcGoods();
 //        initSpinners();
 //        initChoiceBoxes();
 //        infoText.setText("");
-//        citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
+//        citizensText.setText(city.employedCitizensData() + city.unemployedCitizensData());
 //        initProduction();
 //    }
 //
@@ -117,11 +119,10 @@ public class CityPanelPageController {
 //    }
 //
 //    public void initSpinners() {
-//        //TODO is this function ok?
-//        xTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getHeight(), 1, 1));
-//        yTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
-//        xCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
-//        yCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
+//        xTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getHeight(), 1, 1));
+//        yTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getWidth(), 1, 1));
+//        xCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getWidth(), 1, 1));
+//        yCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getWidth(), 1, 1));
 //    }
 //
 //    public void calcGoods() {
@@ -169,7 +170,7 @@ public class CityPanelPageController {
 //    public void unlockButtonClicked(MouseEvent mouseEvent) {
 //        if (!employedCitizensBox.getValue().equals("EmployedCitizens")) {
 //            infoText.setText(CityController.unlockCitizenFromTile(city, Integer.parseInt(employedCitizensBox.getValue())));
-//            citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
+//            citizensText.setText(city.employedCitizensData() + city.unemployedCitizensData());
 //        }
 //        initChoiceBoxes();
 //    }
@@ -178,7 +179,7 @@ public class CityPanelPageController {
 //        if (!unemployedCitizensBox.getValue().equals("UnemployedCitizens")) {
 //            infoText.setText(CityController.lockCitizenToTile(city, Integer.parseInt(unemployedCitizensBox.getValue()),
 //                    xCitizenSpinner.getValue() - 1, yCitizenSpinner.getValue() - 1));
-//            citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
+//            citizensText.setText(city.employedCitizensData() + city.unemployedCitizensData());
 //        }
 //        initChoiceBoxes();
 //    }

@@ -288,12 +288,4 @@ public class CityController {
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                 + " you destroyed the " + city.getName() + "city", unit.getCivilizationName());
     }
-
-    public static Image getCenterImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/cities/cityCenter.png")).toString());
-    }
-
-    public static Image getDistrictImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/cities/cityDistrict.png")).toString());
-    }
 }

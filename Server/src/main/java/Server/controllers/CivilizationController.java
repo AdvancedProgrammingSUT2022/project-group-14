@@ -1,18 +1,20 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
 import Server.enums.Technologies;
 import Server.models.Building;
 import Server.models.Citizen;
 import Server.models.City;
 import Server.models.Civilization;
-import javafx.scene.paint.Color;
 
+import Server.models.network.Response;
 import Server.models.tiles.Ruin;
 import Server.models.tiles.Tile;
 import Server.models.units.Settler;
 import Server.models.units.Unit;
 import Server.models.units.Worker;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 
@@ -146,10 +148,15 @@ public class CivilizationController {
                     tile.setNonCombatUnit(ruin.getNonCombatUnit());
                     found += "FreeNonCombatUnit  + ";
                 }
+                tile.setRuin(null);
                 civilization.setGold(civilization.getGold() + ruin.getGold());
                 found += ruin.getGold() + "Golds";
-                tile.getHex().setInfoText("Found ruin!", Color.GREEN);
-                tile.setRuin(null);
+                ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_HEX_INFO_TEXT, new HashMap<>(){{
+                    put("x", String.valueOf(tile.getX()));
+                    put("y", String.valueOf(tile.getY()));
+                    put("info", "Found ruin!");
+                    put("color", "green");
+                }}));
                 civilization.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                         + " you've found a ruin with these benefits : \n" + found);
             }

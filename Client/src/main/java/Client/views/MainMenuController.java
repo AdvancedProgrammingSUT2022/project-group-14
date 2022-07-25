@@ -1,11 +1,15 @@
 package Client.views;
 
 import Client.application.App;
+import Client.controllers.ClientSocketController;
+import Client.enums.QueryRequests;
 import Client.models.User;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+
+import java.util.HashMap;
 
 public class MainMenuController {
     public static User loggedInUser;
@@ -33,6 +37,10 @@ public class MainMenuController {
     }
 
     public void logout(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGOUT_USER, new HashMap<>(){{
+            put("username", loggedInUser.getUsername());
+        }});
+        loggedInUser = null;
         App.changeScene("loginPage");
     }
 }

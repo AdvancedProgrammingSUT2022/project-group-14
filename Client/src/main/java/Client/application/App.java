@@ -1,6 +1,8 @@
 package Client.application;
 
 import Client.controllers.ClientSocketController;
+import Client.enums.QueryRequests;
+import Client.views.MainMenuController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,6 +13,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class App extends javafx.application.Application {
@@ -41,6 +44,15 @@ public class App extends javafx.application.Application {
         stage.setWidth(1280);
         stage.setHeight(720);
         stage.show();
+    }
+
+    @Override
+    public void stop() throws IOException {
+        if (MainMenuController.loggedInUser != null) {
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGOUT_USER, new HashMap<>() {{
+                put("username", MainMenuController.loggedInUser.getUsername());
+            }});
+        }
     }
 
     public static void changeScene(String address) {

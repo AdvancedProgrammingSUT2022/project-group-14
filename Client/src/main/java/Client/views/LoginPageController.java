@@ -13,6 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -34,7 +35,7 @@ public class LoginPageController {
         passwordTextField.setFocusTraversable(false);
     }
 
-    public void loginButtonClicked(MouseEvent mouseEvent) {
+    public void loginButtonClicked(MouseEvent mouseEvent) throws IOException {
         Response response = Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGIN_USER, new HashMap<>() {{
             put("username", usernameTextField.getText());
             put("password", passwordTextField.getText());
@@ -42,6 +43,7 @@ public class LoginPageController {
         switch (response.getQueryResponse()) {
             case OK -> {
                 MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+                ClientSocketController.startListener(8000);
                 App.changeScene("mainMenuPage");
             }
             case USER_NOT_EXIST, PASSWORD_INCORRECT -> {

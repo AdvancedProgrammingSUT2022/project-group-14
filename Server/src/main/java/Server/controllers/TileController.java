@@ -2,8 +2,11 @@ package Server.controllers;
 
 
 import Server.enums.Improvements;
+import Server.enums.QueryResponses;
 import Server.enums.tiles.TileFeatureTypes;
 import Server.enums.units.UnitStates;
+import Server.models.network.Response;
+import com.google.gson.Gson;
 import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -17,6 +20,7 @@ import Server.models.units.Unit;
 import Server.models.units.Worker;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class TileController {
 
@@ -49,11 +53,9 @@ public class TileController {
     }
 
     public static void updateAllHexes() {
-        for (Tile[] tiles : MapController.getMap()) {
-            for (Tile tile : tiles) {
-                tile.getHex().updateHex();
-            }
-        }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_ALL_HEXES, new HashMap<>(){{
+            put("tiles", new Gson().toJson(MapController.getMap()));
+        }}));
     }
 
     public static ArrayList<Tile> getAvailableNeighbourTiles(int x, int y) {
@@ -135,17 +137,5 @@ public class TileController {
                     CivilizationController.civilizationHasTechnology(((StrategicResource) resource).getRequiredTechnology());
         }
         return false;
-    }
-
-    public static Group getInfoPopup(Coordination coordination) {
-        Group group = new Group();
-        Text text = new Text(MapController.getTileByCoordinates(coordination).getInfo());
-        Rectangle rectangle = new Rectangle(text.getBoundsInLocal().getWidth() + 10, text.getBoundsInLocal().getHeight() - 5, Color.WHITE);
-        text.setLayoutY(rectangle.getLayoutY() + 15);
-        text.setLayoutX(rectangle.getLayoutX() + 5);
-        group.getChildren().add(rectangle);
-        group.getChildren().add(text);
-
-        return group;
     }
 }

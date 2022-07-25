@@ -133,7 +133,7 @@ public enum Technologies {
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                 if (mouseEvent.getClickCount() == 2) {
                     ClientSocketController.sendRequestAndGetResponse(QueryRequests.SET_CURRENT_TECHNOLOGY, new HashMap<>() {{
-                        put("technologyName", Technologies.this.name);
+                        put("technologyName", Technologies.this.name.toUpperCase(Locale.ROOT));
                     }});
                 }
             }

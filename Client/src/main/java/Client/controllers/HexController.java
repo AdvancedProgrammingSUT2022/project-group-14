@@ -1,7 +1,11 @@
 package Client.controllers;
 
+import Client.enums.QueryRequests;
 import Client.models.tiles.Coordination;
 import Client.models.tiles.Hex;
+
+import java.util.HashMap;
+import java.util.Objects;
 
 public class HexController {
     public static int width;
@@ -26,6 +30,14 @@ public class HexController {
     public static int getHeight() {
         return height;
     }
+
+    public static void updateHex(int i, int j) {
+        hexes[i][j].updateHex(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.UPDATE_HEX, new HashMap<>(){{
+            put("x", String.valueOf(i));
+            put("y", String.valueOf(j));
+        }})).getTile());
+    }
+
 
     public static Hex getHexOfTheGivenCoordination(int i, int j) {
         return hexes[i][j];
