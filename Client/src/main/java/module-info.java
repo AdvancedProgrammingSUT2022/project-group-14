@@ -13,6 +13,7 @@ module Client {
     exports Client.models.network to com.google.gson;
     exports Client.models;
     exports Client.enums;
+    exports Client.models.units;
     exports Client.application to javafx.graphics;
     exports Client.views to javafx.fxml, com.google.gson;
 }

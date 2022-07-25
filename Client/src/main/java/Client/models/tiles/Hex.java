@@ -3,12 +3,14 @@ package Client.models.tiles;
 import Client.application.App;
 import Client.controllers.ClientSocketController;
 import Client.enums.QueryRequests;
+import Client.enums.QueryResponses;
 import Client.enums.tiles.TileFeatureTypes;
 import Client.models.City;
 import Client.models.network.Response;
 import Client.models.units.CombatUnit;
 import Client.models.units.NonCombatUnit;
 import Client.models.units.Unit;
+import com.google.gson.Gson;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.effect.Bloom;
@@ -42,16 +44,16 @@ public class Hex {
     private final ColorAdjust colorAdjust = new ColorAdjust();
     private final Popup popup = new Popup();
 
-    public Hex(Tile tile) {
+    public Hex(int x, int y) {
         this.group = new Group();
-        this.coordination = new Coordination(tile.getX(), tile.getY());
-        this.verticalSpacing = tile.getY() * 100 + 5;
-        this.horizontalSpacing = 5 * Math.sqrt(3) * tile.getX() * 10 + 5;
+        this.coordination = new Coordination(x, y);
+        this.verticalSpacing = y * 100 + 5;
+        this.horizontalSpacing = 5 * Math.sqrt(3) * x * 10 + 5;
         this.width = 200;
         this.height = 100 * Math.sqrt(3);
         this.polygon = new Polygon(setX(5), setY(0), setX(15), setY(0), setX(20), setY(5 * Math.sqrt(3)),
                 setX(15), setY(10 * Math.sqrt(3)), setX(5), setY(10 * Math.sqrt(3)), setX(0), setY(5 * Math.sqrt(3)));
-        this.coordinationText = new Text(String.valueOf(tile.getX() + 1) + "," + String.valueOf(tile.getY() + 1));
+        this.coordinationText = new Text(String.valueOf(x + 1) + "," + String.valueOf(y + 1));
         this.coordinationText.setLayoutX(this.getCenterX() - 7 * this.coordinationText.getBoundsInLocal().getWidth() / 10);
         this.coordinationText.setLayoutY(this.getCenterY() - 8);
         this.infoText = new Text();
@@ -76,20 +78,23 @@ public class Hex {
             popup.hide();
         });
         this.group.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.SECONDARY
-                    && WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName())
-                    .getVisionStatesOfMap()[coordination.getX()][coordination.getY()] > 0) {
-                if (WorldController.getSelectedTile() != null
-                        && WorldController.getSelectedTile().equals(MapController.getTileByCoordinates(Hex.this.coordination))) {
-                    WorldController.setSelectedTile(null);
-                    Hex.this.colorAdjust.setInput(null);
-                } else {
-                    if (WorldController.getSelectedTile() != null)
-                        WorldController.getSelectedTile().getHex().setColorAdjust(null);
-                    WorldController.setSelectedTile(MapController.getTileByCoordinates(Hex.this.coordination));
-                    Hex.this.colorAdjust.setInput(new Bloom());
+            if (mouseEvent.getButton() == MouseButton.SECONDARY) {
+                Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.HEX_MOUSE_CLICKED, new HashMap<>() {{
+                    put("x", String.valueOf(coordination.getX()));
+                    put("y", String.valueOf(coordination.getY()));
+                }});
+                switch (Objects.requireNonNull(response).getQueryResponse()) {
+                    case IGNORE -> {
+                    }
+                    case RESET_COLOR_ADJUST -> {
+                        Hex.this.colorAdjust.setInput(null);
+                        setPopup(new Gson().fromJson(response.getParams().get("infoPopup"), Group.class), mouseEvent.getSceneX() + 30, mouseEvent.getSceneY() + 15);
+                    }
+                    case BLOOM_COLOR_ADJUST -> {
+                        Hex.this.colorAdjust.setInput(new Bloom());
+                        setPopup(new Gson().fromJson(response.getParams().get("infoPopup"), Group.class), mouseEvent.getSceneX() + 30, mouseEvent.getSceneY() + 15);
+                    }
                 }
-                setPopup(TileController.getInfoPopup(coordination), mouseEvent.getSceneX() + 30, mouseEvent.getSceneY() + 15);
             }
         });
     }
@@ -97,16 +102,22 @@ public class Hex {
     public void updateHex(Tile tile) {
         this.group.getChildren().clear();
         this.colorAdjust.setBrightness(0);
-        int[][] visionState = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getVisionStatesOfMap();
         this.unitGroups.clear();
-        if (visionState[coordination.getX()][coordination.getY()] == 0) {
-            this.colorAdjust.setBrightness(-1);
-            this.polygon.setFill(Color.BLACK);
-            this.group.getChildren().add(polygon);
-            return;
-        } else if (visionState[coordination.getX()][coordination.getY()] == 1) {
-            tile = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getRevealedTiles()[coordination.getX()][coordination.getY()];
-            this.colorAdjust.setBrightness(-0.5);
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.HEX_VISION_UPDATE, new HashMap<>(){{
+            put("x", String.valueOf(coordination.getX()));
+            put("y", String.valueOf(coordination.getY()));
+        }});
+        switch (Objects.requireNonNull(response).getQueryResponse()) {
+            case FOG -> {
+                this.colorAdjust.setBrightness(-1);
+                this.polygon.setFill(Color.BLACK);
+                this.group.getChildren().add(polygon);
+                return;
+            }
+            case REVEALED -> {
+                tile = new Gson().fromJson(response.getParams().get("tile"), Tile.class);
+                this.colorAdjust.setBrightness(-0.5);
+            }
         }
 
         if (tile.getFeature() != TileFeatureTypes.NULL) {
@@ -114,7 +125,6 @@ public class Hex {
         } else {
             this.polygon.setFill(new ImagePattern(tile.getType().getImage()));
         }
-
         this.group.getChildren().add(this.polygon);
         if (tile.getRoadState() == 0) {
             ImageView roadImage = new ImageView(Objects.requireNonNull(App.class.getResource("/images/resources/road.png")).toString());
@@ -161,18 +171,20 @@ public class Hex {
     }
 
     public boolean isTerritory() {
-        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CITIES, new HashMap<>());
-        for (City city : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCities()) {
-            for (Tile tile : city.getTerritory()) {
-                if (MapController.getTileByCoordinates(this.coordination).equals(tile) && tile.getCity() == null)
-                    return true;
-            }
-        }
-        return false;
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.HEX_IS_TERRITORY, new HashMap<>(){{
+            put("x", String.valueOf(coordination.getX()));
+            put("y", String.valueOf(coordination.getY()));
+        }});
+        assert response != null;
+        return Boolean.parseBoolean(response.getParams().get("boolean"));
     }
 
     public void addUnitToGroup(Unit unit) {
-        Group unitGroup = UnitController.getUnitGroup(unit);
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_UNIT_GROUP, new HashMap<>(){{
+            put("unit", new Gson().toJson(unit));
+        }});
+        assert response != null;
+        Group unitGroup = new Gson().fromJson(response.getParams().get("group"), Group.class);
         unitGroup.setTranslateY(this.getCenterY() + 50);
         unitGroup.setTranslateX(this.getCenterX() + 82 + 30 * (unit instanceof NonCombatUnit ? 1 : -1));
         setUnitGroupEventHandlers(unitGroup, unit);
@@ -186,21 +198,10 @@ public class Hex {
 
     public void setUnitGroupEventHandlers(Group group, Unit unit) {
         group.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY
-                    && unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-                if (unit instanceof CombatUnit) {
-                    if (WorldController.getSelectedCombatUnit() != null && WorldController.getSelectedCombatUnit().equals(unit)) {
-                        WorldController.setSelectedCombatUnit(null);
-                    } else {
-                        WorldController.setSelectedCombatUnit((CombatUnit) unit);
-                    }
-                } else {
-                    if (WorldController.getSelectedNonCombatUnit() != null && WorldController.getSelectedNonCombatUnit().equals(unit)) {
-                        WorldController.setSelectedNonCombatUnit(null);
-                    } else {
-                        WorldController.setSelectedNonCombatUnit((NonCombatUnit) unit);
-                    }
-                }
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.UNIT_HEX_MOUSE_CLICKED, new HashMap<>() {{
+                    put("unit", new Gson().toJson(unit));
+                }});
             }
         });
     }
@@ -212,9 +213,13 @@ public class Hex {
         this.cityImage.setLayoutY(this.getCenterY());
         this.cityImage.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                if (WorldController.getWorld().getCurrentCivilizationName().equals(MapController.getTileByCoordinates(Hex.this.coordination).getCity().getCenterOfCity().getCivilizationName())) {
-                    WorldController.setSelectedCity(MapController.getTileByCoordinates(Hex.this.coordination).getCity());
-//                    App.changeScene("cityPanelPage");
+                Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.CITY_HEX_MOUSE_CLICKED, new HashMap<>() {{
+                    put("x", String.valueOf(coordination.getX()));
+                    put("y", String.valueOf(coordination.getY()));
+                }});
+                assert response != null;
+                if (response.getQueryResponse() == QueryResponses.OK) {
+                    App.changeScene("cityPanelPage");
                 }
             }
         });

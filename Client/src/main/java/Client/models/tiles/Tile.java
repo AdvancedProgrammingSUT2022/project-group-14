@@ -3,7 +3,6 @@ package Client.models.tiles;
 import Client.controllers.ClientSocketController;
 import Client.enums.Improvements;
 import Client.enums.QueryRequests;
-import Client.enums.resources.BonusResourceTypes;
 import Client.enums.resources.LuxuryResourceTypes;
 import Client.enums.tiles.TileBaseTypes;
 import Client.enums.tiles.TileFeatureTypes;
@@ -21,7 +20,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Tile {
-    private final Hex hex;
     private final Coordination coordination;
 
     private TileBaseTypes type;
@@ -66,7 +64,6 @@ public class Tile {
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
         this.resource = Resource.generateRandomResource(type, feature);
-        this.hex = new Hex(this);
         this.ruin = ruin;
     }
 
@@ -213,7 +210,6 @@ public class Tile {
             this.combatImpact -= this.feature.getCombatImpact();
         }
         this.feature = feature;
-        hex.updateHex();
     }
 
     public Resource getResource() {
@@ -222,7 +218,7 @@ public class Tile {
 
     public void setResource(Resource resource) {
         this.resource = resource;
-        hex.updateHex();
+
     }
 
     public boolean[] getIsRiver() {
@@ -237,7 +233,7 @@ public class Tile {
         this.roadState = roadState;
         if (this.roadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 2 / 3;
-            hex.updateHex();
+
         }
     }
 
@@ -249,7 +245,7 @@ public class Tile {
         this.railRoadState = railRoadState;
         if (this.railRoadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 1 / 2;
-            hex.updateHex();
+
         }
     }
 
@@ -259,7 +255,7 @@ public class Tile {
 
     public void setImprovement(Improvements improvement) {
         this.improvement = improvement;
-        hex.updateHex();
+
     }
 
     public int getImprovementTurnsLeftToBuild() {
@@ -295,7 +291,7 @@ public class Tile {
 
     public void setCombatUnit(CombatUnit combatUnit) {
         this.combatUnit = combatUnit;
-        hex.updateHex();
+
     }
 
     public NonCombatUnit getNonCombatUnit() {
@@ -304,7 +300,7 @@ public class Tile {
 
     public void setNonCombatUnit(NonCombatUnit nonCombatUnit) {
         this.nonCombatUnit = nonCombatUnit;
-        hex.updateHex();
+
     }
 
     public City getCity() {
@@ -315,10 +311,9 @@ public class Tile {
         this.city = city;
         if (city != null) {
             for (Tile tile : city.getTerritory()) {
-                tile.getHex().updateHex();
             }
         } else {
-            hex.updateHex();
+
         }
     }
 
@@ -328,12 +323,9 @@ public class Tile {
 
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
-        hex.updateHex();
+
     }
 
-    public Hex getHex() {
-        return hex;
-    }
 
     public void setRuin(Ruin ruin) {
         this.ruin = ruin;
@@ -361,12 +353,12 @@ public class Tile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tile tile = (Tile) o;
-        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && hex.equals(tile.hex) && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
+        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(hex, coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, combatUnit, nonCombatUnit);
+        int result = Objects.hash(coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, combatUnit, nonCombatUnit);
         result = 31 * result + Arrays.hashCode(isRiver);
         return result;
     }

@@ -106,7 +106,6 @@ public class MapController {
                 if (tile.getNonCombatUnit() != null && (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setNonCombatUnit(null);
                 }
-                tile.getHex().updateHex();
             }
         }
     }

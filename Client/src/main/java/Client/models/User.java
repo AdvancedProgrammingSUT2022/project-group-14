@@ -33,14 +33,6 @@ public class User {
         chats = new HashMap<>();
         ArrayList<String> usernames = new ArrayList<>();
         usernames.add(this.username);
-//        ArrayList<User> users = (ArrayList<User>) ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_USERS, null).getReturnedValue();
-//        for (User user : users) {
-//            usernames.add(user.getUsername());
-//        }
-//        chats.put("Public Chat", new Chat(usernames, "Public Chat"));
-//        for (User user : users) {
-//            user.getChats().get("Public Chat").addUsername(this.username);
-//        }
         invitations = new ArrayList<>();
         peopleInLobby = new ArrayList<>(List.of(username));
     }

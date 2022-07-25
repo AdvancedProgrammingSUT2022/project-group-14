@@ -1,36 +1,5 @@
 package Client.views;
 
-import Client.application.App;
-import Client.controllers.ClientSocketController;
-import Client.enums.QueryRequests;
-import Client.enums.Technologies;
-import Client.enums.units.CombatType;
-import Client.enums.units.UnitTypes;
-import Client.models.City;
-import Client.models.tiles.Hex;
-import Client.models.units.CombatUnit;
-import Client.models.units.Settler;
-import Client.models.units.Unit;
-import Client.models.units.Worker;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
-
-import java.util.HashMap;
-import java.util.Objects;
-
 public class GamePageController {
     public static boolean stopTimeline;
     public static String infoPanelName;
