@@ -2,7 +2,6 @@ package enums;
 
 import application.App;
 import controllers.WorldController;
-import enums.tiles.TileBaseTypes;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -12,11 +11,10 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
-import models.World;
 
 import java.util.*;
 
-import static java.util.List.*;
+import static java.util.List.of;
 
 public enum Technologies {
     AGRICULTURE("agriculture", 20, new HashSet<>()), // keshavarzi
@@ -100,6 +98,14 @@ public enum Technologies {
         return allTechs;
     }
 
+    public static Technologies getTechnologyByName(String name) {
+        for (int i = 0; i < Technologies.values().length; i++) {
+            if (Technologies.values()[i].getName().equals(name)) {
+                return Technologies.values()[i];
+            }
+        }
+        return null;
+    }
 
 
     public static Technologies generateRandom() {
@@ -142,4 +148,5 @@ public enum Technologies {
         });
         return group;
     }
+
 }

@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-
-<AnchorPane prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="views.TechnologyTreeController">
-      <HBox fx:id="hBox" prefHeight="720.0" prefWidth="1280.0" />
-</AnchorPane>
+<?import javafx.scene.layout.Pane?>
+<ScrollPane id="technologyTreeScene" fx:id="scrollPane" hbarPolicy="ALWAYS" prefHeight="680.0" prefWidth="1265.0" vbarPolicy="ALWAYS"
+            stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="views.TechnologyTreeController">
+    <Pane fx:id="test" prefHeight="720.0" prefWidth="1280.0">
+    <AnchorPane fx:id="anchorPane"  prefHeight="720.0" prefWidth="1280.0">
+        <HBox fx:id="hBox" prefHeight="720.0" prefWidth="1280.0">
+            <padding>
+                <Insets left="50" right="50"/>
+            </padding>
+        </HBox>
+        <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
+    </AnchorPane>
+    </Pane>
+</ScrollPane>

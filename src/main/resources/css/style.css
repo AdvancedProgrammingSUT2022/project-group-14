@@ -24,6 +24,16 @@
     -fx-background-size: cover;
 }
 
+#technologyTreeScene {
+    -fx-background-image: url("../images/profileMenuBG.png");
+    -fx-background-size: cover;
+}
+
+Line {
+    -fx-stroke: 3;
+    -fx-background-color: #000000;
+}
+
 Button {
     -fx-cursor: hand;
     -fx-background-radius: 15;
@@ -59,10 +69,10 @@ ImageView {
     -fx-font-size: 70;
 }
 
-.scroll-pane{
-    -fx-background-color:transparent;
+.scroll-pane {
+    -fx-background-color: transparent;
 }
 
 .scroll-pane > .viewport {
--fx-background-color: transparent;
+    -fx-background-color: transparent;
 }

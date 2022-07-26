@@ -353,7 +353,7 @@ public class GamePageController {
     }
 
     public void techTreeButtonClicked(MouseEvent mouseEvent) {
-        System.out.println("hello");
-        //TODO goto techTree fxml
+        timeline.stop();
+        App.changeScene("technologyTree");
     }
 }
