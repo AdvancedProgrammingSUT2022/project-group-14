@@ -500,6 +500,7 @@ public class ServerSocketHandler extends Thread {
                 }
             }
             case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));
+            case MAKE_PEACE -> WarController.makePeace(request.getParams().get("name"));
             case GET_CURRENT_CIVILIZATION_NAME -> {
                 return new Response(QueryResponses.OK, new HashMap<>(){{
                     put("name", WorldController.getWorld().getCurrentCivilizationName());

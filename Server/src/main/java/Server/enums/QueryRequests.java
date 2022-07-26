@@ -120,6 +120,7 @@ public enum QueryRequests {
     ADD_LISTENER,
     //game page
     DECLARE_WAR,
+    MAKE_PEACE,
     SEND_INVITATION,
     ACCEPT_INVITATION,
     DECLINE_INVITATION,

@@ -18,9 +18,9 @@ public class Trade {
         this.offeredGold = offeredGold;
         this.requestedGold = requestedGold;
         this.offeredLuxuryResource = offeredLuxuryResource;
-        requestedLuxuryResource = requestedLuxuryResource;
+        this.requestedLuxuryResource = requestedLuxuryResource;
         this.offeredStrategicResource = offeredStrategicResource;
-        requestedStrategicResource = requestedStrategicResource;
+        this.requestedStrategicResource = requestedStrategicResource;
     }
 
     public String tradeInfo() {
