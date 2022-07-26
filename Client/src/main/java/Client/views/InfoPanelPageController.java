@@ -3,6 +3,11 @@ package Client.views;
 import Client.application.App;
 import Client.controllers.ClientSocketController;
 import Client.enums.QueryRequests;
+import Client.enums.units.UnitTypes;
+import Client.models.City;
+import Client.models.units.CombatUnit;
+import Client.models.units.Unit;
+import javafx.event.EventHandler;
 import Client.models.network.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -33,9 +38,38 @@ public class InfoPanelPageController {
             case "NotificationsPanel" -> initNotificationsPanel();
             case "MilitaryPanel" -> initMilitaryPanel();
             case "EconomicStatusPanel" -> initEconomicStatusPanel();
+            case "DiplomacyPanel" -> initDiplomacyPanel();
             default -> {
             }
         }
+    }
+
+    public void initDiplomacyPanel() {
+        Button discussButton = new Button("discuss");
+        discussButton.setLayoutX(330);
+        discussButton.setLayoutY(200);
+        discussButton.setPrefWidth(120);
+        discussButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                App.changeScene("discussPanel");
+            }
+        });
+
+        Button tradeButton = new Button("trade");
+        tradeButton.setLayoutX(330);
+        tradeButton.setLayoutY(240);
+        tradeButton.setPrefWidth(120);
+        tradeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                App.changeScene("tradePanel");
+            }
+        });
+
+        pane.getChildren().add(discussButton);
+        pane.getChildren().add(tradeButton);
+
     }
 
     private void initEconomicStatusPanel() {

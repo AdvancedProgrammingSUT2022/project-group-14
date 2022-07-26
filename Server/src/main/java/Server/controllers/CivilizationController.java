@@ -2,12 +2,14 @@ package Server.controllers;
 
 import Server.enums.QueryResponses;
 import Server.enums.Technologies;
+import Server.models.*;
+import Server.models.network.Response;
+import javafx.scene.paint.Color;
 import Server.models.Building;
 import Server.models.Citizen;
 import Server.models.City;
 import Server.models.Civilization;
 
-import Server.models.network.Response;
 import Server.models.tiles.Ruin;
 import Server.models.tiles.Tile;
 import Server.models.units.Settler;
@@ -202,5 +204,10 @@ public class CivilizationController {
         points += civilization.getCities().size() * 150;
         points += civilization.getHappiness() * 5;
         return points;
+    }
+
+    public static void addTrade(Trade trade) {
+        Civilization civilization = WorldController.getWorld().getCivilizationByName(trade.getSecondCivilization());
+        civilization.addTrade(trade);
     }
 }

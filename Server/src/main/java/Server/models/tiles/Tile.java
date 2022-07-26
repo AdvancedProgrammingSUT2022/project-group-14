@@ -123,7 +123,8 @@ public class Tile {
 
         if (resource.getType() instanceof LuxuryResourceTypes) {
             currenCivilization.getLuxuryResources().put(resource.getName(), currenCivilization.getLuxuryResources().get(resource.getName()) + 1);
-            currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
+            if (currenCivilization.getLuxuryResources().get(resource.getName()) == 1)
+                currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
         } else if (resource instanceof StrategicResource) {
             currenCivilization.getStrategicResources().put(resource.getName(), currenCivilization.getStrategicResources().get(resource.getName()) + 1);
         }

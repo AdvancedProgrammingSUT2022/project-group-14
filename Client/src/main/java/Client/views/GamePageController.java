@@ -35,6 +35,34 @@ import javafx.util.Duration;
 
 import java.util.*;
 
+import Client.application.App;
+import Client.controllers.ClientSocketController;
+import Client.enums.QueryRequests;
+import Client.enums.Technologies;
+import Client.models.City;
+import Client.models.tiles.Hex;
+import Client.models.units.CombatUnit;
+import Client.models.units.NonCombatUnit;
+import Client.models.units.Unit;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.fxml.FXML;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
+import javafx.util.Duration;
+
+import java.util.HashMap;
+import java.util.Objects;
+
 public class GamePageController {
     public static boolean stopTimeline;
     public static String infoPanelName;
@@ -121,7 +149,7 @@ public class GamePageController {
         scienceText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_SCIENCE, new HashMap<>())).getParams().get("science"));
         scienceText.setFill(Color.rgb(7, 146, 169));
         infoPanelsBox.setValue("InfoPanels");
-        infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel");
+        infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel", "DiplomacyPanel");
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
         cheatCodeArea.setVisible(false);
         cheatCodeText.setVisible(false);
@@ -461,11 +489,19 @@ public class GamePageController {
     }
 
     public void conquerButtonClicked(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.CONQUER_CITY, new HashMap<>(){{
+            put("city", new Gson().toJson(city));
+            put("combatUnit", new Gson().toJson(combatUnit));
+        }});
 //        CityController.conquerCity(city, combatUnit);
         showCityOptions = false;
     }
 
     public void destroyButtonClicked(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DESTROY_CITY, new HashMap<>(){{
+            put("city", new Gson().toJson(city));
+            put("combatUnit", new Gson().toJson(combatUnit));
+        }});
 //        CityController.destroyCity(city, combatUnit);
         showCityOptions = false;
     }

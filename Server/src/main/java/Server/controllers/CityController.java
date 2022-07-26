@@ -274,7 +274,8 @@ public class CityController {
     }
 
     public static void conquerCity(City city, CombatUnit unit) {
-        for (Tile tile : city.getTerritory())
+        City actualCity = WorldController.getWorld().getCivilizationByName(city.getCivilizationName()).getCityByName(city.getName());
+        for (Tile tile : actualCity.getTerritory())
             tile.setCivilization(unit.getCivilizationName());
         WorldController.getWorld().getCivilizationByName(unit.getCivilizationName()).addCity(city);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
@@ -282,7 +283,8 @@ public class CityController {
     }
 
     public static void destroyCity(City city, CombatUnit unit) {
-        for (Tile tile : city.getTerritory())
+        City actualCity = WorldController.getWorld().getCivilizationByName(city.getCivilizationName()).getCityByName(city.getName());
+        for (Tile tile : actualCity.getTerritory())
             tile.setCivilization(null);
         MapController.getMap()[city.getCenterOfCity().getX()][city.getCenterOfCity().getY()].setCity(null);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()

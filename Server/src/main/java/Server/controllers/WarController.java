@@ -1,10 +1,15 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
 import Server.enums.units.UnitStates;
 import Server.models.City;
 import Server.models.Civilization;
+import Server.models.network.Response;
 import Server.models.tiles.Tile;
 import Server.models.units.*;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
 
 public class WarController {
 
@@ -29,7 +34,9 @@ public class WarController {
                         attackingUnit.setDestinationCoordinates(x, y);
                         attackCity(attackingUnit, attackingTile.getCity());
                     } else {
-                        //TODO calling GamePageController.setDeclareWarOptions
+                        ServerUpdateController.sendUpdate(attackingUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_WAR_OPTIONS, new HashMap<>(){{
+                            put("enemyName", new Gson().toJson(attackingTile.getCity().getCivilizationName()));
+                        }}));
                     }
                 }
             } else {
@@ -43,7 +50,9 @@ public class WarController {
                             attackingUnit.setDestinationCoordinates(x, y);
                             attackCombatUnit(attackingUnit, attackingTile.getCombatUnit());
                         } else {
-                            //TODO calling GamePageController.setDeclareWarOptions
+                            ServerUpdateController.sendUpdate(attackingUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_WAR_OPTIONS, new HashMap<>(){{
+                                put("enemyName", new Gson().toJson(attackingTile.getCombatUnit().getCivilizationName()));
+                            }}));
                         }
 
                     }
@@ -57,7 +66,9 @@ public class WarController {
                             attackingUnit.setDestinationCoordinates(x, y);
                             attackNonCombatUnit(attackingUnit, attackingTile.getNonCombatUnit());
                         } else {
-                            //TODO calling GamePageController.setDeclareWarOptions
+                            ServerUpdateController.sendUpdate(attackingUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_WAR_OPTIONS, new HashMap<>(){{
+                                put("enemyName", new Gson().toJson(attackingTile.getNonCombatUnit().getCivilizationName()));
+                            }}));
                         }
 
                     }
@@ -211,7 +222,10 @@ public class WarController {
                     combatUnit.getCivilizationName());
             CityController.conquerCity(city, combatUnit);
         } else {
-//            GamePageController.setCityOptions(city, combatUnit);
+            ServerUpdateController.sendUpdate(combatUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_CITY_OPTIONS, new HashMap<>(){{
+                put("city", new Gson().toJson(city));
+                put("combatUnit", new Gson().toJson(combatUnit));
+            }}));
         }
     }
 

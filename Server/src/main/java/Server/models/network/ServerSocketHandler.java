@@ -1,5 +1,9 @@
 package Server.models.network;
 
+import Server.controllers.GameCommandsValidation;
+import Server.controllers.UserController;
+import Server.controllers.WarController;
+import Server.controllers.WorldController;
 import Server.controllers.*;
 import Server.enums.Improvements;
 import Server.enums.QueryResponses;
@@ -8,6 +12,7 @@ import Server.enums.units.UnitStates;
 import Server.enums.units.UnitTypes;
 import Server.models.City;
 import Server.models.Civilization;
+import Server.models.Trade;
 import Server.models.User;
 import Server.models.World;
 import Server.models.chats.Chat;
@@ -405,14 +410,15 @@ public class ServerSocketHandler extends Thread {
                     }
                 }
             }
-            case ADD_LISTENER -> Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setUpdateSocket(this.socket);
+            case ADD_LISTENER ->
+                    Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setUpdateSocket(this.socket);
             case ADD_MESSAGE -> {
                 Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
                 Message message = new Gson().fromJson(request.getParams().get("message"), Message.class);
                 for (String username : chat.getUsernames()) {
                     Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).addMessage(message);
                     if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
-                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>(){{
                             put("user", new Gson().toJson(UserController.getUserByUsername(username)));
                         }}));
                     }
@@ -493,8 +499,44 @@ public class ServerSocketHandler extends Thread {
                     }}));
                 }
             }
+            case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));
+            case GET_CURRENT_CIVILIZATION_NAME -> {
+                return new Response(QueryResponses.OK, new HashMap<>(){{
+                    put("name", WorldController.getWorld().getCurrentCivilizationName());
+                }});
+            }
+            case GET_ALL_CIVILIZATIONS_NAMES -> {
+                return getAllCivilizationsName();
+            }
+            case ADD_TRADE -> CivilizationController.addTrade(new Gson().fromJson(request.getParams().get("trade"), Trade.class));
+            case GET_CIVILIZATION_TRADES -> {
+                return new Response(QueryResponses.OK, new HashMap<>(){{
+                    put("trades", new Gson().toJson(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTradesFromOtherCivilizations()));
+                }});
+            }
+            case ACCEPT_TRADE -> {
+                return acceptTrade(request);
+            }
+            case DESTROY_CITY -> CityController.destroyCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
+            case CONQUER_CITY -> CityController.conquerCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
+
         }
         return new Response(QueryResponses.OK, new HashMap<>());
+    }
+
+    public Response getAllCivilizationsName() {
+        ArrayList<String> civilizationNames = new ArrayList<>();
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            civilizationNames.add(civilization.getName());
+        }
+        return new Response(QueryResponses.OK, new HashMap<>(){{
+            put("names", new Gson().toJson(civilizationNames));
+        }});
+    }
+
+    public Response acceptTrade(Request request) {
+        QueryResponses queryResponse = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).acceptTrade(new Gson().fromJson(request.getParams().get("indexOfTrade"), int.class));
+        return new Response(queryResponse, new HashMap<>());
     }
 
 }
