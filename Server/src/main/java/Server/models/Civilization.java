@@ -303,4 +303,10 @@ public class Civilization {
         }
         return null;
     }
+
+    public QueryResponses getTechnologyStatus(Technologies technology) {
+        if (this.technologies.get(technology) <= 0) return QueryResponses.TECHNOLOGY_WAS_STUDIED;
+        else if (this.currentTechnology.equals(technology)) return QueryResponses.TECHNOLOGY_IS_BEING_STUDIED;
+        else return QueryResponses.TECHNOLOGY_HAS_NOT_BEEN_STUDIED;
+    }
 }

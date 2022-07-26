@@ -2,6 +2,8 @@ package Client.enums;
 
 import Client.application.App;
 import Client.controllers.ClientSocketController;
+import Client.models.network.Response;
+import com.google.gson.Gson;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -105,7 +107,13 @@ public enum Technologies {
 
     public Group getTechnologyGroup(int x, int y) {
         Group group = new Group();
-        Rectangle nameRectangle = new Rectangle(230, 27, Color.CADETBLUE);
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_TECHNOLOGY_STATUS, new HashMap<>(){{put("technology", new Gson().toJson(this));}});
+        Rectangle nameRectangle = null;
+        switch (Objects.requireNonNull(response).getQueryResponse()) {
+            case TECHNOLOGY_WAS_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.GREEN);
+            case TECHNOLOGY_IS_BEING_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.GOLD);
+            case TECHNOLOGY_HAS_NOT_BEEN_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.CADETBLUE);
+        }
         nameRectangle.setLayoutX(x);
         nameRectangle.setLayoutY(y - nameRectangle.getHeight());
         Rectangle turnsRectangle = new Rectangle(145, 27, Color.rgb(238, 128, 0));
