@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.views.TradePanelController">
+   <children>
+      <Text fill="#d7720e" layoutX="358.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" text="trade with civilization" wrappingWidth="201.77557373046875" />
+      <ChoiceBox fx:id="civilizationName" layoutX="590.0" layoutY="130.0" prefHeight="36.0" prefWidth="100.0" />
+      <Button layoutX="729.0" layoutY="130.0" mnemonicParsing="false" onMouseClicked="#tradeButtonClicked" text="trade" />
+
+      <Text fill="#c6750a" layoutX="107.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="your offers:" wrappingWidth="110.20135498046875" />
+      <Text fill="#c86e11" layoutX="150.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="gold" />
+      <TextField fx:id="yourOfferedGold" layoutX="150.0" layoutY="290.0" prefHeight="20.0" prefWidth="89.0" style="-fx-pref-width: 40" text="0" />
+      <Text fill="#c86e11" layoutX="247.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="strategic resource" />
+      <ChoiceBox fx:id="yourOfferedStrategicResource" layoutX="247.0" layoutY="290.0" prefHeight="36.0" prefWidth="100.0" />
+      <Text fill="#c86e11" layoutX="446.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="luxury resource" />
+      <ChoiceBox fx:id="yourOfferedLuxuryResource" layoutX="466.0" layoutY="290.0" prefHeight="36.0" prefWidth="100.0" />
+
+      <Text fill="#e4740c" layoutX="738.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" text="what you want:" />
+      <Text fill="#c86e11" layoutX="784.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="gold" />
+       <TextField fx:id="yourRequestedGold" layoutX="784.0" layoutY="290.0" prefHeight="20.0" prefWidth="89.0" style="-fx-pref-width: 40" text="0" />
+      <Text fill="#c86e11" layoutX="902.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="strategic resource" />
+      <ChoiceBox fx:id="yourRequestedStrategicResource" layoutX="902" layoutY="290.0" prefHeight="36.0" prefWidth="100.0" />
+      <Text fill="#c86e11" layoutX="1085.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" text="luxury resource" />
+      <ChoiceBox fx:id="yourRequestedLuxuryResource" layoutX="1085.0" layoutY="290.0" prefHeight="36.0" prefWidth="100.0" />
+
+      <Button layoutX="562.0" layoutY="516.0" mnemonicParsing="false" onMouseClicked="#goToOfferedTradesPage" text="trade offers" />
+      <Text fx:id="message" fill="#c86e11" layoutX="400.0" layoutY="430.0" strokeType="OUTSIDE" strokeWidth="0.0" text="your offer was sent to civilization" />
+      <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
+   </children>
+</AnchorPane>
