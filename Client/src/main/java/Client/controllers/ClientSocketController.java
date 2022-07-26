@@ -81,12 +81,12 @@ public class ClientSocketController {
                     HexController.getHexOfTheGivenCoordination(response.getTile().getX(), response.getTile().getY()).updateHex(response.getTile());
             case CHANGE_SCENE -> {
                 if (response.getParams().get("sceneName").equals("gamePage")) {
-                        if (Boolean.parseBoolean(response.getParams().get("turn"))) {
-                            GamePageController.isMyTurn = true;
-                            HexController.generateHexes(Integer.parseInt(response.getParams().get("width")), Integer.parseInt(response.getParams().get("height")));
-                        } else {
-                            GamePageController.isMyTurn = false;
-                        }
+                    if (Boolean.parseBoolean(response.getParams().get("turn"))) {
+                        GamePageController.isMyTurn = true;
+                        HexController.generateHexes(Integer.parseInt(response.getParams().get("width")), Integer.parseInt(response.getParams().get("height")));
+                    } else {
+                        GamePageController.isMyTurn = false;
+                    }
                     Platform.runLater(() -> App.changeScene(response.getParams().get("sceneName")));
                 } else if (response.getParams().get("sceneName").equals("endGamePage")) {
                     GamePageController.stopTimeline = true;
@@ -101,9 +101,11 @@ public class ClientSocketController {
                             .setInfoText(response.getParams().get("info"), response.getParams().get("color").equals("green") ? Color.GREEN : Color.RED);
             case UPDATE_ALL_HEXES -> {
                 Tile[][] map = new Gson().fromJson(response.getParams().get("tiles"), Tile[][].class);
-                for (Tile[] tiles : map) {
-                    for (Tile tile : tiles) {
-                        HexController.getHexOfTheGivenCoordination(tile.getX(), tile.getY()).updateHex(tile);
+                if (HexController.getHexes() != null) {
+                    for (Tile[] tiles : map) {
+                        for (Tile tile : tiles) {
+                            HexController.getHexOfTheGivenCoordination(tile.getX(), tile.getY()).updateHex(tile);
+                        }
                     }
                 }
             }

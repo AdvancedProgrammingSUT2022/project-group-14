@@ -47,11 +47,13 @@ public class Civilization {
         do {
             randomX = new Random().nextInt(2, MapController.width - 2);
             randomY = new Random().nextInt(2, MapController.height - 2);
-            for (Tile tile : TileController.getAvailableNeighbourTiles(randomX, randomY)) {
-                if (tile.getCombatUnit() != null)
-                    continue mainLoop;
+            for (int j = 0; j < i - 1; j++) {
+                for (Unit unit : WorldController.getWorld().getAllCivilizations().get(j).getAllUnits()) {
+                    if (unit.getCurrentX() == randomX)
+                        continue mainLoop;
+                }
             }
-        } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999 || MapController.getMap()[randomX][randomY].getCombatUnit() != null);
+        } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
         if (i == 0 && WorldController.getCheatCoordination() != null
                 && TileController.selectedTileIsValid(WorldController.getCheatCoordination().getX(), WorldController.getCheatCoordination().getY())) {
             randomX = WorldController.getCheatCoordination().getX();

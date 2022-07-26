@@ -73,14 +73,41 @@ public class ServerSocketHandler extends Thread {
                     return new Response(QueryResponses.PASSWORD_INCORRECT, new HashMap<>());
                 } else {
                     UserController.addLoggedInUser(Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))));
-                    UserController.getUserByUsername(request.getParams().get("username")).setToken(UserController.generateToken());
+                    Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setToken(UserController.generateToken());
                     return new Response(QueryResponses.OK, new HashMap<>() {{
                         put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                     }});
                 }
             }
-            case LOGOUT_USER ->
-                    UserController.removeLoggedOutUser(UserController.getUserByUsername(request.getParams().get("username")));
+            case LOGOUT_USER -> {
+                if (WorldController.getWorld() != null) {
+                    for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+                        if (civilization.getName().equals(request.getParams().get("username"))) {
+                            WorldController.getWorld().removeCivilization(civilization);
+                            if (WorldController.getWorld() != null) {
+                                WorldController.nextTurn();
+                                for (Civilization civ : WorldController.getWorld().getAllCivilizations()) {
+                                    if (civ.getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+                                        ServerUpdateController.sendUpdate(civ.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
+                                            put("sceneName", "gamePage");
+                                            put("width", String.valueOf(MapController.getWidth()));
+                                            put("turn", String.valueOf(true));
+                                            put("height", String.valueOf(MapController.getHeight()));
+                                        }}));
+                                    } else {
+                                        ServerUpdateController.sendUpdate(civ.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
+                                            put("sceneName", "gamePage");
+                                            put("turn", String.valueOf(false));
+                                        }}));
+                                    }
+                                }
+                            }
+                            break;
+                        }
+                    }
+                }
+                UserController.removeLoggedOutUser(Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))));
+            }
             case CREATE_USER -> {
                 if (UserController.getUserByUsername(request.getParams().get("username")) != null) {
                     return new Response(QueryResponses.USERNAME_EXIST, new HashMap<>());
@@ -223,14 +250,14 @@ public class ServerSocketHandler extends Thread {
                 }.getType());
                 for (int i = 0; i < people.size(); i++) {
                     if (i == 0) {
-                        ServerUpdateController.sendUpdate(people.get(i), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                        ServerUpdateController.sendUpdate(people.get(i), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
                             put("sceneName", "gamePage");
                             put("turn", String.valueOf(true));
                             put("width", request.getParams().get("width"));
                             put("height", request.getParams().get("height"));
                         }}));
                     } else {
-                        ServerUpdateController.sendUpdate(people.get(i), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                        ServerUpdateController.sendUpdate(people.get(i), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
                             put("sceneName", "gamePage");
                             put("turn", String.valueOf(false));
                         }}));
@@ -343,14 +370,14 @@ public class ServerSocketHandler extends Thread {
                     WorldController.nextTurn();
                     for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
                         if (civilization.getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
-                            ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                            ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
                                 put("sceneName", "gamePage");
                                 put("turn", String.valueOf(true));
                                 put("width", String.valueOf(MapController.getWidth()));
                                 put("height", String.valueOf(MapController.getHeight()));
                             }}));
                         } else {
-                            ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                            ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
                                 put("sceneName", "gamePage");
                                 put("turn", String.valueOf(false));
                             }}));
@@ -557,7 +584,7 @@ public class ServerSocketHandler extends Thread {
                     CityController.conquerCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
 
             case GET_YEAR -> {
-                return new Response(QueryResponses.OK, new HashMap<>(){{
+                return new Response(QueryResponses.OK, new HashMap<>() {{
                     put("year", WorldController.getWorld().getYear() < 0 ? String.valueOf(-WorldController.getWorld().getYear()) + " BC" : String.valueOf(WorldController.getWorld().getYear()));
                 }});
             }
