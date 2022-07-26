@@ -21,8 +21,12 @@ public class TechnologyTreeController {
     @FXML
     public AnchorPane anchorPane;
 
+    public int TechnologyGroupWidth = 270;
+    public int TechnologyGroupLength = 80;
+    public final int hBoxSpacing = 200;
+
     public void initialize() {
-        hBox.setSpacing(200);
+        hBox.setSpacing(hBoxSpacing);
         initTechnologies();
 //        Line line = new Line(10, 10, 200, 200);
 //        line.setStrokeWidth(3.7);
@@ -67,27 +71,46 @@ public class TechnologyTreeController {
             for (int j = 0; j < formerLayer.size(); j++) {
                 if (currentLayer.get(i).getRequiredTechnologies().contains(formerLayer.get(j).getName().toUpperCase())) {
                     System.out.println("yeah" + i + "," + j + "," + layerNumber);
+                    double startX = getVBoxStartXByNumber(layerNumber - 1) + 270;
+                    double startY = getVBoxStartYByNumber(j, formerLayer.size());
+                    double endX = getVBoxStartXByNumber(layerNumber);
+                    double endY = getVBoxStartYByNumber(i, currentLayer.size());
+                    Line line = new Line(startX, startY, endX, endY);
+                    line.setStrokeWidth(2.0);
+                    anchorPane.getChildren().add(line);
+
+//                    if (layerNumber > 3) {
 //                    double startX = ((VBox) hBox.getChildren().get(layerNumber - 1)).getChildren().get(j).getLayoutX() + hBox.getChildren().get(layerNumber - 1).getLayoutX() + anchorPane.getLayoutX();
 //                    double startY = ((VBox) hBox.getChildren().get(layerNumber - 1)).getChildren().get(j).getLayoutY() + hBox.getChildren().get(layerNumber - 1).getLayoutY() + anchorPane.getLayoutY();
 //                    double endX = ((VBox) hBox.getChildren().get(layerNumber)).getChildren().get(i).getLayoutX() + hBox.getChildren().get(layerNumber).getLayoutX() + anchorPane.getLayoutX();
 //                    double endY = ((VBox) hBox.getChildren().get(layerNumber)).getChildren().get(i).getLayoutY() + hBox.getChildren().get(layerNumber).getLayoutY() + anchorPane.getLayoutY();
-//                    Line line = new Line(startX, startY, endX, endY);
-//                    line.setStrokeWidth(2.0);
-//                    anchorPane.getChildren().add(line);
-
-                    if (layerNumber > 3) {
 //                        double endX = ((VBox) hBox.getChildren().get(0)).getChildren().get(0).getLayoutX() + hBox.getChildren().get(0).getLayoutX() + anchorPane.getLayoutX();
 //                        double endY = ((VBox) hBox.getChildren().get(0)).getChildren().get(0).getLayoutY() + hBox.getChildren().get(0).getLayoutY() + anchorPane.getLayoutY();
-                        double endX = hBox.getChildren().get(1).getLayoutX() + anchorPane.getLayoutX();
-                        double endY = hBox.getChildren().get(1).getLayoutY() + anchorPane.getLayoutY();
-                        Line line = new Line(200, 200, endX, endY);
-                        line.setStrokeWidth(2);
-                        anchorPane.getChildren().add(line);
-                    }
+//                        Bounds endX1 = ((VBox) hBox.getChildren().get(1)).getChildren().get(0).localToScene(((VBox) hBox.getChildren().get(1)).getChildren().get(0).getBoundsInLocal());
+//                        Bounds endX2 = ((VBox) hBox.getChildren().get(1)).getChildren().get(0).getBoundsInParent();
+//                        double endX = ((VBox) hBox.getChildren().get(0)).getChildren().get(0).getBoundsInParent().getMinX() + ((VBox) hBox.getChildren().get(0)).getBoundsInParent().getMinX() + hBox.getBoundsInParent().getMinX();
+//                        double endY = ((VBox) hBox.getChildren().get(1)).getChildren().get(0).getBoundsInParent().getCenterY();
+//                        System.out.println("endX=" + endX + ",endY=" + endY);
+//                        System.out.println(endX2);
+//                        Line line = new Line(20, 720, getVBoxStartXByNumber(1), getVBoxStartYByNumber(1, 4));
+//                        line.setStrokeWidth(2);
+//                        anchorPane.getChildren().add(line);
+//                    }
 
                 }
             }
         }
+    }
+
+    public double getVBoxStartXByNumber(int number) {
+        return number * (hBoxSpacing + 270);
+    }
+
+    public double getVBoxStartYByNumber(int i, int number) {
+        if (number % 2 == 1)
+            return 360 + 100 * (i - (double) (number - 1) / 2);
+        else
+            return 360 + 100 * (i - (double) (number) / 2) + 40;
     }
 
     public void addLayerToGroup(ArrayList<Technologies> currentLayer) {
@@ -98,6 +121,7 @@ public class TechnologyTreeController {
             vBox.getChildren().add(technology.getTechnologyGroup(0, 0));
         }
         hBox.getChildren().add(vBox);
+//        System.out.println("hBox.getWidth() = " + hBox.getWidth() + ",hBox.getMaxWidth()=" + hBox.getMaxWidth() + ",vBox.getWidth()=" + vBox.getPrefWidth());
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {
