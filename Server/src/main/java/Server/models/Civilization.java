@@ -43,10 +43,15 @@ public class Civilization {
     public Civilization(String name, int i) {
         this.name = name;
         int randomX, randomY;
+        mainLoop :
         do {
             randomX = new Random().nextInt(2, MapController.width - 2);
             randomY = new Random().nextInt(2, MapController.height - 2);
-        } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
+            for (Tile tile : TileController.getAvailableNeighbourTiles(randomX, randomY)) {
+                if (tile.getCombatUnit() != null)
+                    continue mainLoop;
+            }
+        } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999 || MapController.getMap()[randomX][randomY].getCombatUnit() != null);
         if (i == 0 && WorldController.getCheatCoordination() != null
                 && TileController.selectedTileIsValid(WorldController.getCheatCoordination().getX(), WorldController.getCheatCoordination().getY())) {
             randomX = WorldController.getCheatCoordination().getX();
@@ -54,6 +59,7 @@ public class Civilization {
         }
         melees.add(new Melee(UnitTypes.WARRIOR, randomX, randomY, name));
         settlers.add(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
+//        workers.add(new Worker(UnitTypes.WORKER, randomX, randomY, name));
         this.happiness = 10;
         citiesNames.add(name + "1");
         citiesNames.add(name + "2");

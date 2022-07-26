@@ -1,12 +1,15 @@
 package Server.controllers;
 
 import Server.enums.Commands;
+import Server.enums.QueryResponses;
 import Server.enums.Technologies;
 import Server.models.City;
 import Server.models.Civilization;
+import Server.models.network.Response;
 import Server.models.units.Ranged;
 import Server.models.units.Unit;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class GameCommandsValidation {
@@ -62,8 +65,24 @@ public class GameCommandsValidation {
     }
 
     public static void checkIncreaseTurn(Matcher matcher) {
-        for (int i = 0; i < Integer.parseInt(matcher.group("amount")); i++)
+        for (int i = 0; i < Integer.parseInt(matcher.group("amount")); i++) {
             WorldController.nextTurn();
+        }
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            if (civilization.getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+                ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                    put("width", String.valueOf(MapController.getWidth()));
+                    put("height", String.valueOf(MapController.getHeight()));
+                    put("sceneName", "gamePage");
+                    put("turn", String.valueOf(true));
+                }}));
+            } else {
+                ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                    put("sceneName", "gamePage");
+                    put("turn", String.valueOf(false));
+                }}));
+            }
+        }
     }
 
     public static void checkIncreaseMP(Matcher matcher) {

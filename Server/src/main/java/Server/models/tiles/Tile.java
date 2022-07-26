@@ -50,6 +50,7 @@ public class Tile {
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
     private Ruin ruin;
+    private boolean showRuin;
 
     public Tile(TileFeatureTypes feature, TileBaseTypes type, int x, int y, Ruin ruin) {
         this.coordination = new Coordination(x, y);
@@ -331,11 +332,16 @@ public class Tile {
 
     public void setRuin(Ruin ruin) {
         this.ruin = ruin;
+        this.showRuin = true;
         ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Ruin getRuin() {
         return ruin;
+    }
+
+    public boolean showRuin() {
+        return this.showRuin;
     }
 
     public String getInfo() {

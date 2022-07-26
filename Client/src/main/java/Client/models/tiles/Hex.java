@@ -170,6 +170,14 @@ public class Hex {
                 railRoadImage.setLayoutY(this.getCenterY() - 10);
                 this.group.getChildren().add(railRoadImage);
             }
+            if (tile[0].showRuin()) {
+                ImageView ruinImage = new ImageView(Objects.requireNonNull(App.class.getResource("/images/resources/ruin.png")).toString());
+                ruinImage.setFitWidth(30);
+                ruinImage.setFitHeight(30);
+                ruinImage.setLayoutX(this.getCenterX() + 25);
+                ruinImage.setLayoutY(this.getCenterY() - 10);
+                this.group.getChildren().add(ruinImage);
+            }
             if (isTerritory()) {
                 this.cityImage.setImage(new Image(Objects.requireNonNull(App.class.getResource("/images/cities/cityDistrict.png")).toString()));
                 this.group.getChildren().add(this.cityImage);

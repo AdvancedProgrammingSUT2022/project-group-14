@@ -6,6 +6,8 @@ import Client.enums.QueryRequests;
 import Client.models.User;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
@@ -13,6 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,9 +25,18 @@ import java.util.Objects;
 public class ScoreboardController {
     @FXML
     private GridPane gridPane;
+    private static Timeline timeline;
 
 
     public void initialize() {
+        initScoreBoard();
+        timeline = new Timeline(new KeyFrame(Duration.seconds(3), actionEvent -> initScoreBoard()));
+        timeline.setCycleCount(-1);
+        timeline.play();
+    }
+
+    public void initScoreBoard() {
+        gridPane.getChildren().clear();
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.SORT_USERS, new HashMap<>());
         Text rank, username, score, dateOfLastWin, dateOfLastLogin, online;
         Circle avatar;
@@ -32,7 +44,7 @@ public class ScoreboardController {
         ArrayList<User> users = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_USERS, new HashMap<>())).getParams().get("users"),
                 new TypeToken<List<User>>() {
                 }.getType());
-        ArrayList<User> loggedInUsers = new Gson().fromJson(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_LOGGED_IN_USERS, new HashMap<>()).getParams().get("loggedInUsers"),
+        ArrayList<User> loggedInUsers = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_LOGGED_IN_USERS, new HashMap<>())).getParams().get("loggedInUsers"),
                 new TypeToken<List<User>>() {
                 }.getType());
         for (int i = 0, j = 1; i < Math.min(10, users.size()); i++, j++) {
@@ -103,6 +115,7 @@ public class ScoreboardController {
     }
 
     public void goToMainMenu(MouseEvent mouseEvent) {
+        timeline.stop();
         App.changeScene("mainMenuPage");
     }
 }
