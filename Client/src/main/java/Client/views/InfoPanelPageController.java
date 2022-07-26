@@ -53,25 +53,15 @@ public class InfoPanelPageController {
         discussButton.setLayoutX(330);
         discussButton.setLayoutY(200);
         discussButton.setPrefWidth(120);
-        discussButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                App.changeScene("discussPanel");
-            }
-        });
+        discussButton.setOnMouseClicked(mouseEvent -> App.changeScene("discussPanel"));
 
         Button tradeButton = new Button("trade");
         tradeButton.setLayoutX(330);
         tradeButton.setLayoutY(240);
         tradeButton.setPrefWidth(120);
-        tradeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                App.changeScene("tradePanel");
-            }
-        });
+        tradeButton.setOnMouseClicked(mouseEvent -> App.changeScene("tradePanel"));
 
-        Text message = new Text("kjasdngrjeo");
+        Text message = new Text("");
         message.setVisible(false);
         message.setLayoutX(330);
         message.setLayoutY(360);
@@ -84,7 +74,7 @@ public class InfoPanelPageController {
         String currentCivilizationName = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CURRENT_CIVILIZATION_NAME, new HashMap<>())).getParams().get("name"), String.class);
         civilizationNames.remove(currentCivilizationName);
         ChoiceBox<String> civilizationNamesChoiceBox = new ChoiceBox<>();
-        civilizationNamesChoiceBox.setValue(null);
+        civilizationNamesChoiceBox.setValue("civilizations");
         civilizationNamesChoiceBox.getItems().addAll(civilizationNames);
         civilizationNamesChoiceBox.setLayoutX(240);
         civilizationNamesChoiceBox.setLayoutY(300);
@@ -95,16 +85,13 @@ public class InfoPanelPageController {
         declareWarButton.setLayoutX(400);
         declareWarButton.setLayoutY(300);
         declareWarButton.setPrefWidth(120);
-        declareWarButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                message.setVisible(true);
-                if (civilizationNamesChoiceBox.getValue() != null) {
-                    declareWar(civilizationNamesChoiceBox.getValue());
-                    message.setText("you declared war with " + civilizationNamesChoiceBox.getValue());
-                } else {
-                    message.setText("select a civilization");
-                }
+        declareWarButton.setOnMouseClicked(mouseEvent -> {
+            message.setVisible(true);
+            if (civilizationNamesChoiceBox.getValue() != null) {
+                declareWar(civilizationNamesChoiceBox.getValue());
+                message.setText("you declared war with " + civilizationNamesChoiceBox.getValue());
+            } else {
+                message.setText("select a civilization");
             }
         });
 
@@ -112,16 +99,13 @@ public class InfoPanelPageController {
         makePeaceButton.setLayoutX(580);
         makePeaceButton.setLayoutY(300);
         makePeaceButton.setPrefWidth(120);
-        makePeaceButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                message.setVisible(true);
-                if (civilizationNamesChoiceBox.getValue() != null) {
-                    makePeace(civilizationNamesChoiceBox.getValue());
-                    message.setText("you made peace with " + civilizationNamesChoiceBox.getValue());
-                } else {
-                    message.setText("select a civilization");
-                }
+        makePeaceButton.setOnMouseClicked(mouseEvent -> {
+            message.setVisible(true);
+            if (civilizationNamesChoiceBox.getValue() != null) {
+                makePeace(civilizationNamesChoiceBox.getValue());
+                message.setText("you made peace with " + civilizationNamesChoiceBox.getValue());
+            } else {
+                message.setText("select a civilization");
             }
         });
 

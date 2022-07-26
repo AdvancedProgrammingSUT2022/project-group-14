@@ -129,5 +129,7 @@ public enum QueryRequests {
     ADD_TRADE,
     GET_CIVILIZATION_TRADES,
     ACCEPT_TRADE,
+    EDIT_MESSAGE,
+    DELETE_MESSAGE
 
 }

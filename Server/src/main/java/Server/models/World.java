@@ -21,7 +21,7 @@ public class World {
 
     public World(ArrayList<String> players) {
         for (int i = 0; i < players.size(); i++) {
-            this.civilizations.add(new Civilization(players.get(i), i));
+            this.civilizations.add(new Civilization(players.get(i), i, civilizations));
         }
         year = -3000;
         evolutionSpeed = 100;

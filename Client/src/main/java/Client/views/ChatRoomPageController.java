@@ -15,6 +15,7 @@ import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
 
 import javafx.scene.image.Image;
@@ -49,6 +50,8 @@ public class ChatRoomPageController {
     public static boolean updateChatroom = false;
     public Chat selectedChat;
     private Timeline timeline;
+    private boolean isEditing;
+    private int editingMessageIndex;
 
     public void initialize() {
         initPanes();
@@ -67,11 +70,20 @@ public class ChatRoomPageController {
         chatMessageTextField.setVisible(false);
         chatMessageTextField.setOnKeyReleased(keyEvent -> {
             if (keyEvent.getCode().getName().equals("Enter")) {
-                Message message = new Message(chatMessageTextField.getText(), MainMenuController.loggedInUser.getUsername(), new Date());
-                ClientSocketController.sendRequestAndGetResponse(QueryRequests.ADD_MESSAGE, new HashMap<>() {{
-                    put("chat", new Gson().toJson(selectedChat));
-                    put("message", new Gson().toJson(message));
-                }});
+                if (!isEditing) {
+                    Message message = new Message(chatMessageTextField.getText(), MainMenuController.loggedInUser.getUsername(), new Date());
+                    ClientSocketController.sendRequestAndGetResponse(QueryRequests.ADD_MESSAGE, new HashMap<>() {{
+                        put("chat", new Gson().toJson(selectedChat));
+                        put("message", new Gson().toJson(message));
+                    }});
+                } else {
+                    ClientSocketController.sendRequestAndGetResponse(QueryRequests.EDIT_MESSAGE, new HashMap<>() {{
+                        put("chat", new Gson().toJson(selectedChat));
+                        put("newText", chatMessageTextField.getText());
+                        put("index", String.valueOf(editingMessageIndex));
+                    }});
+                }
+                chatMessageTextField.setText("");
             }
         });
         chatNameTextField.setOnKeyPressed(keyEvent -> {
@@ -104,7 +116,7 @@ public class ChatRoomPageController {
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {
-         timeline.stop();
+        timeline.stop();
         App.changeScene("mainMenuPage");
     }
 
@@ -181,8 +193,25 @@ public class ChatRoomPageController {
             Text text = new Text(" " + message.getSenderUsername() + " :    " + message.getText() + "\t\t\t" + message.getDate().toString().substring(4, 16));
             text.setFill(Color.ORANGE);
             HBox hBox = new HBox(new Circle(20, new ImagePattern(getImage(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_USER_AVATAR, new HashMap<>() {{
-                put("username", message.getSenderUsername());
+                put("senderUsername", message.getSenderUsername());
             }})).getParams().get("address")))), text);
+            if (message.getSenderUsername().equals(MainMenuController.loggedInUser.getUsername())) {
+                Circle editCircle = new Circle(10, new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/edit.png")).toString())));
+                editCircle.setCursor(Cursor.HAND);
+                editCircle.setOnMouseClicked(mouseEvent -> {
+                    chatMessageTextField.setText(message.getText());
+                    isEditing = true;
+                    editingMessageIndex = chat.getMessages().indexOf(message);
+                });
+                Circle deleteCircle = new Circle(10, new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/delete.png")).toString())));
+                deleteCircle.setCursor(Cursor.HAND);
+                deleteCircle.setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.DELETE_MESSAGE, new HashMap<>() {{
+                    put("chat", new Gson().toJson(chat));
+                    put("index", String.valueOf(chat.getMessages().indexOf(message)));
+                }}));
+                hBox.getChildren().add(0, editCircle);
+                hBox.getChildren().add(0, deleteCircle);
+            }
             hBox.setPrefWidth(chatMessagesVBox.getPrefWidth());
             hBox.setPrefHeight(50);
             chatMessagesVBox.getChildren().add(hBox);

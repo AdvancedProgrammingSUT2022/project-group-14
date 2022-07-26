@@ -242,7 +242,7 @@ public class Hex {
         text.setLayoutY(15);
         group.getChildren().add(imageView);
         group.getChildren().add(text);
-        group.setCursor(Cursor.HAND);
+        group.setCursor(Cursor.CLOSED_HAND);
         return group;
     }
 

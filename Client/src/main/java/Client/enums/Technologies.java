@@ -113,8 +113,8 @@ public enum Technologies {
         turnsRectangle.setLayoutY(y);
         Text nameText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2 - 25, nameRectangle.getLayoutY() + nameRectangle.getHeight() - 7, this.getName().replaceAll("_", " "));
         nameText.setFill(Color.WHITE);
-//        Text turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(this));
-//        turnsText.setFill(Color.WHITE);
+        Text turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + this.cost);
+        turnsText.setFill(Color.WHITE);
         Circle backgroundCircle = new Circle(40, Color.CADETBLUE);
         backgroundCircle.setLayoutX(x);
         backgroundCircle.setLayoutY(y);
@@ -125,7 +125,7 @@ public enum Technologies {
         group.getChildren().add(nameRectangle);
         group.getChildren().add(turnsRectangle);
         group.getChildren().add(nameText);
-//        group.getChildren().add(turnsText);
+        group.getChildren().add(turnsText);
         group.getChildren().add(backgroundCircle);
         group.getChildren().add(imageCircle);
         group.setCursor(Cursor.HAND);

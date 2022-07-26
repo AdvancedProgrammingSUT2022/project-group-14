@@ -1,6 +1,7 @@
 package Server.controllers;
 
 import Server.enums.QueryResponses;
+import Server.enums.units.UnitStates;
 import Server.models.network.Response;
 import javafx.scene.paint.Color;
 import Server.models.tiles.Tile;
@@ -55,6 +56,7 @@ public class MoveController {
                 unit.cancelMission();
                 break;
             }
+            unit.setUnitState(unit.getUnitState() == UnitStates.SLEEP ? UnitStates.WAKE : unit.getUnitState());
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
             unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
                     nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));

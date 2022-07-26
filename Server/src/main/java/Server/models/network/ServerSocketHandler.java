@@ -15,7 +15,6 @@ import Server.models.City;
 import Server.models.Civilization;
 import Server.models.Trade;
 import Server.models.User;
-import Server.models.World;
 import Server.models.chats.Chat;
 import Server.models.chats.Message;
 import Server.models.tiles.Coordination;
@@ -485,9 +484,33 @@ public class ServerSocketHandler extends Thread {
                     }
                 }
             }
+            case EDIT_MESSAGE -> {
+                Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
+                int index = Integer.parseInt(request.getParams().get("index"));
+                for (String username : chat.getUsernames()) {
+                    Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).getMessages().get(index).setText(request.getParams().get("newText"));
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(username)));
+                        }}));
+                    }
+                }
+            }
+            case DELETE_MESSAGE -> {
+                Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
+                int index = Integer.parseInt(request.getParams().get("index"));
+                for (String username : chat.getUsernames()) {
+                    Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).getMessages().remove(index);
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(username)));
+                        }}));
+                    }
+                }
+            }
             case GET_USER_AVATAR -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
-                    put("address", Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).getAvatarFileAddress());
+                    put("address", Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("senderUsername"))).getAvatarFileAddress());
                 }});
             }
             case ADD_CHAT -> {
@@ -592,27 +615,39 @@ public class ServerSocketHandler extends Thread {
             }
             case GET_SELECTED_CITY -> {
                 City city = WorldController.getSelectedCity();
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("city", new Gson().toJson(city));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("city", new Gson().toJson(city));
+                }});
             }
             case CAN_PRODUCE_UNIT -> {
                 boolean output = CityController.canProduceUnit(new Gson().fromJson(request.getParams().get("unitType"), UnitTypes.class));
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("boolean", String.valueOf(output));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("boolean", String.valueOf(output));
+                }});
             }
             case CAN_PRODUCE_BUILDING -> {
                 boolean output = CityController.canProduceBuilding(new Gson().fromJson(request.getParams().get("buildingType"), BuildingTypes.class));
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("boolean", String.valueOf(output));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("boolean", String.valueOf(output));
+                }});
             }
             case GET_CITY_GOLD -> {
                 double gold = CityController.getCityGold(WorldController.getSelectedCity());
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("gold", new Gson().toJson(gold));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("gold", new Gson().toJson(gold));
+                }});
             }
             case GET_CITY_FOOD -> {
                 double food = CityController.getCityFood(WorldController.getSelectedCity());
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("food", new Gson().toJson(food));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("food", new Gson().toJson(food));
+                }});
             }
             case GET_CITY_PRODUCTION -> {
                 double production = CityController.getCityProduction(WorldController.getSelectedCity());
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("production", new Gson().toJson(production));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("production", new Gson().toJson(production));
+                }});
             }
             case BUY_TILE -> {
                 QueryResponses queryResponse = CityController.buyTileAndAddItToCityTerritory(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()),
@@ -623,11 +658,15 @@ public class ServerSocketHandler extends Thread {
             }
             case PRODUCE_UNIT -> {
                 CityController.producingUnit(new Gson().fromJson(request.getParams().get("unitType"), UnitTypes.class), "gold");
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("city", new Gson().toJson(WorldController.getSelectedCity()));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("city", new Gson().toJson(WorldController.getSelectedCity()));
+                }});
             }
             case PRODUCE_BUILDING -> {
-                CityController.producingBuilding(new Gson().fromJson(request.getParams().get("unitBuilding"), BuildingTypes.class), "gold");
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("city", new Gson().toJson(WorldController.getSelectedCity()));}});
+                CityController.producingBuilding(new Gson().fromJson(request.getParams().get("buildingType"), BuildingTypes.class), "gold");
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("city", new Gson().toJson(WorldController.getSelectedCity()));
+                }});
             }
             case UNLOCK_CITIZEN_FROM_TILE -> {
                 QueryResponses queryResponse = CityController.unlockCitizenFromTile(WorldController.getSelectedCity(),
@@ -643,7 +682,9 @@ public class ServerSocketHandler extends Thread {
             }
             case CANCEL_PRODUCTION -> {
                 WorldController.getSelectedCity().cancelProduction();
-                return new Response(QueryResponses.OK, new HashMap<>(){{put("city", new Gson().toJson(WorldController.getSelectedCity()));}});
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("city", new Gson().toJson(WorldController.getSelectedCity()));
+                }});
             }
             case SET_SELECTED_CITY -> {
                 Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());

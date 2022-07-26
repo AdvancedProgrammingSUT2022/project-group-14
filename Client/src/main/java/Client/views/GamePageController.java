@@ -466,8 +466,7 @@ public class GamePageController {
     }
 
     public void techTreeButtonClicked(MouseEvent mouseEvent) {
-        System.out.println("hello");
-        //TODO goto techTree fxml
+        App.changeScene("technologyTree");
     }
 
     public void gotoPanelButtonClicked(MouseEvent mouseEvent) {
