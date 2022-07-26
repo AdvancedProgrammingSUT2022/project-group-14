@@ -30,6 +30,9 @@ public class ScoreboardController {
 
     public void initialize() {
         initScoreBoard();
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         timeline = new Timeline(new KeyFrame(Duration.seconds(3), actionEvent -> initScoreBoard()));
         timeline.setCycleCount(-1);
         timeline.play();

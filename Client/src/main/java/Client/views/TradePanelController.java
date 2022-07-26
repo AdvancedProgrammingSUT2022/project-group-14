@@ -40,6 +40,9 @@ public class TradePanelController {
     private ChoiceBox<String> yourRequestedLuxuryResource;
 
     public void initialize(){
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         message.setVisible(false);
         initCivilizationNames();
 

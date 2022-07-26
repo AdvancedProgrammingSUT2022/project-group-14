@@ -30,6 +30,9 @@ public class LoginPageController {
     private Button registerButton;
 
     public void initialize() {
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         usernameTextField.setFocusTraversable(false);
         nicknameTextField.setFocusTraversable(false);
         passwordTextField.setFocusTraversable(false);
