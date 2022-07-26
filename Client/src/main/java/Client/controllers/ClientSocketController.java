@@ -8,6 +8,7 @@ import Client.models.network.Response;
 import Client.models.tiles.Tile;
 import Client.views.ChatRoomPageController;
 import Client.views.MainMenuController;
+import Client.views.StartGameMenuController;
 import com.google.gson.Gson;
 import javafx.scene.paint.Color;
 
@@ -87,6 +88,10 @@ public class ClientSocketController {
             case UPDATE_CHAT -> {
                 MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
                 ChatRoomPageController.updateChatroom = true;
+            }
+            case UPDATE_INVITATIONS -> {
+                MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+                StartGameMenuController.updateInvites = true;
             }
         }
     }

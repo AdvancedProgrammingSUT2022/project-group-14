@@ -21,6 +21,7 @@ public enum QueryResponses {
     CHANGE_HEX_INFO_TEXT,
     UPDATE_ALL_HEXES,
     CHANGE_SCENE,
-    UPDATE_CHAT
+    UPDATE_CHAT,
+    UPDATE_INVITATIONS
 
 }
