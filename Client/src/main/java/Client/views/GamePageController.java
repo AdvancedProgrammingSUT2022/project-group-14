@@ -16,7 +16,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.ChoiceBox;
@@ -138,12 +137,8 @@ public class GamePageController {
         infoPanelsBox.setValue("InfoPanels");
         infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel", "DiplomacyPanel");
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
-        settingsCircle.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-                App.changeScene("settingPage");
-            }
-        });
+        settingsCircle.setCursor(Cursor.HAND);
+        settingsCircle.setOnMouseClicked(mouseEvent -> App.changeScene("settingPage"));
         cheatCodeArea.setVisible(false);
         cheatCodeText.setVisible(false);
     }

@@ -23,6 +23,7 @@ public class MainMenuController {
         if (!App.isMute() && App.getMediaPlayer().isMute()) {
             App.playNext();
         }
+        muteButton.setText(!App.isMute() ? "mute music" : "play music");
         usersAvatar.setFill(new ImagePattern(loggedInUser.getImage()));
     }
 
