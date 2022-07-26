@@ -14,6 +14,7 @@ import com.google.gson.reflect.TypeToken;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -67,9 +68,75 @@ public class InfoPanelPageController {
             }
         });
 
+        Text message = new Text("kjasdngrjeo");
+        message.setVisible(false);
+        message.setLayoutX(330);
+        message.setLayoutY(360);
+        message.setStyle("-fx-font-size: 25");
+        message.setFill(Color.rgb(200, 110, 17));
+
+        ArrayList<String> civilizationNames = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_ALL_CIVILIZATIONS_NAMES, new HashMap<>())).getParams().get("names"),
+                new TypeToken<List<String>>() {
+                }.getType());
+        String currentCivilizationName = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CURRENT_CIVILIZATION_NAME, new HashMap<>())).getParams().get("name"), String.class);
+        civilizationNames.remove(currentCivilizationName);
+        ChoiceBox<String> civilizationNamesChoiceBox = new ChoiceBox<>();
+        civilizationNamesChoiceBox.setValue(null);
+        civilizationNamesChoiceBox.getItems().addAll(civilizationNames);
+        civilizationNamesChoiceBox.setLayoutX(240);
+        civilizationNamesChoiceBox.setLayoutY(300);
+        civilizationNamesChoiceBox.setPrefWidth(130);
+        civilizationNamesChoiceBox.setPrefHeight(36);
+
+        Button declareWarButton = new Button("declare war");
+        declareWarButton.setLayoutX(400);
+        declareWarButton.setLayoutY(300);
+        declareWarButton.setPrefWidth(120);
+        declareWarButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                message.setVisible(true);
+                if (civilizationNamesChoiceBox.getValue() != null) {
+                    declareWar(civilizationNamesChoiceBox.getValue());
+                    message.setText("you declared war with " + civilizationNamesChoiceBox.getValue());
+                } else {
+                    message.setText("select a civilization");
+                }
+            }
+        });
+
+        Button makePeaceButton = new Button("make peace");
+        makePeaceButton.setLayoutX(580);
+        makePeaceButton.setLayoutY(300);
+        makePeaceButton.setPrefWidth(120);
+        makePeaceButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                message.setVisible(true);
+                if (civilizationNamesChoiceBox.getValue() != null) {
+                    makePeace(civilizationNamesChoiceBox.getValue());
+                    message.setText("you made peace with " + civilizationNamesChoiceBox.getValue());
+                } else {
+                    message.setText("select a civilization");
+                }
+            }
+        });
+
         pane.getChildren().add(discussButton);
         pane.getChildren().add(tradeButton);
+        pane.getChildren().add(civilizationNamesChoiceBox);
+        pane.getChildren().add(declareWarButton);
+        pane.getChildren().add(makePeaceButton);
+        pane.getChildren().add(message);
 
+    }
+
+    public void declareWar(String civilizationName) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLARE_WAR, new HashMap<>(){{put("enemyName", civilizationName);}});
+    }
+
+    public void makePeace(String civilizationName) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.MAKE_PEACE, new HashMap<>(){{put("name", civilizationName);}});
     }
 
     private void initEconomicStatusPanel() {

@@ -233,6 +233,10 @@ public class WarController {
         Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
         currentCivilization.addEnemy(enemyName);
         WorldController.getWorld().getCivilizationByName(enemyName).addEnemy(currentCivilization.getName());
-
+    }
+    public static void makePeace(String name) {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.removeEnemy(name);
+        WorldController.getWorld().getCivilizationByName(name).removeEnemy(currentCivilization.getName());
     }
 }

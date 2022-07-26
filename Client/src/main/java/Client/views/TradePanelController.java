@@ -76,7 +76,7 @@ public class TradePanelController {
 
                 message.setText("your offer was sent to civilization " + civilizationName.getValue());
             } else {
-                message.setText("you should select aa civilization");
+                message.setText("you should select a civilization");
             }
         }
     }
