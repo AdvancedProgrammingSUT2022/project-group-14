@@ -3,6 +3,7 @@ package Server.controllers;
 
 import Server.Main;
 import Server.enums.BuildingTypes;
+import Server.enums.QueryResponses;
 import Server.enums.tiles.TileBaseTypes;
 import Server.enums.tiles.TileFeatureTypes;
 import Server.enums.units.CombatType;
@@ -100,12 +101,12 @@ public class CityController {
         }
     }
 
-    public static String lockCitizenToTile(City city, int id, int x, int y) {
+    public static QueryResponses lockCitizenToTile(City city, int id, int x, int y) {
         for (int i = 0; i < city.getTerritory().size(); i++) {
             if (city.getTerritory().get(i).getX() == x && city.getTerritory().get(i).getY() == y)
                 break;
             if (i == city.getTerritory().size() - 1 && (city.getTerritory().get(i).getX() != x || city.getTerritory().get(i).getY() != y))
-                return "you should select a tile in city";
+                return QueryResponses.SELECT_TILE_IN_CITY;
         }
         for (Citizen citizen : city.getCitizens()) {
             if (id == citizen.getId()) {
@@ -115,13 +116,13 @@ public class CityController {
                 CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                         + " you locked " + citizen.getId() + " to ( " + String.valueOf(x + 1) + " , "
                         + String.valueOf(y + 1) + " ) coordinates", city.getCenterOfCity().getCivilizationName());
-                return "citizen locked to tile successfully";
+                return QueryResponses.OK;
             }
         }
-        return "no citizen exists in the city with the given id";
+        return QueryResponses.NO_CITIZEN_EXISTS;
     }
 
-    public static String unlockCitizenFromTile(City city, int id) {
+    public static QueryResponses unlockCitizenFromTile(City city, int id) {
         for (Citizen citizen : city.getCitizens()) {
             if (id == citizen.getId()) {
                 citizen.setYOfWorkingTile(-1);
@@ -131,10 +132,10 @@ public class CityController {
                                 + " you unlocked " + citizen.getId() + " from ( " + String.valueOf(citizen.getXOfWorkingTile() + 1) + " , "
                                 + String.valueOf(citizen.getYOfWorkingTile() + 1) + " ) coordinates",
                         city.getCenterOfCity().getCivilizationName());
-                return "citizen unlocked successfully";
+                return QueryResponses.OK;
             }
         }
-        return "no citizen exists in the city with the given id";
+        return QueryResponses.NO_CITIZEN_EXISTS;
     }
 
     public static void updateCityProduction(City city) {
@@ -252,25 +253,25 @@ public class CityController {
         return false;
     }
 
-    public static String buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY) {
+    public static QueryResponses buyTileAndAddItToCityTerritory(Civilization civilization, City city, int tileX, int tileY) {
         if (civilization.getGold() < 100)
-            return "you don't have enough gold for buying this tile";
+            return QueryResponses.NOT_ENOUGH_GOLD;
         ArrayList<Tile> tiles = new ArrayList<>();
         for (Tile tile : city.getTerritory())
             tiles.addAll(TileController.getAvailableNeighbourTiles(tile.getX(), tile.getY()));
         for (Tile tile : tiles) {
             if (tile.getX() == tileX && tile.getY() == tileY) {
                 if (tile.getCivilizationName() != null && tile.getCivilizationName().equals(city.getCenterOfCity().getCivilizationName()))
-                    return "you already have this tile";
+                    return QueryResponses.ALREADY_HAVE_TILE;
                 civilization.setGold(civilization.getGold() - 100);
                 Tile bought = MapController.getMap()[tileX][tileY];
                 bought.setCivilization(civilization.getName());
                 city.getTerritory().add(bought);
                 CivilizationController.updateMapVision(civilization);
-                return "tile was bought successfully";
+                return QueryResponses.OK;
             }
         }
-        return "can't buy this tile";
+        return QueryResponses.CANT_BUY_THIS_TILE;
     }
 
     public static void conquerCity(City city, CombatUnit unit) {
@@ -289,5 +290,63 @@ public class CityController {
         MapController.getMap()[city.getCenterOfCity().getX()][city.getCenterOfCity().getY()].setCity(null);
         CivilizationController.addNotification("In turn " + WorldController.getWorld().getActualTurn()
                 + " you destroyed the " + city.getName() + "city", unit.getCivilizationName());
+    }
+
+    public static double getCityGold(City city) {
+        //        double addedGold = 0, addedFood = 0, addedProduction = 0;
+//        for (Citizen citizen : city.getCitizens()) {
+//            if (citizen.isWorking()) {
+//                addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
+//                addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
+//                addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
+//            }
+//        }
+//        for (Building building : city.getBuildings()) {
+//            addedGold += addedGold * building.getBuildingType().getPercentOfGold() / 100;
+//            addedFood += building.getBuildingType().getFood();
+//            addedProduction += addedProduction * building.getBuildingType().getPercentOfProduction() / 100;
+//            if (building.getName().equals("mint"))
+//                addedGold += city.numberOfWorkingCitizens() * 3;
+//        }
+//        addedProduction += city.getCitizens().size();
+        double addedGold = 0;
+        for (Citizen citizen : city.getCitizens()) {
+            if (citizen.isWorking()) {
+                addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
+            }
+        }
+        for (Building building : city.getBuildings()) {
+            addedGold += addedGold * building.getBuildingType().getPercentOfGold() / 100;
+            if (building.getName().equals("mint"))
+                addedGold += city.numberOfWorkingCitizens() * 3;
+        }
+        return addedGold;
+    }
+
+    public static double getCityFood(City city) {
+        double addedFood = 0;
+        for (Citizen citizen : city.getCitizens()) {
+            if (citizen.isWorking()) {
+                addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
+            }
+        }
+        for (Building building : city.getBuildings()) {
+            addedFood += building.getBuildingType().getFood();
+        }
+        return addedFood;
+    }
+
+    public static double getCityProduction(City city) {
+        double addedProduction = 0;
+        for (Citizen citizen : city.getCitizens()) {
+            if (citizen.isWorking()) {
+                addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
+            }
+        }
+        for (Building building : city.getBuildings()) {
+            addedProduction += addedProduction * building.getBuildingType().getPercentOfProduction() / 100;
+        }
+        addedProduction += city.getCitizens().size();
+        return addedProduction;
     }
 }
