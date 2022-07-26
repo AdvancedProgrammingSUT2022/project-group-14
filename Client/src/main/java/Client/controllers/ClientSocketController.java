@@ -2,11 +2,14 @@ package Client.controllers;
 
 import Client.application.App;
 import Client.enums.QueryRequests;
+import Client.models.City;
 import Client.models.User;
 import Client.models.network.Request;
 import Client.models.network.Response;
 import Client.models.tiles.Tile;
+import Client.models.units.CombatUnit;
 import Client.views.ChatRoomPageController;
+import Client.views.GamePageController;
 import Client.views.MainMenuController;
 import com.google.gson.Gson;
 import javafx.scene.paint.Color;
@@ -88,6 +91,8 @@ public class ClientSocketController {
                 MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
                 ChatRoomPageController.updateChatroom = true;
             }
+            case CHOOSE_CITY_OPTIONS -> GamePageController.setCityOptions(new Gson().fromJson(response.getParams().get("city"), City.class), new Gson().fromJson(response.getParams().get("combatUnit"), CombatUnit.class));
+            case CHOOSE_WAR_OPTIONS -> GamePageController.setDeclareWarOptions(new Gson().fromJson(response.getParams().get("enemyName"), String.class));
         }
     }
 }

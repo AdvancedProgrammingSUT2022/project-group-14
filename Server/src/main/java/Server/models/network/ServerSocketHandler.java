@@ -456,6 +456,9 @@ public class ServerSocketHandler extends Thread {
             case ACCEPT_TRADE -> {
                 return acceptTrade(request);
             }
+            case DESTROY_CITY -> CityController.destroyCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
+            case CONQUER_CITY -> CityController.conquerCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
+
         }
         return new Response(QueryResponses.OK, new HashMap<>());
     }

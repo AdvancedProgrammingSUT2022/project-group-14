@@ -489,11 +489,19 @@ public class GamePageController {
     }
 
     public void conquerButtonClicked(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.CONQUER_CITY, new HashMap<>(){{
+            put("city", new Gson().toJson(city));
+            put("combatUnit", new Gson().toJson(combatUnit));
+        }});
 //        CityController.conquerCity(city, combatUnit);
         showCityOptions = false;
     }
 
     public void destroyButtonClicked(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DESTROY_CITY, new HashMap<>(){{
+            put("city", new Gson().toJson(city));
+            put("combatUnit", new Gson().toJson(combatUnit));
+        }});
 //        CityController.destroyCity(city, combatUnit);
         showCityOptions = false;
     }

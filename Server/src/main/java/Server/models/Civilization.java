@@ -243,7 +243,7 @@ public class Civilization {
         } else if (trade.getOfferedStrategicResource() != null && offeringCivilization.getStrategicResources().get(trade.getOfferedStrategicResource()) < 1) {
             return QueryResponses.OTHER_CIVILIZATION_LACK_STRATEGIC_RESOURCE;
         } else if (trade.getOfferedLuxuryResource() != null && offeringCivilization.getLuxuryResources().get(trade.getOfferedLuxuryResource()) < 1) {
-            return QueryResponses.OTHER_CIVLIZATION_LACK_LUXURY_RESOURCE;
+            return QueryResponses.OTHER_CIVILIZATION_LACK_LUXURY_RESOURCE;
         } else {
             this.gold -= trade.getRequestedGold() + trade.getOfferedGold();
             if (trade.getRequestedLuxuryResource() != null) {
@@ -287,5 +287,12 @@ public class Civilization {
                 "In turn " + WorldController.getWorld().getActualTurn()
                         + " a trade was offered to you from " + trade.getOfferingCivilization(),
                 this.name);
+    }
+
+    public City getCityByName(String name) {
+        for (City city : this.cities) {
+            if (city.getName().equals(name)) return city;
+        }
+        return null;
     }
 }
