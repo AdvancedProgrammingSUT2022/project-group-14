@@ -5,10 +5,8 @@ import Client.controllers.ClientSocketController;
 import Client.controllers.HexController;
 import Client.enums.Improvements;
 import Client.enums.QueryRequests;
-import Client.enums.QueryResponses;
 import Client.enums.Technologies;
 import Client.enums.units.CombatType;
-import Client.enums.units.UnitStates;
 import Client.enums.units.UnitTypes;
 import Client.models.City;
 import Client.models.network.Response;
@@ -35,35 +33,15 @@ import javafx.util.Duration;
 
 import java.util.*;
 
-import Client.application.App;
-import Client.controllers.ClientSocketController;
-import Client.enums.QueryRequests;
-import Client.enums.Technologies;
-import Client.models.City;
-import Client.models.tiles.Hex;
 import Client.models.units.CombatUnit;
 import Client.models.units.NonCombatUnit;
 import Client.models.units.Unit;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
-import javafx.fxml.FXML;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 import java.util.HashMap;
 import java.util.Objects;
 
 public class GamePageController {
+    public static boolean isMyTurn;
     public static boolean stopTimeline;
     public static String infoPanelName;
     public static boolean showCityOptions;
@@ -71,6 +49,8 @@ public class GamePageController {
     public static City city;
     public static CombatUnit combatUnit;
     public static String enemyName;
+    @FXML
+    private AnchorPane notMyTurnPane;
     @FXML
     private AnchorPane mainPane;
     @FXML
@@ -122,19 +102,25 @@ public class GamePageController {
     private Timeline timeline;
 
     public void initialize() {
-        cityOptionsPane.setVisible(false);
-        declareWarOptionsPane.setVisible(false);
-        initNavBar();
-        initTimeLine();
-        initResearchPanel();
-        initHexes();
-        mainPane.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
-                cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
-                cheatCodeText.setVisible(!cheatCodeText.isVisible());
-            }
-        });
-        timeline.play();
+        if (isMyTurn) {
+            notMyTurnPane.setVisible(false);
+            cityOptionsPane.setVisible(false);
+            declareWarOptionsPane.setVisible(false);
+            initNavBar();
+            initTimeLine();
+            initResearchPanel();
+            initHexes();
+            mainPane.setOnKeyReleased(keyEvent -> {
+                if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
+                    cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
+                    cheatCodeText.setVisible(!cheatCodeText.isVisible());
+                }
+            });
+            timeline.play();
+            yearText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_YEAR, new HashMap<>())).getParams().get("year"));
+        } else {
+            notMyTurnPane.setVisible(true);
+        }
     }
 
 
@@ -427,18 +413,16 @@ public class GamePageController {
             unitPanelCSText.setText("");
         }
         String type = (unit instanceof CombatUnit ? "combatUnit" : "nonCombatUnit");
-        ((Text) HexController.getHexOfTheGivenCoordination(unit.getCurrentX(), unit.getCurrentY())
-                .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
+        try {
+            ((Text) HexController.getHexOfTheGivenCoordination(unit.getCurrentX(), unit.getCurrentY())
+                    .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
+        } catch (NullPointerException e) {
+            System.err.println(unit.getCurrentX() + " " + unit.getCurrentY() + " -> " + unit.getUnitType() + "  " + type);
+        }
     }
 
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
-        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEXT_TURN, new HashMap<>());
-        assert response != null;
-        if (response.getQueryResponse() == QueryResponses.OK) {
-            int year = Integer.parseInt(response.getParams().get("year"));
-            yearText.setText(year < 0 ? String.valueOf(-year) + " BC" : String.valueOf(year));
-            unitPanelPane.setVisible(false);
-        }
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEXT_TURN, new HashMap<>());
     }
 
     public void cheatCodeAreaTyped(KeyEvent keyEvent) {
@@ -489,20 +473,18 @@ public class GamePageController {
     }
 
     public void conquerButtonClicked(MouseEvent mouseEvent) {
-        ClientSocketController.sendRequestAndGetResponse(QueryRequests.CONQUER_CITY, new HashMap<>(){{
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.CONQUER_CITY, new HashMap<>() {{
             put("city", new Gson().toJson(city));
             put("combatUnit", new Gson().toJson(combatUnit));
         }});
-//        CityController.conquerCity(city, combatUnit);
         showCityOptions = false;
     }
 
     public void destroyButtonClicked(MouseEvent mouseEvent) {
-        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DESTROY_CITY, new HashMap<>(){{
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DESTROY_CITY, new HashMap<>() {{
             put("city", new Gson().toJson(city));
             put("combatUnit", new Gson().toJson(combatUnit));
         }});
-//        CityController.destroyCity(city, combatUnit);
         showCityOptions = false;
     }
 
@@ -511,7 +493,9 @@ public class GamePageController {
     }
 
     public void declareWarButtonClicked(MouseEvent mouseEvent) {
-        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLARE_WAR, new HashMap<>(){{put("enemyName", GamePageController.enemyName);}});
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLARE_WAR, new HashMap<>() {{
+            put("enemyName", GamePageController.enemyName);
+        }});
         showDeclareWar = false;
     }
 

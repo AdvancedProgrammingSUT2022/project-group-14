@@ -20,6 +20,7 @@ public class UserController {
     }
 
     public static void removeLoggedOutUser(User loggedOutUser) {
+        loggedOutUser.setToken(null);
         UserController.loggedInUsers.remove(loggedOutUser);
     }
 
@@ -75,6 +76,15 @@ public class UserController {
                 return o1.getScore() < o2.getScore() ? 1 : -1;
             }
         });
+    }
+
+    public static String generateToken() {
+        String alphabet = "abcdefghijklmnopqrstuvwxyz0123456789";
+        StringBuilder token = new StringBuilder();
+        for (int i = 0; i < 10; i++) {
+            token.append(alphabet.charAt(new Random().nextInt(36)));
+        }
+        return token.toString();
     }
 
     public static ArrayList<User> getUsers() {

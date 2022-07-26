@@ -101,6 +101,10 @@ public class ProfileMenuController {
         }}));
         switch (response.getQueryResponse()) {
             case OK -> {
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGOUT_USER, new HashMap<>(){{
+                    put("username", MainMenuController.loggedInUser.getUsername());
+                }});
+                MainMenuController.loggedInUser = null;
                 App.changeScene("loginPage");
             }
             case PASSWORD_INCORRECT -> {

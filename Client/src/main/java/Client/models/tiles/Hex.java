@@ -256,7 +256,7 @@ public class Hex {
         this.cityImage.setLayoutX(this.getCenterX() - cityImage.getFitWidth() / 2);
         this.cityImage.setLayoutY(this.getCenterY());
         this.cityImage.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY && !isTerritory()) {
                 Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.CITY_HEX_MOUSE_CLICKED, new HashMap<>() {{
                     put("x", String.valueOf(coordination.getX()));
                     put("y", String.valueOf(coordination.getY()));

@@ -1,12 +1,11 @@
 package Client.models;
 
 
-import Client.controllers.ClientSocketController;
 import Client.enums.Avatars;
-import Client.enums.QueryRequests;
 import Client.models.chats.Chat;
 import javafx.scene.image.Image;
 
+import java.io.BufferedWriter;
 import java.util.*;
 
 public class User {
@@ -20,9 +19,10 @@ public class User {
     private final HashMap<String, Chat> chats;
     private final ArrayList<String> invitations;
     private final ArrayList<String> peopleInLobby;
+    private String token;
+    transient private BufferedWriter bufferedWriter;
 
-    public User(String username, String password, String nickname)
-    {
+    public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -41,40 +41,12 @@ public class User {
         return this.username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getNickname() {
-        return this.nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
     public int getScore() {
         return this.score;
     }
 
-    public void changeScore(int score) {
-        this.score += score;
-    }
-
     public Date getDateOfLastWin() {
         return dateOfLastWin;
-    }
-
-    public void setDateOfLastWin(Date dateOfLastWin) {
-        this.dateOfLastWin = dateOfLastWin;
     }
 
     public Image getImage() {
@@ -85,57 +57,23 @@ public class User {
         }
     }
 
-    public void setAvatarFileAddress(String avatarFileAddress) {
-        this.avatarFileAddress = avatarFileAddress;
-    }
-
     public Date getDateOfLastLogin() {
         return dateOfLastLogin;
-    }
-
-    public void setDateOfLastLogin(Date dateOfLastLogin) {
-        this.dateOfLastLogin = dateOfLastLogin;
     }
 
     public HashMap<String, Chat> getChats() {
         return chats;
     }
 
-    public void addChats(Chat chat) {
-        this.chats.put(chat.getName(), chat);
-    }
-
     public ArrayList<String> getInvitations() {
         return invitations;
-    }
-
-    public void addInvitations(String name) {
-        invitations.remove("Invitation from " + name);
-        invitations.add("Invitation from " + name);
-    }
-
-    public void removeInvitation(String invitation) {
-        invitations.remove(invitation);
     }
 
     public ArrayList<String> getPeopleInLobby() {
         return peopleInLobby;
     }
 
-    public void addPersonToLobby(String username) {
-        peopleInLobby.add(username);
-    }
-
-    public void removePersonFromLobby(String username) {
-        peopleInLobby.remove(username);
-    }
-
-    public void resetPeopleInLobby() {
-        for (String s : peopleInLobby) {
-//            if (!s.equals(username))
-//                Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryCommands.GET_USER_BY_USERNAME, new HashMap<>(){{put("username", s);}}).getReturnedValue()).removePersonFromLobby(username);
-        }
-        peopleInLobby.clear();
-        peopleInLobby.add(username);
+    public String getToken() {
+        return token;
     }
 }

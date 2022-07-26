@@ -49,6 +49,9 @@ public class App extends javafx.application.Application {
     @Override
     public void stop() throws IOException {
         if (MainMenuController.loggedInUser != null) {
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.LEAVE_LOBBY, new HashMap<>(){{
+                put("username", MainMenuController.loggedInUser.getUsername());
+            }});
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGOUT_USER, new HashMap<>() {{
                 put("username", MainMenuController.loggedInUser.getUsername());
             }});

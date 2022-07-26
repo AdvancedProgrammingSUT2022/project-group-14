@@ -60,6 +60,11 @@ public class ServerSocketHandler extends Thread {
         } else {
             currentCivilization = null;
         }
+        if (request.getParams().get("username") != null && request.getParams().get("token") != null) {
+            if (!Objects.requireNonNull(Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username")))).getToken().equals(request.getParams().get("token"))) {
+                return new Response(QueryResponses.INVALID_TOKEN, new HashMap<>());
+            }
+        }
         switch (request.getQueryRequest()) {
             case LOGIN_USER -> {
                 if (UserController.getUserByUsername(request.getParams().get("username")) == null) {
@@ -68,6 +73,7 @@ public class ServerSocketHandler extends Thread {
                     return new Response(QueryResponses.PASSWORD_INCORRECT, new HashMap<>());
                 } else {
                     UserController.addLoggedInUser(Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))));
+                    UserController.getUserByUsername(request.getParams().get("username")).setToken(UserController.generateToken());
                     return new Response(QueryResponses.OK, new HashMap<>() {{
                         put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                     }});
@@ -212,9 +218,26 @@ public class ServerSocketHandler extends Thread {
                     return new Response(QueryResponses.REVEALED, WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getRevealedTiles()[Integer.parseInt(request.getParams().get("x"))][Integer.parseInt(request.getParams().get("y"))]);
                 }
             }
-            case NEW_WORLD ->
-                    WorldController.newWorld(new Gson().fromJson(request.getParams().get("people"), new TypeToken<List<String>>() {
-                    }.getType()), Integer.parseInt(request.getParams().get("width")), Integer.parseInt(request.getParams().get("height")));
+            case NEW_WORLD -> {
+                ArrayList<String> people = new Gson().fromJson(request.getParams().get("people"), new TypeToken<List<String>>() {
+                }.getType());
+                for (int i = 0; i < people.size(); i++) {
+                    if (i == 0) {
+                        ServerUpdateController.sendUpdate(people.get(i), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                            put("sceneName", "gamePage");
+                            put("turn", String.valueOf(true));
+                            put("width", request.getParams().get("width"));
+                            put("height", request.getParams().get("height"));
+                        }}));
+                    } else {
+                        ServerUpdateController.sendUpdate(people.get(i), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                            put("sceneName", "gamePage");
+                            put("turn", String.valueOf(false));
+                        }}));
+                    }
+                }
+                WorldController.newWorld(people, Integer.parseInt(request.getParams().get("width")), Integer.parseInt(request.getParams().get("height")));
+            }
             case CIV_GOLD -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
                     assert currentCivilization != null;
@@ -318,11 +341,21 @@ public class ServerSocketHandler extends Thread {
             case NEXT_TURN -> {
                 if (WorldController.nextTurnImpossible() == null) {
                     WorldController.nextTurn();
-                    return new Response(QueryResponses.OK, new HashMap<>() {{
-                        put("year", String.valueOf(WorldController.getWorld().getYear()));
-                    }});
-                } else {
-                    return new Response(QueryResponses.IGNORE, new HashMap<>());
+                    for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+                        if (civilization.getName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
+                            ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                                put("sceneName", "gamePage");
+                                put("turn", String.valueOf(true));
+                                put("width", String.valueOf(MapController.getWidth()));
+                                put("height", String.valueOf(MapController.getHeight()));
+                            }}));
+                        } else {
+                            ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+                                put("sceneName", "gamePage");
+                                put("turn", String.valueOf(false));
+                            }}));
+                        }
+                    }
                 }
             }
             case UPDATE_HEX -> {
@@ -418,7 +451,7 @@ public class ServerSocketHandler extends Thread {
                 for (String username : chat.getUsernames()) {
                     Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).addMessage(message);
                     if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
-                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>(){{
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
                             put("user", new Gson().toJson(UserController.getUserByUsername(username)));
                         }}));
                     }
@@ -494,32 +527,40 @@ public class ServerSocketHandler extends Thread {
                     } else {
                         Objects.requireNonNull(UserController.getUserByUsername(s)).removePersonFromLobby(user.getUsername());
                     }
-                    ServerUpdateController.sendUpdate(s, new Response(QueryResponses.UPDATE_INVITATIONS, new HashMap<>(){{
+                    ServerUpdateController.sendUpdate(s, new Response(QueryResponses.UPDATE_INVITATIONS, new HashMap<>() {{
                         put("user", new Gson().toJson(UserController.getUserByUsername(s)));
                     }}));
                 }
             }
             case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));
             case GET_CURRENT_CIVILIZATION_NAME -> {
-                return new Response(QueryResponses.OK, new HashMap<>(){{
+                return new Response(QueryResponses.OK, new HashMap<>() {{
                     put("name", WorldController.getWorld().getCurrentCivilizationName());
                 }});
             }
             case GET_ALL_CIVILIZATIONS_NAMES -> {
                 return getAllCivilizationsName();
             }
-            case ADD_TRADE -> CivilizationController.addTrade(new Gson().fromJson(request.getParams().get("trade"), Trade.class));
+            case ADD_TRADE ->
+                    CivilizationController.addTrade(new Gson().fromJson(request.getParams().get("trade"), Trade.class));
             case GET_CIVILIZATION_TRADES -> {
-                return new Response(QueryResponses.OK, new HashMap<>(){{
+                return new Response(QueryResponses.OK, new HashMap<>() {{
                     put("trades", new Gson().toJson(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTradesFromOtherCivilizations()));
                 }});
             }
             case ACCEPT_TRADE -> {
                 return acceptTrade(request);
             }
-            case DESTROY_CITY -> CityController.destroyCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
-            case CONQUER_CITY -> CityController.conquerCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
+            case DESTROY_CITY ->
+                    CityController.destroyCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
+            case CONQUER_CITY ->
+                    CityController.conquerCity(new Gson().fromJson(request.getParams().get("city"), City.class), new Gson().fromJson(request.getParams().get("combatUnit"), CombatUnit.class));
 
+            case GET_YEAR -> {
+                return new Response(QueryResponses.OK, new HashMap<>(){{
+                    put("year", WorldController.getWorld().getYear() < 0 ? String.valueOf(-WorldController.getWorld().getYear()) + " BC" : String.valueOf(WorldController.getWorld().getYear()));
+                }});
+            }
         }
         return new Response(QueryResponses.OK, new HashMap<>());
     }
@@ -529,7 +570,7 @@ public class ServerSocketHandler extends Thread {
         for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
             civilizationNames.add(civilization.getName());
         }
-        return new Response(QueryResponses.OK, new HashMap<>(){{
+        return new Response(QueryResponses.OK, new HashMap<>() {{
             put("names", new Gson().toJson(civilizationNames));
         }});
     }

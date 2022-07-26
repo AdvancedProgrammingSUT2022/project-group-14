@@ -1,10 +1,16 @@
 package Server.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import Server.controllers.CivilizationController;
+import Server.controllers.ServerUpdateController;
+import Server.controllers.UserController;
 import Server.controllers.WorldController;
+import Server.enums.QueryResponses;
+import Server.models.network.Response;
 import Server.models.units.Unit;
+import com.google.gson.Gson;
 
 public class World {
     private final ArrayList<Civilization> civilizations = new ArrayList<>();
@@ -42,11 +48,14 @@ public class World {
             unit = null;
         }
         civilizations.remove(civilization);
+        ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>(){{
+            put("sceneName", "endGamePage");
+            put("winner", String.valueOf(false));
+            put("user", new Gson().toJson(UserController.getUserByUsername(civilization.getName())));
+        }}));
         turn %= civilizations.size();
         if (civilizations.size() == 1) {
-//            GamePageController.stopTimeline = true;
             WorldController.endGame(civilizations.get(0).getName());
-//            App.changeScene("endGamePage");
         }
     }
 
@@ -67,7 +76,6 @@ public class World {
             decreaseEvolutionSpeed(4);
         if (year == 2050) {
             WorldController.endGame(CivilizationController.getBestCivilization());
-//            App.changeScene("endGamePage");
         }
     }
 
