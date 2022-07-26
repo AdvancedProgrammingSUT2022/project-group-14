@@ -8,46 +8,38 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane id="scoreboardScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css"
-            xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="Client.views.ScoreboardController">
+<AnchorPane id="scoreboardScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.views.ScoreboardController">
 
-    <Label layoutX="475.0" styleClass="sceneTitle" text="Scoreboard"/>
-    <Button layoutX="50" layoutY="600" onMouseClicked="#goToMainMenu" prefWidth="100" text="back"/>
-    <GridPane fx:id="gridPane" alignment="TOP_CENTER" layoutX="112.0" layoutY="107.0" prefHeight="452.0"
-              prefWidth="1077.0">
+    <Label layoutX="475.0" styleClass="sceneTitle" text="Scoreboard" />
+    <Button layoutX="50" layoutY="600" onMouseClicked="#goToMainMenu" prefWidth="100" text="back" />
+    <GridPane fx:id="gridPane" alignment="TOP_CENTER" layoutX="112.0" layoutY="107.0" prefHeight="452.0" prefWidth="1077.0">
         <columnConstraints>
-            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="170.66668701171875" minWidth="0.0"
-                               prefWidth="53.0"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0"
-                               prefWidth="136.66666666666666"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="471.33331298828125" minWidth="10.0"
-                               prefWidth="196.99999999999997"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="527.3333129882812" minWidth="10.0"
-                               prefWidth="202.33335367838544"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="555.333251953125" minWidth="10.0"
-                               prefWidth="240.66666666666663"/>
-            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="276.3333740234375" minWidth="10.0"
-                               prefWidth="247.66666666666663"/>
+            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="170.66668701171875" minWidth="0.0" prefWidth="53.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="360.0" minWidth="10.0" prefWidth="103.66670735677081" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="471.33331298828125" minWidth="10.0" prefWidth="174.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="527.3333129882812" minWidth="10.0" prefWidth="182.66668701171875" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="555.333251953125" minWidth="10.0" prefWidth="238.0" />
+            <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" maxWidth="276.3333740234375" minWidth="10.0" prefWidth="255.00004069010413" />
+         <ColumnConstraints maxWidth="72.6666259765625" minWidth="62.666748046875" prefWidth="72.6666259765625" />
         </columnConstraints>
         <rowConstraints>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER" GridPane.columnIndex="2"/>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Score" GridPane.columnIndex="3"/>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of last win" GridPane.columnIndex="4"/>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of last login" GridPane.columnIndex="5"/>
-        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Online" GridPane.columnIndex="6"/>
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Username" textAlignment="CENTER" GridPane.columnIndex="2" />
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Score" GridPane.columnIndex="3" />
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of last win" GridPane.columnIndex="4" />
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Date of last login" GridPane.columnIndex="5" />
+        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Online" GridPane.columnIndex="6" />
     </GridPane>
 
 </AnchorPane>

@@ -72,4 +72,7 @@
         <Button layoutX="470" layoutY="342.5" text="Declare war" onMouseClicked="#declareWarButtonClicked"/>
         <Button layoutX="660" layoutY="342.5" text="Cancel" onMouseClicked="#cancelButtonClicked"/>
     </AnchorPane>
+    <AnchorPane fx:id="notMyTurnPane" prefWidth="1280" prefHeight="720" style="-fx-background-color: cadetblue" >
+        <Text text="Wait until Your Turn!" layoutX="580" layoutY="300"/>
+    </AnchorPane>
 </AnchorPane>

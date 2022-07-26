@@ -187,14 +187,12 @@ public class StartGameMenuController {
             return;
         }
         System.out.println(MainMenuController.loggedInUser.getPeopleInLobby() + " * " + mapWidthSpinner.getValue() + " " + mapHeightSpinner.getValue());
-        HexController.generateHexes(mapWidthSpinner.getValue(), mapHeightSpinner.getValue());
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEW_WORLD, new HashMap<>() {{
             put("people", new Gson().toJson(MainMenuController.loggedInUser.getPeopleInLobby()));
             put("width", String.valueOf(mapWidthSpinner.getValue()));
             put("height", String.valueOf(mapHeightSpinner.getValue()));
         }});
         timeline.stop();
-        App.changeScene("gamePage");
     }
 
     public void continueButtonClicked(MouseEvent mouseEvent) {

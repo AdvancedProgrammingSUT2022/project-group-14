@@ -37,6 +37,8 @@ Button {
 
 Button:hover {
     -fx-background-color: black;
+    -fx-scale-x: 1.1;
+    -fx-scale-y: 1.1;
     -fx-text-fill: #ee8000;
 }
 

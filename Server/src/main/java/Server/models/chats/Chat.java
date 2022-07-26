@@ -1,6 +1,7 @@
 package Server.models.chats;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 
 public class Chat {
     private final ArrayList<String> usernames;
@@ -27,6 +28,7 @@ public class Chat {
 
     public void addMessage(Message message) {
         this.messages.add(message);
+        this.messages.sort(Comparator.comparing(Message::getDate));
     }
 
     public String getName() {

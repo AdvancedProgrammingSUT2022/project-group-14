@@ -23,6 +23,7 @@ public class User {
     private final HashMap<String, Chat> chats;
     private final ArrayList<String> invitations;
     private final ArrayList<String> peopleInLobby;
+    private String token;
     transient private BufferedWriter bufferedWriter;
 
     public User(String username, String password, String nickname) {
@@ -159,5 +160,13 @@ public class User {
 
     public BufferedWriter getBufferedWriter() {
         return this.bufferedWriter;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

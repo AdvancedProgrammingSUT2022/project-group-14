@@ -38,6 +38,10 @@ public class HexController {
         }})).getTile());
     }
 
+    public static Hex[][] getHexes() {
+        return hexes;
+    }
+
 
     public static Hex getHexOfTheGivenCoordination(int i, int j) {
         return hexes[i][j];

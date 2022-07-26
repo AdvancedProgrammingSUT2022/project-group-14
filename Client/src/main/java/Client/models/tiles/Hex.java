@@ -170,6 +170,14 @@ public class Hex {
                 railRoadImage.setLayoutY(this.getCenterY() - 10);
                 this.group.getChildren().add(railRoadImage);
             }
+            if (tile[0].showRuin()) {
+                ImageView ruinImage = new ImageView(Objects.requireNonNull(App.class.getResource("/images/resources/ruin.png")).toString());
+                ruinImage.setFitWidth(30);
+                ruinImage.setFitHeight(30);
+                ruinImage.setLayoutX(this.getCenterX() + 25);
+                ruinImage.setLayoutY(this.getCenterY() - 10);
+                this.group.getChildren().add(ruinImage);
+            }
             if (isTerritory()) {
                 this.cityImage.setImage(new Image(Objects.requireNonNull(App.class.getResource("/images/cities/cityDistrict.png")).toString()));
                 this.group.getChildren().add(this.cityImage);
@@ -256,7 +264,7 @@ public class Hex {
         this.cityImage.setLayoutX(this.getCenterX() - cityImage.getFitWidth() / 2);
         this.cityImage.setLayoutY(this.getCenterY());
         this.cityImage.setOnMouseClicked(mouseEvent -> {
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY && !isTerritory()) {
                 Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.CITY_HEX_MOUSE_CLICKED, new HashMap<>() {{
                     put("x", String.valueOf(coordination.getX()));
                     put("y", String.valueOf(coordination.getY()));

@@ -69,14 +69,6 @@ public class ChatRoomPageController {
                     put("chat", new Gson().toJson(selectedChat));
                     put("message", new Gson().toJson(message));
                 }});
-                HBox hBox = new HBox(new Circle(20, new ImagePattern(getImage(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_USER_AVATAR, new HashMap<>() {{
-                    put("username", message.getSenderUsername());
-                }})).getParams().get("address")))),
-                        new Text(" " + message.getSenderUsername() + " :    " + message.getText() + "\t\t\t" + message.getDate().toString().substring(4, 16)));
-                chatMessageTextField.setText("");
-                hBox.setPrefWidth(chatMessagesVBox.getPrefWidth());
-                hBox.setPrefHeight(50);
-                chatMessagesVBox.getChildren().add(hBox);
             }
         });
         chatNameTextField.setOnKeyPressed(keyEvent -> {

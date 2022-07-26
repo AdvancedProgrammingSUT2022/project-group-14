@@ -50,6 +50,7 @@ public class City {
         for (Tile tile : this.territory) {
             tile.setCivilization(civilizationName);
         }
+        MapController.getTileByCoordinates(x, y).setCivilization(civilizationName);
         healthPoint = 20;
         defenseStrength = 10;
         attackStrength = 10;
