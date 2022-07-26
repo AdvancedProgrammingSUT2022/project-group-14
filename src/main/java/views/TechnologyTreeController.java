@@ -8,7 +8,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Line;
 
@@ -21,15 +20,13 @@ public class TechnologyTreeController {
     public ScrollPane scrollPane;
     @FXML
     public AnchorPane anchorPane;
-    @FXML
-    public Pane test;
 
     public void initialize() {
         hBox.setSpacing(200);
         initTechnologies();
 //        Line line = new Line(10, 10, 200, 200);
+//        line.setStrokeWidth(3.7);
 //        anchorPane.getChildren().add(line);
-
     }
 
     public void initTechnologies() {
@@ -60,7 +57,7 @@ public class TechnologyTreeController {
             currentLayer = downLayer;     //TODO
             downLayer = new ArrayList<>(); //TODO clone...
             addLayerToGroup(currentLayer);
-//            drawLinesBetweenLayers(formerLayer, currentLayer, layerNumber);
+            drawLinesBetweenLayers(formerLayer, currentLayer, layerNumber);
         }
 
     }
@@ -69,13 +66,24 @@ public class TechnologyTreeController {
         for (int i = 0; i < currentLayer.size(); i++) {
             for (int j = 0; j < formerLayer.size(); j++) {
                 if (currentLayer.get(i).getRequiredTechnologies().contains(formerLayer.get(j).getName().toUpperCase())) {
-                    double startX = ((VBox) hBox.getChildren().get(layerNumber - 1)).getChildren().get(j).getLayoutX() + hBox.getChildren().get(layerNumber - 1).getLayoutX() + scrollPane.getLayoutX();
-                    double startY = ((VBox) hBox.getChildren().get(layerNumber - 1)).getChildren().get(j).getLayoutY() + hBox.getChildren().get(layerNumber - 1).getLayoutY() + scrollPane.getLayoutY();
-                    double endX = ((VBox) hBox.getChildren().get(layerNumber)).getChildren().get(i).getLayoutX() + hBox.getChildren().get(layerNumber).getLayoutX() + scrollPane.getLayoutX();
-                    double endY = ((VBox) hBox.getChildren().get(layerNumber)).getChildren().get(i).getLayoutY() + hBox.getChildren().get(layerNumber).getLayoutY() + scrollPane.getLayoutY();
-                    Line line = new Line(startX, startY, endX, endY);
+                    System.out.println("yeah" + i + "," + j + "," + layerNumber);
+//                    double startX = ((VBox) hBox.getChildren().get(layerNumber - 1)).getChildren().get(j).getLayoutX() + hBox.getChildren().get(layerNumber - 1).getLayoutX() + anchorPane.getLayoutX();
+//                    double startY = ((VBox) hBox.getChildren().get(layerNumber - 1)).getChildren().get(j).getLayoutY() + hBox.getChildren().get(layerNumber - 1).getLayoutY() + anchorPane.getLayoutY();
+//                    double endX = ((VBox) hBox.getChildren().get(layerNumber)).getChildren().get(i).getLayoutX() + hBox.getChildren().get(layerNumber).getLayoutX() + anchorPane.getLayoutX();
+//                    double endY = ((VBox) hBox.getChildren().get(layerNumber)).getChildren().get(i).getLayoutY() + hBox.getChildren().get(layerNumber).getLayoutY() + anchorPane.getLayoutY();
+//                    Line line = new Line(startX, startY, endX, endY);
+//                    line.setStrokeWidth(2.0);
+//                    anchorPane.getChildren().add(line);
 
-                    anchorPane.getChildren().add(line);
+                    if (layerNumber > 3) {
+//                        double endX = ((VBox) hBox.getChildren().get(0)).getChildren().get(0).getLayoutX() + hBox.getChildren().get(0).getLayoutX() + anchorPane.getLayoutX();
+//                        double endY = ((VBox) hBox.getChildren().get(0)).getChildren().get(0).getLayoutY() + hBox.getChildren().get(0).getLayoutY() + anchorPane.getLayoutY();
+                        double endX = hBox.getChildren().get(1).getLayoutX() + anchorPane.getLayoutX();
+                        double endY = hBox.getChildren().get(1).getLayoutY() + anchorPane.getLayoutY();
+                        Line line = new Line(200, 200, endX, endY);
+                        line.setStrokeWidth(2);
+                        anchorPane.getChildren().add(line);
+                    }
 
                 }
             }

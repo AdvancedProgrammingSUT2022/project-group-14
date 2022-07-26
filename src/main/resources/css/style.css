@@ -29,10 +29,6 @@
     -fx-background-size: cover;
 }
 
-Line {
-    -fx-stroke: 3;
-    -fx-background-color: #000000;
-}
 
 Button {
     -fx-cursor: hand;
