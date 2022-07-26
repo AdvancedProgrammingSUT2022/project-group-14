@@ -40,15 +40,15 @@ public class Civilization {
     private ArrayList<String> enemies = new ArrayList<>();
     private ArrayList<Trade> tradesFromOtherCivilizations = new ArrayList<>();
 
-    public Civilization(String name, int i) {
+    public Civilization(String name, int i, ArrayList<Civilization> civilizations) {
         this.name = name;
         int randomX, randomY;
         mainLoop :
         do {
             randomX = new Random().nextInt(2, MapController.width - 2);
             randomY = new Random().nextInt(2, MapController.height - 2);
-            for (int j = 0; j < i - 1; j++) {
-                for (Unit unit : WorldController.getWorld().getAllCivilizations().get(j).getAllUnits()) {
+            for (Civilization civilization : civilizations) {
+                for (Unit unit : civilization.getAllUnits()) {
                     if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), randomX, randomY, 1))
                         continue mainLoop;
                 }

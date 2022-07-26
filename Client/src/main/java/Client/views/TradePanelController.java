@@ -43,16 +43,16 @@ public class TradePanelController {
         message.setVisible(false);
         initCivilizationNames();
 
-        yourOfferedLuxuryResource.setValue(null);
+        yourOfferedLuxuryResource.setValue("Luxury");
         yourOfferedLuxuryResource.getItems().addAll(LuxuryResourceTypes.getAllResourcesNames());
 
-        yourOfferedStrategicResource.setValue(null);
+        yourOfferedStrategicResource.setValue("Strategic");
         yourOfferedStrategicResource.getItems().addAll(StrategicResourceTypes.getAllResourcesNames());
 
-        yourRequestedLuxuryResource.setValue(null);
+        yourRequestedLuxuryResource.setValue("Luxury");
         yourRequestedLuxuryResource.getItems().addAll(LuxuryResourceTypes.getAllResourcesNames());
 
-        yourRequestedStrategicResource.setValue(null);
+        yourRequestedStrategicResource.setValue("Luxury");
         yourRequestedStrategicResource.getItems().addAll(StrategicResourceTypes.getAllResourcesNames());
     }
 
@@ -62,7 +62,7 @@ public class TradePanelController {
                 new TypeToken<List<String>>() {
                 }.getType());
         civilizationNames.remove(currentCivilizationName);
-        civilizationName.setValue(null);
+        civilizationName.setValue("civilizations");
         civilizationName.getItems().addAll(civilizationNames);
     }
 

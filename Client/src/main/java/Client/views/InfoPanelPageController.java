@@ -58,7 +58,7 @@ public class InfoPanelPageController {
         tradeButton.setPrefWidth(120);
         tradeButton.setOnMouseClicked(mouseEvent -> App.changeScene("tradePanel"));
 
-        Text message = new Text("kjasdngrjeo");
+        Text message = new Text("");
         message.setVisible(false);
         message.setLayoutX(330);
         message.setLayoutY(360);
@@ -71,7 +71,7 @@ public class InfoPanelPageController {
         String currentCivilizationName = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CURRENT_CIVILIZATION_NAME, new HashMap<>())).getParams().get("name"), String.class);
         civilizationNames.remove(currentCivilizationName);
         ChoiceBox<String> civilizationNamesChoiceBox = new ChoiceBox<>();
-        civilizationNamesChoiceBox.setValue(null);
+        civilizationNamesChoiceBox.setValue("civilizations");
         civilizationNamesChoiceBox.getItems().addAll(civilizationNames);
         civilizationNamesChoiceBox.setLayoutX(240);
         civilizationNamesChoiceBox.setLayoutY(300);
