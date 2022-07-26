@@ -7,6 +7,7 @@ import Client.enums.units.UnitTypes;
 import Client.models.City;
 import Client.models.units.CombatUnit;
 import Client.models.units.Unit;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -35,9 +36,38 @@ public class InfoPanelPageController {
             case "NotificationsPanel" -> initNotificationsPanel();
             case "MilitaryPanel" -> initMilitaryPanel();
             case "EconomicStatusPanel" -> initEconomicStatusPanel();
+            case "DiplomacyPanel" -> initDiplomacyPanel();
             default -> {
             }
         }
+    }
+
+    public void initDiplomacyPanel() {
+        Button discussButton = new Button("discuss");
+        discussButton.setLayoutX(630);
+        discussButton.setLayoutY(400);
+        discussButton.setPrefWidth(120);
+        discussButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                App.changeScene("discussPanel");
+            }
+        });
+
+        Button tradeButton = new Button("discuss");
+        tradeButton.setLayoutX(630);
+        tradeButton.setLayoutY(440);
+        tradeButton.setPrefWidth(120);
+        tradeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                App.changeScene("tradePanel");
+            }
+        });
+
+        pane.getChildren().add(discussButton);
+        pane.getChildren().add(tradeButton);
+
     }
 
     private void initEconomicStatusPanel() {

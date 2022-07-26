@@ -111,5 +111,10 @@ public enum QueryRequests {
     FOREST_REMOVE,
     MARSH_REMOVE,
     //game page
-    DECLARE_WAR
+    DECLARE_WAR,
+    //trade panel
+    GET_ALL_CIVILIZATIONS_NAMES,
+    ADD_TRADE,
+    GET_CIVILIZATION_TRADES,
+    ACCEPT_TRADE,
 }

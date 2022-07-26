@@ -11,6 +11,7 @@ import Server.enums.Technologies;
 import Server.enums.units.UnitStates;
 import Server.models.City;
 import Server.models.Civilization;
+import Server.models.Trade;
 import Server.models.User;
 import Server.models.tiles.Coordination;
 import Server.models.tiles.Tile;
@@ -285,8 +286,40 @@ public class ServerSocketHandler extends Thread {
                 }
             }
             case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));
+            case GET_CURRENT_CIVILIZATION_NAME -> {
+                return new Response(QueryResponses.OK, new HashMap<>(){{
+                    put("name", WorldController.getWorld().getCurrentCivilizationName());
+                }});
+            }
+            case GET_ALL_CIVILIZATIONS_NAMES -> {
+                return getAllCivilizationsName();
+            }
+            case ADD_TRADE -> CivilizationController.addTrade(new Gson().fromJson(request.getParams().get("trade"), Trade.class));
+            case GET_CIVILIZATION_TRADES -> {
+                return new Response(QueryResponses.OK, new HashMap<>(){{
+                    put("trades", new Gson().toJson(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTradesFromOtherCivilizations()));
+                }});
+            }
+            case ACCEPT_TRADE -> {
+                return acceptTrade(request);
+            }
         }
         return new Response(QueryResponses.OK, new HashMap<>());
+    }
+
+    public Response getAllCivilizationsName() {
+        ArrayList<String> civilizationNames = new ArrayList<>();
+        for (Civilization civilization : WorldController.getWorld().getAllCivilizations()) {
+            civilizationNames.add(civilization.getName());
+        }
+        return new Response(QueryResponses.OK, new HashMap<>(){{
+            put("names", new Gson().toJson(civilizationNames));
+        }});
+    }
+
+    public Response acceptTrade(Request request) {
+        QueryResponses queryResponse = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).acceptTrade(new Gson().fromJson(request.getParams().get("indexOfTrade"), int.class));
+        return new Response(queryResponse, new HashMap<>());
     }
 
 }

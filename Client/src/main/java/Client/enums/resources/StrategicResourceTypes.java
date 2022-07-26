@@ -3,6 +3,7 @@ package Client.enums.resources;
 import Client.enums.Improvements;
 import Client.enums.Technologies;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public enum StrategicResourceTypes implements ResourceTypes {
@@ -61,6 +62,14 @@ public enum StrategicResourceTypes implements ResourceTypes {
         for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values())
             allResources.put(strategicResource.getName(), 0);
         return allResources;
+    }
+
+    public static ArrayList<String> getAllResourcesNames() {
+        ArrayList<String> names = new ArrayList<>();
+        for (StrategicResourceTypes strategicResource : StrategicResourceTypes.values()) {
+            names.add(strategicResource.name);
+        }
+        return names;
     }
 
 }

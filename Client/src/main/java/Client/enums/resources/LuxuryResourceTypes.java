@@ -3,6 +3,7 @@ package Client.enums.resources;
 import Client.enums.Improvements;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public enum LuxuryResourceTypes implements ResourceTypes {
@@ -62,6 +63,14 @@ public enum LuxuryResourceTypes implements ResourceTypes {
         for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values())
             allResources.put(luxuryResource.getName(), 0);
         return allResources;
+    }
+
+    public static ArrayList<String> getAllResourcesNames() {
+        ArrayList<String> names = new ArrayList<>();
+        for (LuxuryResourceTypes luxuryResource : LuxuryResourceTypes.values()) {
+            names.add(luxuryResource.name);
+        }
+        return names;
     }
 
 }
