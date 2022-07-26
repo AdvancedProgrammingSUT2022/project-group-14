@@ -4,6 +4,7 @@ package Client.enums.resources;
 import Client.enums.Improvements;
 
 public interface ResourceTypes {
+
     double getFood();
 
     double getProduction();

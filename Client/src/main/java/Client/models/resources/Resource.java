@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Random;
 
 public class Resource {
-    private final ResourceTypes type;
+    transient private final ResourceTypes type;
     private boolean hasBeenUsed;
 
     public Resource(ResourceTypes type) {

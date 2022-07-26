@@ -188,7 +188,9 @@ public class City {
     }
 
     public ArrayList<Tile> getTerritory() {
-        return territory;
+        ArrayList<Tile> tiles = new ArrayList<>(territory);
+        tiles.add(getCenterOfCity());
+        return tiles;
     }
 
     public double getGrowthFoodLimit() {

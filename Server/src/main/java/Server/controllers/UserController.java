@@ -5,20 +5,22 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.*;
-import java.util.regex.Matcher;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import Server.models.User;
 
 public class UserController {
     private static ArrayList<User> users = new ArrayList<>();
-    private static User loggedInUser = null;
+    private static ArrayList<User> loggedInUsers = new ArrayList<>();
 
 
-    public static void setLoggedInUser(User loggedInUser) {
-        UserController.loggedInUser = loggedInUser;
+    public static void addLoggedInUser(User loggedInUser) {
+        UserController.loggedInUsers.add(loggedInUser);
         loggedInUser.setDateOfLastLogin(new Date());
+    }
+
+    public static void removeLoggedOutUser(User loggedOutUser) {
+        UserController.loggedInUsers.remove(loggedOutUser);
     }
 
     public static void readAllUsers() throws IOException {
@@ -28,6 +30,8 @@ public class UserController {
                 }.getType());
         if (users == null)
             users = new ArrayList<>();
+        if (loggedInUsers == null)
+            loggedInUsers = new ArrayList<>();
     }
 
     public static void saveAllUsers() throws IOException {
@@ -56,36 +60,6 @@ public class UserController {
         return null;
     }
 
-    public static boolean playerNumberIsCorrect(Matcher matcher, int numberOfPlayersSoFar) {
-        if (Integer.parseInt(matcher.group("playerNumber")) == numberOfPlayersSoFar)
-            return true;
-        return false;
-    }
-
-    public static boolean usernameExistsInArraylist(String username, ArrayList<String> usernames) {
-        for (String playerUsername : usernames) {
-            if (playerUsername.equals(username))
-                return true;
-        }
-        return false;
-    }
-
-    //this function checks if current player format is correct and exists in users and not repetitive and returns the error
-    // and returns "" if everything is ok and add the player username to usernames
-    public static String checkPlayerValidation(Matcher matcher, ArrayList<String> usernames, int numberOfPlayersSoFar) {
-        if (!playerNumberIsCorrect(matcher, numberOfPlayersSoFar)) {
-            return "invalid command";
-        }
-        if (getUserByUsername(matcher.group("username")) == null) {
-            return "one of the usernames doesn't exist";
-        }
-        if (usernameExistsInArraylist(matcher.group("username"), usernames)) {
-            return "one of the usernames is repetitive";
-        }
-        usernames.add(matcher.group("username"));
-        return "";
-    }
-
     public static void sortUsers() {
         users.sort((o1, o2) -> {
             if (o1.getScore() == o2.getScore()) {
@@ -107,7 +81,7 @@ public class UserController {
         return users;
     }
 
-    public static User getLoggedInUser() {
-        return loggedInUser;
+    public static ArrayList<User> getLoggedInUsers() {
+        return loggedInUsers;
     }
 }

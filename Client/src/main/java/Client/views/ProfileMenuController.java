@@ -101,11 +101,7 @@ public class ProfileMenuController {
         }}));
         switch (response.getQueryResponse()) {
             case OK -> {
-                MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
-                oldPasswordTextField.setText("");
-                oldPasswordTextField.setStyle("-fx-border-color: #11aa11");
-                newPasswordTextField.setText("");
-                newPasswordTextField.setStyle("-fx-border-color: #11aa11");
+                App.changeScene("loginPage");
             }
             case PASSWORD_INCORRECT -> {
                 oldPasswordTextField.setText("");

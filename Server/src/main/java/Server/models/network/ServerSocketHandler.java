@@ -9,10 +9,14 @@ import Server.enums.Improvements;
 import Server.enums.QueryResponses;
 import Server.enums.Technologies;
 import Server.enums.units.UnitStates;
+import Server.enums.units.UnitTypes;
 import Server.models.City;
 import Server.models.Civilization;
 import Server.models.Trade;
 import Server.models.User;
+import Server.models.World;
+import Server.models.chats.Chat;
+import Server.models.chats.Message;
 import Server.models.tiles.Coordination;
 import Server.models.tiles.Tile;
 import Server.models.units.*;
@@ -24,10 +28,12 @@ import java.net.Socket;
 import java.util.*;
 
 public class ServerSocketHandler extends Thread {
+    private final Socket socket;
     private final BufferedWriter bufferedWriter;
     private final BufferedReader bufferedReader;
 
     public ServerSocketHandler(Socket socket) throws IOException {
+        this.socket = socket;
         this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
         this.bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
@@ -46,9 +52,14 @@ public class ServerSocketHandler extends Thread {
         }
     }
 
-    public Response handleRequest(Request request) {
+    public Response handleRequest(Request request) throws IOException {
         System.out.println(request.getQueryRequest() + " : " + request.getParams().toString());
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        Civilization currentCivilization;
+        if (WorldController.getWorld() != null) {
+            currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        } else {
+            currentCivilization = null;
+        }
         switch (request.getQueryRequest()) {
             case LOGIN_USER -> {
                 if (UserController.getUserByUsername(request.getParams().get("username")) == null) {
@@ -56,12 +67,14 @@ public class ServerSocketHandler extends Thread {
                 } else if (!Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).getPassword().equals(request.getParams().get("password"))) {
                     return new Response(QueryResponses.PASSWORD_INCORRECT, new HashMap<>());
                 } else {
-                    UserController.setLoggedInUser(Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))));
-                    return new Response(QueryResponses.OK, new HashMap<>(){{
-                        put("user", new Gson().toJson(UserController.getLoggedInUser()));
+                    UserController.addLoggedInUser(Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))));
+                    return new Response(QueryResponses.OK, new HashMap<>() {{
+                        put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                     }});
                 }
             }
+            case LOGOUT_USER ->
+                    UserController.removeLoggedOutUser(UserController.getUserByUsername(request.getParams().get("username")));
             case CREATE_USER -> {
                 if (UserController.getUserByUsername(request.getParams().get("username")) != null) {
                     return new Response(QueryResponses.USERNAME_EXIST, new HashMap<>());
@@ -72,7 +85,13 @@ public class ServerSocketHandler extends Thread {
                     return new Response(QueryResponses.OK, new HashMap<>());
                 }
             }
-            case SET_CURRENT_TECHNOLOGY -> WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).setCurrentTechnology(Technologies.valueOf(request.getParams().get("technologyName")));
+            case GET_LOGGED_IN_USERS -> {
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("loggedInUsers", new Gson().toJson(UserController.getLoggedInUsers()));
+                }});
+            }
+            case SET_CURRENT_TECHNOLOGY ->
+                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).setCurrentTechnology(Technologies.valueOf(request.getParams().get("technologyName")));
             case CHANGE_NICKNAME -> {
                 if (!Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).getPassword().equals(request.getParams().get("password"))) {
                     return new Response(QueryResponses.PASSWORD_INCORRECT, new HashMap<>());
@@ -80,7 +99,7 @@ public class ServerSocketHandler extends Thread {
                     return new Response(QueryResponses.NICKNAME_EXIST, new HashMap<>());
                 } else {
                     Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setNickname(request.getParams().get("nickname"));
-                    return new Response(QueryResponses.OK, new HashMap<>(){{
+                    return new Response(QueryResponses.OK, new HashMap<>() {{
                         put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                     }});
                 }
@@ -90,25 +109,29 @@ public class ServerSocketHandler extends Thread {
                     return new Response(QueryResponses.PASSWORD_INCORRECT, new HashMap<>());
                 } else {
                     Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setPassword(request.getParams().get("newPassword"));
-                    return new Response(QueryResponses.OK, new HashMap<>(){{
+                    return new Response(QueryResponses.OK, new HashMap<>() {{
                         put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                     }});
                 }
             }
             case CHANGE_AVATAR -> {
                 Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setAvatarFileAddress(request.getParams().get("address"));
-                return new Response(QueryResponses.OK, new HashMap<>(){{
+                return new Response(QueryResponses.OK, new HashMap<>() {{
                     put("user", new Gson().toJson(UserController.getUserByUsername(request.getParams().get("username"))));
                 }});
             }
             case SORT_USERS -> UserController.sortUsers();
             case GET_USERS -> {
-                return new Response(QueryResponses.OK, new HashMap<>(){{
+                return new Response(QueryResponses.OK, new HashMap<>() {{
                     put("users", new Gson().toJson(UserController.getUsers()));
                 }});
             }
-            case SET_STRATEGIC_RESOURCE -> currentCivilization.getStrategicResources().put(request.getParams().get("name"), currentCivilization.getStrategicResources().get(request.getParams().get("name")) + 1);
+            case SET_STRATEGIC_RESOURCE -> {
+                assert currentCivilization != null;
+                currentCivilization.getStrategicResources().put(request.getParams().get("name"), currentCivilization.getStrategicResources().get(request.getParams().get("name")) + 1);
+            }
             case SET_LUXURY_RESOURCE -> {
+                assert currentCivilization != null;
                 currentCivilization.getStrategicResources().put(request.getParams().get("name"), currentCivilization.getStrategicResources().get(request.getParams().get("name")) + 1);
                 currentCivilization.setHappiness(currentCivilization.getHappiness() + 4);
             }
@@ -117,19 +140,19 @@ public class ServerSocketHandler extends Thread {
                 if (WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName())
                         .getVisionStatesOfMap()[Integer.parseInt(request.getParams().get("x"))][Integer.parseInt(request.getParams().get("y"))] > 0) {
                     Coordination coordination = new Coordination(Integer.parseInt(request.getParams().get("x")), Integer.parseInt(request.getParams().get("y")));
-                    HashMap<String, String> hashMap = new HashMap<>() {{
-                        put("infoPopup", new Gson().toJson(TileController.getInfoPopup(coordination)));
-                    }};
                     if (WorldController.getSelectedTile() != null
                             && WorldController.getSelectedTile().equals(MapController.getTileByCoordinates(coordination))) {
                         WorldController.setSelectedTile(null);
-                        return new Response(QueryResponses.RESET_COLOR_ADJUST, hashMap);
+                        return new Response(QueryResponses.RESET_COLOR_ADJUST, new HashMap<>());
                     } else {
                         if (WorldController.getSelectedTile() != null) {
-                            //TODO set selected tile color adjust
+                            return new Response(QueryResponses.RESET_GIVEN_TILE_COLOR, new HashMap<>() {{
+                                put("x", String.valueOf(WorldController.getSelectedTile().getX()));
+                                put("y", String.valueOf(WorldController.getSelectedTile().getY()));
+                            }});
                         }
                         WorldController.setSelectedTile(MapController.getTileByCoordinates(coordination));
-                        return new Response(QueryResponses.BLOOM_COLOR_ADJUST, hashMap);
+                        return new Response(QueryResponses.BLOOM_COLOR_ADJUST, new HashMap<>());
                     }
                 } else {
                     return new Response(QueryResponses.IGNORE, new HashMap<>());
@@ -143,7 +166,12 @@ public class ServerSocketHandler extends Thread {
                 }
             }
             case UNIT_HEX_MOUSE_CLICKED -> {
-                Unit unit = new Gson().fromJson(request.getParams().get("unit"), Unit.class);
+                Unit unit;
+                if (request.getParams().get("type").equals("combat")) {
+                    unit = MapController.getTileByCoordinates(Integer.parseInt(request.getParams().get("x")), Integer.parseInt(request.getParams().get("y"))).getCombatUnit();
+                } else {
+                    unit = MapController.getTileByCoordinates(Integer.parseInt(request.getParams().get("x")), Integer.parseInt(request.getParams().get("y"))).getNonCombatUnit();
+                }
                 if (unit.getCivilizationName().equals(WorldController.getWorld().getCurrentCivilizationName())) {
                     if (unit instanceof CombatUnit) {
                         if (WorldController.getSelectedCombatUnit() != null && WorldController.getSelectedCombatUnit().equals(unit)) {
@@ -160,15 +188,10 @@ public class ServerSocketHandler extends Thread {
                     }
                 }
             }
-            case GET_UNIT_GROUP -> {
-                return new Response(QueryResponses.OK, new HashMap<>() {{
-                    put("group", new Gson().toJson(UnitController.getUnitGroup(new Gson().fromJson(request.getParams().get("unit"), Unit.class))));
-                }});
-            }
             case HEX_IS_TERRITORY -> {
                 for (City city : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCities()) {
                     for (Tile tile : city.getTerritory()) {
-                        if (MapController.getTileByCoordinates(new Coordination(Integer.parseInt(request.getParams().get("X")), Integer.parseInt(request.getParams().get("y")))).equals(tile) && tile.getCity() == null)
+                        if (MapController.getTileByCoordinates(new Coordination(Integer.parseInt(request.getParams().get("x")), Integer.parseInt(request.getParams().get("y")))).equals(tile) && tile.getCity() == null)
                             return new Response(QueryResponses.OK, new HashMap<>() {{
                                 put("boolean", String.valueOf(true));
                             }});
@@ -183,27 +206,27 @@ public class ServerSocketHandler extends Thread {
                 if (visionState[Integer.parseInt(request.getParams().get("x"))][Integer.parseInt(request.getParams().get("y"))] == 0) {
                     return new Response(QueryResponses.FOG, new HashMap<>());
                 } else if (visionState[Integer.parseInt(request.getParams().get("x"))][Integer.parseInt(request.getParams().get("y"))] == 1) {
-                    return new Response(QueryResponses.REVEALED, new HashMap<>() {{
-                        put("tile", new Gson().toJson(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getRevealedTiles()[Integer.parseInt(request.getParams().get("x"))][Integer.parseInt(request.getParams().get("y"))]));
-                    }});
+                    return new Response(QueryResponses.REVEALED, WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getRevealedTiles()[Integer.parseInt(request.getParams().get("x"))][Integer.parseInt(request.getParams().get("y"))]);
                 }
             }
-            case NEW_WORLD -> {
-                WorldController.newWorld(new Gson().fromJson(request.getParams().get("people"), new TypeToken<List<String>>() {
-                }.getType()), Integer.parseInt(request.getParams().get("width")), Integer.parseInt(request.getParams().get("height")));
-            }
+            case NEW_WORLD ->
+                    WorldController.newWorld(new Gson().fromJson(request.getParams().get("people"), new TypeToken<List<String>>() {
+                    }.getType()), Integer.parseInt(request.getParams().get("width")), Integer.parseInt(request.getParams().get("height")));
             case CIV_GOLD -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
+                    assert currentCivilization != null;
                     put("gold", String.valueOf(currentCivilization.getGold()));
                 }});
             }
             case CIV_HAPPINESS -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
+                    assert currentCivilization != null;
                     put("happiness", String.valueOf(currentCivilization.getHappiness()));
                 }});
             }
             case CIV_SCIENCE -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
+                    assert currentCivilization != null;
                     put("science", String.valueOf(currentCivilization.getScience()));
                 }});
             }
@@ -228,6 +251,7 @@ public class ServerSocketHandler extends Thread {
                 }
             }
             case TECH_PANEL_UPDATE -> {
+                assert currentCivilization != null;
                 if (currentCivilization.getCurrentTechnology() != null && !Boolean.parseBoolean(request.getParams().get("boolean"))) {
                     return new Response(QueryResponses.SET_TECH_VISIBLE, new HashMap<>() {{
                         put("technology", new Gson().toJson(currentCivilization.getCurrentTechnology()));
@@ -238,51 +262,180 @@ public class ServerSocketHandler extends Thread {
             }
             case MOVE_ACTION -> {
                 if (WorldController.getSelectedTile() != null) {
-                    Unit unit = new Gson().fromJson(request.getParams().get("unit"), Unit.class);
+                    Unit unit = WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit();
                     UnitController.setUnitDestinationCoordinates(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
                     MoveController.moveUnitToDestination(unit);
                 }
             }
-            case DELETE_ACTION -> UnitController.delete(new Gson().fromJson(request.getParams().get("unit"), Unit.class));
-            case SLEEP_ACTION -> new Gson().fromJson(request.getParams().get("unit"), Unit.class).setUnitState(UnitStates.SLEEP);
-            case WAKE_ACTION -> new Gson().fromJson(request.getParams().get("unit"), Unit.class).setUnitState(UnitStates.WAKE);
-            case ALERT_ACTION -> new Gson().fromJson(request.getParams().get("unit"), Unit.class).setUnitState(UnitStates.ALERT);
-            case FORTIFY_ACTION -> new Gson().fromJson(request.getParams().get("unit"), Unit.class).setUnitState(UnitStates.FORTIFY);
-            case FORTIFY_TILL_HEALED_ACTION -> new Gson().fromJson(request.getParams().get("unit"), Unit.class).setUnitState(UnitStates.FORTIFY_TILL_HEALED);
-            case GARRISON_ACTION -> UnitController.garrisonCity(new Gson().fromJson(request.getParams().get("unit"), CombatUnit.class));
-            case PILLAGE_ACTION -> UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY());
+            case DELETE_ACTION ->
+                    UnitController.delete(WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit());
+            case SLEEP_ACTION ->
+                    (WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit()).setUnitState(UnitStates.SLEEP);
+            case WAKE_ACTION ->
+                    (WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit()).setUnitState(UnitStates.WAKE);
+            case ALERT_ACTION ->
+                    (WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit()).setUnitState(UnitStates.ALERT);
+            case FORTIFY_ACTION ->
+                    (WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit()).setUnitState(UnitStates.FORTIFY);
+            case FORTIFY_TILL_HEALED_ACTION ->
+                    (WorldController.getSelectedCombatUnit() != null ? WorldController.getSelectedCombatUnit() : WorldController.getSelectedNonCombatUnit()).setUnitState(UnitStates.FORTIFY_TILL_HEALED);
+            case GARRISON_ACTION -> UnitController.garrisonCity(WorldController.getSelectedCombatUnit());
+            case PILLAGE_ACTION ->
+                    UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY());
             case ATTACK_ACTION -> {
                 if (WorldController.getSelectedTile() != null)
                     WarController.combatUnitAttacksTile(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY(), WorldController.getSelectedCombatUnit());
             }
-            case SETUP_RANGED_ACTION -> UnitController.setupRangedUnit(new Gson().fromJson(request.getParams().get("unit"), Unit.class), WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
+            case SETUP_RANGED_ACTION ->
+                    UnitController.setupRangedUnit(WorldController.getSelectedNonCombatUnit(), WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
             case GET_AVAILABLE_IMPROVEMENTS_FOR_WORKER -> {
-                return new Response(QueryResponses.OK, new HashMap<>(){{
-                    put("improvements", new Gson().toJson(TileController.getAvailableImprovements(new Gson().fromJson(request.getParams().get("unit"), Worker.class))));
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("improvements", new Gson().toJson(TileController.getAvailableImprovements((Worker) WorldController.getSelectedNonCombatUnit())));
                 }});
             }
             case GET_REMOVABLE_FEATURES -> {
-                return new Response(QueryResponses.OK, new HashMap<>(){{
-                    put("features", new Gson().toJson(TileController.getRemovableFeatures(new Gson().fromJson(request.getParams().get("unit"), Worker.class))));
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("features", new Gson().toJson(TileController.getRemovableFeatures((Worker) WorldController.getSelectedNonCombatUnit())));
                 }});
             }
-            case ROAD_BUILD -> UnitController.buildRoad(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case RAILROAD_BUILD -> UnitController.buildRailRoad(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case IMPROVEMENT_BUILD -> UnitController.buildImprovement(new Gson().fromJson(request.getParams().get("unit"), Worker.class), new Gson().fromJson(request.getParams().get("improvement"), Improvements.class));
-            case ROUTES_REMOVE -> UnitController.removeRouteFromTile(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case JUNGLE_REMOVE ->  UnitController.removeJungleFromTile(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case FOREST_REMOVE -> UnitController.removeForestFromTile(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case MARSH_REMOVE -> UnitController.removeMarshFromTile(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case REPAIR_TILE -> UnitController.repairTile(new Gson().fromJson(request.getParams().get("unit"), Worker.class));
-            case FOUND_CITY -> UnitController.foundCity(new Gson().fromJson(request.getParams().get("unit"), Settler.class));
+            case ROAD_BUILD -> UnitController.buildRoad((Worker) WorldController.getSelectedNonCombatUnit());
+            case RAILROAD_BUILD -> UnitController.buildRailRoad((Worker) WorldController.getSelectedNonCombatUnit());
+            case IMPROVEMENT_BUILD ->
+                    UnitController.buildImprovement((Worker) WorldController.getSelectedNonCombatUnit(), new Gson().fromJson(request.getParams().get("improvement"), Improvements.class));
+            case ROUTES_REMOVE ->
+                    UnitController.removeRouteFromTile((Worker) WorldController.getSelectedNonCombatUnit());
+            case JUNGLE_REMOVE ->
+                    UnitController.removeJungleFromTile((Worker) WorldController.getSelectedNonCombatUnit());
+            case FOREST_REMOVE ->
+                    UnitController.removeForestFromTile((Worker) WorldController.getSelectedNonCombatUnit());
+            case MARSH_REMOVE ->
+                    UnitController.removeMarshFromTile((Worker) WorldController.getSelectedNonCombatUnit());
+            case REPAIR_TILE -> UnitController.repairTile((Worker) WorldController.getSelectedNonCombatUnit());
+            case FOUND_CITY -> UnitController.foundCity((Settler) WorldController.getSelectedNonCombatUnit());
             case NEXT_TURN -> {
                 if (WorldController.nextTurnImpossible() == null) {
                     WorldController.nextTurn();
-                    return new Response(QueryResponses.OK, new HashMap<>(){{
+                    return new Response(QueryResponses.OK, new HashMap<>() {{
                         put("year", String.valueOf(WorldController.getWorld().getYear()));
                     }});
                 } else {
                     return new Response(QueryResponses.IGNORE, new HashMap<>());
+                }
+            }
+            case UPDATE_HEX -> {
+                return new Response(QueryResponses.OK, MapController.getTileByCoordinates(Integer.parseInt(request.getParams().get("x")), Integer.parseInt(request.getParams().get("y"))));
+            }
+            case GET_TILE_INFO -> {
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("info", MapController.getTileByCoordinates(Integer.parseInt(request.getParams().get("x")), Integer.parseInt(request.getParams().get("y"))).getInfo());
+                }});
+            }
+            case GET_CITIES_INFO -> {
+                ArrayList<String> infos = new ArrayList<>();
+                for (City city : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCities()) {
+                    infos.add(city.getInfo());
+                }
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("info", new Gson().toJson(infos));
+                }});
+            }
+            case GET_CITIES_NAME -> {
+                ArrayList<String> names = new ArrayList<>();
+                for (City city : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCities()) {
+                    names.add(city.getName());
+                }
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("citiesName", new Gson().toJson(names));
+                }});
+            }
+            case GET_MILITARY_INFO -> {
+                ArrayList<String> cityCombatInfos = new ArrayList<>();
+                ArrayList<String> unitCombatInfos = new ArrayList<>();
+                assert currentCivilization != null;
+                for (City city : currentCivilization.getCities()) {
+                    cityCombatInfos.add(city.getCombatInfo());
+                }
+                for (Unit unit : currentCivilization.getAllUnits()) {
+                    if (unit instanceof CombatUnit) {
+                        unitCombatInfos.add(((CombatUnit) unit).getCombatInfo());
+                    }
+                }
+                int totalValueOfCombatUnits = 0, totalCombatUnits = 0;
+                for (Unit unit : currentCivilization.getAllUnits()) {
+                    if (unit instanceof CombatUnit) {
+                        totalValueOfCombatUnits += UnitTypes.valueOf(unit.getName().toUpperCase(Locale.ROOT)).getCost();
+                        totalCombatUnits++;
+                    }
+                }
+                int finalTotalValueOfCombatUnits = totalValueOfCombatUnits;
+                int finalTotalCombatUnits = totalCombatUnits;
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("cityCombatInfo", new Gson().toJson(cityCombatInfos));
+                    put("unitCombatInfo", new Gson().toJson(unitCombatInfos));
+                    put("citySize", String.valueOf(currentCivilization.getCities().size()));
+                    put("totalValueOfCombatUnits", String.valueOf(finalTotalValueOfCombatUnits));
+                    put("totalCombatUnits", String.valueOf(finalTotalCombatUnits));
+                }});
+            }
+            case GET_NOTIFICATIONS -> {
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    assert currentCivilization != null;
+                    put("notifications", new Gson().toJson(currentCivilization.getNotifications()));
+                }});
+            }
+            case GET_CIV_INFO -> {
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    assert currentCivilization != null;
+                    put("info", currentCivilization.getInfo());
+                }});
+            }
+            case GET_UNITS_INFO -> {
+                ArrayList<String> unitsInfo = new ArrayList<>();
+                for (Unit unit : WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getAllUnits()) {
+                    unitsInfo.add(unit.getInfo());
+                }
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("unitsInfo", new Gson().toJson(unitsInfo));
+                }});
+            }
+            case VALID_CHAT_NAME -> {
+                ArrayList<String> usernames = new Gson().fromJson(request.getParams().get("usernames"), new TypeToken<List<String>>() {
+                }.getType());
+                for (String username : usernames) {
+                    if (Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().containsKey(request.getParams().get("chatName"))) {
+                        return new Response(QueryResponses.IGNORE, new HashMap<>());
+                    }
+                }
+            }
+            case ADD_LISTENER ->
+                    Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).setUpdateSocket(this.socket);
+            case ADD_MESSAGE -> {
+                Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
+                Message message = new Gson().fromJson(request.getParams().get("message"), Message.class);
+                for (String username : chat.getUsernames()) {
+                    Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).addMessage(message);
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>(){{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(username)));
+                        }}));
+                    }
+                }
+            }
+            case GET_USER_AVATAR -> {
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("address", Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).getAvatarFileAddress());
+                }});
+            }
+            case ADD_CHAT -> {
+                ArrayList<String> usernames = new Gson().fromJson(request.getParams().get("usernames"), new TypeToken<List<String>>() {
+                }.getType());
+                for (String username : usernames) {
+                    Objects.requireNonNull(UserController.getUserByUsername(username)).addChats(new Chat(usernames, request.getParams().get("chatName")));
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>(){{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(username)));
+                        }}));
+                    }
                 }
             }
             case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));

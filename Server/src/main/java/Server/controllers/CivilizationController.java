@@ -1,8 +1,13 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
 import Server.enums.Technologies;
 import Server.models.*;
 import javafx.scene.paint.Color;
+import Server.models.Building;
+import Server.models.Citizen;
+import Server.models.City;
+import Server.models.Civilization;
 
 import Server.models.tiles.Ruin;
 import Server.models.tiles.Tile;
@@ -10,6 +15,7 @@ import Server.models.units.Settler;
 import Server.models.units.Unit;
 import Server.models.units.Worker;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
 

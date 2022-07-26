@@ -26,10 +26,13 @@ public class ScoreboardController {
 
     public void initialize() {
         ClientSocketController.sendRequestAndGetResponse(QueryRequests.SORT_USERS, new HashMap<>());
-        Text rank, username, score, dateOfLastWin, dateOfLastLogin;
+        Text rank, username, score, dateOfLastWin, dateOfLastLogin, online;
         Circle avatar;
         boolean currentUserWasShowed = false;
         ArrayList<User> users = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_USERS, new HashMap<>())).getParams().get("users"),
+                new TypeToken<List<User>>() {
+                }.getType());
+        ArrayList<User> loggedInUsers = new Gson().fromJson(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_LOGGED_IN_USERS, new HashMap<>()).getParams().get("loggedInUsers"),
                 new TypeToken<List<User>>() {
                 }.getType());
         for (int i = 0, j = 1; i < Math.min(10, users.size()); i++, j++) {
@@ -42,6 +45,7 @@ public class ScoreboardController {
             username = new Text(users.get(i).getUsername());
             score = new Text("- " + users.get(i).getScore() + " -");
             dateOfLastWin = new Text("- N/A -");
+            online = new Text(userIsOnline(users.get(i), loggedInUsers) ? "Online" : "Offline");
             if (users.get(i).getDateOfLastWin() != null) {
                 dateOfLastWin.setText("- " + users.get(i).getDateOfLastWin().toString().substring(4, 19) + " -");
             }
@@ -54,12 +58,14 @@ public class ScoreboardController {
             score.setStyle("-fx-font-size: 30");
             dateOfLastWin.setStyle("-fx-font-size: 30");
             dateOfLastLogin.setStyle("-fx-font-size: 30");
+            online.setStyle("-fx-font-size: 30");
             if (users.get(i).getUsername().equals(MainMenuController.loggedInUser.getUsername())) {
                 rank.setFill(Color.RED);
                 username.setFill(Color.RED);
                 score.setFill(Color.RED);
                 dateOfLastWin.setFill(Color.RED);
                 dateOfLastLogin.setFill(Color.RED);
+                online.setFill(Color.RED);
                 currentUserWasShowed = true;
             } else {
                 rank.setFill(Color.ORANGE);
@@ -67,6 +73,7 @@ public class ScoreboardController {
                 score.setFill(Color.ORANGE);
                 dateOfLastWin.setFill(Color.ORANGE);
                 dateOfLastLogin.setFill(Color.ORANGE);
+                online.setFill(Color.ORANGE);
             }
             i = Math.min(9, i);
             gridPane.add(rank, 0, i + 1);
@@ -75,7 +82,16 @@ public class ScoreboardController {
             gridPane.add(score, 3, i + 1);
             gridPane.add(dateOfLastWin, 4, i + 1);
             gridPane.add(dateOfLastLogin, 5, i + 1);
+            gridPane.add(online, 6, i + 1);
         }
+    }
+
+    public boolean userIsOnline(User user, ArrayList<User> loggedInUsers) {
+        for (User loggedInUser : loggedInUsers) {
+            if (loggedInUser.getUsername().equals(user.getUsername()))
+                return true;
+        }
+        return false;
     }
 
     public int getIndexOfUser(ArrayList<User> users) {

@@ -1,6 +1,9 @@
 package Server.models.tiles;
 
+import Server.controllers.ServerUpdateController;
+import Server.enums.QueryResponses;
 import Server.models.City;
+import Server.models.network.Response;
 import Server.models.resources.Resource;
 import Server.models.resources.StrategicResource;
 import Server.models.units.CombatUnit;
@@ -206,6 +209,7 @@ public class Tile {
             this.combatImpact -= this.feature.getCombatImpact();
         }
         this.feature = feature;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Resource getResource() {
@@ -229,6 +233,7 @@ public class Tile {
         if (this.roadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 2 / 3;
         }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public int getRailRoadState() {
@@ -240,6 +245,7 @@ public class Tile {
         if (this.railRoadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 1 / 2;
         }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Improvements getImprovement() {
@@ -248,6 +254,7 @@ public class Tile {
 
     public void setImprovement(Improvements improvement) {
         this.improvement = improvement;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public int getImprovementTurnsLeftToBuild() {
@@ -256,6 +263,7 @@ public class Tile {
 
     public void setImprovementTurnsLeftToBuild(int improvementTurnsLeftToBuild) {
         this.improvementTurnsLeftToBuild = improvementTurnsLeftToBuild;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public int getPillageState() {
@@ -275,6 +283,7 @@ public class Tile {
             this.production += this.resource.getProduction();
             this.movingPoint /= 3 / 2;
         }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public CombatUnit getCombatUnit() {
@@ -283,6 +292,7 @@ public class Tile {
 
     public void setCombatUnit(CombatUnit combatUnit) {
         this.combatUnit = combatUnit;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public NonCombatUnit getNonCombatUnit() {
@@ -291,6 +301,7 @@ public class Tile {
 
     public void setNonCombatUnit(NonCombatUnit nonCombatUnit) {
         this.nonCombatUnit = nonCombatUnit;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public City getCity() {
@@ -300,9 +311,10 @@ public class Tile {
     public void setCity(City city) {
         this.city = city;
         if (city != null) {
-            for (Tile tile : city.getTerritory()) {
-            }
+            for (Tile tile : city.getTerritory())
+                ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, tile));
         } else {
+            ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
         }
     }
 
@@ -312,11 +324,13 @@ public class Tile {
 
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
 
     public void setRuin(Ruin ruin) {
         this.ruin = ruin;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Ruin getRuin() {

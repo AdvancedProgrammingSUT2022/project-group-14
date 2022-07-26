@@ -1,7 +1,5 @@
 package Server.enums;
 
-import javafx.scene.image.Image;
-
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -83,10 +81,6 @@ public enum Avatars {
                 return true;
         }
         return false;
-    }
-
-    public Image getImage() {
-        return new Image(this.address);
     }
 
 }
