@@ -245,16 +245,28 @@ public class Civilization {
         } else if (trade.getOfferedLuxuryResource() != null && offeringCivilization.getLuxuryResources().get(trade.getOfferedLuxuryResource()) < 1) {
             return QueryResponses.OTHER_CIVLIZATION_LACK_LUXURY_RESOURCE;
         } else {
-            this.gold -= trade.getRequestedGold();
-            if (trade.getRequestedLuxuryResource() != null)
+            this.gold -= trade.getRequestedGold() + trade.getOfferedGold();
+            if (trade.getRequestedLuxuryResource() != null) {
                 this.getLuxuryResources().put(trade.getRequestedLuxuryResource(), this.getLuxuryResources().get(trade.getRequestedLuxuryResource()) - 1);
-            if (trade.getRequestedStrategicResource() != null)
+                offeringCivilization.getLuxuryResources().put(trade.getRequestedLuxuryResource(), offeringCivilization.getLuxuryResources().get(trade.getRequestedLuxuryResource()) + 1);
+                if (offeringCivilization.getLuxuryResources().get(trade.getRequestedLuxuryResource()) == 1)
+                    offeringCivilization.setHappiness(offeringCivilization.getHappiness() + 4);
+            }
+            if (trade.getRequestedStrategicResource() != null) {
                 this.getStrategicResources().put(trade.getRequestedStrategicResource(), this.getStrategicResources().get(trade.getRequestedStrategicResource()) - 1);
-            offeringCivilization.setGold(offeringCivilization.getGold() - trade.getOfferedGold());
-            if (trade.getOfferedLuxuryResource() != null)
+                offeringCivilization.getStrategicResources().put(trade.getRequestedStrategicResource(), offeringCivilization.getStrategicResources().get(trade.getRequestedStrategicResource()) + 1);
+            }
+            offeringCivilization.setGold(offeringCivilization.getGold() - trade.getOfferedGold() + trade.getRequestedGold());
+            if (trade.getOfferedLuxuryResource() != null) {
                 offeringCivilization.getLuxuryResources().put(trade.getOfferedLuxuryResource(), offeringCivilization.getLuxuryResources().get(trade.getOfferedLuxuryResource()) - 1);
-            if (trade.getOfferedStrategicResource() != null)
+                this.getLuxuryResources().put(trade.getOfferedLuxuryResource(), this.getLuxuryResources().get(trade.getOfferedLuxuryResource()) + 1);
+                if (this.getLuxuryResources().get(trade.getOfferedLuxuryResource()) == 1)
+                    this.happiness += 4;
+            }
+            if (trade.getOfferedStrategicResource() != null) {
                 offeringCivilization.getStrategicResources().put(trade.getOfferedStrategicResource(), offeringCivilization.getStrategicResources().get(trade.getOfferedStrategicResource()) - 1);
+                this.getStrategicResources().put(trade.getOfferedStrategicResource(), this.getStrategicResources().get(trade.getOfferedStrategicResource()) + 1);
+            }
 
             CivilizationController.addNotification(
                     "In turn " + WorldController.getWorld().getActualTurn()

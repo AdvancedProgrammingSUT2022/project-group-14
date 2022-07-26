@@ -46,8 +46,8 @@ public class InfoPanelPageController {
 
     public void initDiplomacyPanel() {
         Button discussButton = new Button("discuss");
-        discussButton.setLayoutX(630);
-        discussButton.setLayoutY(400);
+        discussButton.setLayoutX(330);
+        discussButton.setLayoutY(200);
         discussButton.setPrefWidth(120);
         discussButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
@@ -56,9 +56,9 @@ public class InfoPanelPageController {
             }
         });
 
-        Button tradeButton = new Button("discuss");
-        tradeButton.setLayoutX(630);
-        tradeButton.setLayoutY(440);
+        Button tradeButton = new Button("trade");
+        tradeButton.setLayoutX(330);
+        tradeButton.setLayoutY(240);
         tradeButton.setPrefWidth(120);
         tradeButton.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
