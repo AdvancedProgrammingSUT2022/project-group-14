@@ -49,7 +49,7 @@ public class Civilization {
             randomY = new Random().nextInt(2, MapController.height - 2);
             for (int j = 0; j < i - 1; j++) {
                 for (Unit unit : WorldController.getWorld().getAllCivilizations().get(j).getAllUnits()) {
-                    if (unit.getCurrentX() == randomX)
+                    if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), randomX, randomY, 1))
                         continue mainLoop;
                 }
             }
