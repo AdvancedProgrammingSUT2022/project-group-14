@@ -32,6 +32,9 @@ public class InfoPanelPageController {
     private AnchorPane pane;
 
     public void initialize() {
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         switch (GamePageController.infoPanelName) {
             case "UnitPanel" -> initUnitPanel();
             case "CityPanel" -> initCityPanel();

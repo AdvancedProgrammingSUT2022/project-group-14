@@ -59,6 +59,9 @@ public class StartGameMenuController {
     public void initialize() {
         initPanes();
         initInvitations();
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         timeline = new Timeline(new KeyFrame(Duration.millis(500), actionEvent -> {
             if (updateInvites) {
                 updateInvites = false;

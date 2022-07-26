@@ -28,6 +28,9 @@ public class OfferedTradesPageController {
     private AnchorPane pane;
 
     public void initialize() {
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         VBox vBox = new VBox();
         vBox.setAlignment(Pos.CENTER);
         vBox.setSpacing(10);

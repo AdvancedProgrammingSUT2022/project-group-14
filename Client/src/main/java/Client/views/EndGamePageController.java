@@ -19,6 +19,9 @@ public class EndGamePageController {
     private Text text;
 
     public void initialize() {
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         if (winnerCivilization != null) {
             text.setText("Congrats " + winnerCivilization + "! You've won the game 😎");
         } else {

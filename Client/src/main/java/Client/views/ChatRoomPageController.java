@@ -52,6 +52,9 @@ public class ChatRoomPageController {
 
     public void initialize() {
         initPanes();
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         timeline.play();
         chatTitle.setText("");
         chatMessagesVBox.heightProperty().addListener((observable, oldValue, newValue) -> {

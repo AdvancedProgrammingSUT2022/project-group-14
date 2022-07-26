@@ -47,6 +47,9 @@ public class ProfileMenuController {
     private int random = new Random().nextInt(0, 40);
 
     public void initialize() {
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         passwordTextField.setFocusTraversable(false);
         newNicknameTextField.setFocusTraversable(false);
         oldPasswordTextField.setFocusTraversable(false);

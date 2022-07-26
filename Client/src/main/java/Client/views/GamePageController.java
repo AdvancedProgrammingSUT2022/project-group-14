@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.ChoiceBox;
@@ -137,6 +138,12 @@ public class GamePageController {
         infoPanelsBox.setValue("InfoPanels");
         infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel", "DiplomacyPanel");
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
+        settingsCircle.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                App.changeScene("settingPage");
+            }
+        });
         cheatCodeArea.setVisible(false);
         cheatCodeText.setVisible(false);
     }
@@ -180,6 +187,9 @@ public class GamePageController {
                 declareWarOptionsPane.setVisible(true);
             } else if (!showDeclareWar && declareWarOptionsPane.isVisible()) {
                 declareWarOptionsPane.setVisible(false);
+            }
+            if (!App.isMute() && App.getMediaPlayer().isMute()) {
+                App.playNext();
             }
         }));
         timeline.setCycleCount(-1);
@@ -282,32 +292,38 @@ public class GamePageController {
         fortify.setOnMouseClicked(mouseEvent -> {
             unitPanelPane.setVisible(false);
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.FORTIFY_ACTION, new HashMap<>());
+            App.getCoinSound().play();
         });
         Circle fortifyTillHealed = new Circle(25, new ImagePattern(getActionImage("fortifyTillHealed")));
         fortifyTillHealed.setOnMouseClicked(mouseEvent -> {
             unitPanelPane.setVisible(false);
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.FORTIFY_TILL_HEALED_ACTION, new HashMap<>());
+            App.getCoinSound().play();
         });
         Circle garrison = new Circle(25, new ImagePattern(getActionImage("garrison")));
         garrison.setOnMouseClicked(mouseEvent -> {
             unitPanelPane.setVisible(false);
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.GARRISON_ACTION, new HashMap<>());
+            App.getSwordSound().play();
         });
         Circle pillage = new Circle(25, new ImagePattern(getActionImage("pillage")));
         pillage.setOnMouseClicked(mouseEvent -> {
             unitPanelPane.setVisible(false);
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.PILLAGE_ACTION, new HashMap<>());
+            App.getSwordSound().play();
         });
         Circle attack = new Circle(25, new ImagePattern(getActionImage("attack")));
         attack.setOnMouseClicked(mouseEvent -> {
             unitPanelPane.setVisible(false);
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.ATTACK_ACTION, new HashMap<>());
+            App.getSwordSound().play();
         });
         if (unit instanceof Ranged) {
             Circle setupRanged = new Circle(25, new ImagePattern(getActionImage("setupRanged")));
             setupRanged.setOnMouseClicked(mouseEvent -> {
                 unitPanelPane.setVisible(false);
                 ClientSocketController.sendRequestAndGetResponse(QueryRequests.SETUP_RANGED_ACTION, new HashMap<>());
+                App.getSwordSound().play();
             });
             unitPanelPane.getChildren().add(setupRanged);
         }

@@ -232,9 +232,10 @@ public class CityPanelPageController {
 
     public void lockButtonClicked(MouseEvent mouseEvent) {
         if (!unemployedCitizensBox.getValue().equals("UnemployedCitizens")) {
+            System.err.println(unemployedCitizensBox.getValue());
             Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOCK_CITIZEN_TO_TILE, new HashMap<>(){{
                 put("city", new Gson().toJson(city));
-                put("id", employedCitizensBox.getValue());
+                put("id", unemployedCitizensBox.getValue());
                 put("x", new Gson().toJson(xCitizenSpinner.getValue() - 1));
                 put("y", new Gson().toJson(yCitizenSpinner.getValue() - 1));
             }});

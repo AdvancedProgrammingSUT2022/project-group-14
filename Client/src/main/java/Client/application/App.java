@@ -6,6 +6,7 @@ import Client.views.MainMenuController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Popup;
@@ -15,11 +16,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.Random;
 
 public class App extends javafx.application.Application {
     private static Scene scene;
     private static MediaPlayer mediaPlayer;
     private static Stage stage;
+    private static final String[] musics = {"Hans Zimmer - Time - musicgeek.ir", "Hans-Zimmer-S.T.A.Y",
+                                        "16 Ramin Djawadi - To Vaes Dothrak", "02 Ramin Djawadi - A Lannister Always Pays His Debts",
+                                        "19 Ramin Djawadi - For the Realm", "01. Main Titles", "02 Blood of the Dragon",
+                                        "03. Light of the Seven", "16. Trust Each Other", "04 - The Queen's Justice", "20 - Ironborn"};
+    private static AudioClip swordSound = new AudioClip(Objects.requireNonNull(App.class.getResource("/musics/draw-sword1-44724.mp3")).toString());
+
+
+    private static AudioClip coinSound = new AudioClip(Objects.requireNonNull(App.class.getResource("/musics/coin.mp3")).toString());
+    private static boolean mute = false;
+    private static int indexOfCurrentMedia;
 
     public static void main(String[] args) {
         launch(args);
@@ -28,7 +40,8 @@ public class App extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         ClientSocketController.startConnecting(8000);
-
+        indexOfCurrentMedia = new Random().nextInt(11);
+        changeMedia(musics[indexOfCurrentMedia]);
         App.stage = stage;
         Parent root = loadFXML("loginPage");
         assert root != null;
@@ -44,6 +57,17 @@ public class App extends javafx.application.Application {
         stage.setWidth(1280);
         stage.setHeight(720);
         stage.show();
+    }
+
+    public static void setMute(boolean mute) {
+        App.mute = mute;
+    }
+
+    public static void playNext() {
+        indexOfCurrentMedia++;
+        indexOfCurrentMedia %= 11;
+        changeMedia(musics[indexOfCurrentMedia]);
+
     }
 
     @Override
@@ -84,7 +108,8 @@ public class App extends javafx.application.Application {
     }
 
     public static void changeMedia(String address) {
-        App.mediaPlayer.stop();
+        if (mediaPlayer != null)
+            App.mediaPlayer.stop();
         App.mediaPlayer = loadMediaPlayer(address);
         assert App.mediaPlayer != null;
         App.mediaPlayer.play();
@@ -100,5 +125,19 @@ public class App extends javafx.application.Application {
         return null;
     }
 
+    public static MediaPlayer getMediaPlayer() {
+        return mediaPlayer;
+    }
 
+    public static boolean isMute() {
+        return mute;
+    }
+
+    public static AudioClip getSwordSound() {
+        return swordSound;
+    }
+
+    public static AudioClip getCoinSound() {
+        return coinSound;
+    }
 }
