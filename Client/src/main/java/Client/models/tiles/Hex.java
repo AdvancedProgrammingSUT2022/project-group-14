@@ -100,6 +100,7 @@ public class Hex {
                     }
                     case RESET_GIVEN_TILE_COLOR -> {
                         HexController.getHexOfTheGivenCoordination(Integer.parseInt(response.getParams().get("x")), Integer.parseInt(response.getParams().get("y"))).setColorAdjust(null);
+                        Hex.this.colorAdjust.setInput(new Bloom());
                         setPopup(getInfoPopup(coordination), mouseEvent.getSceneX() + 30, mouseEvent.getSceneY() + 15);
                     }
                 }

@@ -29,15 +29,19 @@
             text="Continue"/>
     <Text fill="ORANGE" layoutX="1045.0" layoutY="231.0" text="number of players " textAlignment="CENTER"/>
     <Spinner fx:id="numberOfPlayersSpinner" layoutX="1054.0" layoutY="239.0"/>
-    <Text fill="ORANGE" layoutX="1045.0" layoutY="316.0" text="map height" textAlignment="CENTER"/>
-    <Text fill="ORANGE" layoutX="1045.0" layoutY="401.0" text="map width" textAlignment="CENTER"/>
+    <Text fill="ORANGE" layoutX="1077.0" layoutY="317.0" text="map height" textAlignment="CENTER"/>
+    <Text fill="ORANGE" layoutX="1081.0" layoutY="403.0" text="map width" textAlignment="CENTER"/>
     <Spinner fx:id="mapHeightSpinner" layoutX="1054.0" layoutY="324.0"/>
     <Spinner fx:id="mapWidthSpinner" layoutX="1054.0" layoutY="409.0"/>
     <TextArea fx:id="cheatCodeArea" layoutX="1009.0" layoutY="490.0" onKeyPressed="#cheatCodeAreaTyped"
               prefHeight="200.0" prefWidth="200.0"/>
     <Text fx:id="cheatCodeText" fill="WHITE" layoutX="1009.0" layoutY="480.0" text="Enter your cheatCode : "/>
-    <TextField fx:id="saveNameTextField" layoutX="607.0" layoutY="528.0" promptText="Write the name of your save" style="-fx-pref-width: 165;"/>
-    <Button fx:id="saveGameButton" layoutX="615.0" layoutY="572.0" text="Save Game" onMouseClicked="#saveGameButtonClicked"/>
+    <TextField fx:id="saveNameTextField" layoutX="607.0" layoutY="528.0" promptText="Write the name of your save"
+               style="-fx-pref-width: 165;"/>
+    <Button fx:id="saveGameButton" layoutX="615.0" layoutY="572.0" onMouseClicked="#saveGameButtonClicked"
+            text="Save Game"/>
+    <VBox fx:id="lobbyPeopleVBox" layoutX="427.0" layoutY="132.0" prefHeight="434.0" prefWidth="150.0"/>
+    <Text fill="#ff9d00" layoutX="426.0" layoutY="115.0" text="People in lobby : "/>
 
 
 </AnchorPane>

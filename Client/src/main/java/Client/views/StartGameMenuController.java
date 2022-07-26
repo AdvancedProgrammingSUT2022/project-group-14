@@ -5,8 +5,11 @@ import Client.controllers.ClientSocketController;
 import Client.controllers.HexController;
 import Client.enums.QueryRequests;
 import Client.models.User;
+import Client.models.network.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -17,6 +20,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,10 +51,22 @@ public class StartGameMenuController {
     private Button saveGameButton;
     @FXML
     private TextField saveNameTextField;
+    @FXML
+    private VBox lobbyPeopleVBox;
+    public static boolean updateInvites = false;
+    public Timeline timeline;
 
     public void initialize() {
         initPanes();
         initInvitations();
+        timeline = new Timeline(new KeyFrame(Duration.millis(500), actionEvent -> {
+            if (updateInvites) {
+                updateInvites = false;
+                initInvitations();
+                updateLobbyPeopleVBox();
+            }
+        }));
+        timeline.setCycleCount(-1);
 //        continueButton.setVisible(WorldController.getWorld() != null);
 //        saveGameButton.setVisible(WorldController.getWorld() != null);
 //        saveNameTextField.setVisible(WorldController.getWorld() != null);
@@ -65,6 +81,15 @@ public class StartGameMenuController {
                 cheatCodeText.setVisible(!cheatCodeText.isVisible());
             }
         });
+        updateLobbyPeopleVBox();
+        timeline.play();
+    }
+
+    public void updateLobbyPeopleVBox() {
+        lobbyPeopleVBox.getChildren().clear();
+        for (String s : MainMenuController.loggedInUser.getPeopleInLobby()) {
+            lobbyPeopleVBox.getChildren().add(new Text(s));
+        }
     }
 
     public void initPanes() {
@@ -82,38 +107,32 @@ public class StartGameMenuController {
 
     public void initInvitations() {
         invitationsVBox.getChildren().clear();
-//        for (String invitation : UserController.getLoggedInUser().getInvitations()) {
-//            invitationsVBox.getChildren().add(makeInvitationBox(invitation));
-//        }
+        for (String invitation : MainMenuController.loggedInUser.getInvitations()) {
+            invitationsVBox.getChildren().add(makeInvitationBox(invitation));
+        }
     }
 
     public HBox makeInvitationBox(String invitation) {
         Button accept = new Button("✔");
         Button decline = new Button("❌");
-        accept.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                User host = UserController.getUserByUsername(invitation.substring(16));
-//                assert host != null;
-//                UserController.getLoggedInUser().resetPeopleInLobby();
-//                for (String s : host.getPeopleInLobby()) {
-//                    UserController.getLoggedInUser().addPersonToLobby(s);
-//                }
-//                host.addPersonToLobby(UserController.getLoggedInUser().getUsername());
-//                for (String s : host.getPeopleInLobby()) {
-//                    if (!s.equals(host.getUsername()) && !s.equals(UserController.getLoggedInUser().getUsername()))
-//                        Objects.requireNonNull(UserController.getUserByUsername(s)).addPersonToLobby(UserController.getLoggedInUser().getUsername());
-//                }
-//                UserController.getLoggedInUser().removeInvitation(invitation);
-//                initInvitations();
-            }
+        accept.setOnMouseClicked(mouseEvent -> {
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.ACCEPT_INVITATION, new HashMap<>() {{
+                put("loggedInUser", MainMenuController.loggedInUser.getUsername());
+                put("host", invitation.substring(16));
+                put("invitation", invitation);
+            }});
+            assert response != null;
+            MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+            initInvitations();
         });
-        decline.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent mouseEvent) {
-//                UserController.getLoggedInUser().removeInvitation(invitation);
-//                initInvitations();
-            }
+        decline.setOnMouseClicked(mouseEvent -> {
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLINE_INVITATION, new HashMap<>() {{
+                put("loggedInUser", MainMenuController.loggedInUser.getUsername());
+                put("invitation", invitation);
+            }});
+            assert response != null;
+            MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+            initInvitations();
         });
         accept.setStyle("-fx-pref-width: 50");
         decline.setStyle("-fx-pref-width: 50");
@@ -131,7 +150,7 @@ public class StartGameMenuController {
             if (command.equals("clear")) {
                 cheatCodeArea.clear();
             } else {
-                ClientSocketController.sendRequestAndGetResponse(QueryRequests.CHEAT_COMMAND, new HashMap<>(){{
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.CHEAT_COMMAND, new HashMap<>() {{
                     put("command", command);
                 }});
             }
@@ -139,35 +158,47 @@ public class StartGameMenuController {
     }
 
     public void backButtonClicked(MouseEvent mouseEvent) {
+        timeline.stop();
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.LEAVE_LOBBY, new HashMap<>(){{
+            put("username", MainMenuController.loggedInUser.getUsername());
+        }});
         App.changeScene("mainMenuPage");
     }
 
     public void sendInvitations(MouseEvent mouseEvent) {
-//        for (MenuItem item : usernamesMenuButton.getItems()) {
-//            if (((CheckMenuItem) item).isSelected())
-//                Objects.requireNonNull(UserController.getUserByUsername(item.getText())).addInvitations(UserController.getLoggedInUser().getUsername());
-//        }
+        ArrayList<String> receivers = new ArrayList<>();
+        for (MenuItem item : usernamesMenuButton.getItems()) {
+            if (((CheckMenuItem) item).isSelected())
+                receivers.add(item.getText());
+        }
+        if (receivers.size() >= 1)
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.SEND_INVITATION, new HashMap<>() {{
+                put("sender", MainMenuController.loggedInUser.getUsername());
+                put("receivers", new Gson().toJson(receivers));
+            }});
     }
 
     public void startGameButtonClicked(MouseEvent mouseEvent) {
-//        if (UserController.getLoggedInUser().getPeopleInLobby().size() < 2) {
-//            System.out.println("can't start");
-//            return;
-//        } else if (UserController.getLoggedInUser().getPeopleInLobby().size() > numberOfPlayersSpinner.getValue()) {
-//            System.out.println("number of players is less the actual players");
-//            return;
-//        }
+        if (MainMenuController.loggedInUser.getPeopleInLobby().size() < 2) {
+            System.out.println("can't start");
+            return;
+        } else if (MainMenuController.loggedInUser.getPeopleInLobby().size() > numberOfPlayersSpinner.getValue()) {
+            System.out.println("number of players is less the actual players");
+            return;
+        }
         System.out.println(MainMenuController.loggedInUser.getPeopleInLobby() + " * " + mapWidthSpinner.getValue() + " " + mapHeightSpinner.getValue());
         HexController.generateHexes(mapWidthSpinner.getValue(), mapHeightSpinner.getValue());
-        ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEW_WORLD, new HashMap<>(){{
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEW_WORLD, new HashMap<>() {{
             put("people", new Gson().toJson(MainMenuController.loggedInUser.getPeopleInLobby()));
             put("width", String.valueOf(mapWidthSpinner.getValue()));
             put("height", String.valueOf(mapHeightSpinner.getValue()));
         }});
+        timeline.stop();
         App.changeScene("gamePage");
     }
 
     public void continueButtonClicked(MouseEvent mouseEvent) {
+        timeline.stop();
 //        App.changeScene("gamePage");
     }
 

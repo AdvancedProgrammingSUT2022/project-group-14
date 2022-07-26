@@ -146,9 +146,12 @@ public class ServerSocketHandler extends Thread {
                         return new Response(QueryResponses.RESET_COLOR_ADJUST, new HashMap<>());
                     } else {
                         if (WorldController.getSelectedTile() != null) {
+                            int x = WorldController.getSelectedTile().getX();
+                            int y = WorldController.getSelectedTile().getY();
+                            WorldController.setSelectedTile(MapController.getTileByCoordinates(coordination));
                             return new Response(QueryResponses.RESET_GIVEN_TILE_COLOR, new HashMap<>() {{
-                                put("x", String.valueOf(WorldController.getSelectedTile().getX()));
-                                put("y", String.valueOf(WorldController.getSelectedTile().getY()));
+                                put("x", String.valueOf(x));
+                                put("y", String.valueOf(y));
                             }});
                         }
                         WorldController.setSelectedTile(MapController.getTileByCoordinates(coordination));
@@ -432,10 +435,68 @@ public class ServerSocketHandler extends Thread {
                 for (String username : usernames) {
                     Objects.requireNonNull(UserController.getUserByUsername(username)).addChats(new Chat(usernames, request.getParams().get("chatName")));
                     if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
-                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>(){{
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
                             put("user", new Gson().toJson(UserController.getUserByUsername(username)));
                         }}));
                     }
+                }
+            }
+            case SEND_INVITATION -> {
+                ArrayList<String> receivers = new Gson().fromJson(request.getParams().get("receivers"), new TypeToken<List<String>>() {
+                }.getType());
+                for (String receiver : receivers) {
+                    Objects.requireNonNull(UserController.getUserByUsername(receiver)).addInvitations(request.getParams().get("sender"));
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(receiver))) {
+                        ServerUpdateController.sendUpdate(receiver, new Response(QueryResponses.UPDATE_INVITATIONS, new HashMap<>() {{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(receiver)));
+                        }}));
+                    }
+                }
+            }
+            case ACCEPT_INVITATION -> {
+                User host = UserController.getUserByUsername(request.getParams().get("host"));
+                assert host != null;
+                User loggedInUser = UserController.getUserByUsername(request.getParams().get("loggedInUser"));
+                assert loggedInUser != null;
+                loggedInUser.resetPeopleInLobby();
+                for (String s : host.getPeopleInLobby()) {
+                    loggedInUser.addPersonToLobby(s);
+                }
+                host.addPersonToLobby(loggedInUser.getUsername());
+                for (String s : host.getPeopleInLobby()) {
+                    if (!s.equals(host.getUsername()) && !s.equals(loggedInUser.getUsername()))
+                        Objects.requireNonNull(UserController.getUserByUsername(s)).addPersonToLobby(loggedInUser.getUsername());
+                }
+                loggedInUser.removeInvitation(request.getParams().get("invitation"));
+                for (String s : loggedInUser.getPeopleInLobby()) {
+                    ServerUpdateController.sendUpdate(s, new Response(QueryResponses.UPDATE_INVITATIONS, new HashMap<>() {{
+                        put("user", new Gson().toJson(UserController.getUserByUsername(s)));
+                    }}));
+                }
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("user", new Gson().toJson(loggedInUser));
+                }});
+            }
+            case DECLINE_INVITATION -> {
+                User loggedInUser = UserController.getUserByUsername(request.getParams().get("loggedInUser"));
+                assert loggedInUser != null;
+                loggedInUser.removeInvitation(request.getParams().get("invitation"));
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("user", new Gson().toJson(loggedInUser));
+                }});
+            }
+            case LEAVE_LOBBY -> {
+                User user = UserController.getUserByUsername(request.getParams().get("username"));
+                assert user != null;
+                for (String s : user.getPeopleInLobby()) {
+                    if (s.equals(user.getUsername())) {
+                        user.resetPeopleInLobby();
+                    } else {
+                        Objects.requireNonNull(UserController.getUserByUsername(s)).removePersonFromLobby(user.getUsername());
+                    }
+                    ServerUpdateController.sendUpdate(s, new Response(QueryResponses.UPDATE_INVITATIONS, new HashMap<>(){{
+                        put("user", new Gson().toJson(UserController.getUserByUsername(s)));
+                    }}));
                 }
             }
             case DECLARE_WAR -> WarController.declareWar(request.getParams().get("enemyName"));

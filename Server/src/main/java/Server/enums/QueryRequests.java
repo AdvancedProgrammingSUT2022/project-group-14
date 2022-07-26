@@ -120,6 +120,10 @@ public enum QueryRequests {
     ADD_LISTENER,
     //game page
     DECLARE_WAR,
+    SEND_INVITATION,
+    ACCEPT_INVITATION,
+    DECLINE_INVITATION,
+    LEAVE_LOBBY,
     //trade panel
     GET_ALL_CIVILIZATIONS_NAMES,
     ADD_TRADE,

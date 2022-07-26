@@ -11,6 +11,7 @@ import Client.models.units.CombatUnit;
 import Client.views.ChatRoomPageController;
 import Client.views.GamePageController;
 import Client.views.MainMenuController;
+import Client.views.StartGameMenuController;
 import com.google.gson.Gson;
 import javafx.scene.paint.Color;
 
@@ -90,6 +91,10 @@ public class ClientSocketController {
             case UPDATE_CHAT -> {
                 MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
                 ChatRoomPageController.updateChatroom = true;
+            }
+            case UPDATE_INVITATIONS -> {
+                MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+                StartGameMenuController.updateInvites = true;
             }
             case CHOOSE_CITY_OPTIONS -> GamePageController.setCityOptions(new Gson().fromJson(response.getParams().get("city"), City.class), new Gson().fromJson(response.getParams().get("combatUnit"), CombatUnit.class));
             case CHOOSE_WAR_OPTIONS -> GamePageController.setDeclareWarOptions(new Gson().fromJson(response.getParams().get("enemyName"), String.class));
