@@ -34,4 +34,5 @@ public enum QueryResponses {
     NOT_ENOUGH_GOLD,
     NO_CITIZEN_EXISTS,
     SELECT_TILE_IN_CITY,
+    UPDATE_DISCUSS_CHAT
 }
