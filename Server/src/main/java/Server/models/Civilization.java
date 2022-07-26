@@ -9,6 +9,7 @@ import Server.enums.Technologies;
 import Server.enums.resources.LuxuryResourceTypes;
 import Server.enums.resources.StrategicResourceTypes;
 import Server.enums.units.UnitTypes;
+import Server.models.chats.Chat;
 import Server.models.tiles.Tile;
 import Server.models.units.*;
 
@@ -39,6 +40,7 @@ public class Civilization {
     private final ArrayList<String> notifications = new ArrayList<>();
     private ArrayList<String> enemies = new ArrayList<>();
     private ArrayList<Trade> tradesFromOtherCivilizations = new ArrayList<>();
+    transient private final HashMap<String, Chat> chats = new HashMap<>();
 
     public Civilization(String name, int i, ArrayList<Civilization> civilizations) {
         this.name = name;
@@ -302,6 +304,14 @@ public class Civilization {
             if (city.getName().equals(name)) return city;
         }
         return null;
+    }
+
+    public HashMap<String, Chat> getChats() {
+        return chats;
+    }
+
+    public void addChats(Chat chat) {
+        this.chats.put(chat.getName(), chat);
     }
 
     public QueryResponses getTechnologyStatus(Technologies technology) {

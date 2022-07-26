@@ -133,5 +133,8 @@ public enum QueryRequests {
     DELETE_MESSAGE,
     //
     GET_TECHNOLOGY_STATUS,
+    ADD_DISCUSS_MESSAGE,
+    ADD_DISCUSS_CHAT,
+    GET_CIV_CHATS
 
 }

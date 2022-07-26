@@ -690,6 +690,25 @@ public class ServerSocketHandler extends Thread {
                 Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
                 WorldController.setSelectedCity(civilization.getCityByName(request.getParams().get("cityName")));
             }
+            case GET_CIV_CHATS -> {
+                return new Response(QueryResponses.OK, new HashMap<>() {{
+                    put("chats", new Gson().toJson(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getChats().values()));
+                }});
+            }
+            case ADD_DISCUSS_CHAT -> {
+                ArrayList<String> civilizations = new Gson().fromJson(request.getParams().get("usernames"), new TypeToken<List<String>>() {
+                }.getType());
+                for (String civilization : civilizations) {
+                    WorldController.getWorld().getCivilizationByName(civilization).addChats(new Chat(civilizations, request.getParams().get("chatName")));
+                }
+            }
+            case ADD_DISCUSS_MESSAGE -> {
+                Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
+                Message message = new Gson().fromJson(request.getParams().get("message"), Message.class);
+                for (String username : chat.getUsernames()) {
+                    WorldController.getWorld().getCivilizationByName(username).getChats().get(chat.getName()).addMessage(message);
+                }
+            }
             case GET_TECHNOLOGY_STATUS -> {
                 Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
                 return new Response(civilization.getTechnologyStatus(new Gson().fromJson(request.getParams().get("technology"), Technologies.class)), new HashMap<>());
