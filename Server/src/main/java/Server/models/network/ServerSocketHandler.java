@@ -14,7 +14,6 @@ import Server.models.City;
 import Server.models.Civilization;
 import Server.models.Trade;
 import Server.models.User;
-import Server.models.World;
 import Server.models.chats.Chat;
 import Server.models.chats.Message;
 import Server.models.tiles.Coordination;
@@ -484,9 +483,33 @@ public class ServerSocketHandler extends Thread {
                     }
                 }
             }
+            case EDIT_MESSAGE -> {
+                Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
+                int index = Integer.parseInt(request.getParams().get("index"));
+                for (String username : chat.getUsernames()) {
+                    Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).getMessages().get(index).setText(request.getParams().get("newText"));
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(username)));
+                        }}));
+                    }
+                }
+            }
+            case DELETE_MESSAGE -> {
+                Chat chat = new Gson().fromJson(request.getParams().get("chat"), Chat.class);
+                int index = Integer.parseInt(request.getParams().get("index"));
+                for (String username : chat.getUsernames()) {
+                    Objects.requireNonNull(UserController.getUserByUsername(username)).getChats().get(chat.getName()).getMessages().remove(index);
+                    if (UserController.getLoggedInUsers().contains(UserController.getUserByUsername(username))) {
+                        ServerUpdateController.sendUpdate(username, new Response(QueryResponses.UPDATE_CHAT, new HashMap<>() {{
+                            put("user", new Gson().toJson(UserController.getUserByUsername(username)));
+                        }}));
+                    }
+                }
+            }
             case GET_USER_AVATAR -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
-                    put("address", Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("username"))).getAvatarFileAddress());
+                    put("address", Objects.requireNonNull(UserController.getUserByUsername(request.getParams().get("senderUsername"))).getAvatarFileAddress());
                 }});
             }
             case ADD_CHAT -> {
