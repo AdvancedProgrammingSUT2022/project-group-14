@@ -1,6 +1,6 @@
 package Client.enums;
 
-import Server.enums.resources.StrategicResourceTypes;
+import Client.enums.resources.StrategicResourceTypes;
 
 import java.util.Arrays;
 import java.util.HashSet;

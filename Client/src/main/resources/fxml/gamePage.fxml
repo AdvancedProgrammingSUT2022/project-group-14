@@ -33,8 +33,8 @@
     <Text fx:id="happinessText" layoutX="194.0" layoutY="33.0" text="1000" wrappingWidth="70"/>
     <Button layoutX="388.0" layoutY="23.0" onMouseClicked="#showResearchPanel" prefHeight="36.0" prefWidth="127.0"
             style="-fx-pref-width: 125;" text="Research"/>
-    <ChoiceBox fx:id="infoPanelsBox" layoutX="578.0" layoutY="23.0" prefHeight="36.0" prefWidth="125.0"/>
-    <Button layoutX="715.0" layoutY="23.0" style="-fx-pref-width: 130;" text="GotoPanel" onMouseClicked="#gotoPanelButtonClicked"/>
+    <ChoiceBox fx:id="infoPanelsBox" layoutX="525.0" layoutY="23.0" prefHeight="36.0" prefWidth="125.0"/>
+    <Button layoutX="660.0" layoutY="23.0" style="-fx-pref-width: 130;" text="GotoPanel" onMouseClicked="#gotoPanelButtonClicked"/>
     <Text fx:id="yearText" fill="white" layoutX="994.0" layoutY="48.0" text="4000 BC" wrappingWidth="112"/>
     <Circle fill="WHITE" layoutX="1124.0" layoutY="41.0" radius="18.0"/>
     <Circle fx:id="settingsCircle" layoutX="1124.0" layoutY="41.0" radius="18.0" stroke="black"/>
@@ -67,5 +67,12 @@
     <AnchorPane fx:id="cityOptionsPane" prefWidth="1280" prefHeight="720" style="-fx-background-color: transparent">
         <Button layoutX="470" layoutY="342.5" text="Conquer" onMouseClicked="#conquerButtonClicked"/>
         <Button layoutX="660" layoutY="342.5" text="Destroy" onMouseClicked="#destroyButtonClicked"/>
+    </AnchorPane>
+    <AnchorPane fx:id="declareWarOptionsPane" prefWidth="1280" prefHeight="720" style="-fx-background-color: transparent">
+        <Button layoutX="470" layoutY="342.5" text="Declare war" onMouseClicked="#declareWarButtonClicked"/>
+        <Button layoutX="660" layoutY="342.5" text="Cancel" onMouseClicked="#cancelButtonClicked"/>
+    </AnchorPane>
+    <AnchorPane fx:id="notMyTurnPane" prefWidth="1280" prefHeight="720" style="-fx-background-color: cadetblue" >
+        <Text text="Wait until Your Turn!" layoutX="580" layoutY="300"/>
     </AnchorPane>
 </AnchorPane>

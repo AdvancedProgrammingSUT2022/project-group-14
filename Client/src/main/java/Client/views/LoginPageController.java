@@ -1,12 +1,21 @@
 package Client.views;
 
 import Client.application.App;
+import Client.controllers.ClientSocketController;
+import Client.enums.QueryRequests;
+import Client.enums.QueryResponses;
 import Client.models.User;
+import Client.models.network.Response;
+import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class LoginPageController {
     @FXML
@@ -21,22 +30,32 @@ public class LoginPageController {
     private Button registerButton;
 
     public void initialize() {
+        if (!App.isMute() && App.getMediaPlayer().isMute()) {
+            App.playNext();
+        }
         usernameTextField.setFocusTraversable(false);
         nicknameTextField.setFocusTraversable(false);
         passwordTextField.setFocusTraversable(false);
     }
 
-    public void loginButtonClicked(MouseEvent mouseEvent) {
-        User user = UserController.getUserByUsername(usernameTextField.getText());
-        if (user == null || !user.getPassword().equals(passwordTextField.getText())) {
-            usernameTextField.setStyle("-fx-border-color: #ff0022");
-            passwordTextField.setStyle("-fx-border-color: #ff0022");
-            loginButton.setDisable(true);
-            passwordTextField.setText("");
-            passwordTextField.setPromptText("Username and Password didn't match");
-        } else {
-            UserController.setLoggedInUser(user);
-            App.changeScene("mainMenuPage");
+    public void loginButtonClicked(MouseEvent mouseEvent) throws IOException {
+        Response response = Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOGIN_USER, new HashMap<>() {{
+            put("username", usernameTextField.getText());
+            put("password", passwordTextField.getText());
+        }}));
+        switch (response.getQueryResponse()) {
+            case OK -> {
+                MainMenuController.loggedInUser = new Gson().fromJson(response.getParams().get("user"), User.class);
+                ClientSocketController.startListener(8000);
+                App.changeScene("mainMenuPage");
+            }
+            case USER_NOT_EXIST, PASSWORD_INCORRECT -> {
+                usernameTextField.setStyle("-fx-border-color: #ff0022");
+                passwordTextField.setStyle("-fx-border-color: #ff0022");
+                loginButton.setDisable(true);
+                passwordTextField.setText("");
+                passwordTextField.setPromptText("Username and Password didn't match");
+            }
         }
     }
 
@@ -54,19 +73,29 @@ public class LoginPageController {
                 passwordTextField.setStyle("-fx-border-color: #ff0022");
                 passwordTextField.setPromptText("Complete this field!");
             }
-        } else if (UserController.getUserByUsername(usernameTextField.getText()) != null) {
-            usernameTextField.setStyle("-fx-border-color: #ff0022");
-            usernameTextField.setText("");
-            usernameTextField.setPromptText("Username already exists!");
-        } else if (UserController.getUserByNickname(nicknameTextField.getText()) != null) {
-            nicknameTextField.setStyle("-fx-border-color: #ff0022");
-            nicknameTextField.setText("");
-            nicknameTextField.setPromptText("Nickname already exists!");
         } else {
-            UserController.addUser(usernameTextField.getText(), passwordTextField.getText(), nicknameTextField.getText());
-            usernameTextField.setStyle("-fx-border-color: #11aa11");
-            nicknameTextField.setStyle("-fx-border-color: #11aa11");
-            passwordTextField.setStyle("-fx-border-color: #11aa11");
+            QueryResponses queryResponse = Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CREATE_USER, new HashMap<>() {{
+                put("username", usernameTextField.getText());
+                put("nickname", nicknameTextField.getText());
+                put("password", passwordTextField.getText());
+            }})).getQueryResponse();
+            switch (queryResponse) {
+                case OK -> {
+                    usernameTextField.setStyle("-fx-border-color: #11aa11");
+                    nicknameTextField.setStyle("-fx-border-color: #11aa11");
+                    passwordTextField.setStyle("-fx-border-color: #11aa11");
+                }
+                case USERNAME_EXIST -> {
+                    usernameTextField.setStyle("-fx-border-color: #ff0022");
+                    usernameTextField.setText("");
+                    usernameTextField.setPromptText("Username already exists!");
+                }
+                case NICKNAME_EXIST -> {
+                    nicknameTextField.setStyle("-fx-border-color: #ff0022");
+                    nicknameTextField.setText("");
+                    nicknameTextField.setPromptText("Nickname already exists!");
+                }
+            }
         }
     }
 

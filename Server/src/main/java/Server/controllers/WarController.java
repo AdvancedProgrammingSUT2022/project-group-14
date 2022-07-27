@@ -1,10 +1,15 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
 import Server.enums.units.UnitStates;
 import Server.models.City;
 import Server.models.Civilization;
+import Server.models.network.Response;
 import Server.models.tiles.Tile;
 import Server.models.units.*;
+import com.google.gson.Gson;
+
+import java.util.HashMap;
 
 public class WarController {
 
@@ -19,24 +24,55 @@ public class WarController {
             return "siege unit isn't ready for attack";
         } else {
             Tile attackingTile = MapController.getTileByCoordinates(x, y);
-            attackingUnit.setAttackingCoordination(x, y);
-            attackingUnit.setDestinationCoordinates(x, y);
             if (attackingTile.getCity() != null) {
                 if (attackingTile.getCity().getCivilizationName().equals(attackingUnit.getCivilizationName()))
                     return "you have your own city in this tile";
-                else attackCity(attackingUnit, attackingTile.getCity());
+                else {
+                    Civilization unitCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
+                    if (unitCivilization.getEnemies().contains(attackingTile.getCity().getCivilizationName())) {
+                        attackingUnit.setAttackingCoordination(x, y);
+                        attackingUnit.setDestinationCoordinates(x, y);
+                        attackCity(attackingUnit, attackingTile.getCity());
+                    } else {
+                        ServerUpdateController.sendUpdate(attackingUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_WAR_OPTIONS, new HashMap<>(){{
+                            put("enemyName", new Gson().toJson(attackingTile.getCity().getCivilizationName()));
+                        }}));
+                    }
+                }
             } else {
                 if (attackingTile.getCombatUnit() != null) {
                     if (attackingTile.getCombatUnit().getCivilizationName().equals(attackingUnit.getCivilizationName()))
                         return "there is already one of your units in this tile";
-                    else attackCombatUnit(attackingUnit, attackingTile.getCombatUnit());
+                    else {
+                        Civilization unitCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
+                        if (unitCivilization.getEnemies().contains(attackingTile.getCombatUnit().getCivilizationName())) {
+                            attackingUnit.setAttackingCoordination(x, y);
+                            attackingUnit.setDestinationCoordinates(x, y);
+                            attackCombatUnit(attackingUnit, attackingTile.getCombatUnit());
+                        } else {
+                            ServerUpdateController.sendUpdate(attackingUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_WAR_OPTIONS, new HashMap<>(){{
+                                put("enemyName", new Gson().toJson(attackingTile.getCombatUnit().getCivilizationName()));
+                            }}));
+                        }
+
+                    }
                 } else if (attackingTile.getNonCombatUnit() != null) {
                     if (attackingTile.getNonCombatUnit().getCivilizationName().equals(attackingUnit.getCivilizationName()))
                         return "there is already one of your units in this tile";
-                    else attackNonCombatUnit(attackingUnit, attackingTile.getNonCombatUnit());
+                    else {
+                        Civilization unitCivilization = WorldController.getWorld().getCivilizationByName(attackingUnit.getCivilizationName());
+                        if (unitCivilization.getEnemies().contains(attackingTile.getNonCombatUnit().getCivilizationName())) {
+                            attackingUnit.setAttackingCoordination(x, y);
+                            attackingUnit.setDestinationCoordinates(x, y);
+                            attackNonCombatUnit(attackingUnit, attackingTile.getNonCombatUnit());
+                        } else {
+                            ServerUpdateController.sendUpdate(attackingUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_WAR_OPTIONS, new HashMap<>(){{
+                                put("enemyName", new Gson().toJson(attackingTile.getNonCombatUnit().getCivilizationName()));
+                            }}));
+                        }
+
+                    }
                 } else {
-                    attackingUnit.setDestinationCoordinates(-1, -1);
-                    attackingUnit.setAttackingCoordination(-1, -1);
                     return "there is no unit or city in the destination";
                 }
             }
@@ -186,7 +222,21 @@ public class WarController {
                     combatUnit.getCivilizationName());
             CityController.conquerCity(city, combatUnit);
         } else {
-//            GamePageController.setCityOptions(city, combatUnit);
+            ServerUpdateController.sendUpdate(combatUnit.getCivilizationName(), new Response(QueryResponses.CHOOSE_CITY_OPTIONS, new HashMap<>(){{
+                put("city", new Gson().toJson(city));
+                put("combatUnit", new Gson().toJson(combatUnit));
+            }}));
         }
+    }
+
+    public static void declareWar(String enemyName) {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.addEnemy(enemyName);
+        WorldController.getWorld().getCivilizationByName(enemyName).addEnemy(currentCivilization.getName());
+    }
+    public static void makePeace(String name) {
+        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
+        currentCivilization.removeEnemy(name);
+        WorldController.getWorld().getCivilizationByName(name).removeEnemy(currentCivilization.getName());
     }
 }

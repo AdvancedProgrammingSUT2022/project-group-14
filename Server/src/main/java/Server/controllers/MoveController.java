@@ -1,5 +1,8 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
+import Server.enums.units.UnitStates;
+import Server.models.network.Response;
 import javafx.scene.paint.Color;
 import Server.models.tiles.Tile;
 import Server.models.units.CombatUnit;
@@ -7,6 +10,7 @@ import Server.models.units.NonCombatUnit;
 import Server.models.units.Unit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MoveController {
 
@@ -43,10 +47,16 @@ public class MoveController {
             if (nextTileToMove == null || ((error = impossibleToMoveToTile(nextTileToMove.getX(), nextTileToMove.getY(), unit)) != null
                     && error.equals("there is not any space left on the tile to move")
                     && unit.getMovementPoint() - (nextTileToMove.getMovingPoint()) <= 0)) {
-                MapController.getTileByCoordinates(unit.getDestinationX(), unit.getDestinationY()).getHex().setInfoText("Can't move!", Color.RED);
+                ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.CHANGE_HEX_INFO_TEXT, new HashMap<>(){{
+                    put("x", String.valueOf(unit.getDestinationX()));
+                    put("y", String.valueOf(unit.getDestinationY()));
+                    put("info", "Can't move!");
+                    put("color", "red");
+                }}));
                 unit.cancelMission();
                 break;
             }
+            unit.setUnitState(unit.getUnitState() == UnitStates.SLEEP ? UnitStates.WAKE : unit.getUnitState());
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
             unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
                     nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));

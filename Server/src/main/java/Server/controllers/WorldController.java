@@ -1,5 +1,7 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
+import Server.models.network.Response;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import Server.enums.Technologies;
@@ -18,6 +20,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Objects;
 
 public class WorldController {
     private static World world;
@@ -36,7 +41,23 @@ public class WorldController {
     }
 
     public static void endGame(String winnerCivilization) {
-//        EndGamePageController.setWinnerCivilization(winnerCivilization);
+        for (Civilization civilization : world.getAllCivilizations()) {
+            if (civilization.getName().equals(winnerCivilization)) {
+                Objects.requireNonNull(UserController.getUserByUsername(winnerCivilization)).setDateOfLastWin(new Date());
+                Objects.requireNonNull(UserController.getUserByUsername(winnerCivilization)).changeScore(100);
+                ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
+                    put("sceneName", "endGamePage");
+                    put("winner", String.valueOf(true));
+                    put("user", new Gson().toJson(UserController.getUserByUsername(civilization.getName())));
+                }}));
+            } else {
+                ServerUpdateController.sendUpdate(civilization.getName(), new Response(QueryResponses.CHANGE_SCENE, new HashMap<>() {{
+                    put("sceneName", "endGamePage");
+                    put("winner", String.valueOf(false));
+                    put("user", new Gson().toJson(UserController.getUserByUsername(civilization.getName())));
+                }}));
+            }
+        }
         world = null;
         resetSelection();
     }
@@ -77,7 +98,7 @@ public class WorldController {
             return "you have to choose a technology to research";
         for (Unit unit : currentCivilization.getAllUnits()) {
             int x = unit.getCurrentX() + 1, y = unit.getCurrentY() + 1;
-            if ((unit.getMovementPoint() > 0) && (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && unit.getUnitState() != UnitStates.SLEEP)) {
+            if ((unit.getMovementPoint() > 0) && (unit.getDestinationX() == -1 && unit.getDestinationY() == -1 && unit.getUnitState() != UnitStates.SLEEP && unit.getUnitState() != UnitStates.WORKING)) {
                 return unit.getName() + " in ( " + x + " , " + y + " ) coordinates needs to be moved";
             }
         }
@@ -180,11 +201,11 @@ public class WorldController {
 
     public static void saveGame(String name) throws IOException {
         FileWriter worldWriter = new FileWriter("./src/main/resources/worldSaves/" + name + ".json");
-//        FileWriter mapWriter = new FileWriter("./src/main/resources/mapSaves/" + name + ".json");
+        FileWriter mapWriter = new FileWriter("./src/main/resources/mapSaves/" + name + ".json");
         worldWriter.write(new Gson().toJson(world));
         worldWriter.close();
 
-//        mapWriter.write(new Gson().toJson(MapController.getMap()));
-//        mapWriter.close();
+        mapWriter.write(new Gson().toJson(MapController.getMap()));
+        mapWriter.close();
     }
 }

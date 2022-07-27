@@ -6,6 +6,10 @@ import Server.models.chats.Chat;
 import javafx.scene.image.Image;
 import Server.enums.Avatars;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.*;
 
 public class User {
@@ -19,9 +23,10 @@ public class User {
     private final HashMap<String, Chat> chats;
     private final ArrayList<String> invitations;
     private final ArrayList<String> peopleInLobby;
+    private String token;
+    transient private BufferedWriter bufferedWriter;
 
-    public User(String username, String password, String nickname)
-    {
+    public User(String username, String password, String nickname) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
@@ -95,6 +100,10 @@ public class User {
         this.avatarFileAddress = avatarFileAddress;
     }
 
+    public String getAvatarFileAddress() {
+        return this.avatarFileAddress;
+    }
+
     public Date getDateOfLastLogin() {
         return dateOfLastLogin;
     }
@@ -143,5 +152,21 @@ public class User {
         }
         peopleInLobby.clear();
         peopleInLobby.add(username);
+    }
+
+    public void setUpdateSocket(Socket socket) throws IOException {
+        this.bufferedWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+    }
+
+    public BufferedWriter getBufferedWriter() {
+        return this.bufferedWriter;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

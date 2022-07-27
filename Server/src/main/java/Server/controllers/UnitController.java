@@ -1,31 +1,30 @@
 package Server.controllers;
 
-import Server.Main;
 import Server.enums.Improvements;
+import Server.enums.QueryResponses;
 import Server.enums.units.CombatType;
 import Server.enums.units.UnitStates;
 import Server.enums.units.UnitTypes;
 import Server.models.City;
 import Server.models.Civilization;
+import Server.models.network.Response;
 import Server.models.units.*;
-import javafx.scene.Cursor;
-import javafx.scene.Group;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Text;
 import Server.models.tiles.Tile;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
-import java.util.Objects;
 
 public class UnitController {
 
-    public static String setUnitDestinationCoordinates(Unit unit, int x, int y) {
-        String reason;
-        if ((reason = MoveController.impossibleToMoveToTile(x, y, unit)) != null) {
-            MapController.getTileByCoordinates(x, y).getHex().setInfoText("Can't move!", Color.RED);
-            return reason;
+    public static void setUnitDestinationCoordinates(Unit unit, int x, int y) {
+        if (MoveController.impossibleToMoveToTile(x, y, unit) != null) {
+            ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.CHANGE_HEX_INFO_TEXT, new HashMap<>(){{
+                put("x", String.valueOf(x));
+                put("y", String.valueOf(y));
+                put("info", "Can't move!");
+                put("color", "red");
+            }}));
         } else {
             unit.setDestinationCoordinates(x, y);
             MoveController.moveUnitToDestination(unit);
@@ -33,7 +32,6 @@ public class UnitController {
                             " you moved " + unit.getName() + " to ( " + String.valueOf(x + 1) + " , " + String.valueOf(y + 1) + " ) coordinates",
                     unit.getCivilizationName());
         }
-        return null;
     }
 
     public static void resetMovingPoints(Civilization currentCivilization) {
@@ -72,7 +70,8 @@ public class UnitController {
             return "can not found a city in enemy territory";
         } else {
             Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(settler.getCivilizationName());
-            City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY(), settler.getCivilizationName());
+            ArrayList<Tile> tiles = new ArrayList<>(TileController.getAvailableNeighbourTiles(settler.getCurrentX(), settler.getCurrentY()));
+            City city = new City(currentCivilization.getCityName(), settler.getCurrentX(), settler.getCurrentY(), settler.getCivilizationName(), tiles);
             currentCivilization.addCity(city);
             currentTile.setCity(city);
             CivilizationController.updateMapVision(currentCivilization);
@@ -224,25 +223,5 @@ public class UnitController {
             }
             return null;
         }
-    }
-
-    public static Group getUnitGroup(Unit unit) {
-        Group group = new Group();
-        ImageView imageView = new ImageView(unit.getUnitType().getImage());
-        imageView.setFitWidth(imageView.getImage().getWidth() / 5);
-        imageView.setFitHeight(imageView.getImage().getHeight() / 5);
-        imageView.setLayoutX(-100);
-        imageView.setLayoutY(20);
-        Text text = new Text(unit.getUnitState().getName());
-        text.setLayoutX(-100);
-        text.setLayoutY(15);
-        group.getChildren().add(imageView);
-        group.getChildren().add(text);
-        group.setCursor(Cursor.HAND);
-        return group;
-    }
-
-    public static Image getActionImage(String name) {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/units/actions/" + name + ".png")).toString());
     }
 }

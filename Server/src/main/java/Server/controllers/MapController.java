@@ -1,6 +1,8 @@
 package Server.controllers;
 
+import Server.enums.QueryResponses;
 import Server.models.Civilization;
+import Server.models.network.Response;
 import Server.models.tiles.Coordination;
 import Server.models.tiles.Tile;
 import Server.models.units.CombatUnit;
@@ -106,7 +108,7 @@ public class MapController {
                 if (tile.getNonCombatUnit() != null && (tile.getNonCombatUnit().getCurrentX() != tile.getX() || tile.getNonCombatUnit().getCurrentY() != tile.getY())) {
                     tile.setNonCombatUnit(null);
                 }
-                tile.getHex().updateHex();
+                ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, tile));
             }
         }
     }

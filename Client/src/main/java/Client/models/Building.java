@@ -1,8 +1,7 @@
 package Client.models;
 
 import Client.enums.BuildingTypes;
-import Server.enums.BuildingTypes;
-import Server.enums.Technologies;
+import Client.enums.Technologies;
 
 public class Building {
     private final BuildingTypes buildingType;

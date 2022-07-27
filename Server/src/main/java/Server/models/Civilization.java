@@ -1,12 +1,15 @@
 package Server.models;
 
+import Server.controllers.CivilizationController;
 import Server.controllers.MapController;
 import Server.controllers.TileController;
 import Server.controllers.WorldController;
+import Server.enums.QueryResponses;
 import Server.enums.Technologies;
 import Server.enums.resources.LuxuryResourceTypes;
 import Server.enums.resources.StrategicResourceTypes;
 import Server.enums.units.UnitTypes;
+import Server.models.chats.Chat;
 import Server.models.tiles.Tile;
 import Server.models.units.*;
 
@@ -35,13 +38,23 @@ public class Civilization {
     private double gold, happiness, science;
 
     private final ArrayList<String> notifications = new ArrayList<>();
+    private ArrayList<String> enemies = new ArrayList<>();
+    private ArrayList<Trade> tradesFromOtherCivilizations = new ArrayList<>();
+    transient private final HashMap<String, Chat> chats = new HashMap<>();
 
-    public Civilization(String name, int i) {
+    public Civilization(String name, int i, ArrayList<Civilization> civilizations) {
         this.name = name;
         int randomX, randomY;
+        mainLoop :
         do {
             randomX = new Random().nextInt(2, MapController.width - 2);
             randomY = new Random().nextInt(2, MapController.height - 2);
+            for (Civilization civilization : civilizations) {
+                for (Unit unit : civilization.getAllUnits()) {
+                    if (TileController.coordinatesAreInRange(unit.getCurrentX(), unit.getCurrentY(), randomX, randomY, 1))
+                        continue mainLoop;
+                }
+            }
         } while (MapController.getMap()[randomX][randomY].getType().getMovementPoint() == 9999);
         if (i == 0 && WorldController.getCheatCoordination() != null
                 && TileController.selectedTileIsValid(WorldController.getCheatCoordination().getX(), WorldController.getCheatCoordination().getY())) {
@@ -50,6 +63,7 @@ public class Civilization {
         }
         melees.add(new Melee(UnitTypes.WARRIOR, randomX, randomY, name));
         settlers.add(new Settler(UnitTypes.SETTLER, randomX, randomY, name));
+//        workers.add(new Worker(UnitTypes.WORKER, randomX, randomY, name));
         this.happiness = 10;
         citiesNames.add(name + "1");
         citiesNames.add(name + "2");
@@ -203,5 +217,106 @@ public class Civilization {
                 "Total number of units : " + getAllUnits().size() + "\n" +
                 "Total number of cities : " + cities.size() + "\n" +
                 "Total Technologies Acquired : " + totalTechnologiesAcquired + "\n";
+    }
+
+    public ArrayList<String> getEnemies() {
+        return enemies;
+    }
+
+    public void addEnemy(String enemyName) {
+        enemies.add(enemyName);
+    }
+
+    public void removeEnemy(String enemyName) {
+        try {
+            enemies.remove(enemyName);
+        } catch (Exception e) {
+            System.out.println("this civilization isn't your enemy");
+        }
+    }
+
+    public ArrayList<Trade> getTradesFromOtherCivilizations() {
+        return tradesFromOtherCivilizations;
+    }
+
+    public QueryResponses acceptTrade(int indexOfTrade) {
+        Trade trade = tradesFromOtherCivilizations.get(indexOfTrade);
+        Civilization offeringCivilization = WorldController.getWorld().getCivilizationByName(trade.getOfferingCivilization());
+        if (trade.getRequestedGold() > this.gold) {
+            return QueryResponses.YOU_NOT_ENOUGH_GOLD;
+        } else if (trade.getRequestedStrategicResource() != null && this.getStrategicResources().get(trade.getRequestedStrategicResource()) < 1) {
+            return QueryResponses.YOU_LACK_STRATEGIC_RESOURCE;
+        } else if (trade.getRequestedLuxuryResource() != null && this.getLuxuryResources().get(trade.getRequestedLuxuryResource()) < 1) {
+            return QueryResponses.YOU_LACK_LUXURY_RESOURCE;
+        } else if (trade.getOfferedGold() > offeringCivilization.getGold()) {
+            return QueryResponses.OTHER_CIVILIZATION_NOT_ENOUGH_GOLD;
+        } else if (trade.getOfferedStrategicResource() != null && offeringCivilization.getStrategicResources().get(trade.getOfferedStrategicResource()) < 1) {
+            return QueryResponses.OTHER_CIVILIZATION_LACK_STRATEGIC_RESOURCE;
+        } else if (trade.getOfferedLuxuryResource() != null && offeringCivilization.getLuxuryResources().get(trade.getOfferedLuxuryResource()) < 1) {
+            return QueryResponses.OTHER_CIVILIZATION_LACK_LUXURY_RESOURCE;
+        } else {
+            this.gold -= trade.getRequestedGold() + trade.getOfferedGold();
+            if (trade.getRequestedLuxuryResource() != null) {
+                this.getLuxuryResources().put(trade.getRequestedLuxuryResource(), this.getLuxuryResources().get(trade.getRequestedLuxuryResource()) - 1);
+                offeringCivilization.getLuxuryResources().put(trade.getRequestedLuxuryResource(), offeringCivilization.getLuxuryResources().get(trade.getRequestedLuxuryResource()) + 1);
+                if (offeringCivilization.getLuxuryResources().get(trade.getRequestedLuxuryResource()) == 1)
+                    offeringCivilization.setHappiness(offeringCivilization.getHappiness() + 4);
+            }
+            if (trade.getRequestedStrategicResource() != null) {
+                this.getStrategicResources().put(trade.getRequestedStrategicResource(), this.getStrategicResources().get(trade.getRequestedStrategicResource()) - 1);
+                offeringCivilization.getStrategicResources().put(trade.getRequestedStrategicResource(), offeringCivilization.getStrategicResources().get(trade.getRequestedStrategicResource()) + 1);
+            }
+            offeringCivilization.setGold(offeringCivilization.getGold() - trade.getOfferedGold() + trade.getRequestedGold());
+            if (trade.getOfferedLuxuryResource() != null) {
+                offeringCivilization.getLuxuryResources().put(trade.getOfferedLuxuryResource(), offeringCivilization.getLuxuryResources().get(trade.getOfferedLuxuryResource()) - 1);
+                this.getLuxuryResources().put(trade.getOfferedLuxuryResource(), this.getLuxuryResources().get(trade.getOfferedLuxuryResource()) + 1);
+                if (this.getLuxuryResources().get(trade.getOfferedLuxuryResource()) == 1)
+                    this.happiness += 4;
+            }
+            if (trade.getOfferedStrategicResource() != null) {
+                offeringCivilization.getStrategicResources().put(trade.getOfferedStrategicResource(), offeringCivilization.getStrategicResources().get(trade.getOfferedStrategicResource()) - 1);
+                this.getStrategicResources().put(trade.getOfferedStrategicResource(), this.getStrategicResources().get(trade.getOfferedStrategicResource()) + 1);
+            }
+
+            CivilizationController.addNotification(
+                    "In turn " + WorldController.getWorld().getActualTurn()
+                            + " you accepted a trade from " + offeringCivilization.getName(),
+                    this.name);
+            CivilizationController.addNotification(
+                    "In turn " + WorldController.getWorld().getActualTurn()
+                            + " your trade was accepted by " + this.name,
+                    trade.getOfferingCivilization());
+            return QueryResponses.OK;
+        }
+
+    }
+
+    public void addTrade(Trade trade) {
+        tradesFromOtherCivilizations.add(trade);
+        CivilizationController.addNotification(
+                "In turn " + WorldController.getWorld().getActualTurn()
+                        + " a trade was offered to you from " + trade.getOfferingCivilization(),
+                this.name);
+    }
+
+    public City getCityByName(String name) {
+        for (City city : this.cities) {
+            if (city.getName().equals(name)) return city;
+        }
+        return null;
+    }
+
+    public HashMap<String, Chat> getChats() {
+        return chats;
+    }
+
+    public void addChats(Chat chat) {
+        this.chats.put(chat.getName(), chat);
+    }
+
+    public QueryResponses getTechnologyStatus(Technologies technology) {
+        if (this.technologies.get(technology) <= 0) return QueryResponses.TECHNOLOGY_WAS_STUDIED;
+        else if (technology.equals(this.currentTechnology)) return QueryResponses.TECHNOLOGY_IS_BEING_STUDIED;
+        else return QueryResponses.TECHNOLOGY_HAS_NOT_BEEN_STUDIED;
     }
 }

@@ -1,6 +1,9 @@
 package Server.models.tiles;
 
+import Server.controllers.ServerUpdateController;
+import Server.enums.QueryResponses;
 import Server.models.City;
+import Server.models.network.Response;
 import Server.models.resources.Resource;
 import Server.models.resources.StrategicResource;
 import Server.models.units.CombatUnit;
@@ -20,7 +23,6 @@ import java.util.Objects;
 import java.util.Random;
 
 public class Tile {
-    private final Hex hex;
     private final Coordination coordination;
 
     private TileBaseTypes type;
@@ -48,6 +50,7 @@ public class Tile {
     private CombatUnit combatUnit;
     private NonCombatUnit nonCombatUnit;
     private Ruin ruin;
+    private boolean showRuin;
 
     public Tile(TileFeatureTypes feature, TileBaseTypes type, int x, int y, Ruin ruin) {
         this.coordination = new Coordination(x, y);
@@ -65,7 +68,6 @@ public class Tile {
         for (int i = 0; i < 6; i++)
             this.isRiver[i] = false;
         this.resource = Resource.generateRandomResource(type, feature);
-        this.hex = new Hex(this);
         this.ruin = ruin;
     }
 
@@ -122,7 +124,8 @@ public class Tile {
 
         if (resource.getType() instanceof LuxuryResourceTypes) {
             currenCivilization.getLuxuryResources().put(resource.getName(), currenCivilization.getLuxuryResources().get(resource.getName()) + 1);
-            currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
+            if (currenCivilization.getLuxuryResources().get(resource.getName()) == 1)
+                currenCivilization.setHappiness(currenCivilization.getHappiness() + 4);
         } else if (resource instanceof StrategicResource) {
             currenCivilization.getStrategicResources().put(resource.getName(), currenCivilization.getStrategicResources().get(resource.getName()) + 1);
         }
@@ -208,7 +211,7 @@ public class Tile {
             this.combatImpact -= this.feature.getCombatImpact();
         }
         this.feature = feature;
-        hex.updateHex();
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Resource getResource() {
@@ -217,7 +220,6 @@ public class Tile {
 
     public void setResource(Resource resource) {
         this.resource = resource;
-        hex.updateHex();
     }
 
     public boolean[] getIsRiver() {
@@ -232,8 +234,8 @@ public class Tile {
         this.roadState = roadState;
         if (this.roadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 2 / 3;
-            hex.updateHex();
         }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public int getRailRoadState() {
@@ -244,8 +246,8 @@ public class Tile {
         this.railRoadState = railRoadState;
         if (this.railRoadState == 0 && this.movingPoint != 9999) {
             this.movingPoint *= 1 / 2;
-            hex.updateHex();
         }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Improvements getImprovement() {
@@ -254,7 +256,7 @@ public class Tile {
 
     public void setImprovement(Improvements improvement) {
         this.improvement = improvement;
-        hex.updateHex();
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public int getImprovementTurnsLeftToBuild() {
@@ -263,6 +265,7 @@ public class Tile {
 
     public void setImprovementTurnsLeftToBuild(int improvementTurnsLeftToBuild) {
         this.improvementTurnsLeftToBuild = improvementTurnsLeftToBuild;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public int getPillageState() {
@@ -282,6 +285,7 @@ public class Tile {
             this.production += this.resource.getProduction();
             this.movingPoint /= 3 / 2;
         }
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public CombatUnit getCombatUnit() {
@@ -290,7 +294,7 @@ public class Tile {
 
     public void setCombatUnit(CombatUnit combatUnit) {
         this.combatUnit = combatUnit;
-        hex.updateHex();
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public NonCombatUnit getNonCombatUnit() {
@@ -299,7 +303,7 @@ public class Tile {
 
     public void setNonCombatUnit(NonCombatUnit nonCombatUnit) {
         this.nonCombatUnit = nonCombatUnit;
-        hex.updateHex();
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public City getCity() {
@@ -309,11 +313,10 @@ public class Tile {
     public void setCity(City city) {
         this.city = city;
         if (city != null) {
-            for (Tile tile : city.getTerritory()) {
-                tile.getHex().updateHex();
-            }
+            for (Tile tile : city.getTerritory())
+                ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, tile));
         } else {
-            hex.updateHex();
+            ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
         }
     }
 
@@ -323,19 +326,22 @@ public class Tile {
 
     public void setCivilization(String civilizationName) {
         this.civilizationName = civilizationName;
-        hex.updateHex();
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
-    public Hex getHex() {
-        return hex;
-    }
 
     public void setRuin(Ruin ruin) {
         this.ruin = ruin;
+        this.showRuin = true;
+        ServerUpdateController.sendUpdate(WorldController.getWorld().getCurrentCivilizationName(), new Response(QueryResponses.UPDATE_GIVEN_TILE, this));
     }
 
     public Ruin getRuin() {
         return ruin;
+    }
+
+    public boolean showRuin() {
+        return this.showRuin;
     }
 
     public String getInfo() {
@@ -356,12 +362,12 @@ public class Tile {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tile tile = (Tile) o;
-        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && hex.equals(tile.hex) && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
+        return Double.compare(tile.food, food) == 0 && Double.compare(tile.production, production) == 0 && Double.compare(tile.gold, gold) == 0 && combatImpact == tile.combatImpact && movingPoint == tile.movingPoint && improvementTurnsLeftToBuild == tile.improvementTurnsLeftToBuild && roadState == tile.roadState && railRoadState == tile.railRoadState && pillageState == tile.pillageState && coordination.equals(tile.coordination) && type == tile.type && feature == tile.feature && Objects.equals(resource, tile.resource) && improvement == tile.improvement && Arrays.equals(isRiver, tile.isRiver) && Objects.equals(civilizationName, tile.civilizationName) && Objects.equals(combatUnit, tile.combatUnit) && Objects.equals(nonCombatUnit, tile.nonCombatUnit);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(hex, coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, combatUnit, nonCombatUnit);
+        int result = Objects.hash(coordination, type, feature, food, production, gold, combatImpact, movingPoint, resource, improvement, improvementTurnsLeftToBuild, roadState, railRoadState, pillageState, civilizationName, combatUnit, nonCombatUnit);
         result = 31 * result + Arrays.hashCode(isRiver);
         return result;
     }

@@ -1,7 +1,9 @@
 package Client.enums;
 
-import Server.Main;
-import Server.controllers.WorldController;
+import Client.application.App;
+import Client.controllers.ClientSocketController;
+import Client.models.network.Response;
+import com.google.gson.Gson;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -84,7 +86,7 @@ public enum Technologies {
     }
 
     public Image getImage() {
-        return new Image(Objects.requireNonNull(Main.class.getResource("/images/technologies/" + this.name + ".png")).toString());
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/technologies/" + this.name + ".png")).toString());
     }
 
     public HashSet<String> getRequiredTechnologies() {
@@ -105,7 +107,16 @@ public enum Technologies {
 
     public Group getTechnologyGroup(int x, int y) {
         Group group = new Group();
-        Rectangle nameRectangle = new Rectangle(230, 27, Color.CADETBLUE);
+        Rectangle nameRectangle = null;
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_TECHNOLOGY_STATUS, new HashMap<>() {{
+            put("technology", new Gson().toJson(Technologies.this));
+        }});
+        switch (Objects.requireNonNull(response).getQueryResponse()) {
+            case TECHNOLOGY_WAS_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.CADETBLUE);
+            case TECHNOLOGY_IS_BEING_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.GOLD);
+            case TECHNOLOGY_HAS_NOT_BEEN_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.RED);
+        }
+        assert nameRectangle != null;
         nameRectangle.setLayoutX(x);
         nameRectangle.setLayoutY(y - nameRectangle.getHeight());
         Rectangle turnsRectangle = new Rectangle(145, 27, Color.rgb(238, 128, 0));
@@ -113,7 +124,7 @@ public enum Technologies {
         turnsRectangle.setLayoutY(y);
         Text nameText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2 - 25, nameRectangle.getLayoutY() + nameRectangle.getHeight() - 7, this.getName().replaceAll("_", " "));
         nameText.setFill(Color.WHITE);
-        Text turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getTechnologies().get(this));
+        Text turnsText = new Text(turnsRectangle.getLayoutX() + turnsRectangle.getWidth() / 2, turnsRectangle.getLayoutY() + turnsRectangle.getHeight() - 7, "" + this.cost);
         turnsText.setFill(Color.WHITE);
         Circle backgroundCircle = new Circle(40, Color.CADETBLUE);
         backgroundCircle.setLayoutX(x);
@@ -132,7 +143,9 @@ public enum Technologies {
         group.setOnMouseClicked(mouseEvent -> {
             if (mouseEvent.getButton().equals(MouseButton.PRIMARY)) {
                 if (mouseEvent.getClickCount() == 2) {
-                    WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).setCurrentTechnology(this);
+                    ClientSocketController.sendRequestAndGetResponse(QueryRequests.SET_CURRENT_TECHNOLOGY, new HashMap<>() {{
+                        put("technologyName", Technologies.this.name.toUpperCase(Locale.ROOT));
+                    }});
                 }
             }
         });

@@ -1,11 +1,17 @@
 package Client.views;
 
 import Client.application.App;
+import Client.controllers.ClientSocketController;
+import Client.controllers.HexController;
 import Client.enums.BuildingTypes;
+import Client.enums.QueryRequests;
 import Client.enums.units.UnitTypes;
 import Client.models.Building;
 import Client.models.Citizen;
 import Client.models.City;
+import Client.models.network.Response;
+import Client.models.units.Unit;
+import com.google.gson.Gson;
 import javafx.fxml.FXML;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Spinner;
@@ -16,6 +22,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class CityPanelPageController {
@@ -59,14 +66,15 @@ public class CityPanelPageController {
     private Text infoText;
     @FXML
     private Text citizensText;
-    private final City city = WorldController.getSelectedCity();
+    private City city;
 
     public void initialize() {
+        city = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_SELECTED_CITY, new HashMap<>())).getParams().get("city"), City.class);
         calcGoods();
         initSpinners();
         initChoiceBoxes();
         infoText.setText("");
-        citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
+        citizensText.setText(city.employedCitizensData() + city.unemployedCitizensData());
         initProduction();
     }
 
@@ -86,17 +94,25 @@ public class CityPanelPageController {
     public void initChoiceBoxes() {
         unitsBox.setValue("Units");
         unitsBox.getItems().clear();
-        for (UnitTypes value : UnitTypes.values())
-            if (CityController.canProduceUnit(value))
+        for (UnitTypes value : UnitTypes.values()) {
+            if (Boolean.parseBoolean(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CAN_PRODUCE_UNIT, new HashMap<>() {{
+                put("unitType", new Gson().toJson(value));
+            }})).getParams().get("boolean"))) {
                 unitsBox.getItems().add(value.getName());
+            }
+        }
         unitsBox.setOnMouseClicked(mouseEvent -> {
             buildingsBox.setValue("Buildings");
         });
         buildingsBox.setValue("Buildings");
         buildingsBox.getItems().clear();
-        for (BuildingTypes value : BuildingTypes.values())
-            if (CityController.canProduceBuilding(value))
+        for (BuildingTypes value : BuildingTypes.values()) {
+            if (Boolean.parseBoolean(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CAN_PRODUCE_BUILDING, new HashMap<>() {{
+                put("buildingType", new Gson().toJson(value));
+            }})).getParams().get("boolean"))) {
                 buildingsBox.getItems().add(value.getName());
+            }
+        }
         buildingsBox.setOnMouseClicked(mouseEvent -> {
             unitsBox.setValue("Units");
             if (!buildingsBox.getValue().equals("Buildings")) {
@@ -117,30 +133,16 @@ public class CityPanelPageController {
     }
 
     public void initSpinners() {
-        //TODO is this function ok?
-        xTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getHeight(), 1, 1));
-        yTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
-        xCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
-        yCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, MapController.getWidth(), 1, 1));
+        xTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getHeight(), 1, 1));
+        yTileSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getWidth(), 1, 1));
+        xCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getWidth(), 1, 1));
+        yCitizenSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, HexController.getWidth(), 1, 1));
     }
 
     public void calcGoods() {
-        double addedGold = 0, addedFood = 0, addedProduction = 0;
-        for (Citizen citizen : city.getCitizens()) {
-            if (citizen.isWorking()) {
-                addedGold += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getGold();
-                addedFood += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getFood();
-                addedProduction += MapController.getMap()[citizen.getXOfWorkingTile()][citizen.getYOfWorkingTile()].getProduction();
-            }
-        }
-        for (Building building : city.getBuildings()) {
-            addedGold += addedGold * building.getBuildingType().getPercentOfGold() / 100;
-            addedFood += building.getBuildingType().getFood();
-            addedProduction += addedProduction * building.getBuildingType().getPercentOfProduction() / 100;
-            if (building.getName().equals("mint"))
-                addedGold += city.numberOfWorkingCitizens() * 3;
-        }
-        addedProduction += city.getCitizens().size();
+        double addedGold = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CITY_GOLD, new HashMap<>())).getParams().get("gold"), double.class);
+        double addedProduction = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CITY_PRODUCTION, new HashMap<>())).getParams().get("production"), double.class);
+        double addedFood = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_CITY_FOOD, new HashMap<>())).getParams().get("food"), double.class);
         goldText.setText("Gold : " + addedGold);
         foodText.setText("Food : " + addedFood);
         productionText.setText("Production : " + addedProduction);
@@ -152,33 +154,77 @@ public class CityPanelPageController {
     }
 
     public void buyTileButtonClicked(MouseEvent mouseEvent) {
-        infoText.setText(CityController.buyTileAndAddItToCityTerritory(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()),
-                city, xTileSpinner.getValue() - 1, yTileSpinner.getValue() - 1));
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.BUY_TILE, new HashMap<>() {{
+            put("city", new Gson().toJson(city));
+            put("x", new Gson().toJson(xTileSpinner.getValue() - 1));
+            put("y", new Gson().toJson(yTileSpinner.getValue() - 1));
+        }});
+        switch (Objects.requireNonNull(response).getQueryResponse()) {
+            case OK -> {
+                infoText.setText("tile was bought successfully");
+                city = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_SELECTED_CITY, new HashMap<>())).getParams().get("city"), City.class);
+            }
+            case NOT_ENOUGH_GOLD -> infoText.setText("you don't have enough gold for buying this tile");
+            case CANT_BUY_THIS_TILE -> infoText.setText("can't buy this tile");
+            case ALREADY_HAVE_TILE -> infoText.setText("you already have this tile");
+        }
     }
 
     public void purchaseButtonClicked(MouseEvent mouseEvent) {
         if (!unitsBox.getValue().equals("Units")) {
-            CityController.producingUnit(UnitTypes.valueOf(unitsBox.getValue().toUpperCase()), "gold");
+            UnitTypes unit = UnitTypes.valueOf(unitsBox.getValue().toUpperCase());
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.PRODUCE_UNIT, new HashMap<>() {{
+                put("unitType", new Gson().toJson(unit));
+            }});
+            assert response != null;
+            city = new Gson().fromJson(response.getParams().get("city"), City.class);
             initProduction();
         } else if (!buildingsBox.getValue().equals("Buildings")) {
-            CityController.producingBuilding(BuildingTypes.valueOf(buildingsBox.getValue().toUpperCase()), "gold");
+            BuildingTypes building = BuildingTypes.valueOf(buildingsBox.getValue().toUpperCase());
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.PRODUCE_BUILDING, new HashMap<>() {{
+                put("buildingType", new Gson().toJson(building));
+            }});
+            assert response != null;
+            city = new Gson().fromJson(response.getParams().get("city"), City.class);
             initProduction();
         }
     }
 
     public void unlockButtonClicked(MouseEvent mouseEvent) {
         if (!employedCitizensBox.getValue().equals("EmployedCitizens")) {
-            infoText.setText(CityController.unlockCitizenFromTile(city, Integer.parseInt(employedCitizensBox.getValue())));
-            citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.UNLOCK_CITIZEN_FROM_TILE, new HashMap<>() {{
+                put("city", new Gson().toJson(city));
+                put("id", employedCitizensBox.getValue());
+            }});
+            switch (Objects.requireNonNull(response).getQueryResponse()) {
+                case OK -> {
+                    infoText.setText("citizen unlocked successfully");
+                    city = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_SELECTED_CITY, new HashMap<>())).getParams().get("city"), City.class);
+                }
+                case NO_CITIZEN_EXISTS -> infoText.setText("no citizens exists with this id");
+            }
+            citizensText.setText(city.employedCitizensData() + city.unemployedCitizensData());
         }
         initChoiceBoxes();
     }
 
     public void lockButtonClicked(MouseEvent mouseEvent) {
         if (!unemployedCitizensBox.getValue().equals("UnemployedCitizens")) {
-            infoText.setText(CityController.lockCitizenToTile(city, Integer.parseInt(unemployedCitizensBox.getValue()),
-                    xCitizenSpinner.getValue() - 1, yCitizenSpinner.getValue() - 1));
-            citizensText.setText(CityController.employedCitizensData(city) + CityController.unemployedCitizensData(city));
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.LOCK_CITIZEN_TO_TILE, new HashMap<>() {{
+                put("city", new Gson().toJson(city));
+                put("id", unemployedCitizensBox.getValue());
+                put("x", new Gson().toJson(xCitizenSpinner.getValue() - 1));
+                put("y", new Gson().toJson(yCitizenSpinner.getValue() - 1));
+            }});
+            switch (Objects.requireNonNull(response).getQueryResponse()) {
+                case OK -> {
+                    infoText.setText("citizen locked successfully");
+                    city = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_SELECTED_CITY, new HashMap<>())).getParams().get("city"), City.class);
+                }
+                case NO_CITIZEN_EXISTS -> infoText.setText("no citizens exists with this id");
+                case SELECT_TILE_IN_CITY -> infoText.setText("you should select a tile inside city territory");
+            }
+            citizensText.setText(city.employedCitizensData() + city.unemployedCitizensData());
         }
         initChoiceBoxes();
     }
@@ -189,7 +235,9 @@ public class CityPanelPageController {
 
     public void cancelButtonClicked(MouseEvent mouseEvent) {
         if (!productionName.getText().equals("")) {
-            city.cancelProduction();
+            Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.CANCEL_PRODUCTION, new HashMap<>());
+            assert response != null;
+            city = new Gson().fromJson(response.getParams().get("city"), City.class);
             initProduction();
         }
     }

@@ -1,6 +1,7 @@
 package Client.models.units;
 
-import Server.enums.units.UnitTypes;
+
+import Client.enums.units.UnitTypes;
 
 public class Worker extends NonCombatUnit {
     public Worker(UnitTypes unitInfo, int x, int y, String civilization) {

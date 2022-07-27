@@ -3,10 +3,7 @@ package Client.models.units;
 import Client.enums.units.CombatType;
 import Client.enums.units.UnitStates;
 import Client.enums.units.UnitTypes;
-import Server.enums.units.CombatType;
-import Server.enums.units.UnitStates;
-import Server.enums.units.UnitTypes;
-import Server.models.tiles.Coordination;
+import Client.models.tiles.Coordination;
 
 import java.util.Objects;
 

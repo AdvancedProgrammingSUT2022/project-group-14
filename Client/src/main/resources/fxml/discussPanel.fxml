@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.views.DiscussPanelController">
+
+    <ScrollPane hbarPolicy="NEVER" prefHeight="590.0" prefWidth="520" vbarPolicy="NEVER">
+        <AnchorPane prefHeight="720" prefWidth="520">
+            <Button layoutX="180.0" layoutY="123.0" onMouseClicked="#createChatClicked" style="-fx-pref-width: 160;" text="Start Discuss" />
+            <VBox fx:id="chatNamesVBox" alignment="CENTER" layoutX="25.0" layoutY="229.0" prefHeight="50.0" prefWidth="472.0" spacing="3" />
+            <MenuButton fx:id="civilizationsMenuButton" layoutX="148.0" layoutY="78.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="225.0" text="Civilizations" />
+        </AnchorPane>
+    </ScrollPane>
+    <ScrollPane fx:id="chatMessagesScrollPane" hbarPolicy="NEVER" layoutX="520" layoutY="45.0" prefHeight="545.0" prefWidth="760" vbarPolicy="NEVER">
+        <AnchorPane prefHeight="775.0" prefWidth="760">
+            <VBox fx:id="chatMessagesVBox" alignment="CENTER" layoutX="130.0" layoutY="45" prefWidth="500.0" spacing="5" />
+        </AnchorPane>
+    </ScrollPane>
+    <Text fx:id="chatTitle" fill="WHITE" layoutX="761.0" layoutY="39.0" text="Text" textAlignment="CENTER" wrappingWidth="277.5611572265625" />
+    <TextField fx:id="chatMessageTextField" layoutX="750.0" layoutY="600" prefWidth="349.0" promptText="Message" />
+    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back" />
+
+</AnchorPane>

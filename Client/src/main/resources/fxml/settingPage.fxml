@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Client.views.SettingPageController">
+   <children>
+      <Button fx:id="muteButton" layoutX="450.0" layoutY="330.0" mnemonicParsing="false" onMouseClicked="#muteButtonClicked"/>
+      <Button layoutX="700.0" layoutY="330.0" mnemonicParsing="false" text="next track" onMouseClicked="#nextTrackClicked"/>
+       <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
+   </children>
+</AnchorPane>

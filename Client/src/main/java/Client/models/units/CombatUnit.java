@@ -1,7 +1,7 @@
 package Client.models.units;
 
-import Server.enums.units.UnitTypes;
-import Server.models.tiles.Coordination;
+import Client.enums.units.UnitTypes;
+import Client.models.tiles.Coordination;
 
 public class CombatUnit extends Unit {
     private final double defenseStrength;

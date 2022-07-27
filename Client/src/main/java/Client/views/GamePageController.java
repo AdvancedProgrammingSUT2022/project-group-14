@@ -1,20 +1,26 @@
 package Client.views;
 
 import Client.application.App;
-
+import Client.controllers.ClientSocketController;
+import Client.controllers.HexController;
 import Client.enums.Improvements;
+import Client.enums.QueryRequests;
 import Client.enums.Technologies;
 import Client.enums.units.CombatType;
-import Client.enums.units.UnitStates;
 import Client.enums.units.UnitTypes;
 import Client.models.City;
-import Client.models.Civilization;
+import Client.models.network.Response;
+import Client.models.tiles.Hex;
 import Client.models.units.*;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.control.*;
+import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -25,14 +31,26 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 
+import java.util.*;
+
+import Client.models.units.CombatUnit;
+import Client.models.units.NonCombatUnit;
+import Client.models.units.Unit;
+
+import java.util.HashMap;
 import java.util.Objects;
 
 public class GamePageController {
+    public static boolean isMyTurn;
     public static boolean stopTimeline;
     public static String infoPanelName;
     public static boolean showCityOptions;
+    public static boolean showDeclareWar;
     public static City city;
     public static CombatUnit combatUnit;
+    public static String enemyName;
+    @FXML
+    private AnchorPane notMyTurnPane;
     @FXML
     private AnchorPane mainPane;
     @FXML
@@ -79,21 +97,30 @@ public class GamePageController {
     private Text unitPanelCSText;
     @FXML
     private AnchorPane cityOptionsPane;
+    @FXML
+    private AnchorPane declareWarOptionsPane;
     private Timeline timeline;
 
     public void initialize() {
-        cityOptionsPane.setVisible(false);
-        initNavBar();
-        initTimeLine();
-        initResearchPanel();
-        initHexes();
-        mainPane.setOnKeyReleased(keyEvent -> {
-            if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
-                cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
-                cheatCodeText.setVisible(!cheatCodeText.isVisible());
-            }
-        });
-        timeline.play();
+        if (isMyTurn) {
+            notMyTurnPane.setVisible(false);
+            cityOptionsPane.setVisible(false);
+            declareWarOptionsPane.setVisible(false);
+            initNavBar();
+            initTimeLine();
+            initResearchPanel();
+            initHexes();
+            mainPane.setOnKeyReleased(keyEvent -> {
+                if (keyEvent.isControlDown() && keyEvent.isShiftDown() && keyEvent.getCode().getName().equals("C")) {
+                    cheatCodeArea.setVisible(!cheatCodeArea.isVisible());
+                    cheatCodeText.setVisible(!cheatCodeText.isVisible());
+                }
+            });
+            timeline.play();
+            yearText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_YEAR, new HashMap<>())).getParams().get("year"));
+        } else {
+            notMyTurnPane.setVisible(true);
+        }
     }
 
 
@@ -101,25 +128,27 @@ public class GamePageController {
         goldCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/goldLogo.png")).toString())));
         happinessCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/happinessLogo.png")).toString())));
         scienceCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/resources/scienceLogo.png")).toString())));
-        goldText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getGold());
+        goldText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_GOLD, new HashMap<>())).getParams().get("gold"));
         goldText.setFill(Color.GOLD);
-        happinessText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getHappiness());
+        happinessText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_HAPPINESS, new HashMap<>())).getParams().get("happiness"));
         happinessText.setFill(Color.rgb(17, 140, 33));
-        scienceText.setText("" + WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getScience());
+        scienceText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_SCIENCE, new HashMap<>())).getParams().get("science"));
         scienceText.setFill(Color.rgb(7, 146, 169));
         infoPanelsBox.setValue("InfoPanels");
-        infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel");
+        infoPanelsBox.getItems().addAll("UnitPanel", "CityPanel", "DemographicPanel", "NotificationsPanel", "MilitaryPanel", "EconomicStatusPanel", "DiplomacyPanel");
         settingsCircle.setFill(new ImagePattern(new Image(Objects.requireNonNull(App.class.getResource("/images/settings.png")).toString())));
+        settingsCircle.setCursor(Cursor.HAND);
+        settingsCircle.setOnMouseClicked(mouseEvent -> App.changeScene("settingPage"));
         cheatCodeArea.setVisible(false);
         cheatCodeText.setVisible(false);
     }
 
     public void initHexes() {
-        for (int i = 0; i < MapController.getWidth(); i++) {
-            for (int j = 0; j < MapController.getHeight(); j++) {
-                Hex hex = MapController.getTileByCoordinates(i, j).getHex();
+        for (int i = 0; i < HexController.getWidth(); i++) {
+            for (int j = 0; j < HexController.getHeight(); j++) {
+                Hex hex = HexController.getHexOfTheGivenCoordination(i, j);
                 hexPane.getChildren().add(hex.getGroup());
-                hex.updateHex();
+                HexController.updateHex(i, j);
             }
         }
     }
@@ -128,11 +157,11 @@ public class GamePageController {
         researchPanelScrollPane.setVisible(false);
         researchPanelPane.getChildren().remove(1, researchPanelPane.getChildren().size());
         int i = 1;
-        for (Technologies availableTechnology : CivilizationController.getAvailableTechnologies(WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()))) {
-            if (WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName()).getCurrentTechnology() != availableTechnology) {
-                researchPanelPane.getChildren().add(availableTechnology.getTechnologyGroup(50, i * 90));
-                i++;
-            }
+        HashSet<Technologies> technologies = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_AVAILABLE_TECHNOLOGIES, new HashMap<>())).getParams().get("technologies"), new TypeToken<Set<Technologies>>() {
+        }.getType());
+        for (Technologies availableTechnology : technologies) {
+            researchPanelPane.getChildren().add(availableTechnology.getTechnologyGroup(50, i * 90));
+            i++;
         }
     }
 
@@ -140,7 +169,7 @@ public class GamePageController {
         unitPanelPane.setVisible(false);
         techCircle.setVisible(false);
         techText.setText("");
-        timeline = new Timeline(new KeyFrame(Duration.millis(100), actionEvent -> {
+        timeline = new Timeline(new KeyFrame(Duration.millis(250), actionEvent -> {
             if (stopTimeline) timeline.stop();
             checkUnitPanelUpdate();
             checkTechnologyPanelUpdate();
@@ -149,6 +178,14 @@ public class GamePageController {
             } else if (!showCityOptions && cityOptionsPane.isVisible()) {
                 cityOptionsPane.setVisible(false);
             }
+            if (showDeclareWar && !declareWarOptionsPane.isVisible()) {
+                declareWarOptionsPane.setVisible(true);
+            } else if (!showDeclareWar && declareWarOptionsPane.isVisible()) {
+                declareWarOptionsPane.setVisible(false);
+            }
+            if (!App.isMute() && App.getMediaPlayer().isMute()) {
+                App.playNext();
+            }
         }));
         timeline.setCycleCount(-1);
     }
@@ -156,48 +193,51 @@ public class GamePageController {
     public void checkUnitPanelUpdate() {
         if (stopTimeline)
             return;
-        if (WorldController.getSelectedCombatUnit() != null) {
-            if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() == CombatType.NON_COMBAT) {
-                unitPanelPane.setVisible(true);
-                setUnitPanelInfo(WorldController.getSelectedCombatUnit());
-            } else {
-                setUnitPanelTexts(WorldController.getSelectedCombatUnit());
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.UNIT_PANEL_UPDATE, new HashMap<>());
+        switch (Objects.requireNonNull(response).getQueryResponse()) {
+            case COMBAT_UNIT_SELECTED -> {
+                if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() == CombatType.NON_COMBAT) {
+                    unitPanelPane.setVisible(true);
+                    setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), CombatUnit.class));
+                }
             }
-        } else if (WorldController.getSelectedNonCombatUnit() != null) {
-            if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() != CombatType.NON_COMBAT) {
-                unitPanelPane.setVisible(true);
-                setUnitPanelInfo(WorldController.getSelectedNonCombatUnit());
-            } else {
-                setUnitPanelTexts(WorldController.getSelectedNonCombatUnit());
+            case NONCOMBAT_UNIT_SELECTED -> {
+                if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() != CombatType.NON_COMBAT) {
+                    unitPanelPane.setVisible(true);
+                    setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), NonCombatUnit.class));
+                }
             }
-            //TODO WHAT'S THE POINT OF THIS IF AND THE FUNCTION UNIT IS NOT SELECTED??
-        } else if (WorldController.unitIsNotSelected()) {
-            unitPanelPane.setVisible(false);
+            case UNIT_NOT_SELECTED -> unitPanelPane.setVisible(false);
         }
     }
 
     public void checkTechnologyPanelUpdate() {
         if (stopTimeline)
             return;
-        Civilization currentCivilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-        happinessText.setText(currentCivilization.getHappiness() + "");
-        goldText.setText(currentCivilization.getGold() + "");
-        scienceText.setText(currentCivilization.getScience() + "");
-        if (currentCivilization.getCurrentTechnology() != null && !techCircle.isVisible()) {
-            techCircle.setVisible(true);
-            techCircle.setFill(new ImagePattern(currentCivilization.getCurrentTechnology().getImage()));
-            techText.setText(currentCivilization.getCurrentTechnology().getName());
-            initResearchPanel();
-        } else if (currentCivilization.getCurrentTechnology() == null && techCircle.isVisible()) {
-            techCircle.setVisible(false);
-            techText.setText("");
+        happinessText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_HAPPINESS, new HashMap<>())).getParams().get("happiness"));
+        goldText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_GOLD, new HashMap<>())).getParams().get("gold"));
+        scienceText.setText(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.CIV_SCIENCE, new HashMap<>())).getParams().get("science"));
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.TECH_PANEL_UPDATE, new HashMap<>() {{
+            put("boolean", String.valueOf(techCircle.isVisible()));
+        }});
+        switch (Objects.requireNonNull(response).getQueryResponse()) {
+            case SET_TECH_VISIBLE -> {
+                techCircle.setVisible(true);
+                techCircle.setFill(new ImagePattern(new Gson().fromJson(response.getParams().get("technology"), Technologies.class).getImage()));
+                techText.setText(new Gson().fromJson(response.getParams().get("technology"), Technologies.class).getName());
+                initResearchPanel();
+            }
+            case SET_TECH_INVISIBLE -> {
+                techCircle.setVisible(false);
+                techText.setText("");
+            }
         }
     }
 
     public void setUnitPanelInfo(Unit unit) {
         if (unitPanelPane.getChildren().size() > 11)
             unitPanelPane.getChildren().subList(11, unitPanelPane.getChildren().size()).clear();
-        initCommonActions(unit);
+        initCommonActions();
         if (unit instanceof CombatUnit) {
             initCombatUnitActions((CombatUnit) unit);
         } else {
@@ -213,45 +253,73 @@ public class GamePageController {
         setUnitPanelTexts(unit);
     }
 
-    public void initCommonActions(Unit unit) {
-        ((Circle) unitPanelPane.getChildren().get(7)).setFill(new ImagePattern(UnitController.getActionImage("move")));
+    public void initCommonActions() {
+        ((Circle) unitPanelPane.getChildren().get(7)).setFill(new ImagePattern(getActionImage("move")));
         unitPanelPane.getChildren().get(7).setCursor(Cursor.HAND);
         unitPanelPane.getChildren().get(7).setOnMouseClicked(mouseEvent -> {
-            if (WorldController.getSelectedTile() != null) {
-                UnitController.setUnitDestinationCoordinates(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
-                MoveController.moveUnitToDestination(unit);
-            }
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.MOVE_ACTION, new HashMap<>());
         });
-        ((Circle) unitPanelPane.getChildren().get(8)).setFill(new ImagePattern(UnitController.getActionImage("delete")));
-        unitPanelPane.getChildren().get(8).setOnMouseClicked(mouseEvent -> UnitController.delete(unit));
+        ((Circle) unitPanelPane.getChildren().get(8)).setFill(new ImagePattern(getActionImage("delete")));
+        unitPanelPane.getChildren().get(8).setOnMouseClicked(mouseEvent -> ClientSocketController.sendRequestAndGetResponse(QueryRequests.DELETE_ACTION, new HashMap<>()));
         unitPanelPane.getChildren().get(8).setCursor(Cursor.HAND);
-        ((Circle) unitPanelPane.getChildren().get(9)).setFill(new ImagePattern(UnitController.getActionImage("sleep")));
-        unitPanelPane.getChildren().get(9).setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.SLEEP));
+        ((Circle) unitPanelPane.getChildren().get(9)).setFill(new ImagePattern(getActionImage("sleep")));
+        unitPanelPane.getChildren().get(9).setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.SLEEP_ACTION, new HashMap<>());
+        });
         unitPanelPane.getChildren().get(9).setCursor(Cursor.HAND);
-        ((Circle) unitPanelPane.getChildren().get(10)).setFill(new ImagePattern(UnitController.getActionImage("wake")));
-        unitPanelPane.getChildren().get(10).setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.WAKE));
+        ((Circle) unitPanelPane.getChildren().get(10)).setFill(new ImagePattern(getActionImage("wake")));
+        unitPanelPane.getChildren().get(10).setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.WAKE_ACTION, new HashMap<>());
+        });
         unitPanelPane.getChildren().get(10).setCursor(Cursor.HAND);
     }
 
     public void initCombatUnitActions(CombatUnit unit) {
-        Circle alert = new Circle(25, new ImagePattern(UnitController.getActionImage("alert")));
-        alert.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.ALERT));
-        Circle fortify = new Circle(25, new ImagePattern(UnitController.getActionImage("fortify")));
-        fortify.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY));
-        Circle fortifyTillHealed = new Circle(25, new ImagePattern(UnitController.getActionImage("fortifyTillHealed")));
-        fortifyTillHealed.setOnMouseClicked(mouseEvent -> unit.setUnitState(UnitStates.FORTIFY_TILL_HEALED));
-        Circle garrison = new Circle(25, new ImagePattern(UnitController.getActionImage("garrison")));
-        garrison.setOnMouseClicked(mouseEvent -> UnitController.garrisonCity(unit));
-        Circle pillage = new Circle(25, new ImagePattern(UnitController.getActionImage("pillage")));
-        pillage.setOnMouseClicked(mouseEvent -> UnitController.pillage(WorldController.getSelectedCombatUnit().getCurrentX(), WorldController.getSelectedCombatUnit().getCurrentY()));
-        Circle attack = new Circle(25, new ImagePattern(UnitController.getActionImage("attack")));
+        Circle alert = new Circle(25, new ImagePattern(getActionImage("alert")));
+        alert.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.ALERT_ACTION, new HashMap<>());
+        });
+        Circle fortify = new Circle(25, new ImagePattern(getActionImage("fortify")));
+        fortify.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.FORTIFY_ACTION, new HashMap<>());
+            App.getCoinSound().play();
+        });
+        Circle fortifyTillHealed = new Circle(25, new ImagePattern(getActionImage("fortifyTillHealed")));
+        fortifyTillHealed.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.FORTIFY_TILL_HEALED_ACTION, new HashMap<>());
+            App.getCoinSound().play();
+        });
+        Circle garrison = new Circle(25, new ImagePattern(getActionImage("garrison")));
+        garrison.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.GARRISON_ACTION, new HashMap<>());
+            App.getSwordSound().play();
+        });
+        Circle pillage = new Circle(25, new ImagePattern(getActionImage("pillage")));
+        pillage.setOnMouseClicked(mouseEvent -> {
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.PILLAGE_ACTION, new HashMap<>());
+            App.getSwordSound().play();
+        });
+        Circle attack = new Circle(25, new ImagePattern(getActionImage("attack")));
         attack.setOnMouseClicked(mouseEvent -> {
-            if (WorldController.getSelectedTile() != null)
-                WarController.combatUnitAttacksTile(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY(), WorldController.getSelectedCombatUnit());
+            unitPanelPane.setVisible(false);
+            ClientSocketController.sendRequestAndGetResponse(QueryRequests.ATTACK_ACTION, new HashMap<>());
+            App.getSwordSound().play();
         });
         if (unit instanceof Ranged) {
-            Circle setupRanged = new Circle(25, new ImagePattern(UnitController.getActionImage("setupRanged")));
-            setupRanged.setOnMouseClicked(mouseEvent -> UnitController.setupRangedUnit(unit, WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY()));
+            Circle setupRanged = new Circle(25, new ImagePattern(getActionImage("setupRanged")));
+            setupRanged.setOnMouseClicked(mouseEvent -> {
+                unitPanelPane.setVisible(false);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.SETUP_RANGED_ACTION, new HashMap<>());
+                App.getSwordSound().play();
+            });
             unitPanelPane.getChildren().add(setupRanged);
         }
         unitPanelPane.getChildren().add(alert);
@@ -266,44 +334,68 @@ public class GamePageController {
         if (unit.getUnitType() == UnitTypes.WORKER) {
             ChoiceBox<String> buildChoiceBox = new ChoiceBox<>();
             buildChoiceBox.setValue("Build");
-            buildChoiceBox.getItems().addAll(TileController.getAvailableImprovements((Worker) unit));
+            ArrayList<String> availableImprovements = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_AVAILABLE_IMPROVEMENTS_FOR_WORKER, new HashMap<>()))
+                    .getParams().get("improvements"), new TypeToken<List<String>>() {
+            }.getType());
+            buildChoiceBox.getItems().addAll(availableImprovements);
             buildChoiceBox.setLayoutX(265);
             buildChoiceBox.setLayoutY(145);
             buildChoiceBox.setPrefWidth(74);
-            Circle build = new Circle(25, new ImagePattern(UnitController.getActionImage("working")));
+            Circle build = new Circle(25, new ImagePattern(getActionImage("working")));
             build.setOnMouseClicked(mouseEvent -> {
                 switch (buildChoiceBox.getValue()) {
                     case "road":
-                        UnitController.buildRoad((Worker) unit);
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.ROAD_BUILD, new HashMap<>());
                         break;
                     case "railRoad":
-                        UnitController.buildRailRoad((Worker) unit);
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.RAILROAD_BUILD, new HashMap<>());
                         break;
                     case "Build":
                         break;
                     default:
-                        UnitController.buildImprovement((Worker) unit, Improvements.getImprovementByName(buildChoiceBox.getValue()));
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.IMPROVEMENT_BUILD, new HashMap<>() {{
+                            put("improvement", new Gson().toJson(Improvements.getImprovementByName(buildChoiceBox.getValue())));
+                        }});
                         break;
                 }
             });
             ChoiceBox<String> removeChoiceBox = new ChoiceBox<>();
             removeChoiceBox.setValue("Remove");
-            removeChoiceBox.getItems().addAll(TileController.getRemovableFeatures((Worker) unit));
+            ArrayList<String> removableFeatures = new Gson().fromJson(Objects.requireNonNull(ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_REMOVABLE_FEATURES, new HashMap<>()))
+                    .getParams().get("features"), new TypeToken<List<String>>() {
+            }.getType());
+            removeChoiceBox.getItems().addAll(removableFeatures);
             removeChoiceBox.setLayoutX(350);
             removeChoiceBox.setLayoutY(145);
             removeChoiceBox.setPrefWidth(74);
-            Circle remove = new Circle(25, new ImagePattern(UnitController.getActionImage("remove")));
+            Circle remove = new Circle(25, new ImagePattern(getActionImage("remove")));
             remove.setOnMouseClicked(mouseEvent -> {
                 switch (removeChoiceBox.getValue()) {
-                    case "Routes" -> UnitController.removeRouteFromTile((Worker) unit);
-                    case "Jungle" -> UnitController.removeJungleFromTile((Worker) unit);
-                    case "Forest" -> UnitController.removeForestFromTile((Worker) unit);
-                    case "Marsh" -> UnitController.removeMarshFromTile((Worker) unit);
+                    case "Routes" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.ROUTES_REMOVE, new HashMap<>());
+                    }
+                    case "Jungle" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.JUNGLE_REMOVE, new HashMap<>());
+                    }
+                    case "Forest" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.FOREST_REMOVE, new HashMap<>());
+                    }
+                    case "Marsh" -> {
+                        unitPanelPane.setVisible(false);
+                        ClientSocketController.sendRequestAndGetResponse(QueryRequests.MARSH_REMOVE, new HashMap<>());
+                    }
                 }
             });
-            Circle repair = new Circle(25, new ImagePattern(UnitController.getActionImage("repair")));
+            Circle repair = new Circle(25, new ImagePattern(getActionImage("repair")));
             repair.setOnMouseClicked(mouseEvent -> {
-                UnitController.repairTile((Worker) unit);
+                unitPanelPane.setVisible(false);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.REPAIR_TILE, new HashMap<>());
             });
             unitPanelPane.getChildren().add(build);
             unitPanelPane.getChildren().add(buildChoiceBox);
@@ -311,18 +403,16 @@ public class GamePageController {
             unitPanelPane.getChildren().add(removeChoiceBox);
             unitPanelPane.getChildren().add(repair);
         } else {
-            Circle foundCity = new Circle(25, new ImagePattern(UnitController.getActionImage("foundCity")));
+            Circle foundCity = new Circle(25, new ImagePattern(getActionImage("foundCity")));
             foundCity.setOnMouseClicked(mouseEvent -> {
-                UnitController.foundCity((Settler) unit);
+                unitPanelPane.setVisible(false);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.FOUND_CITY, new HashMap<>());
             });
             unitPanelPane.getChildren().add(foundCity);
         }
     }
 
     public void setUnitPanelTexts(Unit unit) {
-        String type = (unit instanceof CombatUnit ? "combatUnit" : "nonCombatUnit");
-        ((Text) MapController.getTileByCoordinates(unit.getCurrentX(), unit.getCurrentY()).getHex()
-                .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
         unitPanelCircle.setFill(new ImagePattern(unit.getUnitType().getLogoImage()));
         unitPanelNameText.setText(unit.getName());
         unitPanelMPText.setText("MP : " + unit.getMovementPoint());
@@ -330,16 +420,20 @@ public class GamePageController {
             unitPanelCSText.setText("CS : " + String.valueOf(unit.getUnitType().getCombatStrength() + unit.getUnitType().getRangedCombatStrength()));
         } else if (unit instanceof Worker) {
             unitPanelCSText.setText("TLW : " + ((Worker) unit).getTurnsLeftToWork());
+        } else {
+            unitPanelCSText.setText("");
         }
-
+        String type = (unit instanceof CombatUnit ? "combatUnit" : "nonCombatUnit");
+        try {
+            ((Text) HexController.getHexOfTheGivenCoordination(unit.getCurrentX(), unit.getCurrentY())
+                    .getUnitGroups().get(type).getChildren().get(1)).setText(unit.getUnitState().getName());
+        } catch (NullPointerException e) {
+            System.err.println(unit.getCurrentX() + " " + unit.getCurrentY() + " -> " + unit.getUnitType() + "  " + type);
+        }
     }
 
     public void nextTurnButtonClicked(MouseEvent mouseEvent) {
-        if (WorldController.nextTurnImpossible() == null) {
-            WorldController.nextTurn();
-            yearText.setText(WorldController.getWorld().getYear() < 0 ? String.valueOf(-WorldController.getWorld().getYear()) + " BC" : String.valueOf(WorldController.getWorld().getYear()));
-            unitPanelPane.setVisible(false);
-        }
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.NEXT_TURN, new HashMap<>());
     }
 
     public void cheatCodeAreaTyped(KeyEvent keyEvent) {
@@ -349,7 +443,10 @@ public class GamePageController {
             if (command.equals("clear")) {
                 cheatCodeArea.clear();
             } else {
-                GameCommandsValidation.checkCommands(command);
+                ClientSocketController.sendRequestAndGetResponse(QueryRequests.CHEAT_COMMAND, new HashMap<>() {{
+                    put("command", command);
+                }});
+                unitPanelPane.setVisible(false);
             }
         }
     }
@@ -364,8 +461,7 @@ public class GamePageController {
     }
 
     public void techTreeButtonClicked(MouseEvent mouseEvent) {
-        System.out.println("hello");
-        //TODO goto techTree fxml
+        App.changeScene("technologyTree");
     }
 
     public void gotoPanelButtonClicked(MouseEvent mouseEvent) {
@@ -381,13 +477,39 @@ public class GamePageController {
         GamePageController.combatUnit = combatUnit;
     }
 
+    public static void setDeclareWarOptions(String civilizationName) {
+        showDeclareWar = true;
+        GamePageController.enemyName = civilizationName;
+    }
+
     public void conquerButtonClicked(MouseEvent mouseEvent) {
-        CityController.conquerCity(city, combatUnit);
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.CONQUER_CITY, new HashMap<>() {{
+            put("city", new Gson().toJson(city));
+            put("combatUnit", new Gson().toJson(combatUnit));
+        }});
         showCityOptions = false;
     }
 
     public void destroyButtonClicked(MouseEvent mouseEvent) {
-        CityController.destroyCity(city, combatUnit);
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DESTROY_CITY, new HashMap<>() {{
+            put("city", new Gson().toJson(city));
+            put("combatUnit", new Gson().toJson(combatUnit));
+        }});
         showCityOptions = false;
+    }
+
+    public static Image getActionImage(String name) {
+        return new Image(Objects.requireNonNull(App.class.getResource("/images/units/actions/" + name + ".png")).toString());
+    }
+
+    public void declareWarButtonClicked(MouseEvent mouseEvent) {
+        ClientSocketController.sendRequestAndGetResponse(QueryRequests.DECLARE_WAR, new HashMap<>() {{
+            put("enemyName", GamePageController.enemyName);
+        }});
+        showDeclareWar = false;
+    }
+
+    public void cancelButtonClicked(MouseEvent mouseEvent) {
+        showDeclareWar = false;
     }
 }

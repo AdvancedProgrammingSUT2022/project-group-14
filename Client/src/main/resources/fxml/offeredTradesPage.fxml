@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="Client.views.OfferedTradesPageController"
+            id="profileMenuScene" prefHeight="720" prefWidth="1280" stylesheets="@../css/style.css">
+
+    <ScrollPane hbarPolicy="NEVER" layoutX="206.0" layoutY="70.0" prefHeight="593.0" prefWidth="760"
+                vbarPolicy="ALWAYS">
+        <AnchorPane fx:id="pane"/>
+    </ScrollPane>
+    <Button layoutX="50" layoutY="600" onMouseClicked="#backButtonClicked" text="Back"/>
+</AnchorPane>

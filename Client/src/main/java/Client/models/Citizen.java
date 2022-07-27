@@ -1,6 +1,6 @@
 package Client.models;
 
-import Server.models.tiles.Coordination;
+import Client.models.tiles.Coordination;
 
 public class Citizen {
     private final int id;
