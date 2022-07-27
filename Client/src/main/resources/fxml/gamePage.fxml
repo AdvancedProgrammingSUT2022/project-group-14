@@ -50,7 +50,7 @@
     <AnchorPane fx:id="unitPanelPane" layoutY="500.0" prefHeight="227.0" prefWidth="450.0"
                 style="-fx-background-color: transparent">
         <Rectangle fill="cadetblue" height="28.0" layoutX="90.0" layoutY="36.0" stroke="BLACK" width="193.0"/>
-        <Rectangle height="163.0" layoutY="64.0" stroke="BLACK" width="450.0"/>
+        <Rectangle height="163.0" layoutY="64.0" stroke="BLACK" width="524"/>
         <Circle fill="cadetblue" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK"/>
         <Circle fx:id="unitPanelCircle" layoutX="63.0" layoutY="61.0" radius="63.0" stroke="BLACK"/>
         <Text fx:id="unitPanelNameText" layoutX="168.0" layoutY="58.0" strokeType="OUTSIDE" strokeWidth="0.0"

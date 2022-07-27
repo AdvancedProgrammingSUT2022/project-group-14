@@ -242,7 +242,7 @@ public class CityController {
         }
         if (building.getRequiredResource() != null) {
             for (int i = 0; i < city.getTerritory().size(); i++) {
-                if (building.getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())) {
+                if (city.getTerritory().get(i).getResource() != null && building.getRequiredResource().getName().equals(city.getTerritory().get(i).getResource().getName())) {
                     if (currentCivilization.getStrategicResources().get(building.getRequiredResource().getName()) > 0) {
                         currentCivilization.getStrategicResources().put(building.getRequiredResource().getName(), currentCivilization.getStrategicResources().get(building.getRequiredResource().getName()) - 1);
                         return true;

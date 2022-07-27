@@ -96,7 +96,8 @@ public class WarController {
             defendingUnitAttackDamage = Math.max(0, defendingUnitAttackDamage);
             attackingUnitAttackDamage = Math.max(0, attackingUnitAttackDamage);
 
-            attackingUnit.receiveDamage(defendingUnitAttackDamage);
+            if (defendingUnit.getRange() >= attackingUnit.getRange())
+                attackingUnit.receiveDamage(defendingUnitAttackDamage);
             defendingUnit.receiveDamage(attackingUnitAttackDamage);
             System.out.println("your combat unit received " + defendingUnitAttackDamage + "and your enemy received " + attackingUnitAttackDamage + "damage");
             if (defendingUnit.getHealthPoint() <= 0) {
@@ -206,7 +207,6 @@ public class WarController {
                     currentCivilization.getMelees().remove((Melee) combatUnit);
                 else if (combatUnit instanceof Ranged)
                     currentCivilization.getRanges().remove((Ranged) combatUnit);
-
             }
         } else MoveController.moveUnitToDestination(combatUnit);
     }

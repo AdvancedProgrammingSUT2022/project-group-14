@@ -13,8 +13,8 @@ public class ServerUpdateController {
             String updateJson = new Gson().toJson(response);
             Objects.requireNonNull(UserController.getUserByUsername(username)).getBufferedWriter().write(updateJson + "\n");
             Objects.requireNonNull(UserController.getUserByUsername(username)).getBufferedWriter().flush();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        } catch (IOException ignore) {
+            System.out.println("Client updater disconnected!");
         }
     }
 }

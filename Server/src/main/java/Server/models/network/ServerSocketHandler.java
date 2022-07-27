@@ -339,8 +339,10 @@ public class ServerSocketHandler extends Thread {
                 if (WorldController.getSelectedTile() != null)
                     WarController.combatUnitAttacksTile(WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY(), WorldController.getSelectedCombatUnit());
             }
-            case SETUP_RANGED_ACTION ->
-                    UnitController.setupRangedUnit(WorldController.getSelectedNonCombatUnit(), WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
+            case SETUP_RANGED_ACTION -> {
+                if (WorldController.getSelectedTile() != null)
+                    UnitController.setupRangedUnit(WorldController.getSelectedCombatUnit(), WorldController.getSelectedTile().getX(), WorldController.getSelectedTile().getY());
+            }
             case GET_AVAILABLE_IMPROVEMENTS_FOR_WORKER -> {
                 return new Response(QueryResponses.OK, new HashMap<>() {{
                     put("improvements", new Gson().toJson(TileController.getAvailableImprovements((Worker) WorldController.getSelectedNonCombatUnit())));

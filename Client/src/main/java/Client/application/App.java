@@ -40,13 +40,13 @@ public class App extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         ClientSocketController.startConnecting(8000);
+        indexOfCurrentMedia = new Random().nextInt(11);
+        changeMedia(musics[indexOfCurrentMedia]);
         App.stage = stage;
         Parent root = loadFXML("loginPage");
         assert root != null;
         App.scene = new Scene(root);
 
-        indexOfCurrentMedia = new Random().nextInt(11);
-        changeMedia(musics[indexOfCurrentMedia]);
 
         stage.setScene(App.scene);
         stage.setTitle("CivilizationVI");

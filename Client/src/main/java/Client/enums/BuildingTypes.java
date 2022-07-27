@@ -22,7 +22,7 @@ public enum BuildingTypes {
     COURTHOUSE("courthouse", 200, 5, Technologies.MATHEMATICS, null, null, 0, 0, 0, false, 0, 0),
     STABLE("stable", 100, 1, Technologies.HORSEBACK_RIDING, null, StrategicResourceTypes.HORSE, 0, 0, 0, false, 0, 0),
     TEMPLE("temple", 120, 2, Technologies.PHILOSOPHY, new HashSet<>(of("MONUMENT")), null, 0, 0, 0, false, 0, 0),
-    CASTLE("castle", 200, 3, Technologies.CHIVALRY, new HashSet<>(of("WALL")), null, 7.5, 0, 0, false, 0, 0),
+    CASTLE("castle", 200, 3, Technologies.CHIVALRY, new HashSet<>(of("WALLS")), null, 7.5, 0, 0, false, 0, 0),
     FORGE("forge", 150, 2, Technologies.METAL_CASTING, null, StrategicResourceTypes.IRON, 0, 0, 0, false, 0, 0),
     GARDEN("garden", 120, 2, Technologies.THEOLOGY, null, null, 0, 0, 0, true, 0, 0),
     MARKET("market", 120, 0, Technologies.CURRENCY, null, null, 0, 0, 0, false, 0, 25),

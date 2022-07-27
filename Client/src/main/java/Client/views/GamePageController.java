@@ -9,6 +9,7 @@ import Client.enums.Technologies;
 import Client.enums.units.CombatType;
 import Client.enums.units.UnitTypes;
 import Client.models.City;
+import Client.models.User;
 import Client.models.network.Response;
 import Client.models.tiles.Hex;
 import Client.models.units.*;
@@ -204,7 +205,11 @@ public class GamePageController {
             case NONCOMBAT_UNIT_SELECTED -> {
                 if (!unitPanelPane.isVisible() || UnitTypes.valueOf(unitPanelNameText.getText().toUpperCase()).getCombatType() != CombatType.NON_COMBAT) {
                     unitPanelPane.setVisible(true);
-                    setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), NonCombatUnit.class));
+                    if (new Gson().fromJson(response.getParams().get("unit"), NonCombatUnit.class).getUnitType() == UnitTypes.WORKER) {
+                        setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), Worker.class));
+                    } else {
+                        setUnitPanelInfo(new Gson().fromJson(response.getParams().get("unit"), Settler.class));
+                    }
                 }
             }
             case UNIT_NOT_SELECTED -> unitPanelPane.setVisible(false);
@@ -313,7 +318,7 @@ public class GamePageController {
             ClientSocketController.sendRequestAndGetResponse(QueryRequests.ATTACK_ACTION, new HashMap<>());
             App.getSwordSound().play();
         });
-        if (unit instanceof Ranged) {
+        if (unit.getRange() > 1) {
             Circle setupRanged = new Circle(25, new ImagePattern(getActionImage("setupRanged")));
             setupRanged.setOnMouseClicked(mouseEvent -> {
                 unitPanelPane.setVisible(false);
@@ -418,7 +423,7 @@ public class GamePageController {
         unitPanelMPText.setText("MP : " + unit.getMovementPoint());
         if (unit instanceof CombatUnit) {
             unitPanelCSText.setText("CS : " + String.valueOf(unit.getUnitType().getCombatStrength() + unit.getUnitType().getRangedCombatStrength()));
-        } else if (unit instanceof Worker) {
+        } else if (unit.getUnitType() == UnitTypes.WORKER) {
             unitPanelCSText.setText("TLW : " + ((Worker) unit).getTurnsLeftToWork());
         } else {
             unitPanelCSText.setText("");

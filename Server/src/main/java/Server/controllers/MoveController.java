@@ -58,6 +58,7 @@ public class MoveController {
             }
             unit.setUnitState(unit.getUnitState() == UnitStates.SLEEP ? UnitStates.WAKE : unit.getUnitState());
             unit.updatePosition(nextTileToMove.getX(), nextTileToMove.getY());
+            System.err.println(unit.getName() + " " + nextTileToMove.getX() + " " + nextTileToMove.getY());
             unit.setMovementPoint(unit.getMovementPoint() - nextTileToMove.getMovingPointFromSide(
                     nextTileToMove.getX() - unit.getCurrentX(), nextTileToMove.getY() - unit.getCurrentY(), unit.getMovementPoint()));
             if ((unit.getMovementPoint() < 0) || (nextTileToMove.getCivilizationName() != null && !nextTileToMove.getCivilizationName().equals(unit.getCivilizationName())))
