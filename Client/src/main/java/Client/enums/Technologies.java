@@ -107,13 +107,16 @@ public enum Technologies {
 
     public Group getTechnologyGroup(int x, int y) {
         Group group = new Group();
-        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_TECHNOLOGY_STATUS, new HashMap<>(){{put("technology", new Gson().toJson(this));}});
         Rectangle nameRectangle = null;
+        Response response = ClientSocketController.sendRequestAndGetResponse(QueryRequests.GET_TECHNOLOGY_STATUS, new HashMap<>() {{
+            put("technology", new Gson().toJson(Technologies.this));
+        }});
         switch (Objects.requireNonNull(response).getQueryResponse()) {
-            case TECHNOLOGY_WAS_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.GREEN);
+            case TECHNOLOGY_WAS_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.CADETBLUE);
             case TECHNOLOGY_IS_BEING_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.GOLD);
-            case TECHNOLOGY_HAS_NOT_BEEN_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.CADETBLUE);
+            case TECHNOLOGY_HAS_NOT_BEEN_STUDIED -> nameRectangle = new Rectangle(230, 27, Color.RED);
         }
+        assert nameRectangle != null;
         nameRectangle.setLayoutX(x);
         nameRectangle.setLayoutY(y - nameRectangle.getHeight());
         Rectangle turnsRectangle = new Rectangle(145, 27, Color.rgb(238, 128, 0));

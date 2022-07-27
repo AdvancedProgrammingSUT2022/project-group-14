@@ -710,8 +710,7 @@ public class ServerSocketHandler extends Thread {
                 }
             }
             case GET_TECHNOLOGY_STATUS -> {
-                Civilization civilization = WorldController.getWorld().getCivilizationByName(WorldController.getWorld().getCurrentCivilizationName());
-                return new Response(civilization.getTechnologyStatus(new Gson().fromJson(request.getParams().get("technology"), Technologies.class)), new HashMap<>());
+                return new Response(currentCivilization.getTechnologyStatus(new Gson().fromJson(request.getParams().get("technology"), Technologies.class)), new HashMap<>());
             }
         }
         return new Response(QueryResponses.OK, new HashMap<>());

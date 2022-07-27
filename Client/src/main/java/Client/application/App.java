@@ -26,10 +26,10 @@ public class App extends javafx.application.Application {
                                         "16 Ramin Djawadi - To Vaes Dothrak", "02 Ramin Djawadi - A Lannister Always Pays His Debts",
                                         "19 Ramin Djawadi - For the Realm", "01. Main Titles", "02 Blood of the Dragon",
                                         "03. Light of the Seven", "16. Trust Each Other", "04 - The Queen's Justice", "20 - Ironborn"};
-    private static AudioClip swordSound = new AudioClip(Objects.requireNonNull(App.class.getResource("/musics/draw-sword1-44724.mp3")).toString());
+    private static final AudioClip swordSound = new AudioClip(Objects.requireNonNull(App.class.getResource("/musics/draw-sword1-44724.mp3")).toString());
 
 
-    private static AudioClip coinSound = new AudioClip(Objects.requireNonNull(App.class.getResource("/musics/coin.mp3")).toString());
+    private static final AudioClip coinSound = new AudioClip(Objects.requireNonNull(App.class.getResource("/musics/coin.mp3")).toString());
     private static boolean mute = false;
     private static int indexOfCurrentMedia;
 
@@ -40,16 +40,13 @@ public class App extends javafx.application.Application {
     @Override
     public void start(Stage stage) throws IOException {
         ClientSocketController.startConnecting(8000);
-        indexOfCurrentMedia = new Random().nextInt(11);
-        changeMedia(musics[indexOfCurrentMedia]);
         App.stage = stage;
         Parent root = loadFXML("loginPage");
         assert root != null;
         App.scene = new Scene(root);
 
-//        mediaPlayer = loadMediaPlayer("");
-//        assert mediaPlayer != null;
-//        mediaPlayer.play();
+        indexOfCurrentMedia = new Random().nextInt(11);
+        changeMedia(musics[indexOfCurrentMedia]);
 
         stage.setScene(App.scene);
         stage.setTitle("CivilizationVI");
@@ -67,7 +64,6 @@ public class App extends javafx.application.Application {
         indexOfCurrentMedia++;
         indexOfCurrentMedia %= 11;
         changeMedia(musics[indexOfCurrentMedia]);
-
     }
 
     @Override

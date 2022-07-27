@@ -44,6 +44,7 @@ public class World {
     }
 
     public void removeCivilization(Civilization civilization) {
+        turn %= civilizations.size() - 1;
         for (Unit unit : civilization.getAllUnits()) {
             unit = null;
         }
@@ -53,7 +54,6 @@ public class World {
             put("winner", String.valueOf(false));
             put("user", new Gson().toJson(UserController.getUserByUsername(civilization.getName())));
         }}));
-        turn %= civilizations.size();
         if (civilizations.size() == 1) {
             WorldController.endGame(civilizations.get(0).getName());
         }
